@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Neural Operators in PyTorch &#8212; neuraloperator 0.3.0 documentation</title> 
+<link rel="stylesheet" href="_static/tensorly_style.css">
+<link rel="apple-touch-icon" sizes="180x180" href="_static/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="_static/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="_static/favicon/favicon-16x16.png">
+<link rel="manifest" href="_static/favicon/site.webmanifest">
+<link rel="mask-icon" href="_static/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="_static/favicon/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/tensorly_style.css?v=a02e9698" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+    <script src="_static/documentation_options.js?v=e259d695"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+ <script src="_static/navbar_burger.js"></script>
+ <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+ 
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installing NeuralOperator" href="install.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  </head>
+<body  class="has-navbar-fixed-top">
+
+  <header>
+    <navbar>
+      <nav class="navbar top-navbar is-fixed-top has-shadow is-flex-wrap-wrap" role="navigation" aria-label="main top navigation">
+        <div class="navbar-brand">
+        
+
+          <a class="navbar-item" href="#">
+            <img src="_static/neuraloperator_logo.png" height="28">
+          </a>
+          <a class="navbar-item is-hidden-desktop" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon"><i class="fab fa-github"></i></span>
+          </a>
+
+          <a role="button" class="navbar-burger" data-target="top-nav-menu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+
+        </div>
+        
+        <div class="navbar-menu" id="top-nav-menu">
+        
+
+          <div class="navbar-start">
+            
+              <a class="navbar-item" href="install.html">
+              Install
+            </a>
+              <a class="navbar-item" href="user_guide/index.html">
+              User Guide
+            </a>
+              <a class="navbar-item" href="modules/api.html">
+              API
+            </a>
+              <a class="navbar-item" href="auto_examples/index.html">
+              Examples
+            </a>
+          </div>
+        
+          <div class="navbar-end">
+            <div class="navbar-item">
+            
+            <a class="button is-hidden-touch is-dark" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon-text">
+                <span class="icon is-large">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Github</span>
+              </span>
+            </a>
+
+            </div> 
+          </div> 
+        </div> 
+
+      </nav>
+      
+    </navbar>
+  </header>
+
+
+  <div id="column-container">
+  <div class="columns is-mobile is-centered">
+	
+  
+
+  <div class="column main-column">
+
+    
+    <div class="main-section">
+
+      
+      
+
+      <div class="container content main-content">
+        
+  <br/><br/><div class="has-text-centered">
+   <h2> Neural Operators in PyTorch </h2>
+</div>
+<br/><br/><a class="reference internal image-reference" href="_images/neuraloperator_logo_long.png"><img alt="_images/neuraloperator_logo_long.png" class="align-center" src="_images/neuraloperator_logo_long.png" style="width: 500px;" />
+</a>
+<p><code class="docutils literal notranslate"><span class="pre">neuraloperator</span></code> is a comprehensive library for
+learning neural operators in PyTorch.
+It is the official implementation for Fourier Neural Operators
+and Tensorized Neural Operators.</p>
+<p>Unlike regular neural networks, neural operators
+enable learning mapping between function spaces, and this library
+provides all of the tools to do so on your own data.</p>
+<p>NeuralOperators are also resolution invariant,
+so your trained operator can be applied on data of any resolution.</p>
+<section id="quickstart">
+<h1>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading"></a></h1>
+<p>This guide will walk you through the standard ML workflow of loading data, creating a neural operator, training it on your data and saving the trained model for later use.</p>
+<p>First install the library <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">neuraloperator</span></code> (see <a class="reference internal" href="install.html"><span class="doc">Installing NeuralOperator</span></a> for more options).</p>
+<p>To create a Fourier Neural Operator model:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuralop.models</span> <span class="kn">import</span> <span class="n">FNO</span>
+
+<span class="n">operator</span> <span class="o">=</span> <span class="n">FNO</span><span class="p">(</span><span class="n">n_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="n">hidden_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+                <span class="n">in_channels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To save the weights of the trained model:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">save_checkpoint</span><span class="p">(</span><span class="n">save_folder</span><span class="o">=</span><span class="s1">&#39;./checkpoints/&#39;</span><span class="p">,</span> <span class="n">save_name</span><span class="o">=</span><span class="s1">&#39;example_fno&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>And to load the weights later:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuralop.models</span> <span class="kn">import</span> <span class="n">FNO</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">FNO</span><span class="o">.</span><span class="n">from_checkpoint</span><span class="p">(</span><span class="n">save_folder</span><span class="o">=</span><span class="s1">&#39;./checkpoints/&#39;</span><span class="p">,</span> <span class="n">save_name</span><span class="o">=</span><span class="s1">&#39;example_fno&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">neuraloperator</span></code> comes prepackaged with an example dataset of flows governed by the Darcy flow equation.</p>
+<p>To import the data:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">neuralop.datasets</span> <span class="kn">import</span> <span class="n">load_darcy_flow_small</span>
+
+<span class="n">train_loader</span><span class="p">,</span> <span class="n">test_loaders</span><span class="p">,</span> <span class="n">data_processor</span> <span class="o">=</span> <span class="n">load_darcy_flow_small</span><span class="p">(</span>
+     <span class="n">n_train</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+     <span class="n">test_resolutions</span><span class="o">=</span><span class="p">[</span><span class="mi">32</span><span class="p">],</span> <span class="n">n_tests</span><span class="o">=</span><span class="p">[</span><span class="mi">100</span><span class="p">],</span>
+     <span class="n">test_batch_sizes</span><span class="o">=</span><span class="p">[</span><span class="mi">32</span><span class="p">],</span>
+     <span class="n">positional_encoding</span><span class="o">=</span><span class="kc">True</span>
+</pre></div>
+</div>
+<p>)</p>
+<p>Similar to the API provided by <code class="docutils literal notranslate"><span class="pre">torchvision</span></code>, this dataset includes training and test data for use in standard PyTorch training loops,
+as well as a <code class="docutils literal notranslate"><span class="pre">preprocessor</span></code> object that automates the transforms to convert the data into the form best understood by the model.</p>
+<p>We provide a <code class="docutils literal notranslate"><span class="pre">Trainer</span></code> object that automates the logic of a basic neural operator training loop to speed up experimentation (see :doc: <cite>auto_examples</cite> for more information).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuralop.training</span> <span class="kn">import</span> <span class="n">Trainer</span>
+
+<span class="c1"># Create the trainer</span>
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">n_epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                  <span class="n">data_processor</span><span class="o">=</span><span class="n">data_processor</span><span class="p">,</span>
+                  <span class="n">wandb_log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                  <span class="n">eval_interval</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                  <span class="n">use_distributed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                  <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># train the model</span>
+<span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_loader</span><span class="o">=</span><span class="n">train_loader</span><span class="p">,</span>
+           <span class="n">test_loaders</span><span class="o">=</span><span class="n">test_loaders</span><span class="p">,</span>
+           <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
+           <span class="n">scheduler</span><span class="o">=</span><span class="n">scheduler</span><span class="p">,</span>
+           <span class="n">regularizer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+           <span class="n">training_loss</span><span class="o">=</span><span class="n">train_loss</span><span class="p">,</span>
+           <span class="n">eval_losses</span><span class="o">=</span><span class="n">eval_losses</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Tensorization is also provided out of the box: you can improve the previous models
+by simply using a Tucker Tensorized FNO with just a few parameters:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuralop.models</span> <span class="kn">import</span> <span class="n">TFNO</span>
+
+<span class="n">operator</span> <span class="o">=</span> <span class="n">TFNO</span><span class="p">(</span><span class="n">n_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="n">hidden_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+                <span class="n">in_channels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">factorization</span><span class="o">=</span><span class="s1">&#39;tucker&#39;</span><span class="p">,</span>
+                <span class="n">implementation</span><span class="o">=</span><span class="s1">&#39;factorized&#39;</span>
+                <span class="n">rank</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This will use a Tucker factorization of the weights. The forward pass
+will be efficient by contracting directly the inputs with the factors
+of the decomposition. The Fourier layers will have 5% of the parameters
+of an equivalent, dense Fourier Neural Operator!</p>
+<div class="toctree-wrapper compound">
+</div>
+<br/> <br/>
+<br/>
+
+<div class="container has-text-centered">
+<a class="button is-medium is-dark is-primary" href="install.html">
+   Install
+</a>
+</div>
+
+
+<!-- CITE -->
+<div class="container mt-6 pt-6">
+   <div class="card">
+   <div class="card-content">
+   <p>
+      If you use NeuralOperator, please cite the following papers:
+   </p>
+   <p>
+      <it> Li, Z., Kovachki, N., Azizzadenesheli, K., Liu, B., Bhattacharya, K., Stuart, A., and Anandkumar A. </it>,
+      <strong> “Fourier Neural Operator for Parametric Partial Differential Equations”</strong>,
+      ICLR, 2021.
+      <br/> <a href="https://arxiv.org/abs/2010.08895">https://arxiv.org/abs/2010.08895</a>.
+   </p>
+   <p>
+      <it> Kovachki, N., Li, Z., Liu, B., Azizzadenesheli, K., Bhattacharya, K., Stuart, A., and Anandkumar A. </it>,
+      <strong>  “Neural Operator: Learning Maps Between Function Spaces”, </strong>,
+      JMLR, 2021.
+      <br/> <a href="https://arxiv.org/abs/2108.08481">https://arxiv.org/abs/2108.08481</a>.
+   </p>
+
+   <blockquote id="bibtex" class="is-hidden">
+      @misc{li2020fourier,<br/>
+      &emsp; title={Fourier Neural Operator for Parametric Partial Differential Equations}, <br/>
+      &emsp; author={Zongyi Li and Nikola Kovachki and Kamyar Azizzadenesheli and Burigede Liu and Kaushik Bhattacharya and Andrew Stuart and Anima Anandkumar},<br/>
+      &emsp; year={2020},<br/>
+      &emsp; eprint={2010.08895},<br/>
+      &emsp; archivePrefix={arXiv},<br/>
+      &emsp; primaryClass={cs.LG}<br/>
+      } <br/> <br/>
+      @article{kovachki2021neural,<br/>
+      &emsp;  author    = {Nikola B. Kovachki and Zongyi Li and Burigede Liu and Kamyar Azizzadenesheli and Kaushik Bhattacharya and Andrew M. Stuart and Anima Anandkumar},<br/>
+      &emsp;  title     = {Neural Operator: Learning Maps Between Function Spaces},<br/>
+      &emsp;  journal   = {CoRR},<br/>
+      &emsp;  volume    = {abs/2108.08481},<br/>
+      &emsp;  year      = {2021},<br/>
+      }<br/>
+      <br/>
+   </blockquote>
+   </div>
+
+   <footer class="card-footer">
+   <p class="card-footer-item">
+   <a onclick="javascrip:toggle_bibtex();" >
+      <span class="button" id="bibtex-toggle">show bibtex</span>
+   </a>
+   </p>
+   </footer>
+
+   </div>
+</div>
+
+<script>
+   function toggle_bibtex() {
+      var bibtex = document.getElementById("bibtex");
+      var toggle = document.getElementById("bibtex-toggle");
+      bibtex.classList.toggle('is-hidden');
+      if (toggle.textContent == 'show bibtex') {
+         toggle.textContent = 'hide bibtex';
+      }
+      else {
+         toggle.textContent = 'show bibtex';
+      }
+   };
+</script></section>
+
+
+      </div>
+
+      
+
+        <footer class="footer">
+    <div class="content has-text-centered">
+        <div class="block">
+          &copy; Copyright 2024, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+        </div>
+    </div>
+  </footer>
+
+    </div>
+
+  </div>  
+
+	
+
+  </div>  
+  </div> 
+
+  
+  <script>
+    function toggle_sidebar() {
+        var element = document.getElementById("sidebar");
+        var container = document.getElementById("column-container");
+        var localtoccolumn = document.getElementById("localtoc-column");
+        element.classList.toggle("hide-tablet");
+        element.classList.toggle("is-hidden-mobile");
+        container.classList.toggle("sidemenu-hidden");
+        localtoccolumn.classList.toggle("is-one-fifth-widescreen");
+        localtoccolumn.classList.toggle("is-2-desktop");
+        localtoccolumn.classList.toggle("is-3-desktop");
+    }
+  </script> 
+
+
+
+  </body>
+</html>

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>neuralop.models.FNO &#8212; neuraloperator 0.3.0 documentation</title> 
+<link rel="stylesheet" href="../../_static/tensorly_style.css">
+<link rel="apple-touch-icon" sizes="180x180" href="../../_static/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../_static/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../_static/favicon/favicon-16x16.png">
+<link rel="manifest" href="../../_static/favicon/site.webmanifest">
+<link rel="mask-icon" href="../../_static/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="../../_static/favicon/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/tensorly_style.css?v=a02e9698" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+    <script src="../../_static/documentation_options.js?v=e259d695"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+ <script src="../../_static/navbar_burger.js"></script>
+ <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+ 
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  </head>
+<body  class="has-navbar-fixed-top">
+
+  <header>
+    <navbar>
+      <nav class="navbar top-navbar is-fixed-top has-shadow is-flex-wrap-wrap" role="navigation" aria-label="main top navigation">
+        <div class="navbar-brand">
+        
+
+          <a class="navbar-item" href="../../index.html">
+            <img src="../../_static/neuraloperator_logo.png" height="28">
+          </a>
+          <a class="navbar-item is-hidden-desktop" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon"><i class="fab fa-github"></i></span>
+          </a>
+
+          <a role="button" class="navbar-burger" data-target="top-nav-menu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+
+        </div>
+        
+        <div class="navbar-menu" id="top-nav-menu">
+        
+
+          <div class="navbar-start">
+            
+              <a class="navbar-item" href="../../install.html">
+              Install
+            </a>
+              <a class="navbar-item" href="../../user_guide/index.html">
+              User Guide
+            </a>
+              <a class="navbar-item" href="../api.html">
+              API
+            </a>
+              <a class="navbar-item" href="../../auto_examples/index.html">
+              Examples
+            </a>
+          </div>
+        
+          <div class="navbar-end">
+            <div class="navbar-item">
+            
+            <a class="button is-hidden-touch is-dark" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon-text">
+                <span class="icon is-large">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Github</span>
+              </span>
+            </a>
+
+            </div> 
+          </div> 
+        </div> 
+
+      </nav>
+      
+    </navbar>
+  </header>
+
+
+  <div id="column-container">
+  <div class="columns is-mobile is-centered">
+	
+  
+      <div class="column is-10-mobile is-one-third-tablet is-3-desktop is-hidden-mobile" id="sidebar">
+    
+    <aside class="sticky-nav sidebar-menu">
+<div class="sidebar-search">
+  <form class="field" id="searchbox" role="search" action="../../search.html" method="get">
+    <!-- <label class="label" id="searchlabel">Quick search</label> -->
+    <div class="field has-addons">
+      <div class="control is-expanded">
+        <input class="input" type="text" placeholder="Search the doc" name="q" aria-labelledby="searchlabel autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      </div>
+      <div class="control">
+        <input class="button is-info" type="submit" value="Go" />
+      </div>
+    </div>
+  </form>
+  <script>document.getElementById('searchbox').style.display = "block"</script>
+
+</div>
+      
+      <div class="sidebar-menu-toc">
+      <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing NeuralOperator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Gallery of examples</a></li>
+</ul>
+ 
+      </div>
+    </aside>
+  </div>
+  
+
+  <div class="column main-column">
+
+    
+    <div class="main-section">
+
+      
+      
+      <div class="side-menu-toggle">
+        <button class="button" id="toggle-sidebar" onclick="toggle_sidebar()">
+          <span class="icon"><i class="fa fa-bars" aria-hidden="true"></i></span>
+          <span>menu</span> 
+        </button>
+      </div>
+      
+
+      <div class="container content main-content">
+        
+  <section id="neuralop-models-fno">
+<h1><a class="reference internal" href="../api.html#module-neuralop.models" title="neuralop.models"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.models</span></code></a>.FNO<a class="headerlink" href="#neuralop-models-fno" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="neuralop.models.FNO">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.models.</span></span><span class="sig-name descname"><span class="pre">FNO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/models/fno.html#FNO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.models.FNO" title="Link to this definition"></a></dt>
+<dd><p>N-Dimensional Fourier Neural Operator. The FNO learns a mapping between
+spaces of functions discretized over regular grids.</p>
+<p>The key component of an FNO is its SpectralConv layer (see <code class="docutils literal notranslate"><span class="pre">neuralop.layers.spectral_convolution</span></code>), which
+is similar to a standard CNN conv layer but operates in the frequency domain.</p>
+<p>For more information, refer to <a class="reference internal" href="../../user_guide/fno.html#fno-guide"><span class="std std-ref">Fourier Neural Operators</span></a>.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_modes</strong><span class="classifier">Tuple[int]</span></dt><dd><p>number of modes to keep in Fourier Layer, along each dimension
+The dimensionality of the FNO is inferred from <code class="docutils literal notranslate"><span class="pre">len(n_modes)</span></code></p>
+</dd>
+<dt><strong>in_channels</strong><span class="classifier">int</span></dt><dd><p>Number of channels in input function</p>
+</dd>
+<dt><strong>out_channels</strong><span class="classifier">int</span></dt><dd><p>Number of channels in output function</p>
+</dd>
+<dt><strong>hidden_channels</strong><span class="classifier">int</span></dt><dd><p>width of the FNO (i.e. number of channels), by default 256</p>
+</dd>
+<dt><strong>n_layers</strong><span class="classifier">int, optional</span></dt><dd><p>Number of Fourier Layers, by default 4</p>
+</dd>
+<dt><strong>Documentation for more advanced parameters is below.</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Other Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt><strong>lifting_channel_ratio</strong><span class="classifier">int, optional</span></dt><dd><p>ratio of lifting channels to hidden_channels, by default 2
+The number of liting channels in the lifting block of the FNO is
+lifting_channel_ratio * hidden_channels (e.g. default 512)</p>
+</dd>
+<dt><strong>projection_channel_ratio</strong><span class="classifier">int, optional</span></dt><dd><p>ratio of projection channels to hidden_channels, by default 2
+The number of projection channels in the projection block of the FNO is
+projection_channel_ratio * hidden_channels (e.g. default 512)</p>
+</dd>
+<dt><strong>positional_embedding</strong><span class="classifier">Union[str, nn.Module], optional</span></dt><dd><p>Positional embedding to apply to last channels of raw input
+before being passed through the FNO. Defaults to “grid”</p>
+<ul class="simple">
+<li><p>If “grid”, appends a grid positional embedding with default settings to</p></li>
+</ul>
+<p>the last channels of raw input. Assumes the inputs are discretized
+over a grid with entry [0,0,…] at the origin and side lengths of 1.</p>
+<ul class="simple">
+<li><p>If an initialized GridEmbedding module, uses this module directly</p></li>
+</ul>
+<p>See <code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.embeddings.GridEmbeddingND</span></code> for details.</p>
+<ul class="simple">
+<li><p>If None, does nothing</p></li>
+</ul>
+</dd>
+<dt><strong>non_linearity</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>Non-Linear activation function module to use, by default F.gelu</p>
+</dd>
+<dt><strong>norm</strong><span class="classifier">str {“ada_in”, “group_norm”, “instance_norm”}, optional</span></dt><dd><p>Normalization layer to use, by default None</p>
+</dd>
+<dt><strong>complex</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether data is complex-valued (default False)
+if True, initializes complex-valued modules.</p>
+</dd>
+<dt><strong>channel_mlp_dropout</strong><span class="classifier">float, optional</span></dt><dd><p>dropout parameter for ChannelMLP in FNO Block, by default 0</p>
+</dd>
+<dt><strong>channel_mlp_expansion</strong><span class="classifier">float, optional</span></dt><dd><p>expansion parameter for ChannelMLP in FNO Block, by default 0.5</p>
+</dd>
+<dt><strong>channel_mlp_skip</strong><span class="classifier">str {‘linear’, ‘identity’, ‘soft-gating’}, optional</span></dt><dd><p>Type of skip connection to use in channel-mixing mlp, by default ‘soft-gating’</p>
+</dd>
+<dt><strong>fno_skip</strong><span class="classifier">str {‘linear’, ‘identity’, ‘soft-gating’}, optional</span></dt><dd><p>Type of skip connection to use in FNO layers, by default ‘linear’</p>
+</dd>
+<dt><strong>resolution_scaling_factor</strong><span class="classifier">Union[Number, List[Number]], optional</span></dt><dd><p>layer-wise factor by which to scale the domain resolution of function, by default None</p>
+<ul class="simple">
+<li><p>If a single number n, scales resolution by n at each layer</p></li>
+<li><p>if a list of numbers [n_0, n_1,…] scales layer i’s resolution by n_i.</p></li>
+</ul>
+</dd>
+<dt><strong>domain_padding</strong><span class="classifier">Union[Number, List[Number]], optional</span></dt><dd><p>If not None, percentage of padding to use, by default None
+To vary the percentage of padding used along each input dimension,
+pass in a list of percentages e.g. [p1, p2, …, pN] such that
+p1 corresponds to the percentage of padding along dim 1, etc.</p>
+</dd>
+<dt><strong>domain_padding_mode</strong><span class="classifier">str {‘symmetric’, ‘one-sided’}, optional</span></dt><dd><p>How to perform domain padding, by default ‘one-sided’</p>
+</dd>
+<dt><strong>fno_block_precision</strong><span class="classifier">str {‘full’, ‘half’, ‘mixed’}, optional</span></dt><dd><p>precision mode in which to perform spectral convolution, by default “full”</p>
+</dd>
+<dt><strong>stabilizer</strong><span class="classifier">str {‘tanh’} | None, optional</span></dt><dd><p>whether to use a tanh stabilizer in FNO block, by default None</p>
+<p>Note: stabilizer greatly improves performance in the case
+<cite>fno_block_precision=’mixed’</cite>.</p>
+</dd>
+<dt><strong>max_n_modes</strong><span class="classifier">Tuple[int] | None, optional</span></dt><dd><ul class="simple">
+<li><p>If not None, this allows to incrementally increase the number of</p></li>
+</ul>
+<p>modes in Fourier domain during training. Has to verify n &lt;= N
+for (n, m) in zip(max_n_modes, n_modes).</p>
+<ul class="simple">
+<li><p>If None, all the n_modes are used.</p></li>
+</ul>
+<p>This can be updated dynamically during training.</p>
+</dd>
+<dt><strong>factorization</strong><span class="classifier">str, optional</span></dt><dd><p>Tensor factorization of the FNO layer weights to use, by default None.</p>
+<ul class="simple">
+<li><p>If None, a dense tensor parametrizes the Spectral convolutions</p></li>
+<li><p>Otherwise, the specified tensor factorization is used.</p></li>
+</ul>
+</dd>
+<dt><strong>rank</strong><span class="classifier">float, optional</span></dt><dd><p>tensor rank to use in above factorization, by default 1.0</p>
+</dd>
+<dt><strong>fixed_rank_modes</strong><span class="classifier">bool, optional</span></dt><dd><p>Modes to not factorize, by default False</p>
+</dd>
+<dt><strong>implementation</strong><span class="classifier">str {‘factorized’, ‘reconstructed’}, optional</span></dt><dd><ul class="simple">
+<li><p>If ‘factorized’, implements tensor contraction with the individual factors of the decomposition</p></li>
+<li><p>If ‘reconstructed’, implements with the reconstructed full tensorized weight.</p></li>
+</ul>
+</dd>
+<dt><strong>decomposition_kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>extra kwargs for tensor decomposition (see <cite>tltorch.FactorizedTensor</cite>), by default dict()</p>
+</dd>
+<dt><strong>separable</strong><span class="classifier">bool, optional (<strong>DEACTIVATED</strong>)</span></dt><dd><p>if True, use a depthwise separable spectral convolution, by default False</p>
+</dd>
+<dt><strong>preactivation</strong><span class="classifier">bool, optional (<strong>DEACTIVATED</strong>)</span></dt><dd><p>whether to compute FNO forward pass with resnet-style preactivation, by default False</p>
+</dd>
+<dt><strong>conv_module</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>module to use for FNOBlock’s convolutions, by default SpectralConv</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neuralop.models</span> <span class="kn">import</span> <span class="n">FNO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">FNO</span><span class="p">(</span><span class="n">n_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">12</span><span class="p">),</span> <span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hidden_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span>
+<span class="go">FNO(</span>
+<span class="go">(positional_embedding): GridEmbeddingND()</span>
+<span class="go">(fno_blocks): FNOBlocks(</span>
+<span class="go">    (convs): SpectralConv(</span>
+<span class="go">    (weight): ModuleList(</span>
+<span class="go">        (0-3): 4 x DenseTensor(shape=torch.Size([64, 64, 12, 7]), rank=None)</span>
+<span class="go">    )</span>
+<span class="go">    )</span>
+<span class="go">        ... torch.nn.Module printout truncated ...</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_modes</strong></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/neuralop.models.FNO.html#neuralop.models.FNO.forward" title="neuralop.models.FNO.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>(x[, output_shape])</p></td>
+<td><p>FNO's forward pass</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralop.models.FNO.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/models/fno.html#FNO.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.models.FNO.forward" title="Link to this definition"></a></dt>
+<dd><p>FNO’s forward pass</p>
+<ol class="arabic simple">
+<li><p>Applies optional positional encoding</p></li>
+<li><dl class="simple">
+<dt>Sends inputs through a lifting layer to a high-dimensional latent</dt><dd><p>space</p>
+</dd>
+</dl>
+</li>
+<li><p>Applies optional domain padding to high-dimensional intermediate function representation</p></li>
+<li><p>Applies <cite>n_layers</cite> Fourier/FNO layers in sequence (SpectralConvolution + skip connections, nonlinearity)</p></li>
+<li><p>If domain padding was applied, domain padding is removed</p></li>
+<li><p>Projection of intermediate function representation to the output channels</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">tensor</span></dt><dd><p>input tensor</p>
+</dd>
+<dt><strong>output_shape</strong><span class="classifier">{tuple, tuple list, None}, default is None</span></dt><dd><p>Gives the option of specifying the exact output shape for odd shaped inputs.</p>
+<ul class="simple">
+<li><p>If None, don’t specify an output shape</p></li>
+<li><p>If tuple, specifies the output-shape of the <strong>last</strong> FNO Block</p></li>
+<li><p>If tuple list, specifies the exact output-shape of each FNO Block</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div class="clearer"></div></section>
+
+
+      </div>
+
+      
+        <nav class="pagination" role="navigation" aria-label="pagination">
+    
+    
+</nav>
+
+      
+
+        <footer class="footer">
+    <div class="content has-text-centered">
+        <div class="block">
+          &copy; Copyright 2024, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+        </div>
+    </div>
+  </footer>
+
+    </div>
+
+  </div>  
+
+	
+    
+    <div class="column is-hidden-touch is-2-desktop is-one-fifth-widescreen" id="localtoc-column">
+
+    <aside class="sticky-nav localtoc"> 
+        <p class="menu-label"> 
+            <span class="icon-text">
+                <span class="icon"><i class="fas fa-duotone fa-list"></i></span>
+                <span> On this page </span>
+            </span>
+        </p>
+
+        <div class="menu menu-list localtoc-list">
+        <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.models</span></code>.FNO</a><ul>
+<li><a class="reference internal" href="#neuralop.models.FNO"><code class="docutils literal notranslate"><span class="pre">FNO</span></code></a><ul>
+<li><a class="reference internal" href="#neuralop.models.FNO.forward"><code class="docutils literal notranslate"><span class="pre">FNO.forward()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+    </aside>
+    </div>
+
+  
+
+  </div>  
+  </div> 
+
+  
+  <script>
+    function toggle_sidebar() {
+        var element = document.getElementById("sidebar");
+        var container = document.getElementById("column-container");
+        var localtoccolumn = document.getElementById("localtoc-column");
+        element.classList.toggle("hide-tablet");
+        element.classList.toggle("is-hidden-mobile");
+        container.classList.toggle("sidemenu-hidden");
+        localtoccolumn.classList.toggle("is-one-fifth-widescreen");
+        localtoccolumn.classList.toggle("is-2-desktop");
+        localtoccolumn.classList.toggle("is-3-desktop");
+    }
+  </script> 
+
+
+
+  </body>
+</html>
