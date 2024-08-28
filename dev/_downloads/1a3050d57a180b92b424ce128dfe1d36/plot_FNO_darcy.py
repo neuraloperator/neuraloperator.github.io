@@ -1,18 +1,19 @@
 """
-Training an FNO on Darcy-Flow
+Training a TFNO on Darcy-Flow
 =============================
 
 In this example, we demonstrate how to use the small Darcy-Flow example we ship with the package
-to train a Fourier-Neural Operator
+to train a Tensorized Fourier-Neural Operator
 """
 
 # %%
 # 
 
+
 import torch
 import matplotlib.pyplot as plt
 import sys
-from neuralop.models import FNO
+from neuralop.models import TFNO
 from neuralop import Trainer
 from neuralop.training import AdamW
 from neuralop.data.datasets import load_darcy_flow_small
@@ -33,13 +34,9 @@ data_processor = data_processor.to(device)
 
 
 # %%
-# We create a simple FNO model
+# We create a tensorized FNO model
 
-model = FNO(n_modes=(16, 16),
-             in_channels=1, 
-             out_channels=1,
-             hidden_channels=32, 
-             projection_channels=64)
+model = TFNO(n_modes=(16, 16), in_channels=1, hidden_channels=32, projection_channels=64, factorization='tucker', rank=0.42)
 model = model.to(device)
 
 n_params = count_model_params(model)

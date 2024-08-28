@@ -18,21 +18,22 @@
 .. _sphx_glr_auto_examples_plot_FNO_darcy.py:
 
 
-Training an FNO on Darcy-Flow
+Training a TFNO on Darcy-Flow
 =============================
 
 In this example, we demonstrate how to use the small Darcy-Flow example we ship with the package
-to train a Fourier-Neural Operator
+to train a Tensorized Fourier-Neural Operator
 
-.. GENERATED FROM PYTHON SOURCE LINES 11-25
+.. GENERATED FROM PYTHON SOURCE LINES 11-26
 
 .. code-block:: Python
+
 
 
     import torch
     import matplotlib.pyplot as plt
     import sys
-    from neuralop.models import FNO
+    from neuralop.models import TFNO
     from neuralop import Trainer
     from neuralop.training import AdamW
     from neuralop.data.datasets import load_darcy_flow_small
@@ -49,11 +50,11 @@ to train a Fourier-Neural Operator
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 26-27
+.. GENERATED FROM PYTHON SOURCE LINES 27-28
 
 Loading the Navier-Stokes dataset in 128x128 resolution
 
-.. GENERATED FROM PYTHON SOURCE LINES 27-35
+.. GENERATED FROM PYTHON SOURCE LINES 28-36
 
 .. code-block:: Python
 
@@ -73,26 +74,26 @@ Loading the Navier-Stokes dataset in 128x128 resolution
 
  .. code-block:: none
 
+    /home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:93: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+      data = torch.load(
     Loading test db for resolution 16 with 100 samples 
+    /home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:172: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+      data = torch.load(Path(root_dir).joinpath(f"{dataset_name}_test_{res}.pt").as_posix())
     Loading test db for resolution 32 with 50 samples 
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 36-37
+.. GENERATED FROM PYTHON SOURCE LINES 37-38
 
-We create a simple FNO model
+We create a tensorized FNO model
 
-.. GENERATED FROM PYTHON SOURCE LINES 37-50
+.. GENERATED FROM PYTHON SOURCE LINES 38-47
 
 .. code-block:: Python
 
 
-    model = FNO(n_modes=(16, 16),
-                 in_channels=1, 
-                 out_channels=1,
-                 hidden_channels=32, 
-                 projection_channels=64)
+    model = TFNO(n_modes=(16, 16), in_channels=1, hidden_channels=32, projection_channels=64, factorization='tucker', rank=0.42)
     model = model.to(device)
 
     n_params = count_model_params(model)
@@ -109,16 +110,16 @@ We create a simple FNO model
  .. code-block:: none
 
 
-    Our model has 1188385 parameters.
+    Our model has 523257 parameters.
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 51-52
+.. GENERATED FROM PYTHON SOURCE LINES 48-49
 
 Create the optimizer
 
-.. GENERATED FROM PYTHON SOURCE LINES 52-58
+.. GENERATED FROM PYTHON SOURCE LINES 49-55
 
 .. code-block:: Python
 
@@ -135,11 +136,11 @@ Create the optimizer
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 59-60
+.. GENERATED FROM PYTHON SOURCE LINES 56-57
 
 Creating the losses
 
-.. GENERATED FROM PYTHON SOURCE LINES 60-67
+.. GENERATED FROM PYTHON SOURCE LINES 57-64
 
 .. code-block:: Python
 
@@ -157,7 +158,7 @@ Creating the losses
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 68-79
+.. GENERATED FROM PYTHON SOURCE LINES 65-76
 
 .. code-block:: Python
 
@@ -182,12 +183,12 @@ Creating the losses
 
 
     ### MODEL ###
-     FNO(
+     TFNO(
       (positional_embedding): GridEmbeddingND()
       (fno_blocks): FNOBlocks(
-        (convs): ModuleList(
-          (0-3): 4 x SpectralConv(
-            (weight): DenseTensor(shape=torch.Size([32, 32, 16, 9]), rank=None)
+        (convs): SpectralConv(
+          (weight): ModuleList(
+            (0-3): 4 x TuckerTensor(shape=(32, 32, 16, 9), rank=(26, 26, 13, 7))
           )
         )
         (fno_skips): ModuleList(
@@ -198,8 +199,8 @@ Creating the losses
       )
       (lifting): ChannelMLP(
         (fcs): ModuleList(
-          (0): Conv1d(3, 64, kernel_size=(1,), stride=(1,))
-          (1): Conv1d(64, 32, kernel_size=(1,), stride=(1,))
+          (0): Conv1d(3, 256, kernel_size=(1,), stride=(1,))
+          (1): Conv1d(256, 32, kernel_size=(1,), stride=(1,))
         )
       )
       (projection): ChannelMLP(
@@ -222,22 +223,22 @@ Creating the losses
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fca77766020>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7feaa01afac0>
 
     ### LOSSES ###
 
-     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7fca76f46830>
+     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7feaa01aff40>
 
-     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7fca76f46830>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7fca77798ca0>}
-
-
+     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7feaa01aff40>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7feaa01bcbe0>}
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 80-81
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 77-78
 
 Create the trainer
 
-.. GENERATED FROM PYTHON SOURCE LINES 81-90
+.. GENERATED FROM PYTHON SOURCE LINES 78-87
 
 .. code-block:: Python
 
@@ -257,11 +258,11 @@ Create the trainer
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 91-92
+.. GENERATED FROM PYTHON SOURCE LINES 88-89
 
 Actually train the model on our small Darcy-Flow dataset
 
-.. GENERATED FROM PYTHON SOURCE LINES 92-102
+.. GENERATED FROM PYTHON SOURCE LINES 89-99
 
 .. code-block:: Python
 
@@ -286,26 +287,26 @@ Actually train the model on our small Darcy-Flow dataset
     Training on 1000 samples
     Testing on [50, 50] samples         on resolutions [16, 32].
     Raw outputs of shape torch.Size([32, 1, 16, 16])
-    [0] time=1.66, avg_loss=0.5065, train_err=15.8288
-    Eval: 16_h1=0.2896, 16_l2=0.2301, 32_h1=0.3807, 32_l2=0.2436
-    [3] time=1.55, avg_loss=0.2119, train_err=6.6233
-    Eval: 16_h1=0.1865, 16_l2=0.1367, 32_h1=0.3028, 32_l2=0.1624
-    [6] time=1.54, avg_loss=0.1922, train_err=6.0064
-    Eval: 16_h1=0.2095, 16_l2=0.1634, 32_h1=0.3203, 32_l2=0.1882
-    [9] time=1.54, avg_loss=0.1814, train_err=5.6678
-    Eval: 16_h1=0.1942, 16_l2=0.1419, 32_h1=0.3132, 32_l2=0.1671
-    [12] time=1.54, avg_loss=0.1636, train_err=5.1129
-    Eval: 16_h1=0.2336, 16_l2=0.1748, 32_h1=0.3897, 32_l2=0.2129
-    [15] time=1.53, avg_loss=0.1126, train_err=3.5185
-    Eval: 16_h1=0.1868, 16_l2=0.1356, 32_h1=0.3154, 32_l2=0.1651
-    [18] time=1.54, avg_loss=0.1192, train_err=3.7263
-    Eval: 16_h1=0.1858, 16_l2=0.1359, 32_h1=0.3326, 32_l2=0.1827
+    [0] time=2.66, avg_loss=0.9003, train_err=28.1341
+    Eval: 16_h1=0.4747, 16_l2=0.3676, 32_h1=0.5249, 32_l2=0.3596
+    [3] time=2.69, avg_loss=0.3368, train_err=10.5251
+    Eval: 16_h1=0.2390, 16_l2=0.1887, 32_h1=0.3212, 32_l2=0.1959
+    [6] time=2.63, avg_loss=0.2176, train_err=6.8002
+    Eval: 16_h1=0.3172, 16_l2=0.2739, 32_h1=0.3649, 32_l2=0.2818
+    [9] time=2.66, avg_loss=0.1803, train_err=5.6347
+    Eval: 16_h1=0.1602, 16_l2=0.1168, 32_h1=0.2624, 32_l2=0.1403
+    [12] time=2.69, avg_loss=0.1738, train_err=5.4326
+    Eval: 16_h1=0.1735, 16_l2=0.1389, 32_h1=0.2747, 32_l2=0.1699
+    [15] time=2.65, avg_loss=0.1604, train_err=5.0136
+    Eval: 16_h1=0.1394, 16_l2=0.0983, 32_h1=0.2542, 32_l2=0.1292
+    [18] time=2.65, avg_loss=0.1506, train_err=4.7071
+    Eval: 16_h1=0.1596, 16_l2=0.1228, 32_h1=0.2629, 32_l2=0.1533
 
-    {'train_err': 3.398870412260294, 'avg_loss': 0.10876385319232941, 'avg_lasso_loss': None, 'epoch_train_time': 1.5358347818255424}
+    {'train_err': 4.956099387258291, 'avg_loss': 0.15859518039226533, 'avg_lasso_loss': None, 'epoch_train_time': 2.642554324999992}
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 103-113
+.. GENERATED FROM PYTHON SOURCE LINES 100-110
 
 Plot the prediction, and compare with the ground-truth 
 Note that we trained on a very small resolution for
@@ -318,7 +319,7 @@ ii) can be trained quickly on CPU
 
 In practice we would train a Neural Operator on one or multiple GPUs
 
-.. GENERATED FROM PYTHON SOURCE LINES 113-151
+.. GENERATED FROM PYTHON SOURCE LINES 110-148
 
 .. code-block:: Python
 
@@ -375,7 +376,7 @@ In practice we would train a Neural Operator on one or multiple GPUs
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 32.144 seconds)
+   **Total running time of the script:** (0 minutes 54.415 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_FNO_darcy.py:
@@ -391,6 +392,10 @@ In practice we would train a Neural Operator on one or multiple GPUs
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_FNO_darcy.py <plot_FNO_darcy.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: plot_FNO_darcy.zip <plot_FNO_darcy.zip>`
 
 
 .. only:: html

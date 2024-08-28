@@ -17,7 +17,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/tensorly_style.css?v=a02e9698" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -174,7 +174,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.models.FNO.html#neuralop.models.FNO" title="neuralop.models.FNO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FNO</span></code></a>(*args, **kwargs)</p></td>
-<td><p>N-Dimensional Fourier Neural Operator.</p></td>
+<td><p>N-Dimensional Fourier Neural Operator</p></td>
 </tr>
 </tbody>
 </table>
@@ -200,7 +200,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.models.TFNO.html#neuralop.models.TFNO" title="neuralop.models.TFNO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TFNO</span></code></a>(*args, **kwargs)</p></td>
-<td><p>N-Dimensional Fourier Neural Operator.</p></td>
+<td><p>N-Dimensional Fourier Neural Operator</p></td>
 </tr>
 </tbody>
 </table>
@@ -225,7 +225,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.models.SFNO.html#neuralop.models.SFNO" title="neuralop.models.SFNO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SFNO</span></code></a>(*args, **kwargs)</p></td>
-<td><p>N-Dimensional Spherical Fourier Neural Operator.</p></td>
+<td><p>N-Dimensional Spherical Fourier Neural Operator</p></td>
 </tr>
 </tbody>
 </table>
@@ -260,7 +260,7 @@
 in <a class="reference internal" href="#module-neuralop.layers" title="neuralop.layers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers</span></code></a> building blocks,
 in the form of PyTorch layers, that you can use to build your own models:</p>
 <section id="neural-operator-layers">
-<h3>Neural operator layers<a class="headerlink" href="#neural-operator-layers" title="Link to this heading"></a></h3>
+<h3>Neural operator Layers<a class="headerlink" href="#neural-operator-layers" title="Link to this heading"></a></h3>
 <p><strong>Spectral convolutions</strong> (in Fourier domain):</p>
 <span class="target" id="module-neuralop.layers.spectral_convolution"></span><p>General SpectralConv layer:</p>
 <table class="autosummary longtable docutils align-default">
@@ -300,23 +300,6 @@ in the form of PyTorch layers, that you can use to build your own models:</p>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.layers.integral_transform.IntegralTransform.html#neuralop.layers.integral_transform.IntegralTransform" title="neuralop.layers.integral_transform.IntegralTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntegralTransform</span></code></a>([channel_mlp, ...])</p></td>
 <td><p>Integral Kernel Transform (GNO) Computes one of the following:     (a) int_{A(x)} k(x, y) dy     (b) int_{A(x)} k(x, y) * f(y) dy     (c) int_{A(x)} k(x, y, f(y)) dy     (d) int_{A(x)} k(x, y, f(y)) * f(y) dy</p></td>
-</tr>
-</tbody>
-</table>
-<hr class="docutils" />
-<p><strong>Embeddings</strong></p>
-<p>Apply positional embeddings as additional channels on a function:</p>
-<span class="target" id="module-neuralop.layers.embeddings"></span><table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.layers.embeddings.GridEmbeddingND.html#neuralop.layers.embeddings.GridEmbeddingND" title="neuralop.layers.embeddings.GridEmbeddingND"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GridEmbeddingND</span></code></a>([dim, grid_boundaries])</p></td>
-<td><p>A positional embedding as a regular ND grid</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/neuralop.layers.embeddings.GridEmbedding2D.html#neuralop.layers.embeddings.GridEmbedding2D" title="neuralop.layers.embeddings.GridEmbedding2D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GridEmbedding2D</span></code></a>([grid_boundaries])</p></td>
-<td><p>A simple positional embedding as a regular 2D grid</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.layers.embeddings.SinusoidalEmbedding2D.html#neuralop.layers.embeddings.SinusoidalEmbedding2D" title="neuralop.layers.embeddings.SinusoidalEmbedding2D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SinusoidalEmbedding2D</span></code></a>(num_channels[, ...])</p></td>
-<td><p><p class="rubric">Methods</p>
-</p></td>
 </tr>
 </tbody>
 </table>
@@ -436,8 +419,7 @@ loss functions:</p>
 <td><p>DefaultDataProcessor is a simple processor  to pre/post process data before training/inferencing a model.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/neuralop.data.transforms.data_processors.MGPatchingDataProcessor.html#neuralop.data.transforms.data_processors.MGPatchingDataProcessor" title="neuralop.data.transforms.data_processors.MGPatchingDataProcessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MGPatchingDataProcessor</span></code></a>(model, levels, ...)</p></td>
-<td><p><p class="rubric">Methods</p>
-</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -511,7 +493,7 @@ loss functions:</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-neuralop.layers">Layers</a><ul>
-<li><a class="reference internal" href="#neural-operator-layers">Neural operator layers</a><ul>
+<li><a class="reference internal" href="#neural-operator-layers">Neural operator Layers</a><ul>
 </ul>
 </li>
 <li><a class="reference internal" href="#other-resolution-invariant-operations">Other resolution invariant operations</a><ul>

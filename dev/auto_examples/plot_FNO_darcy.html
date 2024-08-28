@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Training an FNO on Darcy-Flow &#8212; neuraloperator 0.3.0 documentation</title> 
+    <title>Training a TFNO on Darcy-Flow &#8212; neuraloperator 0.3.0 documentation</title> 
 <link rel="stylesheet" href="../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../_static/favicon/favicon-32x32.png">
@@ -17,7 +17,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/tensorly_style.css?v=a02e9698" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -132,7 +132,7 @@
 <li class="toctree-l2"><a class="reference internal" href="plot_count_flops.html">Using <cite>torchtnt</cite> to count FLOPS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_darcy_flow.html">A simple Darcy-Flow dataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="checkpoint_FNO_darcy.html">Training a TFNO on Darcy-Flow</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Training an FNO on Darcy-Flow</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Training a TFNO on Darcy-Flow</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_SFNO_swe.html">Training a SFNO on the spherical Shallow Water equations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_UNO_darcy.html">U-NO on Darcy-Flow</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_darcy_flow_spectrum.html">A simple Darcy-Flow spectrum analysis</a></li>
@@ -168,14 +168,14 @@
 <p><a class="reference internal" href="#sphx-glr-download-auto-examples-plot-fno-darcy-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code.</p>
 </div>
-<section class="sphx-glr-example-title" id="training-an-fno-on-darcy-flow">
-<span id="sphx-glr-auto-examples-plot-fno-darcy-py"></span><h1>Training an FNO on Darcy-Flow<a class="headerlink" href="#training-an-fno-on-darcy-flow" title="Link to this heading"></a></h1>
+<section class="sphx-glr-example-title" id="training-a-tfno-on-darcy-flow">
+<span id="sphx-glr-auto-examples-plot-fno-darcy-py"></span><h1>Training a TFNO on Darcy-Flow<a class="headerlink" href="#training-a-tfno-on-darcy-flow" title="Link to this heading"></a></h1>
 <p>In this example, we demonstrate how to use the small Darcy-Flow example we ship with the package
-to train a Fourier-Neural Operator</p>
+to train a Tensorized Fourier-Neural Operator</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">neuralop.models</span> <span class="kn">import</span> <span class="n">FNO</span>
+<span class="kn">from</span> <span class="nn">neuralop.models</span> <span class="kn">import</span> <span class="n">TFNO</span>
 <span class="kn">from</span> <span class="nn">neuralop</span> <span class="kn">import</span> <span class="n">Trainer</span>
 <span class="kn">from</span> <span class="nn">neuralop.training</span> <span class="kn">import</span> <span class="n">AdamW</span>
 <span class="kn">from</span> <span class="nn">neuralop.data.datasets</span> <span class="kn">import</span> <span class="n">load_darcy_flow_small</span>
@@ -194,16 +194,16 @@ to train a Fourier-Neural Operator</p>
 <span class="n">data_processor</span> <span class="o">=</span> <span class="n">data_processor</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Loading test db for resolution 16 with 100 samples
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:93: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don&#39;t have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  data = torch.load(
+Loading test db for resolution 16 with 100 samples
+/home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:172: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don&#39;t have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  data = torch.load(Path(root_dir).joinpath(f&quot;{dataset_name}_test_{res}.pt&quot;).as_posix())
 Loading test db for resolution 32 with 50 samples
 </pre></div>
 </div>
-<p>We create a simple FNO model</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">FNO</span><span class="p">(</span><span class="n">n_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span>
-             <span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-             <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-             <span class="n">hidden_channels</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
-             <span class="n">projection_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span>
+<p>We create a tensorized FNO model</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">TFNO</span><span class="p">(</span><span class="n">n_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hidden_channels</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">projection_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">factorization</span><span class="o">=</span><span class="s1">&#39;tucker&#39;</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="mf">0.42</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
 <span class="n">n_params</span> <span class="o">=</span> <span class="n">count_model_params</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
@@ -211,7 +211,7 @@ Loading test db for resolution 32 with 50 samples
 <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Our model has 1188385 parameters.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Our model has 523257 parameters.
 </pre></div>
 </div>
 <p>Create the optimizer</p>
@@ -239,12 +239,12 @@ Loading test db for resolution 32 with 50 samples
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>### MODEL ###
- FNO(
+ TFNO(
   (positional_embedding): GridEmbeddingND()
   (fno_blocks): FNOBlocks(
-    (convs): ModuleList(
-      (0-3): 4 x SpectralConv(
-        (weight): DenseTensor(shape=torch.Size([32, 32, 16, 9]), rank=None)
+    (convs): SpectralConv(
+      (weight): ModuleList(
+        (0-3): 4 x TuckerTensor(shape=(32, 32, 16, 9), rank=(26, 26, 13, 7))
       )
     )
     (fno_skips): ModuleList(
@@ -255,8 +255,8 @@ Loading test db for resolution 32 with 50 samples
   )
   (lifting): ChannelMLP(
     (fcs): ModuleList(
-      (0): Conv1d(3, 64, kernel_size=(1,), stride=(1,))
-      (1): Conv1d(64, 32, kernel_size=(1,), stride=(1,))
+      (0): Conv1d(3, 256, kernel_size=(1,), stride=(1,))
+      (1): Conv1d(256, 32, kernel_size=(1,), stride=(1,))
     )
   )
   (projection): ChannelMLP(
@@ -279,13 +279,13 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fca77766020&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7feaa01afac0&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fca76f46830&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7feaa01aff40&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fca76f46830&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fca77798ca0&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7feaa01aff40&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7feaa01bcbe0&gt;}
 </pre></div>
 </div>
 <p>Create the trainer</p>
@@ -311,22 +311,22 @@ Parameter Group 0
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Training on 1000 samples
 Testing on [50, 50] samples         on resolutions [16, 32].
 Raw outputs of shape torch.Size([32, 1, 16, 16])
-[0] time=1.66, avg_loss=0.5065, train_err=15.8288
-Eval: 16_h1=0.2896, 16_l2=0.2301, 32_h1=0.3807, 32_l2=0.2436
-[3] time=1.55, avg_loss=0.2119, train_err=6.6233
-Eval: 16_h1=0.1865, 16_l2=0.1367, 32_h1=0.3028, 32_l2=0.1624
-[6] time=1.54, avg_loss=0.1922, train_err=6.0064
-Eval: 16_h1=0.2095, 16_l2=0.1634, 32_h1=0.3203, 32_l2=0.1882
-[9] time=1.54, avg_loss=0.1814, train_err=5.6678
-Eval: 16_h1=0.1942, 16_l2=0.1419, 32_h1=0.3132, 32_l2=0.1671
-[12] time=1.54, avg_loss=0.1636, train_err=5.1129
-Eval: 16_h1=0.2336, 16_l2=0.1748, 32_h1=0.3897, 32_l2=0.2129
-[15] time=1.53, avg_loss=0.1126, train_err=3.5185
-Eval: 16_h1=0.1868, 16_l2=0.1356, 32_h1=0.3154, 32_l2=0.1651
-[18] time=1.54, avg_loss=0.1192, train_err=3.7263
-Eval: 16_h1=0.1858, 16_l2=0.1359, 32_h1=0.3326, 32_l2=0.1827
+[0] time=2.66, avg_loss=0.9003, train_err=28.1341
+Eval: 16_h1=0.4747, 16_l2=0.3676, 32_h1=0.5249, 32_l2=0.3596
+[3] time=2.69, avg_loss=0.3368, train_err=10.5251
+Eval: 16_h1=0.2390, 16_l2=0.1887, 32_h1=0.3212, 32_l2=0.1959
+[6] time=2.63, avg_loss=0.2176, train_err=6.8002
+Eval: 16_h1=0.3172, 16_l2=0.2739, 32_h1=0.3649, 32_l2=0.2818
+[9] time=2.66, avg_loss=0.1803, train_err=5.6347
+Eval: 16_h1=0.1602, 16_l2=0.1168, 32_h1=0.2624, 32_l2=0.1403
+[12] time=2.69, avg_loss=0.1738, train_err=5.4326
+Eval: 16_h1=0.1735, 16_l2=0.1389, 32_h1=0.2747, 32_l2=0.1699
+[15] time=2.65, avg_loss=0.1604, train_err=5.0136
+Eval: 16_h1=0.1394, 16_l2=0.0983, 32_h1=0.2542, 32_l2=0.1292
+[18] time=2.65, avg_loss=0.1506, train_err=4.7071
+Eval: 16_h1=0.1596, 16_l2=0.1228, 32_h1=0.2629, 32_l2=0.1533
 
-{&#39;train_err&#39;: 3.398870412260294, &#39;avg_loss&#39;: 0.10876385319232941, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 1.5358347818255424}
+{&#39;train_err&#39;: 4.956099387258291, &#39;avg_loss&#39;: 0.15859518039226533, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 2.642554324999992}
 </pre></div>
 </div>
 <p>Plot the prediction, and compare with the ground-truth
@@ -376,13 +376,16 @@ ii) can be trained quickly on CPU</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_plot_FNO_darcy_001.png" srcset="../_images/sphx_glr_plot_FNO_darcy_001.png" alt="Inputs, ground-truth output and prediction., Input x, Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 32.144 seconds)</p>
+<img src="../_images/sphx_glr_plot_FNO_darcy_001.png" srcset="../_images/sphx_glr_plot_FNO_darcy_001.png" alt="Inputs, ground-truth output and prediction., Input x, Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 54.415 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-fno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/e81e8f640b2a3cda84c542bbc8f36a54/plot_FNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_FNO_darcy.ipynb</span></code></a></p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/1a3050d57a180b92b424ce128dfe1d36/plot_FNO_darcy.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_FNO_darcy.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/645da00b8fbbb9bb5cae877fd0f31635/plot_FNO_darcy.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_FNO_darcy.zip</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>

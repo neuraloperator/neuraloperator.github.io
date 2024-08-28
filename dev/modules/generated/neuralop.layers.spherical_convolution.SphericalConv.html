@@ -17,7 +17,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/tensorly_style.css?v=a02e9698" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -164,7 +164,7 @@
 <h1><a class="reference internal" href="../api.html#module-neuralop.layers.spherical_convolution" title="neuralop.layers.spherical_convolution"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.spherical_convolution</span></code></a>.SphericalConv<a class="headerlink" href="#neuralop-layers-spherical-convolution-sphericalconv" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.layers.spherical_convolution.SphericalConv">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.spherical_convolution.</span></span><span class="sig-name descname"><span class="pre">SphericalConv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_n_modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution_scaling_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fno_block_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'full'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rank</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factorization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cp'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implementation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'reconstructed'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_rank_modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joint_factorization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decomposition_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_std</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sht_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ortho'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sht_grids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'equiangular'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">torch.float32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">complex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/spherical_convolution.html#SphericalConv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.spherical_convolution.SphericalConv" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.spherical_convolution.</span></span><span class="sig-name descname"><span class="pre">SphericalConv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_n_modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_scaling_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rank</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factorization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cp'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implementation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'reconstructed'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_rank_modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joint_factorization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decomposition_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_std</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sht_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ortho'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sht_grids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'equiangular'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">torch.float32</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/spherical_convolution.html#SphericalConv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.spherical_convolution.SphericalConv" title="Link to this definition"></a></dt>
 <dd><p>Spherical Convolution, base class for the SFNO <a class="reference internal" href="#radd7fd10dc7a-1" id="id1">[1]</a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -179,7 +179,26 @@ e.g. for 1 layer, [“input_grid”, “output_grid”]</p></li>
 <dt><strong>See SpectralConv for full list of other parameters</strong></dt><dd></dd>
 </dl>
 </dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>n_modes</strong></dt><dd></dd>
 </dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.layers.spherical_convolution.SphericalConv.forward" title="neuralop.layers.spherical_convolution.SphericalConv.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>(x[, indices, output_shape])</p></td>
+<td><p>Generic forward pass for the Factorized Spectral Conv</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#neuralop.layers.spherical_convolution.SphericalConv.get_conv" title="neuralop.layers.spherical_convolution.SphericalConv.get_conv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_conv</span></code></a>(indices)</p></td>
+<td><p>Returns a sub-convolutional layer from the joint parametrize main-convolution</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.layers.spherical_convolution.SphericalConv.transform" title="neuralop.layers.spherical_convolution.SphericalConv.transform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transform</span></code></a>(x[, layer_index, output_shape])</p></td>
+<td><p>Transforms an input x for a skip connection, by default just an identity map</p></td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">References</p>
 <div role="list" class="citation-list">
 <div class="citation" id="radd7fd10dc7a-1" role="doc-biblioentry">
@@ -189,27 +208,9 @@ Boris Bonev, Thorsten Kurth, Christian Hundt, Jaideep Pathak, Maximilian Baust, 
 ICML 2023.</p>
 </div>
 </div>
-<dl class="field-list simple">
-<dt class="field-odd">Attributes<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>n_modes</strong></dt><dd></dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">Methods</p>
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.layers.spherical_convolution.SphericalConv.forward" title="neuralop.layers.spherical_convolution.SphericalConv.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>(x[, output_shape])</p></td>
-<td><p>Generic forward pass for the Factorized Spectral Conv</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#neuralop.layers.spherical_convolution.SphericalConv.transform" title="neuralop.layers.spherical_convolution.SphericalConv.transform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transform</span></code></a>(x[, output_shape])</p></td>
-<td><p>Transforms an input x for a skip connection, by default just an identity map</p></td>
-</tr>
-</tbody>
-</table>
 <dl class="py method">
 <dt class="sig sig-object py" id="neuralop.layers.spherical_convolution.SphericalConv.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/spherical_convolution.html#SphericalConv.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.spherical_convolution.SphericalConv.transform" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/spherical_convolution.html#SphericalConv.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.spherical_convolution.SphericalConv.transform" title="Link to this definition"></a></dt>
 <dd><p>Transforms an input x for a skip connection, by default just an identity map</p>
 <p>If your function transforms the input then you should also implement this transform method 
 so the skip connection can also work.</p>
@@ -223,12 +224,14 @@ This allows you to deal with it however you want (e.g. avoid aliasing)</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neuralop.layers.spherical_convolution.SphericalConv.forward">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/spherical_convolution.html#SphericalConv.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.spherical_convolution.SphericalConv.forward" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/spherical_convolution.html#SphericalConv.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.spherical_convolution.SphericalConv.forward" title="Link to this definition"></a></dt>
 <dd><p>Generic forward pass for the Factorized Spectral Conv</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>x</strong><span class="classifier">torch.Tensor</span></dt><dd><p>input activation of size (batch_size, channels, d1, …, dN)</p>
+</dd>
+<dt><strong>indices</strong><span class="classifier">int, default is 0</span></dt><dd><p>if joint_factorization, index of the layers for n_layers &gt; 1</p>
 </dd>
 </dl>
 </dd>
@@ -238,6 +241,13 @@ This allows you to deal with it however you want (e.g. avoid aliasing)</p></li>
 </dl>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralop.layers.spherical_convolution.SphericalConv.get_conv">
+<span class="sig-name descname"><span class="pre">get_conv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indices</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/spherical_convolution.html#SphericalConv.get_conv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.spherical_convolution.SphericalConv.get_conv" title="Link to this definition"></a></dt>
+<dd><p>Returns a sub-convolutional layer from the joint parametrize main-convolution</p>
+<p>The parametrization of sub-convolutional layers is shared with the main one.</p>
 </dd></dl>
 
 </dd></dl>
@@ -299,6 +309,7 @@ This allows you to deal with it however you want (e.g. avoid aliasing)</p></li>
 <li><a class="reference internal" href="#neuralop.layers.spherical_convolution.SphericalConv"><code class="docutils literal notranslate"><span class="pre">SphericalConv</span></code></a><ul>
 <li><a class="reference internal" href="#neuralop.layers.spherical_convolution.SphericalConv.transform"><code class="docutils literal notranslate"><span class="pre">SphericalConv.transform()</span></code></a></li>
 <li><a class="reference internal" href="#neuralop.layers.spherical_convolution.SphericalConv.forward"><code class="docutils literal notranslate"><span class="pre">SphericalConv.forward()</span></code></a></li>
+<li><a class="reference internal" href="#neuralop.layers.spherical_convolution.SphericalConv.get_conv"><code class="docutils literal notranslate"><span class="pre">SphericalConv.get_conv()</span></code></a></li>
 </ul>
 </li>
 </ul>

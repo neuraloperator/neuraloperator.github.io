@@ -80,17 +80,12 @@ Loading the Navier-Stokes dataset in 128x128 resolution
 
 We create a tensorized FNO model
 
-.. GENERATED FROM PYTHON SOURCE LINES 33-47
+.. GENERATED FROM PYTHON SOURCE LINES 33-42
 
 .. code-block:: Python
 
 
-    model = SFNO(n_modes=(32, 32),
-                 in_channels=3,
-                 out_channels=3,
-                 hidden_channels=32,
-                 projection_channels=64,
-                 factorization='dense')
+    model = SFNO(n_modes=(32, 32), in_channels=3, out_channels=3, hidden_channels=32, projection_channels=64, factorization='dense')
     model = model.to(device)
 
     n_params = count_model_params(model)
@@ -106,21 +101,17 @@ We create a tensorized FNO model
 
  .. code-block:: none
 
-    self.sht_grids=['equiangular', 'equiangular']
-    self.sht_grids=['equiangular', 'equiangular']
-    self.sht_grids=['equiangular', 'equiangular']
-    self.sht_grids=['equiangular', 'equiangular']
 
-    Our model has 275555 parameters.
+    Our model has 278435 parameters.
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 48-49
+.. GENERATED FROM PYTHON SOURCE LINES 43-44
 
 Create the optimizer
 
-.. GENERATED FROM PYTHON SOURCE LINES 49-55
+.. GENERATED FROM PYTHON SOURCE LINES 44-50
 
 .. code-block:: Python
 
@@ -137,11 +128,11 @@ Create the optimizer
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 56-57
+.. GENERATED FROM PYTHON SOURCE LINES 51-52
 
 Creating the losses
 
-.. GENERATED FROM PYTHON SOURCE LINES 57-64
+.. GENERATED FROM PYTHON SOURCE LINES 52-59
 
 .. code-block:: Python
 
@@ -159,7 +150,7 @@ Creating the losses
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 65-76
+.. GENERATED FROM PYTHON SOURCE LINES 60-71
 
 .. code-block:: Python
 
@@ -187,13 +178,13 @@ Creating the losses
      SFNO(
       (positional_embedding): GridEmbeddingND()
       (fno_blocks): FNOBlocks(
-        (convs): ModuleList(
-          (0-3): 4 x SphericalConv(
-            (weight): ComplexDenseTensor(shape=torch.Size([32, 32, 32]), rank=None)
-            (sht_handle): SHT(
-              (_SHT_cache): ModuleDict()
-              (_iSHT_cache): ModuleDict()
-            )
+        (convs): SphericalConv(
+          (weight): ModuleList(
+            (0-3): 4 x ComplexDenseTensor(shape=torch.Size([32, 32, 32]), rank=None)
+          )
+          (sht_handle): SHT(
+            (_SHT_cache): ModuleDict()
+            (_iSHT_cache): ModuleDict()
           )
         )
         (fno_skips): ModuleList(
@@ -201,22 +192,11 @@ Creating the losses
             (conv): Conv1d(32, 32, kernel_size=(1,), stride=(1,), bias=False)
           )
         )
-        (channel_mlp): ModuleList(
-          (0-3): 4 x ChannelMLP(
-            (fcs): ModuleList(
-              (0): Conv1d(32, 16, kernel_size=(1,), stride=(1,))
-              (1): Conv1d(16, 32, kernel_size=(1,), stride=(1,))
-            )
-          )
-        )
-        (channel_mlp_skips): ModuleList(
-          (0-3): 4 x SoftGating()
-        )
       )
       (lifting): ChannelMLP(
         (fcs): ModuleList(
-          (0): Conv1d(5, 64, kernel_size=(1,), stride=(1,))
-          (1): Conv1d(64, 32, kernel_size=(1,), stride=(1,))
+          (0): Conv1d(5, 256, kernel_size=(1,), stride=(1,))
+          (1): Conv1d(256, 32, kernel_size=(1,), stride=(1,))
         )
       )
       (projection): ChannelMLP(
@@ -239,22 +219,22 @@ Creating the losses
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f746f238df0>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fea8ebc0ee0>
 
     ### LOSSES ###
 
-     * Train: <neuralop.losses.data_losses.LpLoss object at 0x7f746c5a3d90>
+     * Train: <neuralop.losses.data_losses.LpLoss object at 0x7fea8ec2a2e0>
 
-     * Test: {'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f746c5a3d90>}
-
-
+     * Test: {'l2': <neuralop.losses.data_losses.LpLoss object at 0x7fea8ec2a2e0>}
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 77-78
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 72-73
 
 Create the trainer
 
-.. GENERATED FROM PYTHON SOURCE LINES 78-86
+.. GENERATED FROM PYTHON SOURCE LINES 73-81
 
 .. code-block:: Python
 
@@ -273,11 +253,11 @@ Create the trainer
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 87-88
+.. GENERATED FROM PYTHON SOURCE LINES 82-83
 
 Actually train the model on our small Darcy-Flow dataset
 
-.. GENERATED FROM PYTHON SOURCE LINES 88-98
+.. GENERATED FROM PYTHON SOURCE LINES 83-93
 
 .. code-block:: Python
 
@@ -302,26 +282,26 @@ Actually train the model on our small Darcy-Flow dataset
     Training on 200 samples
     Testing on [50, 50] samples         on resolutions [(32, 64), (64, 128)].
     Raw outputs of shape torch.Size([4, 3, 32, 64])
-    [0] time=0.91, avg_loss=2.6421, train_err=10.5682
-    Eval: (32, 64)_l2=2.1051, (64, 128)_l2=2.4542
-    [3] time=0.84, avg_loss=0.3812, train_err=1.5250
-    Eval: (32, 64)_l2=0.5328, (64, 128)_l2=2.3434
-    [6] time=0.73, avg_loss=0.2580, train_err=1.0322
-    Eval: (32, 64)_l2=0.5245, (64, 128)_l2=2.2983
-    [9] time=0.73, avg_loss=0.2163, train_err=0.8652
-    Eval: (32, 64)_l2=0.4739, (64, 128)_l2=2.2781
-    [12] time=0.73, avg_loss=0.1938, train_err=0.7753
-    Eval: (32, 64)_l2=0.4735, (64, 128)_l2=2.2642
-    [15] time=0.73, avg_loss=0.1628, train_err=0.6512
-    Eval: (32, 64)_l2=0.4826, (64, 128)_l2=2.2505
-    [18] time=0.73, avg_loss=0.1391, train_err=0.5565
-    Eval: (32, 64)_l2=0.4369, (64, 128)_l2=2.2668
+    [0] time=3.46, avg_loss=2.2655, train_err=9.0619
+    Eval: (32, 64)_l2=1.6165, (64, 128)_l2=2.6751
+    [3] time=3.47, avg_loss=0.4604, train_err=1.8414
+    Eval: (32, 64)_l2=0.5567, (64, 128)_l2=2.3834
+    [6] time=3.44, avg_loss=0.3189, train_err=1.2755
+    Eval: (32, 64)_l2=0.4640, (64, 128)_l2=2.3548
+    [9] time=3.41, avg_loss=0.2569, train_err=1.0278
+    Eval: (32, 64)_l2=0.4651, (64, 128)_l2=2.3221
+    [12] time=3.41, avg_loss=0.2121, train_err=0.8484
+    Eval: (32, 64)_l2=0.3232, (64, 128)_l2=2.3157
+    [15] time=3.40, avg_loss=0.1598, train_err=0.6390
+    Eval: (32, 64)_l2=0.2673, (64, 128)_l2=2.3022
+    [18] time=3.44, avg_loss=0.1432, train_err=0.5729
+    Eval: (32, 64)_l2=0.2376, (64, 128)_l2=2.3091
 
-    {'train_err': 0.5427721077203751, 'avg_loss': 0.13569302693009377, 'avg_lasso_loss': None, 'epoch_train_time': 0.7358115278184414}
+    {'train_err': 0.550230712890625, 'avg_loss': 0.13755767822265624, 'avg_lasso_loss': None, 'epoch_train_time': 3.4114261440000746}
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 99-109
+.. GENERATED FROM PYTHON SOURCE LINES 94-104
 
 Plot the prediction, and compare with the ground-truth 
 Note that we trained on a very small resolution for
@@ -334,7 +314,7 @@ ii) can be trained quickly on CPU
 
 In practice we would train a Neural Operator on one or multiple GPUs
 
-.. GENERATED FROM PYTHON SOURCE LINES 109-144
+.. GENERATED FROM PYTHON SOURCE LINES 104-139
 
 .. code-block:: Python
 
@@ -388,7 +368,7 @@ In practice we would train a Neural Operator on one or multiple GPUs
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 20.521 seconds)
+   **Total running time of the script:** (1 minutes 25.030 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_SFNO_swe.py:
@@ -404,6 +384,10 @@ In practice we would train a Neural Operator on one or multiple GPUs
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_SFNO_swe.py <plot_SFNO_swe.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: plot_SFNO_swe.zip <plot_SFNO_swe.zip>`
 
 
 .. only:: html

@@ -16,7 +16,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -333,11 +333,16 @@
 <span class="sd">        tensor weight individually</span>
 <span class="sd">    init_std : float or &#39;auto&#39;, default is &#39;auto&#39;</span>
 <span class="sd">        std to use for the init</span>
+<span class="sd">    n_layers : int, optional</span>
+<span class="sd">        Number of Fourier Layers, by default 4</span>
 <span class="sd">    factorization : str or None, {&#39;tucker&#39;, &#39;cp&#39;, &#39;tt&#39;}, default is None</span>
 <span class="sd">        If None, a single dense weight is learned for the FNO.</span>
 <span class="sd">        Otherwise, that weight, used for the contraction in the Fourier domain</span>
 <span class="sd">        is learned in factorized form. In that case, `factorization` is the</span>
 <span class="sd">        tensor factorization of the parameters weight used.</span>
+<span class="sd">    joint_factorization : bool, optional</span>
+<span class="sd">        Whether all the Fourier Layers should be parametrized by a single tensor</span>
+<span class="sd">        (vs one per layer), by default False Ignored if ``factorization is None``</span>
 <span class="sd">    rank : float or rank, optional</span>
 <span class="sd">        Rank of the tensor factorization of the Fourier weights, by default 1.0</span>
 <span class="sd">        Ignored if ``factorization is None``</span>
@@ -356,7 +361,7 @@
 <span class="sd">    decomposition_kwargs : dict, optional, default is {}</span>
 <span class="sd">        Optionaly additional parameters to pass to the tensor decomposition</span>
 <span class="sd">        Ignored if ``factorization is None``</span>
-<span class="sd">    complex: bool, optional</span>
+<span class="sd">    complex_data: bool, optional</span>
 <span class="sd">        whether data takes on complex values in the spatial domain, by default False</span>
 <span class="sd">        if True, uses different logic for FFT contraction and uses full FFT instead of real-valued</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -366,29 +371,30 @@
         <span class="n">in_channels</span><span class="p">,</span>
         <span class="n">out_channels</span><span class="p">,</span>
         <span class="n">n_modes</span><span class="p">,</span>
-        <span class="nb">complex</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">max_n_modes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">bias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">n_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">separable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">resolution_scaling_factor</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Number</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Number</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">output_scaling_factor</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Number</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Number</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">fno_block_precision</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">,</span>
         <span class="n">rank</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
         <span class="n">factorization</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">implementation</span><span class="o">=</span><span class="s2">&quot;reconstructed&quot;</span><span class="p">,</span>
         <span class="n">fixed_rank_modes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">joint_factorization</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">decomposition_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+        <span class="n">complex_data</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">init_std</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
         <span class="n">fft_norm</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span>
         <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span> <span class="o">=</span> <span class="n">in_channels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span> <span class="o">=</span> <span class="n">out_channels</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">complex</span> <span class="o">=</span> <span class="nb">complex</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">joint_factorization</span> <span class="o">=</span> <span class="n">joint_factorization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">complex_data</span> <span class="o">=</span> <span class="n">complex_data</span>
 
         <span class="c1"># n_modes is the total number of modes kept along each dimension</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_modes</span> <span class="o">=</span> <span class="n">n_modes</span>
@@ -403,11 +409,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">fno_block_precision</span> <span class="o">=</span> <span class="n">fno_block_precision</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">=</span> <span class="n">rank</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">factorization</span> <span class="o">=</span> <span class="n">factorization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_layers</span> <span class="o">=</span> <span class="n">n_layers</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">implementation</span> <span class="o">=</span> <span class="n">implementation</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">resolution_scaling_factor</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_scaling_factor</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
             <span class="kc">None</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span>
-        <span class="p">]</span> <span class="o">=</span> <span class="n">validate_scaling_factor</span><span class="p">(</span><span class="n">resolution_scaling_factor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">)</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="n">validate_scaling_factor</span><span class="p">(</span><span class="n">output_scaling_factor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span> <span class="n">n_layers</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">init_std</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
             <span class="n">init_std</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">in_channels</span> <span class="o">+</span> <span class="n">out_channels</span><span class="p">))</span><span class="o">**</span><span class="mf">0.5</span>
@@ -438,36 +445,50 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">separable</span> <span class="o">=</span> <span class="n">separable</span>
 
         <span class="n">tensor_kwargs</span> <span class="o">=</span> <span class="n">decomposition_kwargs</span> <span class="k">if</span> <span class="n">decomposition_kwargs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
-
-        <span class="c1"># Create/init spectral weight tensor</span>
-
         <span class="k">if</span> <span class="n">factorization</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">weight_shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">cfloat</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">weight_shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">cfloat</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span><span class="p">)]</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">:</span>
+                <span class="n">w</span><span class="o">.</span><span class="n">normal_</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">init_std</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">joint_factorization</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">FactorizedTensor</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">n_layers</span><span class="p">,</span> <span class="o">*</span><span class="n">weight_shape</span><span class="p">),</span>
+                <span class="n">rank</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rank</span><span class="p">,</span> <span class="n">factorization</span><span class="o">=</span><span class="n">factorization</span><span class="p">,</span> <span class="n">fixed_rank_modes</span><span class="o">=</span><span class="n">fixed_rank_modes</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">cfloat</span><span class="p">,</span> <span class="o">**</span><span class="n">tensor_kwargs</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">normal_</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">init_std</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">FactorizedTensor</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">weight_shape</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rank</span><span class="p">,</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">([</span>
+                <span class="n">FactorizedTensor</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">weight_shape</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rank</span><span class="p">,</span> 
                                      <span class="n">factorization</span><span class="o">=</span><span class="n">factorization</span><span class="p">,</span> <span class="n">fixed_rank_modes</span><span class="o">=</span><span class="n">fixed_rank_modes</span><span class="p">,</span>
                                      <span class="o">**</span><span class="n">tensor_kwargs</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">cfloat</span><span class="p">)</span> 
-        <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">normal_</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">init_std</span><span class="p">)</span>
-        
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span><span class="p">)]</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">:</span>
+                <span class="n">w</span><span class="o">.</span><span class="n">normal_</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">init_std</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_contract</span> <span class="o">=</span> <span class="n">get_contract_fun</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">implementation</span><span class="o">=</span><span class="n">implementation</span><span class="p">,</span> <span class="n">separable</span><span class="o">=</span><span class="n">separable</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">implementation</span><span class="o">=</span><span class="n">implementation</span><span class="p">,</span> <span class="n">separable</span><span class="o">=</span><span class="n">separable</span>
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">bias</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
-                <span class="n">init_std</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="nb">tuple</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span><span class="p">])</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">))</span>
+                <span class="n">init_std</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="o">*</span><span class="p">((</span><span class="n">n_layers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">))</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="kc">None</span>
 
+    <span class="k">def</span> <span class="nf">_get_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+
 <div class="viewcode-block" id="SpectralConv.transform">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.spectral_convolution.SpectralConv.html#neuralop.layers.spectral_convolution.SpectralConv.transform">[docs]</a>
-    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">layer_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">in_shape</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution_scaling_factor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">output_shape</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_scaling_factor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">output_shape</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">out_shape</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
-                <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">s</span> <span class="o">*</span> <span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">in_shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution_scaling_factor</span><span class="p">)]</span>
+                <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">s</span> <span class="o">*</span> <span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">in_shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_scaling_factor</span><span class="p">[</span><span class="n">layer_index</span><span class="p">])]</span>
             <span class="p">)</span>
         <span class="k">elif</span> <span class="n">output_shape</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">out_shape</span> <span class="o">=</span> <span class="n">output_shape</span>
@@ -493,14 +514,14 @@
         <span class="c1"># the real FFT is skew-symmetric, so the last mode has a redundacy if our data is real in space </span>
         <span class="c1"># As a design choice we do the operation here to avoid users dealing with the +1</span>
         <span class="c1"># if we use the full FFT we cannot cut off informtion from the last mode</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">complex</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">complex_data</span><span class="p">:</span>
             <span class="n">n_modes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">n_modes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_n_modes</span> <span class="o">=</span> <span class="n">n_modes</span>
 
 <div class="viewcode-block" id="SpectralConv.forward">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.spectral_convolution.SpectralConv.html#neuralop.layers.spectral_convolution.SpectralConv.forward">[docs]</a>
     <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">output_shape</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">output_shape</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Generic forward pass for the Factorized Spectral Conv</span>
 
@@ -508,6 +529,8 @@
 <span class="sd">        ----------</span>
 <span class="sd">        x : torch.Tensor</span>
 <span class="sd">            input activation of size (batch_size, channels, d1, ..., dN)</span>
+<span class="sd">        indices : int, default is 0</span>
+<span class="sd">            if joint_factorization, index of the layers for n_layers &gt; 1</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -516,14 +539,14 @@
         <span class="n">batchsize</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="o">*</span><span class="n">mode_sizes</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
 
         <span class="n">fft_size</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">mode_sizes</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">complex</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">complex_data</span><span class="p">:</span>
             <span class="n">fft_size</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">fft_size</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># Redundant last coefficient in real spatial data</span>
         <span class="n">fft_dims</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fno_block_precision</span> <span class="o">==</span> <span class="s2">&quot;half&quot;</span><span class="p">:</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">half</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">complex</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">complex_data</span><span class="p">:</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fft_norm</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">fft_dims</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span> 
             <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfftn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fft_norm</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">fft_dims</span><span class="p">)</span>
@@ -551,14 +574,14 @@
             <span class="n">slices_w</span> <span class="o">=</span> <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)]</span> <span class="c1"># channels</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">slices_w</span> <span class="o">=</span>  <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)]</span> <span class="c1"># in_channels, out_channels</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">complex</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">complex_data</span><span class="p">:</span>
             <span class="n">slices_w</span> <span class="o">+=</span> <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="n">start</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="n">start</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span> <span class="k">if</span> <span class="n">start</span> <span class="k">else</span> <span class="nb">slice</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="n">starts</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># The last mode already has redundant half removed in real FFT</span>
             <span class="n">slices_w</span> <span class="o">+=</span> <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="n">start</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="n">start</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span> <span class="k">if</span> <span class="n">start</span> <span class="k">else</span> <span class="nb">slice</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="n">starts</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
             <span class="n">slices_w</span> <span class="o">+=</span> <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="o">-</span><span class="n">starts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="n">starts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)]</span>
         
-        <span class="n">weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="n">slices_w</span><span class="p">]</span>
+        <span class="n">weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_weight</span><span class="p">(</span><span class="n">indices</span><span class="p">)[</span><span class="n">slices_w</span><span class="p">]</span>
 
         <span class="c1"># if separable conv, weight tensor only has one channel dim</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">separable</span><span class="p">:</span>
@@ -569,15 +592,15 @@
         <span class="n">starts</span> <span class="o">=</span> <span class="p">[(</span><span class="n">size</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">n_mode</span><span class="p">))</span> <span class="k">for</span> <span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">n_mode</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:]),</span> <span class="nb">list</span><span class="p">(</span><span class="n">weight</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">weight_start_idx</span><span class="p">:]))]</span>
         <span class="n">slices_x</span> <span class="o">=</span>  <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)]</span> <span class="c1"># Batch_size, channels</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">complex</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">complex_data</span><span class="p">:</span>
             <span class="n">slices_x</span> <span class="o">+=</span> <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="n">start</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="n">start</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span> <span class="k">if</span> <span class="n">start</span> <span class="k">else</span> <span class="nb">slice</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="n">starts</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">slices_x</span> <span class="o">+=</span> <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="n">start</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="n">start</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span> <span class="k">if</span> <span class="n">start</span> <span class="k">else</span> <span class="nb">slice</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="n">starts</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
             <span class="n">slices_x</span> <span class="o">+=</span> <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="o">-</span><span class="n">starts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="n">starts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)]</span> <span class="c1"># The last mode already has redundant half removed</span>
         <span class="n">out_fft</span><span class="p">[</span><span class="n">slices_x</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contract</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">slices_x</span><span class="p">],</span> <span class="n">weight</span><span class="p">,</span> <span class="n">separable</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">separable</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution_scaling_factor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">output_shape</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">mode_sizes</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="nb">round</span><span class="p">(</span><span class="n">s</span> <span class="o">*</span> <span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">mode_sizes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution_scaling_factor</span><span class="p">)])</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_scaling_factor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">output_shape</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">mode_sizes</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="nb">round</span><span class="p">(</span><span class="n">s</span> <span class="o">*</span> <span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">mode_sizes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_scaling_factor</span><span class="p">[</span><span class="n">indices</span><span class="p">])])</span>
 
         <span class="k">if</span> <span class="n">output_shape</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">mode_sizes</span> <span class="o">=</span> <span class="n">output_shape</span>
@@ -585,16 +608,32 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">out_fft</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">out_fft</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">fft_dims</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
         
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">complex</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">complex_data</span><span class="p">:</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifftn</span><span class="p">(</span><span class="n">out_fft</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">mode_sizes</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">fft_dims</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fft_norm</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">irfftn</span><span class="p">(</span><span class="n">out_fft</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">mode_sizes</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">fft_dims</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fft_norm</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="p">[</span><span class="n">indices</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">x</span></div>
-</div>
+
+
+<div class="viewcode-block" id="SpectralConv.get_conv">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.spectral_convolution.SpectralConv.html#neuralop.layers.spectral_convolution.SpectralConv.get_conv">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_conv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a sub-convolutional layer from the joint parametrize main-convolution</span>
+
+<span class="sd">        The parametrization of sub-convolutional layers is shared with the main one.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_layers</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="ne">Warning</span><span class="p">(</span><span class="s2">&quot;A single convolution is parametrized, directly use the main class.&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">SubConv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_conv</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span></div>
 
 
 
@@ -651,16 +690,16 @@
             <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_modes</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="c1"># :half_n_modes[0]]</span>
         <span class="p">)</span>
         <span class="n">out_fft</span><span class="p">[</span><span class="n">slices</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contract</span><span class="p">(</span>
-            <span class="n">x</span><span class="p">[</span><span class="n">slices</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="n">slices</span><span class="p">],</span> <span class="n">separable</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">separable</span>
+            <span class="n">x</span><span class="p">[</span><span class="n">slices</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_weight</span><span class="p">(</span><span class="n">indices</span><span class="p">)[</span><span class="n">slices</span><span class="p">],</span> <span class="n">separable</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">separable</span>
         <span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution_scaling_factor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">width</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">width</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution_scaling_factor</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_scaling_factor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">width</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">width</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_scaling_factor</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
         <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">irfft</span><span class="p">(</span><span class="n">out_fft</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fft_norm</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="p">[</span><span class="o">...</span><span class="p">]</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="p">[</span><span class="n">indices</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">x</span></div>
 </div>
@@ -678,7 +717,7 @@
 
 <div class="viewcode-block" id="SpectralConv2d.forward">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.spectral_convolution.SpectralConv2d.html#neuralop.layers.spectral_convolution.SpectralConv2d.forward">[docs]</a>
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="n">batchsize</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
 
         <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfft2</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">float</span><span class="p">(),</span> <span class="n">norm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fft_norm</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
@@ -703,28 +742,28 @@
             <span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">n_modes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># -half_n_modes[0]:,</span>
             <span class="nb">slice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_modes</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>  <span class="c1"># ......      :half_n_modes[1]]</span>
         <span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;2D: </span><span class="si">{</span><span class="n">x</span><span class="p">[</span><span class="n">slices0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="si">=}</span><span class="s1">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="n">slices0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="si">=}</span><span class="s1">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">shape</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;2D: </span><span class="si">{</span><span class="n">x</span><span class="p">[</span><span class="n">slices0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="si">=}</span><span class="s1">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_weight</span><span class="p">(</span><span class="n">indices</span><span class="p">)[</span><span class="n">slices0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="si">=}</span><span class="s1">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_weight</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Upper block (truncate high frequencies).&quot;&quot;&quot;</span>
         <span class="n">out_fft</span><span class="p">[</span><span class="n">slices0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contract</span><span class="p">(</span>
-            <span class="n">x</span><span class="p">[</span><span class="n">slices0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="n">slices1</span><span class="p">],</span> <span class="n">separable</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">separable</span>
+            <span class="n">x</span><span class="p">[</span><span class="n">slices0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_weight</span><span class="p">(</span><span class="n">indices</span><span class="p">)[</span><span class="n">slices1</span><span class="p">],</span> <span class="n">separable</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">separable</span>
         <span class="p">)</span>
 
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Lower block&quot;&quot;&quot;</span>
         <span class="n">out_fft</span><span class="p">[</span><span class="n">slices1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contract</span><span class="p">(</span>
-            <span class="n">x</span><span class="p">[</span><span class="n">slices1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="n">slices0</span><span class="p">],</span> <span class="n">separable</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">separable</span>
+            <span class="n">x</span><span class="p">[</span><span class="n">slices1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_weight</span><span class="p">(</span><span class="n">indices</span><span class="p">)[</span><span class="n">slices0</span><span class="p">],</span> <span class="n">separable</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">separable</span>
         <span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution_scaling_factor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">width</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">width</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution_scaling_factor</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="n">height</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">height</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution_scaling_factor</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_scaling_factor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">width</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">width</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_scaling_factor</span><span class="p">[</span><span class="n">indices</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">height</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">height</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_scaling_factor</span><span class="p">[</span><span class="n">indices</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
 
         <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">irfft2</span><span class="p">(</span>
             <span class="n">out_fft</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">norm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fft_norm</span>
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="p">[</span><span class="n">indices</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">x</span></div>
 </div>
@@ -742,7 +781,7 @@
 
 <div class="viewcode-block" id="SpectralConv3d.forward">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.spectral_convolution.SpectralConv3d.html#neuralop.layers.spectral_convolution.SpectralConv3d.forward">[docs]</a>
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="n">batchsize</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">depth</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
 
         <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfftn</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">float</span><span class="p">(),</span> <span class="n">norm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fft_norm</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
@@ -784,34 +823,34 @@
 
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Upper block -- truncate high frequencies.&quot;&quot;&quot;</span>
         <span class="n">out_fft</span><span class="p">[</span><span class="n">slices0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contract</span><span class="p">(</span>
-            <span class="n">x</span><span class="p">[</span><span class="n">slices0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="n">slices3</span><span class="p">],</span> <span class="n">separable</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">separable</span>
+            <span class="n">x</span><span class="p">[</span><span class="n">slices0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_weight</span><span class="p">(</span><span class="n">indices</span><span class="p">)[</span><span class="n">slices3</span><span class="p">],</span> <span class="n">separable</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">separable</span>
         <span class="p">)</span>
 
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Low-pass filter for indices 2 &amp; 4, and high-pass filter for index 3.&quot;&quot;&quot;</span>
         <span class="n">out_fft</span><span class="p">[</span><span class="n">slices1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contract</span><span class="p">(</span>
-            <span class="n">x</span><span class="p">[</span><span class="n">slices1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="n">slices2</span><span class="p">],</span> <span class="n">separable</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">separable</span>
+            <span class="n">x</span><span class="p">[</span><span class="n">slices1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_weight</span><span class="p">(</span><span class="n">indices</span><span class="p">)[</span><span class="n">slices2</span><span class="p">],</span> <span class="n">separable</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">separable</span>
         <span class="p">)</span>
 
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Low-pass filter for indices 3 &amp; 4, and high-pass filter for index 2.&quot;&quot;&quot;</span>
         <span class="n">out_fft</span><span class="p">[</span><span class="n">slices2</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contract</span><span class="p">(</span>
-            <span class="n">x</span><span class="p">[</span><span class="n">slices2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="n">slices1</span><span class="p">],</span> <span class="n">separable</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">separable</span>
+            <span class="n">x</span><span class="p">[</span><span class="n">slices2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_weight</span><span class="p">(</span><span class="n">indices</span><span class="p">)[</span><span class="n">slices1</span><span class="p">],</span> <span class="n">separable</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">separable</span>
         <span class="p">)</span>
 
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Lower block -- low-cut filter in indices 2 &amp; 3</span>
 <span class="sd">        and high-cut filter in index 4.&quot;&quot;&quot;</span>
         <span class="n">out_fft</span><span class="p">[</span><span class="n">slices3</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contract</span><span class="p">(</span>
-            <span class="n">x</span><span class="p">[</span><span class="n">slices3</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="n">slices0</span><span class="p">],</span> <span class="n">separable</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">separable</span>
+            <span class="n">x</span><span class="p">[</span><span class="n">slices3</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_weight</span><span class="p">(</span><span class="n">indices</span><span class="p">)[</span><span class="n">slices0</span><span class="p">],</span> <span class="n">separable</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">separable</span>
         <span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution_scaling_factor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">width</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">width</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution_scaling_factor</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="n">height</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">height</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution_scaling_factor</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-            <span class="n">depth</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">depth</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution_scaling_factor</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_scaling_factor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">width</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">width</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_scaling_factor</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">height</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">height</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_scaling_factor</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">depth</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">depth</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_scaling_factor</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 
         <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">irfftn</span><span class="p">(</span><span class="n">out_fft</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">depth</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">norm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fft_norm</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="p">[</span><span class="n">indices</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">x</span></div>
 </div>
 

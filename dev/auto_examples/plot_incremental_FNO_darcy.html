@@ -17,7 +17,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/tensorly_style.css?v=a02e9698" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -131,7 +131,7 @@
 <li class="toctree-l2"><a class="reference internal" href="plot_count_flops.html">Using <cite>torchtnt</cite> to count FLOPS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_darcy_flow.html">A simple Darcy-Flow dataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="checkpoint_FNO_darcy.html">Training a TFNO on Darcy-Flow</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_FNO_darcy.html">Training an FNO on Darcy-Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_FNO_darcy.html">Training a TFNO on Darcy-Flow</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_SFNO_swe.html">Training a SFNO on the spherical Shallow Water equations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_UNO_darcy.html">U-NO on Darcy-Flow</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_darcy_flow_spectrum.html">A simple Darcy-Flow spectrum analysis</a></li>
@@ -192,7 +192,11 @@ to download the full example code.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Loading test db for resolution 16 with 100 samples
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:93: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don&#39;t have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  data = torch.load(
+Loading test db for resolution 16 with 100 samples
+/home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:172: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don&#39;t have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  data = torch.load(Path(root_dir).joinpath(f&quot;{dataset_name}_test_{res}.pt&quot;).as_posix())
 Loading test db for resolution 32 with 50 samples
 </pre></div>
 </div>
@@ -271,7 +275,7 @@ Original Incre Res: change res to 8
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>### N PARAMS ###
- 2110305
+ 2119329
 
 ### OPTIMIZER ###
  AdamW (
@@ -285,15 +289,15 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f746c2a2b90&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fea8ec5f790&gt;
 
 ### LOSSES ###
 
 ### INCREMENTAL RESOLUTION + GRADIENT EXPLAINED ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f746c3ab1f0&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7feab84cca90&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f746c3ab1f0&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f746c2a2fe0&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7feab84cca90&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7feaa0415d00&gt;}
 </pre></div>
 </div>
 <p>Set up the IncrementalTrainer
@@ -347,51 +351,51 @@ uses the incremental_loss_eps parameter</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Training on 100 samples
 Testing on [50, 50] samples         on resolutions [16, 32].
 Raw outputs of shape torch.Size([16, 1, 8, 8])
-[0] time=0.07, avg_loss=0.8236, train_err=11.7655
-Eval: 16_h1=0.7665, 16_l2=0.6166, 32_h1=0.7932, 32_l2=0.6111
-[1] time=0.03, avg_loss=0.6737, train_err=9.6245
-Eval: 16_h1=0.6417, 16_l2=0.4694, 32_h1=0.7263, 32_l2=0.4793
-[2] time=0.03, avg_loss=0.5479, train_err=7.8269
-Eval: 16_h1=0.6615, 16_l2=0.4694, 32_h1=0.8183, 32_l2=0.4896
-[3] time=0.03, avg_loss=0.5040, train_err=7.1998
-Eval: 16_h1=0.5634, 16_l2=0.4002, 32_h1=0.6886, 32_l2=0.4146
-[4] time=0.04, avg_loss=0.4482, train_err=6.4026
-Eval: 16_h1=0.5917, 16_l2=0.4267, 32_h1=0.7822, 32_l2=0.4703
-[5] time=0.04, avg_loss=0.4120, train_err=5.8851
-Eval: 16_h1=0.5466, 16_l2=0.3766, 32_h1=0.7625, 32_l2=0.4164
-[6] time=0.04, avg_loss=0.3683, train_err=5.2609
-Eval: 16_h1=0.4672, 16_l2=0.3235, 32_h1=0.6485, 32_l2=0.3597
-[7] time=0.04, avg_loss=0.3326, train_err=4.7513
-Eval: 16_h1=0.4938, 16_l2=0.3391, 32_h1=0.6948, 32_l2=0.3841
-[8] time=0.04, avg_loss=0.3064, train_err=4.3769
-Eval: 16_h1=0.4673, 16_l2=0.3198, 32_h1=0.6777, 32_l2=0.3651
-[9] time=0.04, avg_loss=0.2868, train_err=4.0965
-Eval: 16_h1=0.4539, 16_l2=0.3072, 32_h1=0.6651, 32_l2=0.3536
+[0] time=0.21, avg_loss=0.7750, train_err=11.0714
+Eval: 16_h1=0.7031, 16_l2=0.5348, 32_h1=0.7319, 32_l2=0.5357
+[1] time=0.21, avg_loss=0.5908, train_err=8.4395
+Eval: 16_h1=0.6114, 16_l2=0.4391, 32_h1=0.6716, 32_l2=0.4473
+[2] time=0.20, avg_loss=0.5093, train_err=7.2754
+Eval: 16_h1=0.5647, 16_l2=0.3843, 32_h1=0.6667, 32_l2=0.3946
+[3] time=0.21, avg_loss=0.4408, train_err=6.2975
+Eval: 16_h1=0.5216, 16_l2=0.3600, 32_h1=0.6661, 32_l2=0.3915
+[4] time=0.21, avg_loss=0.4055, train_err=5.7927
+Eval: 16_h1=0.5165, 16_l2=0.3631, 32_h1=0.6852, 32_l2=0.4008
+[5] time=0.21, avg_loss=0.3794, train_err=5.4201
+Eval: 16_h1=0.5407, 16_l2=0.4053, 32_h1=0.6456, 32_l2=0.4213
+[6] time=0.22, avg_loss=0.3662, train_err=5.2311
+Eval: 16_h1=0.4848, 16_l2=0.3434, 32_h1=0.6641, 32_l2=0.3786
+[7] time=0.22, avg_loss=0.3320, train_err=4.7433
+Eval: 16_h1=0.4515, 16_l2=0.3280, 32_h1=0.5890, 32_l2=0.3661
+[8] time=0.22, avg_loss=0.3013, train_err=4.3041
+Eval: 16_h1=0.4443, 16_l2=0.3024, 32_h1=0.6300, 32_l2=0.3467
+[9] time=0.23, avg_loss=0.2621, train_err=3.7436
+Eval: 16_h1=0.4252, 16_l2=0.2978, 32_h1=0.6085, 32_l2=0.3395
 Incre Res Update: change index to 1
 Incre Res Update: change sub to 1
 Incre Res Update: change res to 16
-[10] time=0.06, avg_loss=0.3922, train_err=5.6035
-Eval: 16_h1=0.3690, 16_l2=0.2683, 32_h1=0.4566, 32_l2=0.2656
-[11] time=0.04, avg_loss=0.3392, train_err=4.8454
-Eval: 16_h1=0.3419, 16_l2=0.2484, 32_h1=0.4551, 32_l2=0.2650
-[12] time=0.04, avg_loss=0.3098, train_err=4.4253
-Eval: 16_h1=0.3172, 16_l2=0.2389, 32_h1=0.4273, 32_l2=0.2547
-[13] time=0.04, avg_loss=0.2827, train_err=4.0392
-Eval: 16_h1=0.3155, 16_l2=0.2391, 32_h1=0.4182, 32_l2=0.2516
-[14] time=0.04, avg_loss=0.2774, train_err=3.9626
-Eval: 16_h1=0.2872, 16_l2=0.2186, 32_h1=0.3938, 32_l2=0.2344
-[15] time=0.04, avg_loss=0.2490, train_err=3.5571
-Eval: 16_h1=0.2744, 16_l2=0.2075, 32_h1=0.3745, 32_l2=0.2220
-[16] time=0.04, avg_loss=0.2346, train_err=3.3511
-Eval: 16_h1=0.2758, 16_l2=0.2056, 32_h1=0.3889, 32_l2=0.2249
-[17] time=0.04, avg_loss=0.2293, train_err=3.2760
-Eval: 16_h1=0.2793, 16_l2=0.2077, 32_h1=0.3904, 32_l2=0.2213
-[18] time=0.04, avg_loss=0.2262, train_err=3.2321
-Eval: 16_h1=0.3024, 16_l2=0.2263, 32_h1=0.4136, 32_l2=0.2417
-[19] time=0.04, avg_loss=0.2388, train_err=3.4117
-Eval: 16_h1=0.3040, 16_l2=0.2327, 32_h1=0.4129, 32_l2=0.2462
+[10] time=0.30, avg_loss=0.3530, train_err=5.0422
+Eval: 16_h1=0.3418, 16_l2=0.2496, 32_h1=0.4258, 32_l2=0.2477
+[11] time=0.29, avg_loss=0.2891, train_err=4.1300
+Eval: 16_h1=0.3833, 16_l2=0.2783, 32_h1=0.4696, 32_l2=0.2820
+[12] time=0.31, avg_loss=0.2975, train_err=4.2504
+Eval: 16_h1=0.3179, 16_l2=0.2267, 32_h1=0.4156, 32_l2=0.2404
+[13] time=0.31, avg_loss=0.2420, train_err=3.4567
+Eval: 16_h1=0.2829, 16_l2=0.2034, 32_h1=0.3807, 32_l2=0.2174
+[14] time=0.31, avg_loss=0.2147, train_err=3.0676
+Eval: 16_h1=0.3394, 16_l2=0.2630, 32_h1=0.4255, 32_l2=0.2714
+[15] time=0.32, avg_loss=0.2232, train_err=3.1885
+Eval: 16_h1=0.3785, 16_l2=0.2985, 32_h1=0.4668, 32_l2=0.3102
+[16] time=0.32, avg_loss=0.2555, train_err=3.6494
+Eval: 16_h1=0.3279, 16_l2=0.2593, 32_h1=0.4078, 32_l2=0.2623
+[17] time=0.32, avg_loss=0.2769, train_err=3.9559
+Eval: 16_h1=0.4073, 16_l2=0.3371, 32_h1=0.4499, 32_l2=0.3422
+[18] time=0.32, avg_loss=0.2840, train_err=4.0576
+Eval: 16_h1=0.2826, 16_l2=0.2202, 32_h1=0.3649, 32_l2=0.2272
+[19] time=0.32, avg_loss=0.1984, train_err=2.8340
+Eval: 16_h1=0.2795, 16_l2=0.2186, 32_h1=0.3582, 32_l2=0.2296
 
-{&#39;train_err&#39;: 3.411697438785008, &#39;avg_loss&#39;: 0.23881882071495056, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 0.04143996722996235, &#39;16_h1&#39;: tensor(0.3040, device=&#39;cuda:0&#39;), &#39;16_l2&#39;: tensor(0.2327, device=&#39;cuda:0&#39;), &#39;32_h1&#39;: tensor(0.4129, device=&#39;cuda:0&#39;), &#39;32_l2&#39;: tensor(0.2462, device=&#39;cuda:0&#39;)}
+{&#39;train_err&#39;: 2.8339713641575406, &#39;avg_loss&#39;: 0.19837799549102783, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 0.3178346639999745, &#39;16_h1&#39;: tensor(0.2795), &#39;16_l2&#39;: tensor(0.2186), &#39;32_h1&#39;: tensor(0.3582), &#39;32_l2&#39;: tensor(0.2296)}
 </pre></div>
 </div>
 <p>Plot the prediction, and compare with the ground-truth
@@ -441,13 +445,16 @@ ii) can be trained quickly on CPU</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" srcset="../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" alt="Inputs, ground-truth output and prediction., Input x, Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.140 seconds)</p>
+<img src="../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" srcset="../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" alt="Inputs, ground-truth output and prediction., Input x, Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 7.776 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-incremental-fno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/082e73328a5caf8c1fe9ad7fe05cf68f/plot_incremental_FNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_incremental_FNO_darcy.ipynb</span></code></a></p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/e0c6b93bc273399c7d7bc6ab62761730/plot_incremental_FNO_darcy.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_incremental_FNO_darcy.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/0d78e075dd52a34e158d7f5f710dfe89/plot_incremental_FNO_darcy.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_incremental_FNO_darcy.zip</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>

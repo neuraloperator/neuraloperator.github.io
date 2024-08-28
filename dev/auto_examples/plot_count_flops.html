@@ -17,7 +17,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/tensorly_style.css?v=a02e9698" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -132,7 +132,7 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Using <cite>torchtnt</cite> to count FLOPS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_darcy_flow.html">A simple Darcy-Flow dataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="checkpoint_FNO_darcy.html">Training a TFNO on Darcy-Flow</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_FNO_darcy.html">Training an FNO on Darcy-Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_FNO_darcy.html">Training a TFNO on Darcy-Flow</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_SFNO_swe.html">Training a SFNO on the spherical Shallow Water equations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_UNO_darcy.html">U-NO on Darcy-Flow</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_darcy_flow_spectrum.html">A simple Darcy-Flow spectrum analysis</a></li>
@@ -182,13 +182,13 @@ operations per second (FLOPS) required for a model’s forward and backward pass
 <span class="n">device</span> <span class="o">=</span> <span class="s1">&#39;cpu&#39;</span>
 
 <span class="n">fno</span> <span class="o">=</span> <span class="n">FNO</span><span class="p">(</span><span class="n">n_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span><span class="mi">64</span><span class="p">),</span>
-          <span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+          <span class="n">in_channels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
           <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
           <span class="n">hidden_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
           <span class="n">projection_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span>
 
 <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">4</span>
-<span class="n">model_input</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
+<span class="n">model_input</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
 
 
 <span class="k">with</span> <span class="n">FlopTensorDispatchMode</span><span class="p">(</span><span class="n">fno</span><span class="p">)</span> <span class="k">as</span> <span class="n">ftdm</span><span class="p">:</span>
@@ -205,7 +205,7 @@ operations per second (FLOPS) required for a model’s forward and backward pass
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">fno_forward_flops</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>defaultdict(&lt;function FlopTensorDispatchMode.__init__.&lt;locals&gt;.&lt;lambda&gt; at 0x7f03bbb1be20&gt;, {&#39;&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 2470445056, &#39;bmm.default&#39;: 138412032}), &#39;lifting&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 1124073472}), &#39;lifting.fcs.0&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 50331648}), &#39;lifting.fcs.1&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 1073741824}), &#39;fno_blocks&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 1073741824, &#39;bmm.default&#39;: 138412032}), &#39;fno_blocks.fno_skips.0&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.fno_skips.0.conv&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.convs&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;bmm.default&#39;: 138412032}), &#39;fno_blocks.fno_skips.1&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.fno_skips.1.conv&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.fno_skips.2&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.fno_skips.2.conv&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.fno_skips.3&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.fno_skips.3.conv&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;projection&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 272629760}), &#39;projection.fcs.0&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;projection.fcs.1&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 4194304})})
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>defaultdict(&lt;function FlopTensorDispatchMode.__init__.&lt;locals&gt;.&lt;lambda&gt; at 0x7feab52b2e50&gt;, {&#39;&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 2503999488, &#39;bmm.default&#39;: 138412032}), &#39;lifting&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 1157627904}), &#39;lifting.fcs.0&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 83886080}), &#39;lifting.fcs.1&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 1073741824}), &#39;fno_blocks&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 1073741824, &#39;bmm.default&#39;: 138412032}), &#39;fno_blocks.fno_skips.0&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.fno_skips.0.conv&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.convs&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;bmm.default&#39;: 138412032}), &#39;fno_blocks.fno_skips.1&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.fno_skips.1.conv&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.fno_skips.2&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.fno_skips.2.conv&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.fno_skips.3&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.fno_skips.3.conv&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;projection&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 272629760}), &#39;projection.fcs.0&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;projection.fcs.1&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 4194304})})
 </pre></div>
 </div>
 <p>To check the maximum FLOPS used during the forward pass, let’s create a recursive function to search the nested dict:</p>
@@ -226,17 +226,20 @@ operations per second (FLOPS) required for a model’s forward and backward pass
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Max FLOPS required for FNO.backward: </span><span class="si">{</span><span class="n">get_max_flops</span><span class="p">(</span><span class="n">fno_backward_flops</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Max FLOPS required for FNO.forward: 2470445056
-Max FLOPS required for FNO.backward: 4890558464
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Max FLOPS required for FNO.forward: 2503999488
+Max FLOPS required for FNO.backward: 4924112896
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.302 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 4.065 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-count-flops-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/84c435865e4e2910253a980881498782/plot_count_flops.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_count_flops.ipynb</span></code></a></p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/de69282d3144c5a2b675c6f6338237c1/plot_count_flops.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_count_flops.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/20c43dd37baf603889c4dc23e93bdb60/plot_count_flops.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_count_flops.zip</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>

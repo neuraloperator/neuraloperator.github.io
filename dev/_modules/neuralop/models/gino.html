@@ -16,7 +16,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -183,7 +183,7 @@
 <span class="sd">            number of channels in FNO&#39;s pointwise projection, by default 256</span>
 <span class="sd">        fno_n_layers : int, optional</span>
 <span class="sd">            number of layers in FNO, by default 4</span>
-<span class="sd">        fno_resolution_scaling_factor : float | None, optional</span>
+<span class="sd">        fno_output_scaling_factor : float | None, optional</span>
 <span class="sd">            factor by which to scale output of FNO, by default None</span>
 <span class="sd">        fno_incremental_n_modes : list[int] | None, defaults to None</span>
 <span class="sd">        if passed, sets n_modes separately for each FNO layer.</span>
@@ -255,7 +255,7 @@
             <span class="n">fno_hidden_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
             <span class="n">lifting_channels</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
             <span class="n">fno_n_layers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-            <span class="n">fno_resolution_scaling_factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">fno_output_scaling_factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">fno_incremental_n_modes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">fno_block_precision</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">,</span>
             <span class="n">fno_use_channel_mlp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
@@ -328,7 +328,7 @@
                 <span class="n">out_channels</span><span class="o">=</span><span class="n">fno_hidden_channels</span><span class="p">,</span>
                 <span class="n">positional_embedding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">n_layers</span><span class="o">=</span><span class="n">fno_n_layers</span><span class="p">,</span>
-                <span class="n">resolution_scaling_factor</span><span class="o">=</span><span class="n">fno_resolution_scaling_factor</span><span class="p">,</span>
+                <span class="n">output_scaling_factor</span><span class="o">=</span><span class="n">fno_output_scaling_factor</span><span class="p">,</span>
                 <span class="n">incremental_n_modes</span><span class="o">=</span><span class="n">fno_incremental_n_modes</span><span class="p">,</span>
                 <span class="n">fno_block_precision</span><span class="o">=</span><span class="n">fno_block_precision</span><span class="p">,</span>
                 <span class="n">use_channel_mlp</span><span class="o">=</span><span class="n">fno_use_channel_mlp</span><span class="p">,</span>

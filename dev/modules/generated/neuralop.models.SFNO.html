@@ -17,7 +17,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/tensorly_style.css?v=a02e9698" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -165,173 +165,123 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.models.SFNO">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.models.</span></span><span class="sig-name descname"><span class="pre">SFNO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralop.models.SFNO" title="Link to this definition"></a></dt>
-<dd><p>N-Dimensional Spherical Fourier Neural Operator. The SFNO learns a mapping between
-spaces of functions discretized over regular grids.</p>
-<p>The key component of an SFNO is its SpectralConv layer (see <code class="docutils literal notranslate"><span class="pre">neuralop.layers.spectral_convolution</span></code>), which
-is similar to a standard CNN conv layer but operates in the frequency domain.</p>
-<p>For more information, refer to <span class="xref std std-ref">sfno-guide</span>.</p>
+<dd><p>N-Dimensional Spherical Fourier Neural Operator</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>n_modes</strong><span class="classifier">Tuple[int]</span></dt><dd><p>number of modes to keep in Fourier Layer, along each dimension
+<dd class="field-odd"><dl>
+<dt><strong>n_modes</strong><span class="classifier">int tuple</span></dt><dd><p>number of modes to keep in Fourier Layer, along each dimension
 The dimensionality of the SFNO is inferred from <code class="docutils literal notranslate"><span class="pre">len(n_modes)</span></code></p>
 </dd>
-<dt><strong>in_channels</strong><span class="classifier">int</span></dt><dd><p>Number of channels in input function</p>
+<dt><strong>hidden_channels</strong><span class="classifier">int</span></dt><dd><p>width of the SFNO (i.e. number of channels)</p>
 </dd>
-<dt><strong>out_channels</strong><span class="classifier">int</span></dt><dd><p>Number of channels in output function</p>
+<dt><strong>in_channels</strong><span class="classifier">int, optional</span></dt><dd><p>Number of input channels, by default 3</p>
 </dd>
-<dt><strong>hidden_channels</strong><span class="classifier">int</span></dt><dd><p>width of the SFNO (i.e. number of channels), by default 256</p>
+<dt><strong>out_channels</strong><span class="classifier">int, optional</span></dt><dd><p>Number of output channels, by default 1</p>
+</dd>
+<dt><strong>lifting_channels</strong><span class="classifier">int, optional</span></dt><dd><p>number of hidden channels of the lifting block of the SFNO, by default 256</p>
+</dd>
+<dt><strong>projection_channels</strong><span class="classifier">int, optional</span></dt><dd><p>number of hidden channels of the projection block of the SFNO, by default 256</p>
 </dd>
 <dt><strong>n_layers</strong><span class="classifier">int, optional</span></dt><dd><p>Number of Fourier Layers, by default 4</p>
 </dd>
-<dt><strong>Documentation for more advanced parameters is below.</strong></dt><dd></dd>
-</dl>
+<dt><strong>positional_embedding</strong><span class="classifier">str literal | GridEmbedding2D | GridEmbeddingND | None</span></dt><dd><p>if “grid”, appends a grid positional embedding with default settings to 
+the last channels of raw input. Assumes the inputs are discretized
+over a grid with entry [0,0,…] at the origin and side lengths of 1.
+If an initialized GridEmbedding, uses this module directly
+See <cite>neuralop.embeddings.GridEmbeddingND</cite> for details
+if None, does nothing</p>
 </dd>
-<dt class="field-even">Other Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><dl>
-<dt><strong>lifting_channel_ratio</strong><span class="classifier">int, optional</span></dt><dd><p>ratio of lifting channels to hidden_channels, by default 2
-The number of liting channels in the lifting block of the SFNO is
-lifting_channel_ratio * hidden_channels (e.g. default 512)</p>
-</dd>
-<dt><strong>projection_channel_ratio</strong><span class="classifier">int, optional</span></dt><dd><p>ratio of projection channels to hidden_channels, by default 2
-The number of projection channels in the projection block of the SFNO is
-projection_channel_ratio * hidden_channels (e.g. default 512)</p>
-</dd>
-<dt><strong>positional_embedding</strong><span class="classifier">Union[str, nn.Module], optional</span></dt><dd><p>Positional embedding to apply to last channels of raw input
-before being passed through the SFNO. Defaults to “grid”</p>
-<ul class="simple">
-<li><p>If “grid”, appends a grid positional embedding with default settings to</p></li>
-</ul>
-<p>the last channels of raw input. Assumes the inputs are discretized
-over a grid with entry [0,0,…] at the origin and side lengths of 1.</p>
-<ul class="simple">
-<li><p>If an initialized GridEmbedding module, uses this module directly</p></li>
-</ul>
-<p>See <code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.embeddings.GridEmbeddingND</span></code> for details.</p>
-<ul class="simple">
-<li><p>If None, does nothing</p></li>
-</ul>
-</dd>
-<dt><strong>non_linearity</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>Non-Linear activation function module to use, by default F.gelu</p>
-</dd>
-<dt><strong>norm</strong><span class="classifier">str {“ada_in”, “group_norm”, “instance_norm”}, optional</span></dt><dd><p>Normalization layer to use, by default None</p>
-</dd>
-<dt><strong>complex</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether data is complex-valued (default False)
-if True, initializes complex-valued modules.</p>
-</dd>
-<dt><strong>channel_mlp_dropout</strong><span class="classifier">float, optional</span></dt><dd><p>dropout parameter for ChannelMLP in SFNO Block, by default 0</p>
-</dd>
-<dt><strong>channel_mlp_expansion</strong><span class="classifier">float, optional</span></dt><dd><p>expansion parameter for ChannelMLP in SFNO Block, by default 0.5</p>
-</dd>
-<dt><strong>channel_mlp_skip</strong><span class="classifier">str {‘linear’, ‘identity’, ‘soft-gating’}, optional</span></dt><dd><p>Type of skip connection to use in channel-mixing mlp, by default ‘soft-gating’</p>
-</dd>
-<dt><strong>sfno_skip</strong><span class="classifier">str {‘linear’, ‘identity’, ‘soft-gating’}, optional</span></dt><dd><p>Type of skip connection to use in SFNO layers, by default ‘linear’</p>
-</dd>
-<dt><strong>resolution_scaling_factor</strong><span class="classifier">Union[Number, List[Number]], optional</span></dt><dd><p>layer-wise factor by which to scale the domain resolution of function, by default None</p>
-<ul class="simple">
-<li><p>If a single number n, scales resolution by n at each layer</p></li>
-<li><p>if a list of numbers [n_0, n_1,…] scales layer i’s resolution by n_i.</p></li>
-</ul>
-</dd>
-<dt><strong>domain_padding</strong><span class="classifier">Union[Number, List[Number]], optional</span></dt><dd><p>If not None, percentage of padding to use, by default None
-To vary the percentage of padding used along each input dimension,
-pass in a list of percentages e.g. [p1, p2, …, pN] such that
-p1 corresponds to the percentage of padding along dim 1, etc.</p>
-</dd>
-<dt><strong>domain_padding_mode</strong><span class="classifier">str {‘symmetric’, ‘one-sided’}, optional</span></dt><dd><p>How to perform domain padding, by default ‘one-sided’</p>
-</dd>
-<dt><strong>sfno_block_precision</strong><span class="classifier">str {‘full’, ‘half’, ‘mixed’}, optional</span></dt><dd><p>precision mode in which to perform spectral convolution, by default “full”</p>
-</dd>
-<dt><strong>stabilizer</strong><span class="classifier">str {‘tanh’} | None, optional</span></dt><dd><p>whether to use a tanh stabilizer in SFNO block, by default None</p>
-<p>Note: stabilizer greatly improves performance in the case
-<cite>sfno_block_precision=’mixed’</cite>.</p>
-</dd>
-<dt><strong>max_n_modes</strong><span class="classifier">Tuple[int] | None, optional</span></dt><dd><ul class="simple">
-<li><p>If not None, this allows to incrementally increase the number of</p></li>
-</ul>
-<p>modes in Fourier domain during training. Has to verify n &lt;= N
-for (n, m) in zip(max_n_modes, n_modes).</p>
-<ul class="simple">
+<dt><strong>max_n_modes</strong><span class="classifier">None or int tuple, default is None</span></dt><dd><ul class="simple">
+<li><p>If not None, this allows to incrementally increase the number of
+modes in Fourier domain during training. Has to verify n &lt;= N
+for (n, m) in zip(max_n_modes, n_modes).</p></li>
 <li><p>If None, all the n_modes are used.</p></li>
 </ul>
 <p>This can be updated dynamically during training.</p>
 </dd>
-<dt><strong>factorization</strong><span class="classifier">str, optional</span></dt><dd><p>Tensor factorization of the SFNO layer weights to use, by default None.</p>
-<ul class="simple">
-<li><p>If None, a dense tensor parametrizes the Spectral convolutions</p></li>
-<li><p>Otherwise, the specified tensor factorization is used.</p></li>
-</ul>
+<dt><strong>sfno_block_precision</strong><span class="classifier">str {‘full’, ‘half’, ‘mixed’}</span></dt><dd><p>if ‘full’, the SFNO Block runs in full precision
+if ‘half’, the FFT, contraction, and inverse FFT run in half precision
+if ‘mixed’, the contraction and inverse FFT run in half precision</p>
 </dd>
-<dt><strong>rank</strong><span class="classifier">float, optional</span></dt><dd><p>tensor rank to use in above factorization, by default 1.0</p>
+<dt><strong>stabilizer</strong><span class="classifier">str {‘tanh’} or None, optional</span></dt><dd><p>By default None, otherwise tanh is used before FFT in the SFNO block</p>
+</dd>
+<dt><strong>use_channel_mlp</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use a ChannelMLP layer after each SFNO block, by default False</p>
+</dd>
+<dt><strong>channel_mlp_dropout</strong><span class="classifier">float , optional</span></dt><dd><p>droupout parameter of ChannelMLP layer, by default 0</p>
+</dd>
+<dt><strong>channel_mlp_expansion</strong><span class="classifier">float, optional</span></dt><dd><p>expansion parameter of ChannelMLP layer, by default 0.5</p>
+</dd>
+<dt><strong>non_linearity</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>Non-Linearity module to use, by default F.gelu</p>
+</dd>
+<dt><strong>norm</strong><span class="classifier">Literal[“ada_in”, “group_norm”, “instance_norm”], optional</span></dt><dd><p>Normalization layer to use, by default None</p>
+</dd>
+<dt><strong>preactivation</strong><span class="classifier">bool, default is False</span></dt><dd><p>if True, use resnet-style preactivation</p>
+</dd>
+<dt><strong>sfno_skip</strong><span class="classifier">{‘linear’, ‘identity’, ‘soft-gating’}, optional</span></dt><dd><p>Type of skip connection to use in sfno, by default ‘linear’</p>
+</dd>
+<dt><strong>channel_mlp_skip</strong><span class="classifier">{‘linear’, ‘identity’, ‘soft-gating’}, optional</span></dt><dd><p>Type of skip connection to use in channel-mixing mlp, by default ‘soft-gating’</p>
+</dd>
+<dt><strong>separable</strong><span class="classifier">bool, default is False</span></dt><dd><p>if True, use a depthwise separable spectral convolution</p>
+</dd>
+<dt><strong>factorization</strong><span class="classifier">str or None, {‘tucker’, ‘cp’, ‘tt’}</span></dt><dd><p>Tensor factorization of the parameters weight to use, by default None.
+* If None, a dense tensor parametrizes the Spectral convolutions
+* Otherwise, the specified tensor factorization is used.</p>
+</dd>
+<dt><strong>joint_factorization</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether all the Fourier Layers should be parametrized by a single tensor
+(vs one per layer), by default False</p>
+</dd>
+<dt><strong>rank</strong><span class="classifier">float or rank, optional</span></dt><dd><p>Rank of the tensor factorization of the Fourier weights, by default 1.0</p>
 </dd>
 <dt><strong>fixed_rank_modes</strong><span class="classifier">bool, optional</span></dt><dd><p>Modes to not factorize, by default False</p>
 </dd>
-<dt><strong>implementation</strong><span class="classifier">str {‘factorized’, ‘reconstructed’}, optional</span></dt><dd><ul class="simple">
-<li><p>If ‘factorized’, implements tensor contraction with the individual factors of the decomposition</p></li>
-<li><p>If ‘reconstructed’, implements with the reconstructed full tensorized weight.</p></li>
+<dt><strong>implementation</strong><span class="classifier">{‘factorized’, ‘reconstructed’}, optional, default is ‘factorized’</span></dt><dd><p>If factorization is not None, forward mode to use::
+* <cite>reconstructed</cite> : the full weight tensor is reconstructed from the</p>
+<blockquote>
+<div><p>factorization and used for the forward pass</p>
+</div></blockquote>
+<ul class="simple">
+<li><p><cite>factorized</cite> : the input is directly contracted with the factors of
+the decomposition</p></li>
 </ul>
 </dd>
-<dt><strong>decomposition_kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>extra kwargs for tensor decomposition (see <cite>tltorch.FactorizedTensor</cite>), by default dict()</p>
+<dt><strong>decomposition_kwargs</strong><span class="classifier">dict, optional, default is {}</span></dt><dd><p>Optionaly additional parameters to pass to the tensor decomposition</p>
 </dd>
-<dt><strong>separable</strong><span class="classifier">bool, optional (<strong>DEACTIVATED</strong>)</span></dt><dd><p>if True, use a depthwise separable spectral convolution, by default False</p>
+<dt><strong>domain_padding</strong><span class="classifier">None, float, or List[float], optional</span></dt><dd><p>If not None, percentage of padding to use, by default None
+To vary the percentage of padding used along each input dimension,
+pass in a list of percentages e.g. [p1, p2, …, pN] such that
+p1 corresponds to the percentage of padding along dim 1, etc.</p>
 </dd>
-<dt><strong>preactivation</strong><span class="classifier">bool, optional (<strong>DEACTIVATED</strong>)</span></dt><dd><p>whether to compute SFNO forward pass with resnet-style preactivation, by default False</p>
+<dt><strong>domain_padding_mode</strong><span class="classifier">{‘symmetric’, ‘one-sided’}, optional</span></dt><dd><p>How to perform domain padding, by default ‘one-sided’</p>
 </dd>
-<dt><strong>conv_module</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>module to use for SFNOBlock’s convolutions, by default SpectralConv</p>
+<dt><strong>conv_module</strong><span class="classifier">BaseConv, optional</span></dt><dd><p>Module to use for convolutions in SFNO, by default SpectralConv</p>
+</dd>
+<dt><strong>complex_data: bool, optional</strong></dt><dd><p>whether SFNO data takes on complex values 
+in the spatial domain, by default False</p>
 </dd>
 </dl>
 </dd>
 </dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neuralop.models</span> <span class="kn">import</span> <span class="n">SFNO</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">SFNO</span><span class="p">(</span><span class="n">n_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">12</span><span class="p">),</span> <span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hidden_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span>
-<span class="go">SFNO(</span>
-<span class="go">(positional_embedding): GridEmbeddingND()</span>
-<span class="go">(sfno_blocks): SFNOBlocks(</span>
-<span class="go">    (convs): SpectralConv(</span>
-<span class="go">    (weight): ModuleList(</span>
-<span class="go">        (0-3): 4 x DenseTensor(shape=torch.Size([64, 64, 12, 7]), rank=None)</span>
-<span class="go">    )</span>
-<span class="go">    )</span>
-<span class="go">        ... torch.nn.Module printout truncated ...</span>
-</pre></div>
-</div>
 <p class="rubric">Methods</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.models.SFNO.forward" title="neuralop.models.SFNO.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>(x[, output_shape])</p></td>
-<td><p>FNO's forward pass</p></td>
+<td><p>TFNO's forward pass</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py method">
 <dt class="sig sig-object py" id="neuralop.models.SFNO.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralop.models.SFNO.forward" title="Link to this definition"></a></dt>
-<dd><p>FNO’s forward pass</p>
-<ol class="arabic simple">
-<li><p>Applies optional positional encoding</p></li>
-<li><dl class="simple">
-<dt>Sends inputs through a lifting layer to a high-dimensional latent</dt><dd><p>space</p>
-</dd>
-</dl>
-</li>
-<li><p>Applies optional domain padding to high-dimensional intermediate function representation</p></li>
-<li><p>Applies <cite>n_layers</cite> Fourier/FNO layers in sequence (SpectralConvolution + skip connections, nonlinearity)</p></li>
-<li><p>If domain padding was applied, domain padding is removed</p></li>
-<li><p>Projection of intermediate function representation to the output channels</p></li>
-</ol>
+<dd><p>TFNO’s forward pass</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>x</strong><span class="classifier">tensor</span></dt><dd><p>input tensor</p>
 </dd>
-<dt><strong>output_shape</strong><span class="classifier">{tuple, tuple list, None}, default is None</span></dt><dd><p>Gives the option of specifying the exact output shape for odd shaped inputs.</p>
-<ul class="simple">
-<li><p>If None, don’t specify an output shape</p></li>
-<li><p>If tuple, specifies the output-shape of the <strong>last</strong> FNO Block</p></li>
-<li><p>If tuple list, specifies the exact output-shape of each FNO Block</p></li>
-</ul>
+<dt><strong>output_shape</strong><span class="classifier">{tuple, tuple list, None}, default is None</span></dt><dd><p>Gives the option of specifying the exact output shape for odd shaped inputs.
+* If None, don’t specify an output shape
+* If tuple, specifies the output-shape of the <strong>last</strong> FNO Block
+* If tuple list, specifies the exact output-shape of each FNO Block</p>
 </dd>
 </dl>
 </dd>

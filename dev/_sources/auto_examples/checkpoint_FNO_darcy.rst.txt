@@ -62,19 +62,12 @@ Loading the Navier-Stokes dataset in 128x128 resolution
 
 We create a tensorized FNO model
 
-.. GENERATED FROM PYTHON SOURCE LINES 35-51
+.. GENERATED FROM PYTHON SOURCE LINES 35-44
 
 .. code-block:: Python
 
 
-    model = TFNO(n_modes=(16, 16),
-                 in_channels=1, 
-                 out_channels=1, 
-                 hidden_channels=32, 
-                 projection_channels=64, 
-                 factorization='tucker', 
-                 rank=0.42)
-
+    model = TFNO(n_modes=(16, 16), in_channels=1, hidden_channels=32, projection_channels=64, factorization='tucker', rank=0.42)
     model = model.to(device)
 
     n_params = count_model_params(model)
@@ -83,11 +76,11 @@ We create a tensorized FNO model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 52-53
+.. GENERATED FROM PYTHON SOURCE LINES 45-46
 
 Create the optimizer
 
-.. GENERATED FROM PYTHON SOURCE LINES 53-59
+.. GENERATED FROM PYTHON SOURCE LINES 46-52
 
 .. code-block:: Python
 
@@ -98,11 +91,11 @@ Create the optimizer
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 60-61
+.. GENERATED FROM PYTHON SOURCE LINES 53-54
 
 Creating the losses
 
-.. GENERATED FROM PYTHON SOURCE LINES 61-68
+.. GENERATED FROM PYTHON SOURCE LINES 54-61
 
 .. code-block:: Python
 
@@ -114,7 +107,7 @@ Creating the losses
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 69-80
+.. GENERATED FROM PYTHON SOURCE LINES 62-73
 
 .. code-block:: Python
 
@@ -130,11 +123,11 @@ Creating the losses
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 81-82
+.. GENERATED FROM PYTHON SOURCE LINES 74-75
 
 Create the trainer
 
-.. GENERATED FROM PYTHON SOURCE LINES 82-91
+.. GENERATED FROM PYTHON SOURCE LINES 75-84
 
 .. code-block:: Python
 
@@ -148,11 +141,11 @@ Create the trainer
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 92-93
+.. GENERATED FROM PYTHON SOURCE LINES 85-86
 
 Actually train the model on our small Darcy-Flow dataset
 
-.. GENERATED FROM PYTHON SOURCE LINES 93-120
+.. GENERATED FROM PYTHON SOURCE LINES 86-113
 
 .. code-block:: Python
 
@@ -198,6 +191,10 @@ Actually train the model on our small Darcy-Flow dataset
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: checkpoint_FNO_darcy.py <checkpoint_FNO_darcy.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: checkpoint_FNO_darcy.zip <checkpoint_FNO_darcy.zip>`
 
 
 .. only:: html
