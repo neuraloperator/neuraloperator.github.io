@@ -126,7 +126,6 @@
       <div class="sidebar-menu-toc">
       <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installing NeuralOperator</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide/quickstart.html">NeuralOperator User Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules/api.html">API reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Gallery of examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="plot_count_flops.html">Using <cite>torchtnt</cite> to count FLOPS</a></li>
@@ -276,13 +275,13 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fbe14322460&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fe125b628e0&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fbe25a2b970&gt;
+ * Train: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fe13726c8e0&gt;
 
- * Test: {&#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fbe25a2b970&gt;}
+ * Test: {&#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fe13726c8e0&gt;}
 </pre></div>
 </div>
 <p>Create the trainer</p>
@@ -307,22 +306,22 @@ Parameter Group 0
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Training on 200 samples
 Testing on [50, 50] samples         on resolutions [(32, 64), (64, 128)].
 Raw outputs of shape torch.Size([4, 3, 32, 64])
-[0] time=3.43, avg_loss=2.2323, train_err=8.9290
-Eval: (32, 64)_l2=1.3906, (64, 128)_l2=2.5843
-[3] time=3.38, avg_loss=0.4466, train_err=1.7863
-Eval: (32, 64)_l2=0.4889, (64, 128)_l2=2.3738
-[6] time=3.38, avg_loss=0.3130, train_err=1.2522
-Eval: (32, 64)_l2=0.3422, (64, 128)_l2=2.3656
-[9] time=3.38, avg_loss=0.2460, train_err=0.9839
-Eval: (32, 64)_l2=0.3641, (64, 128)_l2=2.3678
-[12] time=3.38, avg_loss=0.2155, train_err=0.8620
-Eval: (32, 64)_l2=0.2694, (64, 128)_l2=2.3618
-[15] time=3.38, avg_loss=0.1790, train_err=0.7159
-Eval: (32, 64)_l2=0.2250, (64, 128)_l2=2.3652
-[18] time=3.38, avg_loss=0.1457, train_err=0.5828
-Eval: (32, 64)_l2=0.1823, (64, 128)_l2=2.3650
+[0] time=3.45, avg_loss=2.2364, train_err=8.9456
+Eval: (32, 64)_l2=1.5414, (64, 128)_l2=2.6027
+[3] time=3.43, avg_loss=0.4398, train_err=1.7591
+Eval: (32, 64)_l2=0.4122, (64, 128)_l2=2.3448
+[6] time=3.42, avg_loss=0.2936, train_err=1.1745
+Eval: (32, 64)_l2=0.3607, (64, 128)_l2=2.3185
+[9] time=3.41, avg_loss=0.2525, train_err=1.0099
+Eval: (32, 64)_l2=0.3318, (64, 128)_l2=2.2875
+[12] time=3.39, avg_loss=0.2005, train_err=0.8018
+Eval: (32, 64)_l2=0.2855, (64, 128)_l2=2.2774
+[15] time=3.41, avg_loss=0.1665, train_err=0.6661
+Eval: (32, 64)_l2=0.2413, (64, 128)_l2=2.2890
+[18] time=3.39, avg_loss=0.1431, train_err=0.5724
+Eval: (32, 64)_l2=0.2218, (64, 128)_l2=2.2927
 
-{&#39;train_err&#39;: 0.563617325425148, &#39;avg_loss&#39;: 0.140904331356287, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 3.367121343000008}
+{&#39;train_err&#39;: 0.5530825763940811, &#39;avg_loss&#39;: 0.13827064409852027, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 3.380090987000017}
 </pre></div>
 </div>
 <p>Plot the prediction, and compare with the ground-truth
@@ -369,7 +368,7 @@ ii) can be trained quickly on CPU</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_plot_SFNO_swe_001.png" srcset="../_images/sphx_glr_plot_SFNO_swe_001.png" alt="Inputs, ground-truth output and prediction., Input x (32, 64), Ground-truth y, Model prediction, Input x (64, 128), Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 23.878 seconds)</p>
+<img src="../_images/sphx_glr_plot_SFNO_swe_001.png" srcset="../_images/sphx_glr_plot_SFNO_swe_001.png" alt="Inputs, ground-truth output and prediction., Input x (32, 64), Ground-truth y, Model prediction, Input x (64, 128), Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 24.407 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-sfno-swe-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/af3a515d2684655c6a5a8e0df87a4cf9/plot_SFNO_swe.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_SFNO_swe.ipynb</span></code></a></p>
