@@ -183,23 +183,37 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.models.TFNO3d.forward" title="neuralop.models.TFNO3d.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>(x[, output_shape])</p></td>
-<td><p>TFNO's forward pass</p></td>
+<td><p>FNO's forward pass</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py method">
 <dt class="sig sig-object py" id="neuralop.models.TFNO3d.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralop.models.TFNO3d.forward" title="Link to this definition"></a></dt>
-<dd><p>TFNO’s forward pass</p>
+<dd><p>FNO’s forward pass</p>
+<ol class="arabic simple">
+<li><p>Applies optional positional encoding</p></li>
+<li><dl class="simple">
+<dt>Sends inputs through a lifting layer to a high-dimensional latent</dt><dd><p>space</p>
+</dd>
+</dl>
+</li>
+<li><p>Applies optional domain padding to high-dimensional intermediate function representation</p></li>
+<li><p>Applies <cite>n_layers</cite> Fourier/FNO layers in sequence (SpectralConvolution + skip connections, nonlinearity)</p></li>
+<li><p>If domain padding was applied, domain padding is removed</p></li>
+<li><p>Projection of intermediate function representation to the output channels</p></li>
+</ol>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>x</strong><span class="classifier">tensor</span></dt><dd><p>input tensor</p>
 </dd>
-<dt><strong>output_shape</strong><span class="classifier">{tuple, tuple list, None}, default is None</span></dt><dd><p>Gives the option of specifying the exact output shape for odd shaped inputs.
-* If None, don’t specify an output shape
-* If tuple, specifies the output-shape of the <strong>last</strong> FNO Block
-* If tuple list, specifies the exact output-shape of each FNO Block</p>
+<dt><strong>output_shape</strong><span class="classifier">{tuple, tuple list, None}, default is None</span></dt><dd><p>Gives the option of specifying the exact output shape for odd shaped inputs.</p>
+<ul class="simple">
+<li><p>If None, don’t specify an output shape</p></li>
+<li><p>If tuple, specifies the output-shape of the <strong>last</strong> FNO Block</p></li>
+<li><p>If tuple list, specifies the exact output-shape of each FNO Block</p></li>
+</ul>
 </dd>
 </dl>
 </dd>

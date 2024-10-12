@@ -32,7 +32,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="U-NO on Darcy-Flow" href="plot_UNO_darcy.html" />
-    <link rel="prev" title="Training a TFNO on Darcy-Flow" href="plot_FNO_darcy.html" />
+    <link rel="prev" title="Checkpointing and loading training states" href="checkpoint_FNO_darcy.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   </head>
@@ -131,12 +131,12 @@
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Gallery of examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="plot_count_flops.html">Using <cite>torchtnt</cite> to count FLOPS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_darcy_flow.html">A simple Darcy-Flow dataset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="checkpoint_FNO_darcy.html">Training a TFNO on Darcy-Flow</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_FNO_darcy.html">Training a TFNO on Darcy-Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_FNO_darcy.html">Checkpointing and loading training states</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Training a SFNO on the spherical Shallow Water equations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_UNO_darcy.html">U-NO on Darcy-Flow</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_darcy_flow_spectrum.html">A simple Darcy-Flow spectrum analysis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_incremental_FNO_darcy.html">Training a neural operator on Darcy-Flow - Author Robert Joseph George</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_FNO_darcy.html">Training an FNO on Darcy-Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_incremental_FNO_darcy.html">Training an FNO with incremental meta-learning</a></li>
 </ul>
 </li>
 </ul>
@@ -185,7 +185,7 @@ to train a Spherical Fourier-Neural Operator</p>
 <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda:0&#39;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Loading the Navier-Stokes dataset in 128x128 resolution</p>
+<p>Loading the Spherical Shallow Water Equations in multiple resolutions</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">train_loader</span><span class="p">,</span> <span class="n">test_loaders</span> <span class="o">=</span> <span class="n">load_spherical_swe</span><span class="p">(</span><span class="n">n_train</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">train_resolution</span><span class="o">=</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span>
                                                 <span class="n">test_resolutions</span><span class="o">=</span><span class="p">[(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span> <span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">)],</span> <span class="n">n_tests</span><span class="o">=</span><span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="n">test_batch_sizes</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">],)</span>
 </pre></div>
@@ -195,8 +195,13 @@ Loading test dataloader at resolution (32, 64) with 50 samples and batch-size=10
 Loading test dataloader at resolution (64, 128) with 50 samples and batch-size=10
 </pre></div>
 </div>
-<p>We create a tensorized FNO model</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">SFNO</span><span class="p">(</span><span class="n">n_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span> <span class="n">in_channels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">hidden_channels</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">projection_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">factorization</span><span class="o">=</span><span class="s1">&#39;dense&#39;</span><span class="p">)</span>
+<p>We create a spherical FNO model</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">SFNO</span><span class="p">(</span><span class="n">n_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+             <span class="n">in_channels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+             <span class="n">out_channels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+             <span class="n">hidden_channels</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+             <span class="n">projection_channel_ratio</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+             <span class="n">factorization</span><span class="o">=</span><span class="s1">&#39;dense&#39;</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
 <span class="n">n_params</span> <span class="o">=</span> <span class="n">count_model_params</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
@@ -204,7 +209,12 @@ Loading test dataloader at resolution (64, 128) with 50 samples and batch-size=1
 <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Our model has 278435 parameters.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>self.sht_grids=[&#39;equiangular&#39;, &#39;equiangular&#39;]
+self.sht_grids=[&#39;equiangular&#39;, &#39;equiangular&#39;]
+self.sht_grids=[&#39;equiangular&#39;, &#39;equiangular&#39;]
+self.sht_grids=[&#39;equiangular&#39;, &#39;equiangular&#39;]
+
+Our model has 275555 parameters.
 </pre></div>
 </div>
 <p>Create the optimizer</p>
@@ -235,13 +245,13 @@ Loading test dataloader at resolution (64, 128) with 50 samples and batch-size=1
  SFNO(
   (positional_embedding): GridEmbeddingND()
   (fno_blocks): FNOBlocks(
-    (convs): SphericalConv(
-      (weight): ModuleList(
-        (0-3): 4 x ComplexDenseTensor(shape=torch.Size([32, 32, 32]), rank=None)
-      )
-      (sht_handle): SHT(
-        (_SHT_cache): ModuleDict()
-        (_iSHT_cache): ModuleDict()
+    (convs): ModuleList(
+      (0-3): 4 x SphericalConv(
+        (weight): ComplexDenseTensor(shape=torch.Size([32, 32, 32]), rank=None)
+        (sht_handle): SHT(
+          (_SHT_cache): ModuleDict()
+          (_iSHT_cache): ModuleDict()
+        )
       )
     )
     (fno_skips): ModuleList(
@@ -249,11 +259,22 @@ Loading test dataloader at resolution (64, 128) with 50 samples and batch-size=1
         (conv): Conv1d(32, 32, kernel_size=(1,), stride=(1,), bias=False)
       )
     )
+    (channel_mlp): ModuleList(
+      (0-3): 4 x ChannelMLP(
+        (fcs): ModuleList(
+          (0): Conv1d(32, 16, kernel_size=(1,), stride=(1,))
+          (1): Conv1d(16, 32, kernel_size=(1,), stride=(1,))
+        )
+      )
+    )
+    (channel_mlp_skips): ModuleList(
+      (0-3): 4 x SoftGating()
+    )
   )
   (lifting): ChannelMLP(
     (fcs): ModuleList(
-      (0): Conv1d(5, 256, kernel_size=(1,), stride=(1,))
-      (1): Conv1d(256, 32, kernel_size=(1,), stride=(1,))
+      (0): Conv1d(5, 64, kernel_size=(1,), stride=(1,))
+      (1): Conv1d(64, 32, kernel_size=(1,), stride=(1,))
     )
   )
   (projection): ChannelMLP(
@@ -276,13 +297,13 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fc1272d4bb0&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f12cce49b20&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fc127432b50&gt;
+ * Train: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f12cce62bb0&gt;
 
- * Test: {&#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fc127432b50&gt;}
+ * Test: {&#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f12cce62bb0&gt;}
 </pre></div>
 </div>
 <p>Create the trainer</p>
@@ -294,7 +315,7 @@ Parameter Group 0
                   <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Actually train the model on our small Darcy-Flow dataset</p>
+<p>Train the model on the spherical SWE dataset</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_loader</span><span class="o">=</span><span class="n">train_loader</span><span class="p">,</span>
               <span class="n">test_loaders</span><span class="o">=</span><span class="n">test_loaders</span><span class="p">,</span>
               <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
@@ -307,22 +328,22 @@ Parameter Group 0
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Training on 200 samples
 Testing on [50, 50] samples         on resolutions [(32, 64), (64, 128)].
 Raw outputs of shape torch.Size([4, 3, 32, 64])
-[0] time=3.46, avg_loss=2.2298, train_err=8.9191
-Eval: (32, 64)_l2=1.3674, (64, 128)_l2=2.5446
-[3] time=3.42, avg_loss=0.4558, train_err=1.8230
-Eval: (32, 64)_l2=0.5148, (64, 128)_l2=2.3843
-[6] time=3.42, avg_loss=0.3259, train_err=1.3036
-Eval: (32, 64)_l2=0.3938, (64, 128)_l2=2.3348
-[9] time=3.42, avg_loss=0.2804, train_err=1.1215
-Eval: (32, 64)_l2=0.4201, (64, 128)_l2=2.3508
-[12] time=3.45, avg_loss=0.2344, train_err=0.9376
-Eval: (32, 64)_l2=0.2799, (64, 128)_l2=2.3162
-[15] time=3.50, avg_loss=0.1948, train_err=0.7792
-Eval: (32, 64)_l2=0.2279, (64, 128)_l2=2.3277
-[18] time=3.46, avg_loss=0.1729, train_err=0.6916
-Eval: (32, 64)_l2=0.2141, (64, 128)_l2=2.3127
+[0] time=3.51, avg_loss=2.6388, train_err=10.5553
+Eval: (32, 64)_l2=2.2462, (64, 128)_l2=2.4062
+[3] time=3.43, avg_loss=0.4270, train_err=1.7081
+Eval: (32, 64)_l2=0.7215, (64, 128)_l2=2.5762
+[6] time=3.44, avg_loss=0.2797, train_err=1.1189
+Eval: (32, 64)_l2=0.6460, (64, 128)_l2=2.5014
+[9] time=3.46, avg_loss=0.2301, train_err=0.9204
+Eval: (32, 64)_l2=0.6211, (64, 128)_l2=2.4767
+[12] time=3.44, avg_loss=0.1978, train_err=0.7912
+Eval: (32, 64)_l2=0.5682, (64, 128)_l2=2.4422
+[15] time=3.49, avg_loss=0.1688, train_err=0.6750
+Eval: (32, 64)_l2=0.5389, (64, 128)_l2=2.4043
+[18] time=3.44, avg_loss=0.1477, train_err=0.5906
+Eval: (32, 64)_l2=0.5387, (64, 128)_l2=2.4028
 
-{&#39;train_err&#39;: 0.6601384162902832, &#39;avg_loss&#39;: 0.1650346040725708, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 3.4505961670000147}
+{&#39;train_err&#39;: 0.6065096139907837, &#39;avg_loss&#39;: 0.15162740349769593, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 3.4495549430000665}
 </pre></div>
 </div>
 <p>Plot the prediction, and compare with the ground-truth
@@ -369,7 +390,7 @@ ii) can be trained quickly on CPU</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_plot_SFNO_swe_001.png" srcset="../_images/sphx_glr_plot_SFNO_swe_001.png" alt="Inputs, ground-truth output and prediction., Input x (32, 64), Ground-truth y, Model prediction, Input x (64, 128), Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 25.832 seconds)</p>
+<img src="../_images/sphx_glr_plot_SFNO_swe_001.png" srcset="../_images/sphx_glr_plot_SFNO_swe_001.png" alt="Inputs, ground-truth output and prediction., Input x (32, 64), Ground-truth y, Model prediction, Input x (64, 128), Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 24.617 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-sfno-swe-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/af3a515d2684655c6a5a8e0df87a4cf9/plot_SFNO_swe.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_SFNO_swe.ipynb</span></code></a></p>
@@ -390,11 +411,11 @@ ii) can be trained quickly on CPU</p>
       
         <nav class="pagination" role="navigation" aria-label="pagination">
     
-    <a class="button pagination-previous" href="plot_FNO_darcy.html" title="previous page" accesskey="p">
+    <a class="button pagination-previous" href="checkpoint_FNO_darcy.html" title="previous page" accesskey="p">
         <span class="icon">
             <i class="fa fa-arrow-circle-left"></i>
         </span>
-        <span>Training a TFNO on Darcy-Flow</span>
+        <span>Checkpointing and loading training states</span>
     </a>
     
     

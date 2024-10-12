@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Training a neural operator on Darcy-Flow - Author Robert Joseph George &#8212; neuraloperator 0.3.0 documentation</title> 
+    <title>Training an FNO with incremental meta-learning &#8212; neuraloperator 0.3.0 documentation</title> 
 <link rel="stylesheet" href="../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../_static/favicon/favicon-32x32.png">
@@ -31,7 +31,7 @@
  
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="A simple Darcy-Flow spectrum analysis" href="plot_darcy_flow_spectrum.html" />
+    <link rel="prev" title="Training an FNO on Darcy-Flow" href="plot_FNO_darcy.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   </head>
@@ -130,12 +130,12 @@
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Gallery of examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="plot_count_flops.html">Using <cite>torchtnt</cite> to count FLOPS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_darcy_flow.html">A simple Darcy-Flow dataset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="checkpoint_FNO_darcy.html">Training a TFNO on Darcy-Flow</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_FNO_darcy.html">Training a TFNO on Darcy-Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_FNO_darcy.html">Checkpointing and loading training states</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_SFNO_swe.html">Training a SFNO on the spherical Shallow Water equations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_UNO_darcy.html">U-NO on Darcy-Flow</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_darcy_flow_spectrum.html">A simple Darcy-Flow spectrum analysis</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Training a neural operator on Darcy-Flow - Author Robert Joseph George</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_FNO_darcy.html">Training an FNO on Darcy-Flow</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Training an FNO with incremental meta-learning</a></li>
 </ul>
 </li>
 </ul>
@@ -167,9 +167,11 @@
 <p><a class="reference internal" href="#sphx-glr-download-auto-examples-plot-incremental-fno-darcy-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code.</p>
 </div>
-<section class="sphx-glr-example-title" id="training-a-neural-operator-on-darcy-flow-author-robert-joseph-george">
-<span id="sphx-glr-auto-examples-plot-incremental-fno-darcy-py"></span><h1>Training a neural operator on Darcy-Flow - Author Robert Joseph George<a class="headerlink" href="#training-a-neural-operator-on-darcy-flow-author-robert-joseph-george" title="Link to this heading"></a></h1>
-<p>In this example, we demonstrate how to use the small Darcy-Flow example we ship with the package on Incremental FNO and Incremental Resolution</p>
+<section class="sphx-glr-example-title" id="training-an-fno-with-incremental-meta-learning">
+<span id="sphx-glr-auto-examples-plot-incremental-fno-darcy-py"></span><h1>Training an FNO with incremental meta-learning<a class="headerlink" href="#training-an-fno-with-incremental-meta-learning" title="Link to this heading"></a></h1>
+<p>In this example, we demonstrate how to use the small Darcy-Flow
+example we ship with the package to demonstrate the Incremental FNO
+meta-learning algorithm</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -275,7 +277,7 @@ Original Incre Res: change res to 8
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>### N PARAMS ###
- 2119329
+ 2110305
 
 ### OPTIMIZER ###
  AdamW (
@@ -289,15 +291,15 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fc13a4c1340&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f12b49e0af0&gt;
 
 ### LOSSES ###
 
 ### INCREMENTAL RESOLUTION + GRADIENT EXPLAINED ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fc13a4c9550&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f12b49e0700&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fc13a4c9550&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fc13a4c9190&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f12b49e0700&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f12b49e00d0&gt;}
 </pre></div>
 </div>
 <p>Set up the IncrementalTrainer
@@ -351,51 +353,51 @@ uses the incremental_loss_eps parameter</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Training on 100 samples
 Testing on [50, 50] samples         on resolutions [16, 32].
 Raw outputs of shape torch.Size([16, 1, 8, 8])
-[0] time=0.22, avg_loss=0.7750, train_err=11.0714
-Eval: 16_h1=0.7031, 16_l2=0.5348, 32_h1=0.7319, 32_l2=0.5357
-[1] time=0.21, avg_loss=0.5908, train_err=8.4395
-Eval: 16_h1=0.6114, 16_l2=0.4391, 32_h1=0.6716, 32_l2=0.4473
-[2] time=0.21, avg_loss=0.5093, train_err=7.2754
-Eval: 16_h1=0.5647, 16_l2=0.3843, 32_h1=0.6667, 32_l2=0.3946
-[3] time=0.21, avg_loss=0.4408, train_err=6.2975
-Eval: 16_h1=0.5216, 16_l2=0.3600, 32_h1=0.6661, 32_l2=0.3915
-[4] time=0.22, avg_loss=0.4055, train_err=5.7927
-Eval: 16_h1=0.5165, 16_l2=0.3631, 32_h1=0.6852, 32_l2=0.4008
-[5] time=0.21, avg_loss=0.3794, train_err=5.4201
-Eval: 16_h1=0.5407, 16_l2=0.4053, 32_h1=0.6456, 32_l2=0.4213
-[6] time=0.22, avg_loss=0.3662, train_err=5.2311
-Eval: 16_h1=0.4848, 16_l2=0.3434, 32_h1=0.6641, 32_l2=0.3786
-[7] time=0.23, avg_loss=0.3320, train_err=4.7433
-Eval: 16_h1=0.4515, 16_l2=0.3280, 32_h1=0.5890, 32_l2=0.3661
-[8] time=0.22, avg_loss=0.3013, train_err=4.3041
-Eval: 16_h1=0.4443, 16_l2=0.3024, 32_h1=0.6300, 32_l2=0.3467
-[9] time=0.23, avg_loss=0.2621, train_err=3.7436
-Eval: 16_h1=0.4252, 16_l2=0.2978, 32_h1=0.6085, 32_l2=0.3395
+[0] time=0.23, avg_loss=0.8115, train_err=11.5929
+Eval: 16_h1=0.7332, 16_l2=0.5739, 32_h1=0.7863, 32_l2=0.5720
+[1] time=0.22, avg_loss=0.6661, train_err=9.5159
+Eval: 16_h1=0.8889, 16_l2=0.7005, 32_h1=1.1195, 32_l2=0.7407
+[2] time=0.22, avg_loss=0.6497, train_err=9.2815
+Eval: 16_h1=0.6372, 16_l2=0.4883, 32_h1=0.6967, 32_l2=0.5000
+[3] time=0.22, avg_loss=0.5559, train_err=7.9411
+Eval: 16_h1=0.6112, 16_l2=0.4348, 32_h1=0.7432, 32_l2=0.4530
+[4] time=0.22, avg_loss=0.4852, train_err=6.9312
+Eval: 16_h1=0.5762, 16_l2=0.4037, 32_h1=0.7138, 32_l2=0.4262
+[5] time=0.22, avg_loss=0.4393, train_err=6.2764
+Eval: 16_h1=0.5515, 16_l2=0.3826, 32_h1=0.7143, 32_l2=0.4146
+[6] time=0.22, avg_loss=0.4039, train_err=5.7703
+Eval: 16_h1=0.5421, 16_l2=0.3832, 32_h1=0.7289, 32_l2=0.4221
+[7] time=0.23, avg_loss=0.3626, train_err=5.1807
+Eval: 16_h1=0.5418, 16_l2=0.3902, 32_h1=0.7402, 32_l2=0.4312
+[8] time=0.22, avg_loss=0.3563, train_err=5.0894
+Eval: 16_h1=0.5598, 16_l2=0.3874, 32_h1=0.7716, 32_l2=0.4260
+[9] time=0.22, avg_loss=0.3525, train_err=5.0354
+Eval: 16_h1=0.4780, 16_l2=0.3197, 32_h1=0.6826, 32_l2=0.3563
 Incre Res Update: change index to 1
 Incre Res Update: change sub to 1
 Incre Res Update: change res to 16
-[10] time=0.30, avg_loss=0.3530, train_err=5.0422
-Eval: 16_h1=0.3418, 16_l2=0.2496, 32_h1=0.4258, 32_l2=0.2477
-[11] time=0.29, avg_loss=0.2891, train_err=4.1300
-Eval: 16_h1=0.3833, 16_l2=0.2783, 32_h1=0.4696, 32_l2=0.2820
-[12] time=0.32, avg_loss=0.2975, train_err=4.2504
-Eval: 16_h1=0.3179, 16_l2=0.2267, 32_h1=0.4156, 32_l2=0.2404
-[13] time=0.31, avg_loss=0.2420, train_err=3.4567
-Eval: 16_h1=0.2829, 16_l2=0.2034, 32_h1=0.3807, 32_l2=0.2174
-[14] time=0.32, avg_loss=0.2147, train_err=3.0676
-Eval: 16_h1=0.3394, 16_l2=0.2630, 32_h1=0.4255, 32_l2=0.2714
-[15] time=0.33, avg_loss=0.2232, train_err=3.1885
-Eval: 16_h1=0.3785, 16_l2=0.2985, 32_h1=0.4668, 32_l2=0.3102
-[16] time=0.32, avg_loss=0.2555, train_err=3.6494
-Eval: 16_h1=0.3279, 16_l2=0.2593, 32_h1=0.4078, 32_l2=0.2623
-[17] time=0.32, avg_loss=0.2769, train_err=3.9559
-Eval: 16_h1=0.4073, 16_l2=0.3371, 32_h1=0.4499, 32_l2=0.3422
-[18] time=0.32, avg_loss=0.2840, train_err=4.0576
-Eval: 16_h1=0.2826, 16_l2=0.2202, 32_h1=0.3649, 32_l2=0.2272
-[19] time=0.32, avg_loss=0.1984, train_err=2.8340
-Eval: 16_h1=0.2795, 16_l2=0.2186, 32_h1=0.3582, 32_l2=0.2296
+[10] time=0.28, avg_loss=0.4253, train_err=6.0757
+Eval: 16_h1=0.4069, 16_l2=0.2959, 32_h1=0.4904, 32_l2=0.2928
+[11] time=0.27, avg_loss=0.3745, train_err=5.3500
+Eval: 16_h1=0.3820, 16_l2=0.2869, 32_h1=0.4769, 32_l2=0.3026
+[12] time=0.28, avg_loss=0.3405, train_err=4.8636
+Eval: 16_h1=0.3404, 16_l2=0.2598, 32_h1=0.4410, 32_l2=0.2731
+[13] time=0.27, avg_loss=0.3090, train_err=4.4136
+Eval: 16_h1=0.3231, 16_l2=0.2452, 32_h1=0.4245, 32_l2=0.2586
+[14] time=0.27, avg_loss=0.2896, train_err=4.1368
+Eval: 16_h1=0.3130, 16_l2=0.2380, 32_h1=0.4161, 32_l2=0.2522
+[15] time=0.27, avg_loss=0.2789, train_err=3.9843
+Eval: 16_h1=0.3072, 16_l2=0.2324, 32_h1=0.4151, 32_l2=0.2455
+[16] time=0.27, avg_loss=0.2690, train_err=3.8434
+Eval: 16_h1=0.3042, 16_l2=0.2305, 32_h1=0.4100, 32_l2=0.2425
+[17] time=0.28, avg_loss=0.2637, train_err=3.7674
+Eval: 16_h1=0.2954, 16_l2=0.2229, 32_h1=0.4023, 32_l2=0.2354
+[18] time=0.28, avg_loss=0.2557, train_err=3.6533
+Eval: 16_h1=0.2756, 16_l2=0.2105, 32_h1=0.3780, 32_l2=0.2269
+[19] time=0.27, avg_loss=0.2395, train_err=3.4208
+Eval: 16_h1=0.2735, 16_l2=0.2106, 32_h1=0.3738, 32_l2=0.2303
 
-{&#39;train_err&#39;: 2.8339713641575406, &#39;avg_loss&#39;: 0.19837799549102783, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 0.32431735399995887, &#39;16_h1&#39;: tensor(0.2795), &#39;16_l2&#39;: tensor(0.2186), &#39;32_h1&#39;: tensor(0.3582), &#39;32_l2&#39;: tensor(0.2296)}
+{&#39;train_err&#39;: 3.420767681939261, &#39;avg_loss&#39;: 0.2394537377357483, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 0.26751869200006695, &#39;16_h1&#39;: tensor(0.2735), &#39;16_l2&#39;: tensor(0.2106), &#39;32_h1&#39;: tensor(0.3738), &#39;32_l2&#39;: tensor(0.2303)}
 </pre></div>
 </div>
 <p>Plot the prediction, and compare with the ground-truth
@@ -445,7 +447,7 @@ ii) can be trained quickly on CPU</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" srcset="../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" alt="Inputs, ground-truth output and prediction., Input x, Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 7.926 seconds)</p>
+<img src="../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" srcset="../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" alt="Inputs, ground-truth output and prediction., Input x, Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 6.784 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-incremental-fno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/082e73328a5caf8c1fe9ad7fe05cf68f/plot_incremental_FNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_incremental_FNO_darcy.ipynb</span></code></a></p>
@@ -466,11 +468,11 @@ ii) can be trained quickly on CPU</p>
       
         <nav class="pagination" role="navigation" aria-label="pagination">
     
-    <a class="button pagination-previous" href="plot_darcy_flow_spectrum.html" title="previous page" accesskey="p">
+    <a class="button pagination-previous" href="plot_FNO_darcy.html" title="previous page" accesskey="p">
         <span class="icon">
             <i class="fa fa-arrow-circle-left"></i>
         </span>
-        <span>A simple Darcy-Flow spectrum analysis</span>
+        <span>Training an FNO on Darcy-Flow</span>
     </a>
     
     

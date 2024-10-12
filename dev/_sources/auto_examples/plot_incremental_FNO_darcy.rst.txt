@@ -18,11 +18,13 @@
 .. _sphx_glr_auto_examples_plot_incremental_FNO_darcy.py:
 
 
-Training a neural operator on Darcy-Flow - Author Robert Joseph George
-========================================
-In this example, we demonstrate how to use the small Darcy-Flow example we ship with the package on Incremental FNO and Incremental Resolution
+Training an FNO with incremental meta-learning
+===============================================
+In this example, we demonstrate how to use the small Darcy-Flow 
+example we ship with the package to demonstrate the Incremental FNO
+meta-learning algorithm
 
-.. GENERATED FROM PYTHON SOURCE LINES 9-22
+.. GENERATED FROM PYTHON SOURCE LINES 11-24
 
 .. code-block:: Python
 
@@ -46,11 +48,11 @@ In this example, we demonstrate how to use the small Darcy-Flow example we ship 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 23-24
+.. GENERATED FROM PYTHON SOURCE LINES 25-26
 
 Loading the Darcy flow dataset
 
-.. GENERATED FROM PYTHON SOURCE LINES 24-32
+.. GENERATED FROM PYTHON SOURCE LINES 26-34
 
 .. code-block:: Python
 
@@ -80,11 +82,11 @@ Loading the Darcy flow dataset
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 33-34
+.. GENERATED FROM PYTHON SOURCE LINES 35-36
 
 Choose device
 
-.. GENERATED FROM PYTHON SOURCE LINES 34-36
+.. GENERATED FROM PYTHON SOURCE LINES 36-38
 
 .. code-block:: Python
 
@@ -97,13 +99,13 @@ Choose device
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 37-40
+.. GENERATED FROM PYTHON SOURCE LINES 39-42
 
 Set up the incremental FNO model
 We start with 2 modes in each dimension
 We choose to update the modes by the incremental gradient explained algorithm
 
-.. GENERATED FROM PYTHON SOURCE LINES 40-46
+.. GENERATED FROM PYTHON SOURCE LINES 42-48
 
 .. code-block:: Python
 
@@ -120,11 +122,11 @@ We choose to update the modes by the incremental gradient explained algorithm
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 47-48
+.. GENERATED FROM PYTHON SOURCE LINES 49-50
 
 set up model
 
-.. GENERATED FROM PYTHON SOURCE LINES 48-58
+.. GENERATED FROM PYTHON SOURCE LINES 50-60
 
 .. code-block:: Python
 
@@ -145,11 +147,11 @@ set up model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 59-60
+.. GENERATED FROM PYTHON SOURCE LINES 61-62
 
 Set up the optimizer and scheduler
 
-.. GENERATED FROM PYTHON SOURCE LINES 60-85
+.. GENERATED FROM PYTHON SOURCE LINES 62-87
 
 .. code-block:: Python
 
@@ -193,11 +195,11 @@ Set up the optimizer and scheduler
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 86-87
+.. GENERATED FROM PYTHON SOURCE LINES 88-89
 
 Set up the losses
 
-.. GENERATED FROM PYTHON SOURCE LINES 87-100
+.. GENERATED FROM PYTHON SOURCE LINES 89-102
 
 .. code-block:: Python
 
@@ -224,7 +226,7 @@ Set up the losses
 
 
     ### N PARAMS ###
-     2119329
+     2110305
 
     ### OPTIMIZER ###
      AdamW (
@@ -238,20 +240,20 @@ Set up the losses
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fc13a4c1340>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f12b49e0af0>
 
     ### LOSSES ###
 
     ### INCREMENTAL RESOLUTION + GRADIENT EXPLAINED ###
 
-     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7fc13a4c9550>
+     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7f12b49e0700>
 
-     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7fc13a4c9550>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7fc13a4c9190>}
-
-
+     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7f12b49e0700>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f12b49e00d0>}
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 101-116
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 103-118
 
 Set up the IncrementalTrainer
 other options include setting incremental_loss_gap = True
@@ -269,7 +271,7 @@ incremental_loss_gap : bool, default is False
    if True, use the incremental algorithm based on loss gap
    uses the incremental_loss_eps parameter
 
-.. GENERATED FROM PYTHON SOURCE LINES 116-134
+.. GENERATED FROM PYTHON SOURCE LINES 118-136
 
 .. code-block:: Python
 
@@ -298,11 +300,11 @@ incremental_loss_gap : bool, default is False
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 135-136
+.. GENERATED FROM PYTHON SOURCE LINES 137-138
 
 Train the model
 
-.. GENERATED FROM PYTHON SOURCE LINES 136-146
+.. GENERATED FROM PYTHON SOURCE LINES 138-148
 
 .. code-block:: Python
 
@@ -327,55 +329,55 @@ Train the model
     Training on 100 samples
     Testing on [50, 50] samples         on resolutions [16, 32].
     Raw outputs of shape torch.Size([16, 1, 8, 8])
-    [0] time=0.22, avg_loss=0.7750, train_err=11.0714
-    Eval: 16_h1=0.7031, 16_l2=0.5348, 32_h1=0.7319, 32_l2=0.5357
-    [1] time=0.21, avg_loss=0.5908, train_err=8.4395
-    Eval: 16_h1=0.6114, 16_l2=0.4391, 32_h1=0.6716, 32_l2=0.4473
-    [2] time=0.21, avg_loss=0.5093, train_err=7.2754
-    Eval: 16_h1=0.5647, 16_l2=0.3843, 32_h1=0.6667, 32_l2=0.3946
-    [3] time=0.21, avg_loss=0.4408, train_err=6.2975
-    Eval: 16_h1=0.5216, 16_l2=0.3600, 32_h1=0.6661, 32_l2=0.3915
-    [4] time=0.22, avg_loss=0.4055, train_err=5.7927
-    Eval: 16_h1=0.5165, 16_l2=0.3631, 32_h1=0.6852, 32_l2=0.4008
-    [5] time=0.21, avg_loss=0.3794, train_err=5.4201
-    Eval: 16_h1=0.5407, 16_l2=0.4053, 32_h1=0.6456, 32_l2=0.4213
-    [6] time=0.22, avg_loss=0.3662, train_err=5.2311
-    Eval: 16_h1=0.4848, 16_l2=0.3434, 32_h1=0.6641, 32_l2=0.3786
-    [7] time=0.23, avg_loss=0.3320, train_err=4.7433
-    Eval: 16_h1=0.4515, 16_l2=0.3280, 32_h1=0.5890, 32_l2=0.3661
-    [8] time=0.22, avg_loss=0.3013, train_err=4.3041
-    Eval: 16_h1=0.4443, 16_l2=0.3024, 32_h1=0.6300, 32_l2=0.3467
-    [9] time=0.23, avg_loss=0.2621, train_err=3.7436
-    Eval: 16_h1=0.4252, 16_l2=0.2978, 32_h1=0.6085, 32_l2=0.3395
+    [0] time=0.23, avg_loss=0.8115, train_err=11.5929
+    Eval: 16_h1=0.7332, 16_l2=0.5739, 32_h1=0.7863, 32_l2=0.5720
+    [1] time=0.22, avg_loss=0.6661, train_err=9.5159
+    Eval: 16_h1=0.8889, 16_l2=0.7005, 32_h1=1.1195, 32_l2=0.7407
+    [2] time=0.22, avg_loss=0.6497, train_err=9.2815
+    Eval: 16_h1=0.6372, 16_l2=0.4883, 32_h1=0.6967, 32_l2=0.5000
+    [3] time=0.22, avg_loss=0.5559, train_err=7.9411
+    Eval: 16_h1=0.6112, 16_l2=0.4348, 32_h1=0.7432, 32_l2=0.4530
+    [4] time=0.22, avg_loss=0.4852, train_err=6.9312
+    Eval: 16_h1=0.5762, 16_l2=0.4037, 32_h1=0.7138, 32_l2=0.4262
+    [5] time=0.22, avg_loss=0.4393, train_err=6.2764
+    Eval: 16_h1=0.5515, 16_l2=0.3826, 32_h1=0.7143, 32_l2=0.4146
+    [6] time=0.22, avg_loss=0.4039, train_err=5.7703
+    Eval: 16_h1=0.5421, 16_l2=0.3832, 32_h1=0.7289, 32_l2=0.4221
+    [7] time=0.23, avg_loss=0.3626, train_err=5.1807
+    Eval: 16_h1=0.5418, 16_l2=0.3902, 32_h1=0.7402, 32_l2=0.4312
+    [8] time=0.22, avg_loss=0.3563, train_err=5.0894
+    Eval: 16_h1=0.5598, 16_l2=0.3874, 32_h1=0.7716, 32_l2=0.4260
+    [9] time=0.22, avg_loss=0.3525, train_err=5.0354
+    Eval: 16_h1=0.4780, 16_l2=0.3197, 32_h1=0.6826, 32_l2=0.3563
     Incre Res Update: change index to 1
     Incre Res Update: change sub to 1
     Incre Res Update: change res to 16
-    [10] time=0.30, avg_loss=0.3530, train_err=5.0422
-    Eval: 16_h1=0.3418, 16_l2=0.2496, 32_h1=0.4258, 32_l2=0.2477
-    [11] time=0.29, avg_loss=0.2891, train_err=4.1300
-    Eval: 16_h1=0.3833, 16_l2=0.2783, 32_h1=0.4696, 32_l2=0.2820
-    [12] time=0.32, avg_loss=0.2975, train_err=4.2504
-    Eval: 16_h1=0.3179, 16_l2=0.2267, 32_h1=0.4156, 32_l2=0.2404
-    [13] time=0.31, avg_loss=0.2420, train_err=3.4567
-    Eval: 16_h1=0.2829, 16_l2=0.2034, 32_h1=0.3807, 32_l2=0.2174
-    [14] time=0.32, avg_loss=0.2147, train_err=3.0676
-    Eval: 16_h1=0.3394, 16_l2=0.2630, 32_h1=0.4255, 32_l2=0.2714
-    [15] time=0.33, avg_loss=0.2232, train_err=3.1885
-    Eval: 16_h1=0.3785, 16_l2=0.2985, 32_h1=0.4668, 32_l2=0.3102
-    [16] time=0.32, avg_loss=0.2555, train_err=3.6494
-    Eval: 16_h1=0.3279, 16_l2=0.2593, 32_h1=0.4078, 32_l2=0.2623
-    [17] time=0.32, avg_loss=0.2769, train_err=3.9559
-    Eval: 16_h1=0.4073, 16_l2=0.3371, 32_h1=0.4499, 32_l2=0.3422
-    [18] time=0.32, avg_loss=0.2840, train_err=4.0576
-    Eval: 16_h1=0.2826, 16_l2=0.2202, 32_h1=0.3649, 32_l2=0.2272
-    [19] time=0.32, avg_loss=0.1984, train_err=2.8340
-    Eval: 16_h1=0.2795, 16_l2=0.2186, 32_h1=0.3582, 32_l2=0.2296
+    [10] time=0.28, avg_loss=0.4253, train_err=6.0757
+    Eval: 16_h1=0.4069, 16_l2=0.2959, 32_h1=0.4904, 32_l2=0.2928
+    [11] time=0.27, avg_loss=0.3745, train_err=5.3500
+    Eval: 16_h1=0.3820, 16_l2=0.2869, 32_h1=0.4769, 32_l2=0.3026
+    [12] time=0.28, avg_loss=0.3405, train_err=4.8636
+    Eval: 16_h1=0.3404, 16_l2=0.2598, 32_h1=0.4410, 32_l2=0.2731
+    [13] time=0.27, avg_loss=0.3090, train_err=4.4136
+    Eval: 16_h1=0.3231, 16_l2=0.2452, 32_h1=0.4245, 32_l2=0.2586
+    [14] time=0.27, avg_loss=0.2896, train_err=4.1368
+    Eval: 16_h1=0.3130, 16_l2=0.2380, 32_h1=0.4161, 32_l2=0.2522
+    [15] time=0.27, avg_loss=0.2789, train_err=3.9843
+    Eval: 16_h1=0.3072, 16_l2=0.2324, 32_h1=0.4151, 32_l2=0.2455
+    [16] time=0.27, avg_loss=0.2690, train_err=3.8434
+    Eval: 16_h1=0.3042, 16_l2=0.2305, 32_h1=0.4100, 32_l2=0.2425
+    [17] time=0.28, avg_loss=0.2637, train_err=3.7674
+    Eval: 16_h1=0.2954, 16_l2=0.2229, 32_h1=0.4023, 32_l2=0.2354
+    [18] time=0.28, avg_loss=0.2557, train_err=3.6533
+    Eval: 16_h1=0.2756, 16_l2=0.2105, 32_h1=0.3780, 32_l2=0.2269
+    [19] time=0.27, avg_loss=0.2395, train_err=3.4208
+    Eval: 16_h1=0.2735, 16_l2=0.2106, 32_h1=0.3738, 32_l2=0.2303
 
-    {'train_err': 2.8339713641575406, 'avg_loss': 0.19837799549102783, 'avg_lasso_loss': None, 'epoch_train_time': 0.32431735399995887, '16_h1': tensor(0.2795), '16_l2': tensor(0.2186), '32_h1': tensor(0.3582), '32_l2': tensor(0.2296)}
+    {'train_err': 3.420767681939261, 'avg_loss': 0.2394537377357483, 'avg_lasso_loss': None, 'epoch_train_time': 0.26751869200006695, '16_h1': tensor(0.2735), '16_l2': tensor(0.2106), '32_h1': tensor(0.3738), '32_l2': tensor(0.2303)}
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 147-157
+.. GENERATED FROM PYTHON SOURCE LINES 149-159
 
 Plot the prediction, and compare with the ground-truth
 Note that we trained on a very small resolution for
@@ -388,7 +390,7 @@ ii) can be trained quickly on CPU
 
 In practice we would train a Neural Operator on one or multiple GPUs
 
-.. GENERATED FROM PYTHON SOURCE LINES 157-195
+.. GENERATED FROM PYTHON SOURCE LINES 159-197
 
 .. code-block:: Python
 
@@ -445,7 +447,7 @@ In practice we would train a Neural Operator on one or multiple GPUs
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 7.926 seconds)
+   **Total running time of the script:** (0 minutes 6.784 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_incremental_FNO_darcy.py:

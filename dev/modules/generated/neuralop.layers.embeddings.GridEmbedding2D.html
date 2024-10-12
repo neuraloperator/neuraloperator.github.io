@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>neuralop.models.TFNO2d &#8212; neuraloperator 0.3.0 documentation</title> 
+    <title>neuralop.layers.embeddings.GridEmbedding2D &#8212; neuraloperator 0.3.0 documentation</title> 
 <link rel="stylesheet" href="../../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../_static/favicon/favicon-32x32.png">
@@ -31,8 +31,8 @@
  
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="neuralop.models.TFNO3d" href="neuralop.models.TFNO3d.html" />
-    <link rel="prev" title="neuralop.models.TFNO1d" href="neuralop.models.TFNO1d.html" />
+    <link rel="next" title="neuralop.layers.embeddings.SinusoidalEmbedding" href="neuralop.layers.embeddings.SinusoidalEmbedding.html" />
+    <link rel="prev" title="neuralop.layers.embeddings.GridEmbeddingND" href="neuralop.layers.embeddings.GridEmbeddingND.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   </head>
@@ -128,8 +128,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing NeuralOperator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">NeuralOperator User Guide</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../api.html#models">Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.layers">Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#models">Models</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#module-neuralop.layers">Layers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#model-dispatching">Model Dispatching</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#training">Training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#data">Data</a></li>
@@ -160,62 +160,67 @@
 
       <div class="container content main-content">
         
-  <section id="neuralop-models-tfno2d">
-<h1><a class="reference internal" href="../api.html#module-neuralop.models" title="neuralop.models"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.models</span></code></a>.TFNO2d<a class="headerlink" href="#neuralop-models-tfno2d" title="Link to this heading"></a></h1>
+  <section id="neuralop-layers-embeddings-gridembedding2d">
+<h1><a class="reference internal" href="../api.html#module-0" title="neuralop.layers.embeddings"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.embeddings</span></code></a>.GridEmbedding2D<a class="headerlink" href="#neuralop-layers-embeddings-gridembedding2d" title="Link to this heading"></a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="neuralop.models.TFNO2d">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.models.</span></span><span class="sig-name descname"><span class="pre">TFNO2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralop.models.TFNO2d" title="Link to this definition"></a></dt>
-<dd><p>2D Fourier Neural Operator</p>
-<p>For the full list of parameters, see <a class="reference internal" href="neuralop.models.FNO.html#neuralop.models.FNO" title="neuralop.models.FNO"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralop.models.FNO</span></code></a>.</p>
+<dt class="sig sig-object py" id="neuralop.layers.embeddings.GridEmbedding2D">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.embeddings.</span></span><span class="sig-name descname"><span class="pre">GridEmbedding2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_boundaries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[[0,</span> <span class="pre">1],</span> <span class="pre">[0,</span> <span class="pre">1]]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/embeddings.html#GridEmbedding2D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.embeddings.GridEmbedding2D" title="Link to this definition"></a></dt>
+<dd><p>A simple positional embedding as a regular 2D grid</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>n_modes_width</strong><span class="classifier">int</span></dt><dd><p>number of modes to keep in Fourier Layer, along the width</p>
-</dd>
-<dt><strong>n_modes_height</strong><span class="classifier">int</span></dt><dd><p>number of Fourier modes to keep along the height</p>
-</dd>
+<dt><strong>out_channels</strong></dt><dd></dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Methods</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.models.TFNO2d.forward" title="neuralop.models.TFNO2d.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>(x[, output_shape])</p></td>
-<td><p>FNO's forward pass</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.layers.embeddings.GridEmbedding2D.forward" title="neuralop.layers.embeddings.GridEmbedding2D.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>(data[, batched])</p></td>
+<td><p>Define the computation performed at every call.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#neuralop.layers.embeddings.GridEmbedding2D.grid" title="neuralop.layers.embeddings.GridEmbedding2D.grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">grid</span></code></a>(spatial_dims, device, dtype)</p></td>
+<td><p>grid generates 2D grid needed for pos encoding and caches the grid associated with MRU resolution</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py method">
-<dt class="sig sig-object py" id="neuralop.models.TFNO2d.forward">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralop.models.TFNO2d.forward" title="Link to this definition"></a></dt>
-<dd><p>FNO’s forward pass</p>
-<ol class="arabic simple">
-<li><p>Applies optional positional encoding</p></li>
-<li><dl class="simple">
-<dt>Sends inputs through a lifting layer to a high-dimensional latent</dt><dd><p>space</p>
-</dd>
-</dl>
-</li>
-<li><p>Applies optional domain padding to high-dimensional intermediate function representation</p></li>
-<li><p>Applies <cite>n_layers</cite> Fourier/FNO layers in sequence (SpectralConvolution + skip connections, nonlinearity)</p></li>
-<li><p>If domain padding was applied, domain padding is removed</p></li>
-<li><p>Projection of intermediate function representation to the output channels</p></li>
-</ol>
-<dl class="field-list simple">
+<dt class="sig sig-object py" id="neuralop.layers.embeddings.GridEmbedding2D.grid">
+<span class="sig-name descname"><span class="pre">grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spatial_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/embeddings.html#GridEmbedding2D.grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.embeddings.GridEmbedding2D.grid" title="Link to this definition"></a></dt>
+<dd><p>grid generates 2D grid needed for pos encoding
+and caches the grid associated with MRU resolution</p>
+<dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>x</strong><span class="classifier">tensor</span></dt><dd><p>input tensor</p>
+<dd class="field-odd"><dl>
+<dt><strong>spatial_dims</strong><span class="classifier">torch.size</span></dt><dd><p>sizes of spatial resolution</p>
 </dd>
-<dt><strong>output_shape</strong><span class="classifier">{tuple, tuple list, None}, default is None</span></dt><dd><p>Gives the option of specifying the exact output shape for odd shaped inputs.</p>
-<ul class="simple">
-<li><p>If None, don’t specify an output shape</p></li>
-<li><p>If tuple, specifies the output-shape of the <strong>last</strong> FNO Block</p></li>
-<li><p>If tuple list, specifies the exact output-shape of each FNO Block</p></li>
-</ul>
+<dt><strong>device</strong><span class="classifier">literal ‘cpu’ or ‘cuda:<a href="#id1"><span class="problematic" id="id2">*</span></a>’</span></dt><dd><p>where to load data</p>
+</dd>
+<dt><strong>dtype</strong><span class="classifier">str</span></dt><dd><p>dtype to encode data</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>torch.tensor</dt><dd><p>output grids to concatenate</p>
 </dd>
 </dl>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralop.layers.embeddings.GridEmbedding2D.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batched</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/embeddings.html#GridEmbedding2D.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.embeddings.GridEmbedding2D.forward" title="Link to this definition"></a></dt>
+<dd><p>Define the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -228,16 +233,16 @@
       
         <nav class="pagination" role="navigation" aria-label="pagination">
     
-    <a class="button pagination-previous" href="neuralop.models.TFNO1d.html" title="previous page" accesskey="p">
+    <a class="button pagination-previous" href="neuralop.layers.embeddings.GridEmbeddingND.html" title="previous page" accesskey="p">
         <span class="icon">
             <i class="fa fa-arrow-circle-left"></i>
         </span>
-        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.models</span></code>.TFNO1d</span>
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.embeddings</span></code>.GridEmbeddingND</span>
     </a>
     
     
-    <a class="button pagination-next" href="neuralop.models.TFNO3d.html" title="next page" accesskey="n">
-        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.models</span></code>.TFNO3d </span>
+    <a class="button pagination-next" href="neuralop.layers.embeddings.SinusoidalEmbedding.html" title="next page" accesskey="n">
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.embeddings</span></code>.SinusoidalEmbedding </span>
         <span class="icon">
             <i class="fa fa-arrow-circle-right"></i>
         </span>
@@ -273,9 +278,10 @@
 
         <div class="menu menu-list localtoc-list">
         <ul>
-<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.models</span></code>.TFNO2d</a><ul>
-<li><a class="reference internal" href="#neuralop.models.TFNO2d"><code class="docutils literal notranslate"><span class="pre">TFNO2d</span></code></a><ul>
-<li><a class="reference internal" href="#neuralop.models.TFNO2d.forward"><code class="docutils literal notranslate"><span class="pre">TFNO2d.forward()</span></code></a></li>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.embeddings</span></code>.GridEmbedding2D</a><ul>
+<li><a class="reference internal" href="#neuralop.layers.embeddings.GridEmbedding2D"><code class="docutils literal notranslate"><span class="pre">GridEmbedding2D</span></code></a><ul>
+<li><a class="reference internal" href="#neuralop.layers.embeddings.GridEmbedding2D.grid"><code class="docutils literal notranslate"><span class="pre">GridEmbedding2D.grid()</span></code></a></li>
+<li><a class="reference internal" href="#neuralop.layers.embeddings.GridEmbedding2D.forward"><code class="docutils literal notranslate"><span class="pre">GridEmbedding2D.forward()</span></code></a></li>
 </ul>
 </li>
 </ul>

@@ -131,12 +131,12 @@
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Gallery of examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="plot_count_flops.html">Using <cite>torchtnt</cite> to count FLOPS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_darcy_flow.html">A simple Darcy-Flow dataset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="checkpoint_FNO_darcy.html">Training a TFNO on Darcy-Flow</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_FNO_darcy.html">Training a TFNO on Darcy-Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_FNO_darcy.html">Checkpointing and loading training states</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_SFNO_swe.html">Training a SFNO on the spherical Shallow Water equations</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">U-NO on Darcy-Flow</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_darcy_flow_spectrum.html">A simple Darcy-Flow spectrum analysis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_incremental_FNO_darcy.html">Training a neural operator on Darcy-Flow - Author Robert Joseph George</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_FNO_darcy.html">Training an FNO on Darcy-Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_incremental_FNO_darcy.html">Training an FNO with incremental meta-learning</a></li>
 </ul>
 </li>
 </ul>
@@ -192,11 +192,18 @@ the small Darcy-Flow example we ship with the package</p>
         <span class="n">test_batch_sizes</span><span class="o">=</span><span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span>
 <span class="p">)</span>
 
+<span class="n">model</span> <span class="o">=</span> <span class="n">UNO</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">hidden_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+            <span class="n">projection_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+            <span class="n">uno_out_channels</span><span class="o">=</span><span class="p">[</span><span class="mi">32</span><span class="p">,</span><span class="mi">64</span><span class="p">,</span><span class="mi">64</span><span class="p">,</span><span class="mi">64</span><span class="p">,</span><span class="mi">32</span><span class="p">],</span>
+            <span class="n">uno_n_modes</span><span class="o">=</span><span class="p">[[</span><span class="mi">16</span><span class="p">,</span><span class="mi">16</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">],[</span><span class="mi">16</span><span class="p">,</span><span class="mi">16</span><span class="p">]],</span>
+            <span class="n">uno_scalings</span><span class="o">=</span><span class="p">[[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">],[</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]],</span>
+            <span class="n">horizontal_skips_map</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">channel_mlp_skip</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
+            <span class="n">n_layers</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+            <span class="n">domain_padding</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 
-
-<span class="n">model</span> <span class="o">=</span> <span class="n">UNO</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hidden_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">projection_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span><span class="n">uno_out_channels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span><span class="mi">64</span><span class="p">,</span><span class="mi">64</span><span class="p">,</span><span class="mi">64</span><span class="p">,</span><span class="mi">32</span><span class="p">],</span> \
-            <span class="n">uno_n_modes</span><span class="o">=</span> <span class="p">[[</span><span class="mi">16</span><span class="p">,</span><span class="mi">16</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">],[</span><span class="mi">16</span><span class="p">,</span><span class="mi">16</span><span class="p">]],</span> <span class="n">uno_scalings</span><span class="o">=</span>  <span class="p">[[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">],[</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]],</span>\
-            <span class="n">horizontal_skips_map</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">n_layers</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">domain_padding</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
 <span class="n">n_params</span> <span class="o">=</span> <span class="n">count_model_params</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
@@ -210,8 +217,18 @@ Loading test db for resolution 16 with 100 samples
 /home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:172: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don&#39;t have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
   data = torch.load(Path(root_dir).joinpath(f&quot;{dataset_name}_test_{res}.pt&quot;).as_posix())
 Loading test db for resolution 32 with 50 samples
+fno_skip=&#39;linear&#39;
+channel_mlp_skip=&#39;linear&#39;
+fno_skip=&#39;linear&#39;
+channel_mlp_skip=&#39;linear&#39;
+fno_skip=&#39;linear&#39;
+channel_mlp_skip=&#39;linear&#39;
+fno_skip=&#39;linear&#39;
+channel_mlp_skip=&#39;linear&#39;
+fno_skip=&#39;linear&#39;
+channel_mlp_skip=&#39;linear&#39;
 
-Our model has 2665921 parameters.
+Our model has 2700097 parameters.
 </pre></div>
 </div>
 <p>Create the optimizer</p>
@@ -250,9 +267,9 @@ Our model has 2665921 parameters.
   )
   (fno_blocks): ModuleList(
     (0): FNOBlocks(
-      (convs): SpectralConv(
-        (weight): ModuleList(
-          (0): DenseTensor(shape=torch.Size([64, 32, 16, 9]), rank=None)
+      (convs): ModuleList(
+        (0): SpectralConv(
+          (weight): DenseTensor(shape=torch.Size([64, 32, 16, 9]), rank=None)
         )
       )
       (fno_skips): ModuleList(
@@ -260,11 +277,24 @@ Our model has 2665921 parameters.
           (conv): Conv1d(64, 32, kernel_size=(1,), stride=(1,), bias=False)
         )
       )
+      (channel_mlp): ModuleList(
+        (0): ChannelMLP(
+          (fcs): ModuleList(
+            (0): Conv1d(32, 16, kernel_size=(1,), stride=(1,))
+            (1): Conv1d(16, 32, kernel_size=(1,), stride=(1,))
+          )
+        )
+      )
+      (channel_mlp_skips): ModuleList(
+        (0): Flattened1dConv(
+          (conv): Conv1d(64, 32, kernel_size=(1,), stride=(1,), bias=False)
+        )
+      )
     )
     (1): FNOBlocks(
-      (convs): SpectralConv(
-        (weight): ModuleList(
-          (0): DenseTensor(shape=torch.Size([32, 64, 8, 5]), rank=None)
+      (convs): ModuleList(
+        (0): SpectralConv(
+          (weight): DenseTensor(shape=torch.Size([32, 64, 8, 5]), rank=None)
         )
       )
       (fno_skips): ModuleList(
@@ -272,11 +302,24 @@ Our model has 2665921 parameters.
           (conv): Conv1d(32, 64, kernel_size=(1,), stride=(1,), bias=False)
         )
       )
+      (channel_mlp): ModuleList(
+        (0): ChannelMLP(
+          (fcs): ModuleList(
+            (0): Conv1d(64, 32, kernel_size=(1,), stride=(1,))
+            (1): Conv1d(32, 64, kernel_size=(1,), stride=(1,))
+          )
+        )
+      )
+      (channel_mlp_skips): ModuleList(
+        (0): Flattened1dConv(
+          (conv): Conv1d(32, 64, kernel_size=(1,), stride=(1,), bias=False)
+        )
+      )
     )
     (2): FNOBlocks(
-      (convs): SpectralConv(
-        (weight): ModuleList(
-          (0): DenseTensor(shape=torch.Size([64, 64, 8, 5]), rank=None)
+      (convs): ModuleList(
+        (0): SpectralConv(
+          (weight): DenseTensor(shape=torch.Size([64, 64, 8, 5]), rank=None)
         )
       )
       (fno_skips): ModuleList(
@@ -284,11 +327,24 @@ Our model has 2665921 parameters.
           (conv): Conv1d(64, 64, kernel_size=(1,), stride=(1,), bias=False)
         )
       )
+      (channel_mlp): ModuleList(
+        (0): ChannelMLP(
+          (fcs): ModuleList(
+            (0): Conv1d(64, 32, kernel_size=(1,), stride=(1,))
+            (1): Conv1d(32, 64, kernel_size=(1,), stride=(1,))
+          )
+        )
+      )
+      (channel_mlp_skips): ModuleList(
+        (0): Flattened1dConv(
+          (conv): Conv1d(64, 64, kernel_size=(1,), stride=(1,), bias=False)
+        )
+      )
     )
     (3): FNOBlocks(
-      (convs): SpectralConv(
-        (weight): ModuleList(
-          (0): DenseTensor(shape=torch.Size([128, 64, 8, 5]), rank=None)
+      (convs): ModuleList(
+        (0): SpectralConv(
+          (weight): DenseTensor(shape=torch.Size([128, 64, 8, 5]), rank=None)
         )
       )
       (fno_skips): ModuleList(
@@ -296,14 +352,40 @@ Our model has 2665921 parameters.
           (conv): Conv1d(128, 64, kernel_size=(1,), stride=(1,), bias=False)
         )
       )
+      (channel_mlp): ModuleList(
+        (0): ChannelMLP(
+          (fcs): ModuleList(
+            (0): Conv1d(64, 32, kernel_size=(1,), stride=(1,))
+            (1): Conv1d(32, 64, kernel_size=(1,), stride=(1,))
+          )
+        )
+      )
+      (channel_mlp_skips): ModuleList(
+        (0): Flattened1dConv(
+          (conv): Conv1d(128, 64, kernel_size=(1,), stride=(1,), bias=False)
+        )
+      )
     )
     (4): FNOBlocks(
-      (convs): SpectralConv(
-        (weight): ModuleList(
-          (0): DenseTensor(shape=torch.Size([96, 32, 16, 9]), rank=None)
+      (convs): ModuleList(
+        (0): SpectralConv(
+          (weight): DenseTensor(shape=torch.Size([96, 32, 16, 9]), rank=None)
         )
       )
       (fno_skips): ModuleList(
+        (0): Flattened1dConv(
+          (conv): Conv1d(96, 32, kernel_size=(1,), stride=(1,), bias=False)
+        )
+      )
+      (channel_mlp): ModuleList(
+        (0): ChannelMLP(
+          (fcs): ModuleList(
+            (0): Conv1d(32, 16, kernel_size=(1,), stride=(1,))
+            (1): Conv1d(16, 32, kernel_size=(1,), stride=(1,))
+          )
+        )
+      )
+      (channel_mlp_skips): ModuleList(
         (0): Flattened1dConv(
           (conv): Conv1d(96, 32, kernel_size=(1,), stride=(1,), bias=False)
         )
@@ -338,13 +420,13 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fc13a455f70&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f12cce03040&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fc13a455430&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f12cce031c0&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fc13a455430&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fc13a4553a0&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f12cce031c0&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f12cce03700&gt;}
 </pre></div>
 </div>
 <p>Create the trainer</p>
@@ -371,22 +453,22 @@ Parameter Group 0
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Training on 1000 samples
 Testing on [50, 50] samples         on resolutions [16, 32].
 Raw outputs of shape torch.Size([32, 1, 16, 16])
-[0] time=6.67, avg_loss=0.5576, train_err=17.4250
-Eval: 16_h1=0.2957, 16_l2=0.2297, 32_h1=0.7656, 32_l2=0.5978
-[3] time=6.68, avg_loss=0.2666, train_err=8.3303
-Eval: 16_h1=0.2130, 16_l2=0.1614, 32_h1=0.7293, 32_l2=0.5833
-[6] time=6.66, avg_loss=0.2331, train_err=7.2842
-Eval: 16_h1=0.2309, 16_l2=0.1888, 32_h1=0.7265, 32_l2=0.6037
-[9] time=6.72, avg_loss=0.2213, train_err=6.9148
-Eval: 16_h1=0.1880, 16_l2=0.1345, 32_h1=0.7092, 32_l2=0.5831
-[12] time=6.67, avg_loss=0.1992, train_err=6.2257
-Eval: 16_h1=0.1921, 16_l2=0.1428, 32_h1=0.7151, 32_l2=0.5942
-[15] time=6.62, avg_loss=0.1920, train_err=5.9999
-Eval: 16_h1=0.2084, 16_l2=0.1545, 32_h1=0.6995, 32_l2=0.5675
-[18] time=6.77, avg_loss=0.1628, train_err=5.0877
-Eval: 16_h1=0.1777, 16_l2=0.1195, 32_h1=0.7062, 32_l2=0.5767
+[0] time=8.46, avg_loss=0.6278, train_err=19.6184
+Eval: 16_h1=0.3865, 16_l2=0.3108, 32_h1=0.8094, 32_l2=0.6893
+[3] time=8.41, avg_loss=0.2409, train_err=7.5288
+Eval: 16_h1=0.2350, 16_l2=0.1879, 32_h1=0.7293, 32_l2=0.5997
+[6] time=8.44, avg_loss=0.2255, train_err=7.0477
+Eval: 16_h1=0.2546, 16_l2=0.2167, 32_h1=0.7049, 32_l2=0.6002
+[9] time=8.43, avg_loss=0.1959, train_err=6.1212
+Eval: 16_h1=0.2891, 16_l2=0.2400, 32_h1=0.6859, 32_l2=0.5562
+[12] time=8.45, avg_loss=0.1683, train_err=5.2593
+Eval: 16_h1=0.2701, 16_l2=0.2237, 32_h1=0.6748, 32_l2=0.5346
+[15] time=8.43, avg_loss=0.1747, train_err=5.4597
+Eval: 16_h1=0.2059, 16_l2=0.1532, 32_h1=0.6077, 32_l2=0.4555
+[18] time=8.47, avg_loss=0.1341, train_err=4.1893
+Eval: 16_h1=0.1968, 16_l2=0.1473, 32_h1=0.6199, 32_l2=0.4563
 
-{&#39;train_err&#39;: 4.960551746189594, &#39;avg_loss&#39;: 0.158737655878067, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 6.727991384999996}
+{&#39;train_err&#39;: 4.484663292765617, &#39;avg_loss&#39;: 0.14350922536849975, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 8.433023241}
 </pre></div>
 </div>
 <p>Plot the prediction, and compare with the ground-truth
@@ -436,7 +518,7 @@ ii) can be trained quickly on CPU</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_plot_UNO_darcy_001.png" srcset="../_images/sphx_glr_plot_UNO_darcy_001.png" alt="Inputs, ground-truth output and prediction., Input x, Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 16.872 seconds)</p>
+<img src="../_images/sphx_glr_plot_UNO_darcy_001.png" srcset="../_images/sphx_glr_plot_UNO_darcy_001.png" alt="Inputs, ground-truth output and prediction., Input x, Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 52.075 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-uno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/ecc34f03fb30bee651bda959149422c4/plot_UNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_UNO_darcy.ipynb</span></code></a></p>
