@@ -151,7 +151,10 @@
 <span class="sd">    ----------</span>
 <span class="sd">    channel_mlp : torch.nn.Module, default None</span>
 <span class="sd">        MLP parametrizing the kernel k. Input dimension</span>
-<span class="sd">        should be dim x + dim y or dim x + dim y + dim f</span>
+<span class="sd">        should be dim x + dim y or dim x + dim y + dim f.</span>
+<span class="sd">        MLP should not be pointwise and should only operate across</span>
+<span class="sd">        channels to preserve the discretization-invariance of the </span>
+<span class="sd">        kernel integral.</span>
 <span class="sd">    channel_mlp_layers : list, default None</span>
 <span class="sd">        List of layers sizes speficing a MLP which</span>
 <span class="sd">        parametrizes the kernel k. The MLP will be</span>
