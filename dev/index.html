@@ -152,16 +152,15 @@ training it on the data and saving the trained model for later use. (Check out <
 <p><code class="docutils literal notranslate"><span class="pre">neuraloperator</span></code> comes prepackaged with an example dataset of flows governed by the Darcy flow equation.</p>
 <p>To import the data:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">neuralop.datasets</span> <span class="kn">import</span> <span class="n">load_darcy_flow_small</span>
+<span class="kn">from</span> <span class="nn">neuralop.data.datasets</span> <span class="kn">import</span> <span class="n">load_darcy_flow_small</span>
 
 <span class="n">train_loader</span><span class="p">,</span> <span class="n">test_loaders</span><span class="p">,</span> <span class="n">data_processor</span> <span class="o">=</span> <span class="n">load_darcy_flow_small</span><span class="p">(</span>
      <span class="n">n_train</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
      <span class="n">test_resolutions</span><span class="o">=</span><span class="p">[</span><span class="mi">32</span><span class="p">],</span> <span class="n">n_tests</span><span class="o">=</span><span class="p">[</span><span class="mi">100</span><span class="p">],</span>
      <span class="n">test_batch_sizes</span><span class="o">=</span><span class="p">[</span><span class="mi">32</span><span class="p">],</span>
-     <span class="n">positional_encoding</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
 </pre></div>
 </div>
-<p>)</p>
 <p>Similar to the API provided by <code class="docutils literal notranslate"><span class="pre">torchvision</span></code>, this dataset includes training and test data for use in standard PyTorch training loops,
 as well as a <code class="docutils literal notranslate"><span class="pre">preprocessor</span></code> object that automates the transforms to convert the data into the form best understood by the model.</p>
 <p>We provide a <code class="docutils literal notranslate"><span class="pre">Trainer</span></code> object that automates the logic of a basic neural operator training loop to speed up experimentation (see :doc: <cite>auto_examples</cite> for more information).</p>
@@ -170,9 +169,6 @@ as well as a <code class="docutils literal notranslate"><span class="pre">prepro
 <span class="c1"># Create the trainer</span>
 <span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">n_epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
                   <span class="n">data_processor</span><span class="o">=</span><span class="n">data_processor</span><span class="p">,</span>
-                  <span class="n">wandb_log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                  <span class="n">eval_interval</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-                  <span class="n">use_distributed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                   <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># train the model</span>
@@ -185,7 +181,7 @@ as well as a <code class="docutils literal notranslate"><span class="pre">prepro
            <span class="n">eval_losses</span><span class="o">=</span><span class="n">eval_losses</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Tensorization is also provided out of the box: you can improve the previous models
+<p>Weight tensorization is also provided out of the box: you can improve the previous models
 by simply using a Tucker Tensorized FNO with just a few parameters:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neuralop.models</span> <span class="kn">import</span> <span class="n">TFNO</span>
 
