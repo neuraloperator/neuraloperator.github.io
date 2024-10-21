@@ -166,7 +166,7 @@
 <dt class="sig sig-object py" id="neuralop.layers.embeddings.SinusoidalEmbedding">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.embeddings.</span></span><span class="sig-name descname"><span class="pre">SinusoidalEmbedding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_frequencies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'transformer'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_positions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/embeddings.html#SinusoidalEmbedding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.embeddings.SinusoidalEmbedding" title="Link to this definition"></a></dt>
 <dd><p>SinusoidalEmbedding provides a unified sinusoidal positional embedding
-in the styles of Transformers <a class="reference internal" href="neuralop.training.IncrementalFNOTrainer.html#id2"><span class="std std-ref">George, R., Zhao, J., Kossaifi, J., Li, Z., and Anandkumar, A. (2024)</span></a> and Neural Radiance Fields (NERFs) <a class="reference internal" href="#id2"><span class="std std-ref">Mildenhall, B. et al (2020)</span></a>.</p>
+in the styles of Transformers <a class="reference internal" href="#r2f544174e18d-1" id="id1">[1]</a> and Neural Radiance Fields (NERFs) <a class="reference internal" href="#r2f544174e18d-2" id="id2">[2]</a>.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
@@ -214,12 +214,24 @@ Only used if <cite>embedding == transformer</cite>.</p>
 </tbody>
 </table>
 <p class="rubric">References</p>
-<dl class="simple" id="id1">
+<div role="list" class="citation-list">
+<div class="citation" id="r2f544174e18d-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>:</p>
+</div>
+</div>
+<dl class="simple">
 <dt>Vaswani, A. et al (2017)</dt><dd><p>“Attention Is All You Need”. 
 NeurIPS 2017, <a class="reference external" href="https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf">https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf</a>.</p>
 </dd>
 </dl>
-<dl class="simple" id="id2">
+<div role="list" class="citation-list">
+<div class="citation" id="r2f544174e18d-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>:</p>
+</div>
+</div>
+<dl class="simple">
 <dt>Mildenhall, B. et al (2020)</dt><dd><p>“NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis”.
 ArXiv, <a class="reference external" href="https://arxiv.org/pdf/2003.08934">https://arxiv.org/pdf/2003.08934</a>.</p>
 </dd>
