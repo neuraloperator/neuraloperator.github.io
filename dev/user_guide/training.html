@@ -168,15 +168,13 @@ can easily be implemented. For more specific documentation, check the API refere
 <section id="distributed-training">
 <h2>Distributed Training<a class="headerlink" href="#distributed-training" title="Link to this heading"></a></h2>
 <p>We also provide a simple way to use PyTorch’s <code class="code docutils literal notranslate"><span class="pre">DistributedDataParallel</span></code>
-functionality to hold data across multiple GPUs. We use PyTorch’s MPI backend,
+functionality to hold data across multiple GPUs. We use PyTorch’s <code class="code docutils literal notranslate"><span class="pre">torchrun</span></code> elastic launcher,
 so all you need to do on a multi-GPU system is the following:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">mpi4py</span>
-
-<span class="n">mpiexec</span> <span class="o">--</span><span class="n">allow</span><span class="o">-</span><span class="n">run</span><span class="o">-</span><span class="k">as</span><span class="o">-</span><span class="n">root</span> <span class="o">-</span><span class="n">n</span> <span class="n">N_GPUS</span> <span class="n">python</span> <span class="n">my_script</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">torchrun</span> <span class="o">--</span><span class="n">standalone</span> <span class="o">--</span><span class="n">nproc_per_node</span> <span class="o">&lt;</span><span class="n">NUM_GPUS</span><span class="o">&gt;</span> <span class="n">script</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p>You may need to adjust the batch size, model parallel size and world size in
-accordance with your specific use case.</p>
+accordance with your specific use case. See the <a class="reference external" href="https://pytorch.org/docs/stable/elastic/run.html">torchrun documentation</a> for more details.</p>
 </section>
 </section>
 
