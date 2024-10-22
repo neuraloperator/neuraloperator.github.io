@@ -134,12 +134,14 @@
 <a class="viewcode-back" href="../../../modules/generated/neuralop.models.FNO.html#neuralop.models.FNO">[docs]</a>
 <span class="k">class</span> <span class="nc">FNO</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;FNO&#39;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;N-Dimensional Fourier Neural Operator. The FNO learns a mapping between</span>
-<span class="sd">    spaces of functions discretized over regular grids. </span>
+<span class="sd">    spaces of functions discretized over regular grids using Fourier convolutions, </span>
+<span class="sd">    as described in [1]_.</span>
 <span class="sd">    </span>
-<span class="sd">    The key component of an FNO is its SpectralConv layer (see ``neuralop.layers.spectral_convolution``), which</span>
-<span class="sd">    is similar to a standard CNN conv layer but operates in the frequency domain.</span>
+<span class="sd">    The key component of an FNO is its SpectralConv layer (see </span>
+<span class="sd">    ``neuralop.layers.spectral_convolution``), which is similar to a standard CNN </span>
+<span class="sd">    conv layer but operates in the frequency domain.</span>
 
-<span class="sd">    For more information, refer to :ref:`fno_intro`.</span>
+<span class="sd">    For a deeper dive into the FNO architecture, refer to :ref:`fno_intro`.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -265,6 +267,12 @@
 <span class="sd">        )</span>
 <span class="sd">            ... torch.nn.Module printout truncated ...</span>
 
+<span class="sd">    References</span>
+<span class="sd">    -----------</span>
+<span class="sd">    .. [1] :</span>
+
+<span class="sd">    Li, Z. et al. &quot;Fourier Neural Operator for Parametric Partial Differential </span>
+<span class="sd">        Equations&quot; (2021). ICLR 2021, https://arxiv.org/pdf/2010.08895.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 

@@ -165,7 +165,8 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.layers.spectral_convolution.SpectralConv">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.spectral_convolution.</span></span><span class="sig-name descname"><span class="pre">SpectralConv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">complex_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_n_modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution_scaling_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fno_block_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'full'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rank</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factorization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implementation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'reconstructed'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_rank_modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decomposition_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_std</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'forward'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/spectral_convolution.html#SpectralConv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.spectral_convolution.SpectralConv" title="Link to this definition"></a></dt>
-<dd><p>Generic N-Dimensional Fourier Neural Operator</p>
+<dd><p>SpectralConv implements the Spectral Convolution component of a Fourier layer
+described in <a class="reference internal" href="#r17685265b205-1" id="id1">[1]</a> and <a class="reference internal" href="#r17685265b205-2" id="id2">[2]</a>.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
@@ -180,7 +181,8 @@
 of size I_1, …, I_N, please provide modes M_K that are I_1 &lt; M_K &lt;= I_N
 We will automatically keep the right amount of modes: specifically, for the 
 last mode only, if you specify M_N modes we will use M_N // 2 + 1 modes 
-as the real FFT is redundant along that last dimension.</p>
+as the real FFT is redundant along that last dimension. For more information on 
+mode truncation, refer to <a class="reference internal" href="../../user_guide/fno.html#fourier-layer-impl"><span class="std std-ref">Implementation</span></a></p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -252,6 +254,28 @@ if True, uses different logic for FFT contraction and uses full FFT instead of r
 </tr>
 </tbody>
 </table>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="r17685265b205-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>:</p>
+</div>
+</div>
+<dl class="simple">
+<dt>Li, Z. et al. “Fourier Neural Operator for Parametric Partial Differential </dt><dd><p>Equations” (2021). ICLR 2021, <a class="reference external" href="https://arxiv.org/pdf/2010.08895">https://arxiv.org/pdf/2010.08895</a>.</p>
+</dd>
+</dl>
+<div role="list" class="citation-list">
+<div class="citation" id="r17685265b205-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>:</p>
+</div>
+</div>
+<dl class="simple">
+<dt>Kossaifi, J., Kovachki, N., Azizzadenesheli, K., Anandkumar, A. “Multi-Grid</dt><dd><p>Tensorized Fourier Neural Operator for High-Resolution PDEs” (2024). 
+TMLR 2024, <a class="reference external" href="https://openreview.net/pdf?id=AWiDlO63bH">https://openreview.net/pdf?id=AWiDlO63bH</a>.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="neuralop.layers.spectral_convolution.SpectralConv.transform">
 <span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/spectral_convolution.html#SpectralConv.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.spectral_convolution.SpectralConv.transform" title="Link to this definition"></a></dt>

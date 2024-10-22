@@ -166,10 +166,12 @@
 <dt class="sig sig-object py" id="neuralop.models.FNO">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.models.</span></span><span class="sig-name descname"><span class="pre">FNO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/models/fno.html#FNO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.models.FNO" title="Link to this definition"></a></dt>
 <dd><p>N-Dimensional Fourier Neural Operator. The FNO learns a mapping between
-spaces of functions discretized over regular grids.</p>
-<p>The key component of an FNO is its SpectralConv layer (see <code class="docutils literal notranslate"><span class="pre">neuralop.layers.spectral_convolution</span></code>), which
-is similar to a standard CNN conv layer but operates in the frequency domain.</p>
-<p>For more information, refer to <a class="reference internal" href="../../user_guide/fno.html#fno-intro"><span class="std std-ref">Fourier Neural Operators</span></a>.</p>
+spaces of functions discretized over regular grids using Fourier convolutions, 
+as described in <a class="reference internal" href="#ra1828dcd7949-1" id="id1">[1]</a>.</p>
+<p>The key component of an FNO is its SpectralConv layer (see 
+<code class="docutils literal notranslate"><span class="pre">neuralop.layers.spectral_convolution</span></code>), which is similar to a standard CNN 
+conv layer but operates in the frequency domain.</p>
+<p>For a deeper dive into the FNO architecture, refer to <a class="reference internal" href="../../user_guide/fno.html#fno-intro"><span class="std std-ref">Fourier Neural Operators</span></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -295,6 +297,17 @@ for (n, m) in zip(max_n_modes, n_modes).</p>
 <dt><strong>conv_module</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>module to use for FNOBlock’s convolutions, by default SpectralConv</p>
 </dd>
 </dl>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="ra1828dcd7949-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>:</p>
+</div>
+</div>
+<dl class="simple">
+<dt>Li, Z. et al. “Fourier Neural Operator for Parametric Partial Differential </dt><dd><p>Equations” (2021). ICLR 2021, <a class="reference external" href="https://arxiv.org/pdf/2010.08895">https://arxiv.org/pdf/2010.08895</a>.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
