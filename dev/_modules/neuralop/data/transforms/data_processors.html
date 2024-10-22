@@ -426,6 +426,7 @@
         <span class="n">padding_fraction</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">stitching</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
+        <span class="n">use_distributed</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">in_normalizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">out_normalizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
@@ -438,11 +439,11 @@
 <span class="sd">        model: nn.Module</span>
 <span class="sd">            model to wrap in MultigridPatching2D</span>
 <span class="sd">        levels : int</span>
-<span class="sd">            mg_patching level parameter for MultigridPatching2D</span>
+<span class="sd">            number of multi-grid patching levels to use</span>
 <span class="sd">        padding_fraction : float</span>
-<span class="sd">            mg_padding_fraction parameter for MultigridPatching2D</span>
-<span class="sd">        stitching : float</span>
-<span class="sd">            mg_patching_stitching parameter for MultigridPatching2D</span>
+<span class="sd">            fraction by which to pad inputs in multigrid-patching</span>
+<span class="sd">        stitching : bool</span>
+<span class="sd">            whether to stitch back the output from the multi-grid patches </span>
 <span class="sd">        in_normalizer : neuralop.datasets.transforms.Transform, optional</span>
 <span class="sd">            OutputEncoder to decode model inputs, by default None</span>
 <span class="sd">        in_normalizer : neuralop.datasets.transforms.Transform, optional</span>
@@ -459,6 +460,7 @@
             <span class="n">levels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">levels</span><span class="p">,</span>
             <span class="n">padding_fraction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">padding_fraction</span><span class="p">,</span>
             <span class="n">stitching</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stitching</span><span class="p">,</span>
+            <span class="n">use_distributed</span><span class="o">=</span><span class="n">use_distributed</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
 
@@ -468,7 +470,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">in_normalizer</span> <span class="o">=</span> <span class="n">in_normalizer</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">out_normalizer</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">out_normalizer</span> <span class="o">=</span> <span class="n">out_normalizer</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
 
 <div class="viewcode-block" id="MGPatchingDataProcessor.to">
 <a class="viewcode-back" href="../../../../modules/generated/neuralop.data.transforms.data_processors.MGPatchingDataProcessor.html#neuralop.data.transforms.data_processors.MGPatchingDataProcessor.to">[docs]</a>
@@ -505,6 +507,7 @@
             <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_normalizer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
             <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_normalizer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
         <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">],</span> <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patcher</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="n">data_dict</span></div>
 
 
@@ -524,7 +527,7 @@
 <span class="sd">            model output predictions</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span>
-        <span class="n">out</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patcher</span><span class="o">.</span><span class="n">unpatch</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">out</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patcher</span><span class="o">.</span><span class="n">unpatch</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">evaluation</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">training</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_normalizer</span><span class="p">:</span>
             <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_normalizer</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
