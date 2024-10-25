@@ -144,43 +144,22 @@
 <span class="sd">        latent_feature_channels : int, optional</span>
 <span class="sd">            number of channels in optional latent feature map</span>
 <span class="sd">            to concatenate onto latent embeddings before </span>
-<span class="sd">            the latent FNO&#39;s forward pass, default None</span>
+<span class="sd">            the FNO&#39;s forward pass, default None</span>
 <span class="sd">        projection_channels : int, optional</span>
 <span class="sd">            number of channels in FNO pointwise projection</span>
 <span class="sd">        gno_coord_dim : int, optional</span>
 <span class="sd">            geometric dimension of input/output queries, by default 3</span>
+<span class="sd">        gno_radius : float, optional</span>
+<span class="sd">            radius in input/output space for GNO neighbor search, by default 0.033</span>
+<span class="sd">        in_gno_transform_type : str, optional</span>
+<span class="sd">            transform type parameter for input GNO, by default &#39;linear&#39;</span>
+<span class="sd">            see neuralop.layers.gno_block for more details</span>
+<span class="sd">        out_gno_transform_type : str, optional</span>
+<span class="sd">            transform type parameter for output GNO, by default &#39;linear&#39;</span>
+<span class="sd">            see neuralop.layers.gno_block for more details</span>
 <span class="sd">        gno_pos_embed_type : literal `{&#39;transformer&#39;, &#39;nerf&#39;}` | None</span>
 <span class="sd">            type of optional sinusoidal positional embedding to use in GNOBlock,</span>
 <span class="sd">            by default `&#39;transformer&#39;`</span>
-<span class="sd">        gno_embed_channels: int</span>
-<span class="sd">            dimension of optional per-channel embedding to use in GNOBlock,</span>
-<span class="sd">            by default 32</span>
-<span class="sd">        gno_embed_max_positions: int</span>
-<span class="sd">            max positions of optional per-channel embedding to use in GNOBlock,</span>
-<span class="sd">            by default 10000. If `gno_pos_embed_type != &#39;transformer&#39;`, value is unused.</span>
-<span class="sd">        gno_radius : float, optional</span>
-<span class="sd">            radius in input/output space for GNO neighbor search, by default 0.033</span>
-<span class="sd">        in_gno_channel_mlp_hidden_layers : list, optional</span>
-<span class="sd">            widths of hidden layers in input GNO, by default [80, 80, 80]</span>
-<span class="sd">        out_gno_channel_mlp_hidden_layers : list, optional</span>
-<span class="sd">            widths of hidden layers in output GNO, by default [512, 256]</span>
-<span class="sd">        gno_channel_mlp_non_linearity : nn.Module, optional</span>
-<span class="sd">            nonlinearity to use in gno ChannelMLP, by default F.gelu</span>
-<span class="sd">        in_gno_transform_type : str, optional</span>
-<span class="sd">            transform type parameter for input GNO, by default &#39;linear&#39;</span>
-<span class="sd">            see neuralop.layers.IntegralTransform</span>
-<span class="sd">        out_gno_transform_type : str, optional</span>
-<span class="sd">            transform type parameter for output GNO, by default &#39;linear&#39;</span>
-<span class="sd">            see neuralop.layers.IntegralTransform</span>
-<span class="sd">        gno_use_open3d : bool, optional</span>
-<span class="sd">            whether to use open3d neighbor search, by default False</span>
-<span class="sd">            if False, uses pure-PyTorch fallback neighbor search</span>
-<span class="sd">        gno_use_torch_scatter : bool, optional</span>
-<span class="sd">            whether to use torch_scatter&#39;s neighborhood reduction function</span>
-<span class="sd">            or the native PyTorch implementation in IntegralTransform layers.</span>
-<span class="sd">            If False, uses the fallback PyTorch version.</span>
-<span class="sd">        out_gno_tanh : bool, optional</span>
-<span class="sd">            whether to use tanh to stabilize outputs of the output GNO, by default False</span>
 <span class="sd">        fno_in_channels : int, optional</span>
 <span class="sd">            number of input channels for FNO, by default 26</span>
 <span class="sd">        fno_n_modes : tuple, optional</span>
@@ -188,19 +167,43 @@
 <span class="sd">            to use in FNO, by default (16, 16, 16)</span>
 <span class="sd">        fno_hidden_channels : int, optional</span>
 <span class="sd">            hidden channels for use in FNO, by default 64</span>
-<span class="sd">        lifting_channels : int, optional</span>
-<span class="sd">            number of channels in FNO&#39;s pointwise lifting, by default 256</span>
-<span class="sd">        fno_projection_channels : int, optional</span>
-<span class="sd">            number of channels in FNO&#39;s pointwise projection, by default 256</span>
+<span class="sd">        lifting_channel_ratio : int, optional</span>
+<span class="sd">            ratio of lifting channels to `fno_hidden_channels`, by default 2</span>
+<span class="sd">            The number of liting channels in the lifting block of the FNO is</span>
+<span class="sd">            lifting_channel_ratio * hidden_channels (e.g. default 512)</span>
 <span class="sd">        fno_n_layers : int, optional</span>
 <span class="sd">            number of layers in FNO, by default 4</span>
+<span class="sd">        </span>
+<span class="sd">        Other Parameters</span>
+<span class="sd">        ----------------</span>
+<span class="sd">        gno_embed_channels: int</span>
+<span class="sd">            dimension of optional per-channel embedding to use in GNOBlock,</span>
+<span class="sd">            by default 32</span>
+<span class="sd">        gno_embed_max_positions: int</span>
+<span class="sd">            max positions of optional per-channel embedding to use in GNOBlock,</span>
+<span class="sd">            by default 10000. If `gno_pos_embed_type != &#39;transformer&#39;`, value is unused.</span>
+<span class="sd">        in_gno_channel_mlp_hidden_layers : list, optional</span>
+<span class="sd">            widths of hidden layers in input GNO, by default [80, 80, 80]</span>
+<span class="sd">        out_gno_channel_mlp_hidden_layers : list, optional</span>
+<span class="sd">            widths of hidden layers in output GNO, by default [512, 256]</span>
+<span class="sd">        gno_channel_mlp_non_linearity : nn.Module, optional</span>
+<span class="sd">            nonlinearity to use in gno ChannelMLP, by default F.gelu</span>
+<span class="sd">        gno_use_open3d : bool, optional</span>
+<span class="sd">            whether to use open3d neighbor search, by default True</span>
+<span class="sd">            if False, uses pure-PyTorch fallback neighbor search</span>
+<span class="sd">        gno_use_torch_scatter : bool, optional</span>
+<span class="sd">            whether to use torch_scatter&#39;s neighborhood reduction function</span>
+<span class="sd">            or the native PyTorch implementation in IntegralTransform layers.</span>
+<span class="sd">            If False, uses the fallback PyTorch version.</span>
+<span class="sd">        out_gno_tanh : bool, optional</span>
+<span class="sd">            whether to use tanh to stabilize outputs of the output GNO, by default False</span>
 <span class="sd">        fno_resolution_scaling_factor : float | None, optional</span>
 <span class="sd">            factor by which to scale output of FNO, by default None</span>
 <span class="sd">        fno_incremental_n_modes : list[int] | None, defaults to None</span>
 <span class="sd">        if passed, sets n_modes separately for each FNO layer.</span>
 <span class="sd">        fno_block_precision : str, defaults to &#39;full&#39;</span>
 <span class="sd">            data precision to compute within fno block</span>
-<span class="sd">        fno_use_channel_mlp : bool, defaults to False</span>
+<span class="sd">        fno_use_channel_mlp : bool, defaults to True</span>
 <span class="sd">            Whether to use a ChannelMLP layer after each FNO block.</span>
 <span class="sd">        fno_channel_mlp_dropout : float, defaults to 0</span>
 <span class="sd">            dropout parameter of above ChannelMLP.</span>
@@ -256,52 +259,54 @@
 <span class="sd">            https://proceedings.neurips.cc/paper_files/paper/2023/hash/70518ea42831f02afc3a2828993935ad-Abstract-Conference.html</span>
 <span class="sd">        &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span>
-            <span class="n">in_channels</span><span class="p">,</span>
-            <span class="n">out_channels</span><span class="p">,</span>
-            <span class="n">latent_feature_channels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">projection_channels</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
-            <span class="n">gno_coord_dim</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-            <span class="n">gno_pos_embed_type</span><span class="o">=</span><span class="s1">&#39;transformer&#39;</span><span class="p">,</span>
-            <span class="n">gno_embed_channels</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
-            <span class="n">gno_embed_max_positions</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
-            <span class="n">gno_radius</span><span class="o">=</span><span class="mf">0.033</span><span class="p">,</span>
-            <span class="n">in_gno_channel_mlp_hidden_layers</span><span class="o">=</span><span class="p">[</span><span class="mi">80</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">80</span><span class="p">],</span>
-            <span class="n">out_gno_channel_mlp_hidden_layers</span><span class="o">=</span><span class="p">[</span><span class="mi">512</span><span class="p">,</span> <span class="mi">256</span><span class="p">],</span>
-            <span class="n">gno_channel_mlp_non_linearity</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">gelu</span><span class="p">,</span> 
-            <span class="n">in_gno_transform_type</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
-            <span class="n">out_gno_transform_type</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
-            <span class="n">gno_use_open3d</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">gno_use_torch_scatter</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">out_gno_tanh</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">fno_in_channels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-            <span class="n">fno_n_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> 
-            <span class="n">fno_hidden_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
-            <span class="n">lifting_channels</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
-            <span class="n">fno_n_layers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-            <span class="n">fno_resolution_scaling_factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">fno_incremental_n_modes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">fno_block_precision</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">,</span>
-            <span class="n">fno_use_channel_mlp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
-            <span class="n">fno_channel_mlp_dropout</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-            <span class="n">fno_channel_mlp_expansion</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-            <span class="n">fno_non_linearity</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">gelu</span><span class="p">,</span>
-            <span class="n">fno_stabilizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
-            <span class="n">fno_norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">fno_ada_in_features</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-            <span class="n">fno_ada_in_dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="n">fno_preactivation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">fno_skip</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
-            <span class="n">fno_channel_mlp_skip</span><span class="o">=</span><span class="s1">&#39;soft-gating&#39;</span><span class="p">,</span>
-            <span class="n">fno_separable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">fno_factorization</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">fno_rank</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">fno_joint_factorization</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
-            <span class="n">fno_fixed_rank_modes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">fno_implementation</span><span class="o">=</span><span class="s1">&#39;factorized&#39;</span><span class="p">,</span>
-            <span class="n">fno_decomposition_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span>
-            <span class="n">fno_conv_module</span><span class="o">=</span><span class="n">SpectralConv</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">kwargs</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">in_channels</span><span class="p">,</span>
+        <span class="n">out_channels</span><span class="p">,</span>
+        <span class="n">latent_feature_channels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">projection_channels</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
+        <span class="n">gno_coord_dim</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">gno_radius</span><span class="o">=</span><span class="mf">0.033</span><span class="p">,</span>
+        <span class="n">in_gno_transform_type</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+        <span class="n">out_gno_transform_type</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+        <span class="n">gno_pos_embed_type</span><span class="o">=</span><span class="s1">&#39;transformer&#39;</span><span class="p">,</span>
+        <span class="n">fno_in_channels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">fno_n_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> 
+        <span class="n">fno_hidden_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+        <span class="n">fno_lifting_channel_ratio</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">fno_n_layers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+        <span class="c1"># Other GNO Params</span>
+        <span class="n">gno_embed_channels</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+        <span class="n">gno_embed_max_positions</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+        <span class="n">in_gno_channel_mlp_hidden_layers</span><span class="o">=</span><span class="p">[</span><span class="mi">80</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">80</span><span class="p">],</span>
+        <span class="n">out_gno_channel_mlp_hidden_layers</span><span class="o">=</span><span class="p">[</span><span class="mi">512</span><span class="p">,</span> <span class="mi">256</span><span class="p">],</span>
+        <span class="n">gno_channel_mlp_non_linearity</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">gelu</span><span class="p">,</span> 
+        <span class="n">gno_use_open3d</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">gno_use_torch_scatter</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">out_gno_tanh</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="c1"># Other FNO Params</span>
+        <span class="n">fno_resolution_scaling_factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">fno_incremental_n_modes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">fno_block_precision</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">,</span>
+        <span class="n">fno_use_channel_mlp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+        <span class="n">fno_channel_mlp_dropout</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">fno_channel_mlp_expansion</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">fno_non_linearity</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">gelu</span><span class="p">,</span>
+        <span class="n">fno_stabilizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+        <span class="n">fno_norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">fno_ada_in_features</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">fno_ada_in_dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">fno_preactivation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">fno_skip</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+        <span class="n">fno_channel_mlp_skip</span><span class="o">=</span><span class="s1">&#39;soft-gating&#39;</span><span class="p">,</span>
+        <span class="n">fno_separable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">fno_factorization</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">fno_rank</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">fno_joint_factorization</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+        <span class="n">fno_fixed_rank_modes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">fno_implementation</span><span class="o">=</span><span class="s1">&#39;factorized&#39;</span><span class="p">,</span>
+        <span class="n">fno_decomposition_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span>
+        <span class="n">fno_conv_module</span><span class="o">=</span><span class="n">SpectralConv</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
         <span class="p">):</span>
         
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -311,7 +316,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">gno_coord_dim</span> <span class="o">=</span> <span class="n">gno_coord_dim</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fno_hidden_channels</span> <span class="o">=</span> <span class="n">fno_hidden_channels</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">lifting_channels</span> <span class="o">=</span> <span class="n">lifting_channels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lifting_channels</span> <span class="o">=</span> <span class="n">fno_lifting_channel_ratio</span> <span class="o">*</span> <span class="n">fno_hidden_channels</span>
 
         <span class="c1"># TODO: make sure this makes sense in all contexts</span>
         <span class="k">if</span> <span class="n">in_gno_transform_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;nonlinear&quot;</span><span class="p">,</span> <span class="s2">&quot;nonlinear_kernelonly&quot;</span><span class="p">]:</span>
@@ -356,8 +361,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">out_gno_tanh</span> <span class="o">=</span> <span class="n">out_gno_tanh</span>
 
         <span class="c1">### input GNO</span>
-        <span class="c1"># input to the first GNO ChannelMLP: x pos encoding,</span>
-        <span class="c1"># y (integrand) pos encoding, potentially f_y</span>
+        <span class="c1"># input to the first GNO ChannelMLP: `x` pos encoding,</span>
+        <span class="c1"># `y` (integrand) pos encoding, potentially `f_y`</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">gno_in</span> <span class="o">=</span> <span class="n">GNOBlock</span><span class="p">(</span>
             <span class="n">in_channels</span><span class="o">=</span><span class="n">in_channels</span><span class="p">,</span>
@@ -374,12 +379,15 @@
             <span class="n">use_torch_scatter_reduce</span><span class="o">=</span><span class="n">gno_use_torch_scatter</span><span class="p">,</span>
         <span class="p">)</span>
 
-
+        <span class="c1">### Lifting layer before FNOBlocks</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lifting</span> <span class="o">=</span> <span class="n">ChannelMLP</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fno_in_channels</span><span class="p">,</span>
-                                  <span class="n">hidden_channels</span><span class="o">=</span><span class="n">lifting_channels</span><span class="p">,</span>
+                                  <span class="n">hidden_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lifting_channels</span><span class="p">,</span>
                                   <span class="n">out_channels</span><span class="o">=</span><span class="n">fno_hidden_channels</span><span class="p">,</span>
                                   <span class="n">n_layers</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
         
+        <span class="c1">### FNOBlocks in latent space</span>
+        <span class="c1"># input: `in_p` intermediate embeddings,</span>
+        <span class="c1"># possibly concatenated feature channels `latent_features` </span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fno_blocks</span> <span class="o">=</span> <span class="n">FNOBlocks</span><span class="p">(</span>
                 <span class="n">n_modes</span><span class="o">=</span><span class="n">fno_n_modes</span><span class="p">,</span>
                 <span class="n">hidden_channels</span><span class="o">=</span><span class="n">fno_hidden_channels</span><span class="p">,</span>

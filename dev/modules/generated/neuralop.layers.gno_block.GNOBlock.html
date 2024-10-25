@@ -164,7 +164,7 @@
 <h1><a class="reference internal" href="../api.html#module-neuralop.layers.gno_block" title="neuralop.layers.gno_block"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.gno_block</span></code></a>.GNOBlock<a class="headerlink" href="#neuralop-layers-gno-block-gnoblock" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.layers.gno_block.GNOBlock">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.gno_block.</span></span><span class="sig-name descname"><span class="pre">GNOBlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coord_dim:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius:</span> <span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_embedding_type:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'transformer'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_embedding_channels:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_embedding_max_positions:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_mlp:</span> <span class="pre">~torch.nn.modules.module.Module</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_mlp_layers:</span> <span class="pre">~typing.List[int]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_mlp_non_linearity=&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform_type='linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_open3d_neighbor_search:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_torch_scatter_reduce=True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/gno_block.html#GNOBlock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.gno_block.GNOBlock" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.gno_block.</span></span><span class="sig-name descname"><span class="pre">GNOBlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">in_channels:</span> <span class="pre">int,</span> <span class="pre">out_channels:</span> <span class="pre">int,</span> <span class="pre">coord_dim:</span> <span class="pre">int,</span> <span class="pre">radius:</span> <span class="pre">float,</span> <span class="pre">transform_type='linear',</span> <span class="pre">pos_embedding_type:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'transformer',</span> <span class="pre">pos_embedding_channels:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">32,</span> <span class="pre">pos_embedding_max_positions:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">10000,</span> <span class="pre">channel_mlp_layers:</span> <span class="pre">~typing.List[int]</span> <span class="pre">=</span> <span class="pre">[128,</span> <span class="pre">256,</span> <span class="pre">128],</span> <span class="pre">channel_mlp_non_linearity=&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;,</span> <span class="pre">channel_mlp:</span> <span class="pre">~torch.nn.modules.module.Module</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">use_open3d_neighbor_search:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">use_torch_scatter_reduce:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/gno_block.html#GNOBlock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.gno_block.GNOBlock" title="Link to this definition"></a></dt>
 <dd><p>GNOBlock implements a Graph Neural Operator layer as described in <a class="reference internal" href="#r61402ca715ea-1" id="id1">[1]</a>.</p>
 <p>A GNO layer is a resolution-invariant operator that maps a function defined
 over one coordinate mesh to another defined over another coordinate mesh using 
@@ -194,6 +194,28 @@ is (c) “nonlinear” or (d) “nonlinear_kernelonly”</p>
 </dd>
 <dt><strong>radius</strong><span class="classifier">float</span></dt><dd><p>radius in which to search for neighbors</p>
 </dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.layers.gno_block.GNOBlock.forward" title="neuralop.layers.gno_block.GNOBlock.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>(y, x[, f_y, reduction])</p></td>
+<td><p>Compute a GNO neighbor search and kernel integral transform.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="field-list simple">
+<dt class="field-odd">Other Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>transform_type</strong><span class="classifier">str, optional</span></dt><dd><p>Which integral transform to compute. The mapping is:
+‘linear_kernelonly’ -&gt; (a)
+‘linear’ -&gt; (b) [DEFAULT]
+‘nonlinear_kernelonly’ -&gt; (c)
+‘nonlinear’ -&gt; (d)
+If the input f is not given then (a) is computed
+by default independently of this parameter.</p>
+</dd>
 <dt><strong>pos_embedding_type: literal {‘transformer’, ‘nerf’} | None</strong></dt><dd><p>type of positional embedding to use during the kernel integral transform.
 see <cite>neuralop.layers.embeddings.SinusoidalEmbedding</cite> for more details.
 default <cite>‘transformer’</cite></p>
@@ -203,24 +225,18 @@ default <cite>‘transformer’</cite></p>
 <dt><strong>pos_embedding_max_positions: int</strong></dt><dd><p><cite>max_positions</cite> parameter for SinusoidalEmbedding of type <cite>‘transformer’</cite>. If
 <cite>pos_embedding_type != ‘transformer’</cite>, this value is not used. Default 10000</p>
 </dd>
-<dt><strong>channel_mlp</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>ChannelMLP parametrizing the kernel k. Input dimension
-should be dim x + dim y or dim x + dim y + dim f.
-ChannelMLP should not be pointwise and should only operate across
-channels to preserve the discretization-invariance of the 
-kernel integral.</p>
-</dd>
 <dt><strong>channel_mlp_layers</strong><span class="classifier">List[int], optional</span></dt><dd><p>list of layer widths to dynamically construct
 LinearChannelMLP network to parameterize kernel k, by default None</p>
 </dd>
 <dt><strong>channel_mlp_non_linearity</strong><span class="classifier">torch.nn function, optional</span></dt><dd><p>activation function for ChannelMLPLinear above, by default F.gelu</p>
 </dd>
-<dt><strong>transform_type</strong><span class="classifier">str, optional</span></dt><dd><p>Which integral transform to compute. The mapping is:
-‘linear_kernelonly’ -&gt; (a)
-‘linear’ -&gt; (b) [DEFAULT]
-‘nonlinear_kernelonly’ -&gt; (c)
-‘nonlinear’ -&gt; (d)
-If the input f is not given then (a) is computed
-by default independently of this parameter.</p>
+<dt><strong>channel_mlp</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>ChannelMLP parametrizing the kernel k. Input dimension
+should be dim x + dim y or dim x + dim y + dim f.
+ChannelMLP should not be pointwise and should only operate across
+channels to preserve the discretization-invariance of the 
+kernel integral. If you have more specific needs than the LinearChannelMLP,
+this argument allows you to pass your own Module to parameterize the kernel k. 
+Default None.</p>
 </dd>
 <dt><strong>use_open3d_neighbor_search: bool, optional</strong></dt><dd><p>whether to use open3d or native-PyTorch search</p>
 </dd>
@@ -231,14 +247,6 @@ native PyTorch implementation, by default True</p>
 </dl>
 </dd>
 </dl>
-<p class="rubric">Methods</p>
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.layers.gno_block.GNOBlock.forward" title="neuralop.layers.gno_block.GNOBlock.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>(y, x[, f_y])</p></td>
-<td><p>Compute a GNO neighbor search and kernel integral transform.</p></td>
-</tr>
-</tbody>
-</table>
 <p class="rubric">References</p>
 <div role="list" class="citation-list">
 <div class="citation" id="r61402ca715ea-1" role="doc-biblioentry">
@@ -251,9 +259,38 @@ native PyTorch implementation, by default True</p>
 Partial Differential Equations.” ArXiV, <a class="reference external" href="https://arxiv.org/pdf/2003.03485">https://arxiv.org/pdf/2003.03485</a>.</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p><a href="#id3"><span class="problematic" id="id4">``</span></a>`
+&gt;&gt;&gt; gno = GNOBlock(in_channels=2, out_channels=12, coord_dim=3, radius=0.035)</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gno</span>
+<span class="go">GNOBlock(</span>
+<span class="go">    (pos_embedding): SinusoidalEmbedding()</span>
+<span class="go">    (neighbor_search): NeighborSearch()</span>
+<span class="go">    (channel_mlp): LinearChannelMLP(</span>
+<span class="go">        (fcs): ModuleList(</span>
+<span class="go">        (0): Linear(in_features=384, out_features=128, bias=True)</span>
+<span class="go">        (1): Linear(in_features=128, out_features=256, bias=True)</span>
+<span class="go">        (2): Linear(in_features=256, out_features=128, bias=True)</span>
+<span class="go">        (3): Linear(in_features=128, out_features=12, bias=True)</span>
+<span class="go">        )</span>
+<span class="go">    )</span>
+<span class="go">    (integral_transform): IntegralTransform(</span>
+<span class="go">        (channel_mlp): LinearChannelMLP(</span>
+<span class="go">        (fcs): ModuleList(</span>
+<span class="go">            (0): Linear(in_features=384, out_features=128, bias=True)</span>
+<span class="go">            (1): Linear(in_features=128, out_features=256, bias=True)</span>
+<span class="go">            (2): Linear(in_features=256, out_features=128, bias=True)</span>
+<span class="go">            (3): Linear(in_features=128, out_features=12, bias=True)</span>
+<span class="go">        )</span>
+<span class="go">        )</span>
+<span class="go">    )</span>
+<span class="go">)</span>
+<span class="go">```</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="neuralop.layers.gno_block.GNOBlock.forward">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/gno_block.html#GNOBlock.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.gno_block.GNOBlock.forward" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sum'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/gno_block.html#GNOBlock.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.gno_block.GNOBlock.forward" title="Link to this definition"></a></dt>
 <dd><p>Compute a GNO neighbor search and kernel integral transform.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

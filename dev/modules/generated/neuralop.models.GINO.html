@@ -164,7 +164,7 @@
 <h1><a class="reference internal" href="../api.html#module-neuralop.models" title="neuralop.models"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.models</span></code></a>.GINO<a class="headerlink" href="#neuralop-models-gino" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.models.GINO">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.models.</span></span><span class="sig-name descname"><span class="pre">GINO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">in_channels,</span> <span class="pre">out_channels,</span> <span class="pre">latent_feature_channels=None,</span> <span class="pre">projection_channels=256,</span> <span class="pre">gno_coord_dim=3,</span> <span class="pre">gno_pos_embed_type='transformer',</span> <span class="pre">gno_embed_channels=32,</span> <span class="pre">gno_embed_max_positions=10000,</span> <span class="pre">gno_radius=0.033,</span> <span class="pre">in_gno_channel_mlp_hidden_layers=[80,</span> <span class="pre">80,</span> <span class="pre">80],</span> <span class="pre">out_gno_channel_mlp_hidden_layers=[512,</span> <span class="pre">256],</span> <span class="pre">gno_channel_mlp_non_linearity=&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;,</span> <span class="pre">in_gno_transform_type='linear',</span> <span class="pre">out_gno_transform_type='linear',</span> <span class="pre">gno_use_open3d=False,</span> <span class="pre">gno_use_torch_scatter=True,</span> <span class="pre">out_gno_tanh=None,</span> <span class="pre">fno_in_channels=3,</span> <span class="pre">fno_n_modes=(16,</span> <span class="pre">16,</span> <span class="pre">16),</span> <span class="pre">fno_hidden_channels=64,</span> <span class="pre">lifting_channels=256,</span> <span class="pre">fno_n_layers=4,</span> <span class="pre">fno_resolution_scaling_factor=None,</span> <span class="pre">fno_incremental_n_modes=None,</span> <span class="pre">fno_block_precision='full',</span> <span class="pre">fno_use_channel_mlp=False,</span> <span class="pre">fno_channel_mlp_dropout=0,</span> <span class="pre">fno_channel_mlp_expansion=0.5,</span> <span class="pre">fno_non_linearity=&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;,</span> <span class="pre">fno_stabilizer=None,</span> <span class="pre">fno_norm=None,</span> <span class="pre">fno_ada_in_features=4,</span> <span class="pre">fno_ada_in_dim=1,</span> <span class="pre">fno_preactivation=False,</span> <span class="pre">fno_skip='linear',</span> <span class="pre">fno_channel_mlp_skip='soft-gating',</span> <span class="pre">fno_separable=False,</span> <span class="pre">fno_factorization=None,</span> <span class="pre">fno_rank=1.0,</span> <span class="pre">fno_joint_factorization=False,</span> <span class="pre">fno_fixed_rank_modes=False,</span> <span class="pre">fno_implementation='factorized',</span> <span class="pre">fno_decomposition_kwargs={},</span> <span class="pre">fno_conv_module=&lt;class</span> <span class="pre">'neuralop.layers.spectral_convolution.SpectralConv'&gt;,</span> <span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/models/gino.html#GINO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.models.GINO" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.models.</span></span><span class="sig-name descname"><span class="pre">GINO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">in_channels,</span> <span class="pre">out_channels,</span> <span class="pre">latent_feature_channels=None,</span> <span class="pre">projection_channels=256,</span> <span class="pre">gno_coord_dim=3,</span> <span class="pre">gno_radius=0.033,</span> <span class="pre">in_gno_transform_type='linear',</span> <span class="pre">out_gno_transform_type='linear',</span> <span class="pre">gno_pos_embed_type='transformer',</span> <span class="pre">fno_in_channels=3,</span> <span class="pre">fno_n_modes=(16,</span> <span class="pre">16,</span> <span class="pre">16),</span> <span class="pre">fno_hidden_channels=64,</span> <span class="pre">fno_lifting_channel_ratio=2,</span> <span class="pre">fno_n_layers=4,</span> <span class="pre">gno_embed_channels=32,</span> <span class="pre">gno_embed_max_positions=10000,</span> <span class="pre">in_gno_channel_mlp_hidden_layers=[80,</span> <span class="pre">80,</span> <span class="pre">80],</span> <span class="pre">out_gno_channel_mlp_hidden_layers=[512,</span> <span class="pre">256],</span> <span class="pre">gno_channel_mlp_non_linearity=&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;,</span> <span class="pre">gno_use_open3d=True,</span> <span class="pre">gno_use_torch_scatter=True,</span> <span class="pre">out_gno_tanh=None,</span> <span class="pre">fno_resolution_scaling_factor=None,</span> <span class="pre">fno_incremental_n_modes=None,</span> <span class="pre">fno_block_precision='full',</span> <span class="pre">fno_use_channel_mlp=True,</span> <span class="pre">fno_channel_mlp_dropout=0,</span> <span class="pre">fno_channel_mlp_expansion=0.5,</span> <span class="pre">fno_non_linearity=&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;,</span> <span class="pre">fno_stabilizer=None,</span> <span class="pre">fno_norm=None,</span> <span class="pre">fno_ada_in_features=4,</span> <span class="pre">fno_ada_in_dim=1,</span> <span class="pre">fno_preactivation=False,</span> <span class="pre">fno_skip='linear',</span> <span class="pre">fno_channel_mlp_skip='soft-gating',</span> <span class="pre">fno_separable=False,</span> <span class="pre">fno_factorization=None,</span> <span class="pre">fno_rank=1.0,</span> <span class="pre">fno_joint_factorization=False,</span> <span class="pre">fno_fixed_rank_modes=False,</span> <span class="pre">fno_implementation='factorized',</span> <span class="pre">fno_decomposition_kwargs={},</span> <span class="pre">fno_conv_module=&lt;class</span> <span class="pre">'neuralop.layers.spectral_convolution.SpectralConv'&gt;,</span> <span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/models/gino.html#GINO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.models.GINO" title="Link to this definition"></a></dt>
 <dd><p>GINO: Geometry-informed Neural Operator. Learns a mapping between
 functions presented over arbitrary coordinate meshes. The model carries
 global integration through spectral convolution layers in an intermediate
@@ -178,43 +178,22 @@ latent space, as described in <a href="#id2"><span class="problematic" id="id1">
 </dd>
 <dt><strong>latent_feature_channels</strong><span class="classifier">int, optional</span></dt><dd><p>number of channels in optional latent feature map
 to concatenate onto latent embeddings before 
-the latent FNO’s forward pass, default None</p>
+the FNO’s forward pass, default None</p>
 </dd>
 <dt><strong>projection_channels</strong><span class="classifier">int, optional</span></dt><dd><p>number of channels in FNO pointwise projection</p>
 </dd>
 <dt><strong>gno_coord_dim</strong><span class="classifier">int, optional</span></dt><dd><p>geometric dimension of input/output queries, by default 3</p>
 </dd>
-<dt><strong>gno_pos_embed_type</strong><span class="classifier">literal <cite>{‘transformer’, ‘nerf’}</cite> | None</span></dt><dd><p>type of optional sinusoidal positional embedding to use in GNOBlock,
-by default <cite>‘transformer’</cite></p>
-</dd>
-<dt><strong>gno_embed_channels: int</strong></dt><dd><p>dimension of optional per-channel embedding to use in GNOBlock,
-by default 32</p>
-</dd>
-<dt><strong>gno_embed_max_positions: int</strong></dt><dd><p>max positions of optional per-channel embedding to use in GNOBlock,
-by default 10000. If <cite>gno_pos_embed_type != ‘transformer’</cite>, value is unused.</p>
-</dd>
 <dt><strong>gno_radius</strong><span class="classifier">float, optional</span></dt><dd><p>radius in input/output space for GNO neighbor search, by default 0.033</p>
 </dd>
-<dt><strong>in_gno_channel_mlp_hidden_layers</strong><span class="classifier">list, optional</span></dt><dd><p>widths of hidden layers in input GNO, by default [80, 80, 80]</p>
-</dd>
-<dt><strong>out_gno_channel_mlp_hidden_layers</strong><span class="classifier">list, optional</span></dt><dd><p>widths of hidden layers in output GNO, by default [512, 256]</p>
-</dd>
-<dt><strong>gno_channel_mlp_non_linearity</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>nonlinearity to use in gno ChannelMLP, by default F.gelu</p>
-</dd>
 <dt><strong>in_gno_transform_type</strong><span class="classifier">str, optional</span></dt><dd><p>transform type parameter for input GNO, by default ‘linear’
-see neuralop.layers.IntegralTransform</p>
+see neuralop.layers.gno_block for more details</p>
 </dd>
 <dt><strong>out_gno_transform_type</strong><span class="classifier">str, optional</span></dt><dd><p>transform type parameter for output GNO, by default ‘linear’
-see neuralop.layers.IntegralTransform</p>
+see neuralop.layers.gno_block for more details</p>
 </dd>
-<dt><strong>gno_use_open3d</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to use open3d neighbor search, by default False
-if False, uses pure-PyTorch fallback neighbor search</p>
-</dd>
-<dt><strong>gno_use_torch_scatter</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to use torch_scatter’s neighborhood reduction function
-or the native PyTorch implementation in IntegralTransform layers.
-If False, uses the fallback PyTorch version.</p>
-</dd>
-<dt><strong>out_gno_tanh</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to use tanh to stabilize outputs of the output GNO, by default False</p>
+<dt><strong>gno_pos_embed_type</strong><span class="classifier">literal <cite>{‘transformer’, ‘nerf’}</cite> | None</span></dt><dd><p>type of optional sinusoidal positional embedding to use in GNOBlock,
+by default <cite>‘transformer’</cite></p>
 </dd>
 <dt><strong>fno_in_channels</strong><span class="classifier">int, optional</span></dt><dd><p>number of input channels for FNO, by default 26</p>
 </dd>
@@ -223,11 +202,49 @@ to use in FNO, by default (16, 16, 16)</p>
 </dd>
 <dt><strong>fno_hidden_channels</strong><span class="classifier">int, optional</span></dt><dd><p>hidden channels for use in FNO, by default 64</p>
 </dd>
-<dt><strong>lifting_channels</strong><span class="classifier">int, optional</span></dt><dd><p>number of channels in FNO’s pointwise lifting, by default 256</p>
-</dd>
-<dt><strong>fno_projection_channels</strong><span class="classifier">int, optional</span></dt><dd><p>number of channels in FNO’s pointwise projection, by default 256</p>
+<dt><strong>lifting_channel_ratio</strong><span class="classifier">int, optional</span></dt><dd><p>ratio of lifting channels to <cite>fno_hidden_channels</cite>, by default 2
+The number of liting channels in the lifting block of the FNO is
+lifting_channel_ratio * hidden_channels (e.g. default 512)</p>
 </dd>
 <dt><strong>fno_n_layers</strong><span class="classifier">int, optional</span></dt><dd><p>number of layers in FNO, by default 4</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.models.GINO.forward" title="neuralop.models.GINO.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>(x, input_geom, latent_queries, ...)</p></td>
+<td><p>The GINO's forward call: Input GNO --&gt; FNOBlocks --&gt; output GNO + projection to output queries</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">latent_embedding</span></code>(in_p[, ada_in])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="field-list simple">
+<dt class="field-odd">Other Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>gno_embed_channels: int</strong></dt><dd><p>dimension of optional per-channel embedding to use in GNOBlock,
+by default 32</p>
+</dd>
+<dt><strong>gno_embed_max_positions: int</strong></dt><dd><p>max positions of optional per-channel embedding to use in GNOBlock,
+by default 10000. If <cite>gno_pos_embed_type != ‘transformer’</cite>, value is unused.</p>
+</dd>
+<dt><strong>in_gno_channel_mlp_hidden_layers</strong><span class="classifier">list, optional</span></dt><dd><p>widths of hidden layers in input GNO, by default [80, 80, 80]</p>
+</dd>
+<dt><strong>out_gno_channel_mlp_hidden_layers</strong><span class="classifier">list, optional</span></dt><dd><p>widths of hidden layers in output GNO, by default [512, 256]</p>
+</dd>
+<dt><strong>gno_channel_mlp_non_linearity</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>nonlinearity to use in gno ChannelMLP, by default F.gelu</p>
+</dd>
+<dt><strong>gno_use_open3d</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to use open3d neighbor search, by default True
+if False, uses pure-PyTorch fallback neighbor search</p>
+</dd>
+<dt><strong>gno_use_torch_scatter</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to use torch_scatter’s neighborhood reduction function
+or the native PyTorch implementation in IntegralTransform layers.
+If False, uses the fallback PyTorch version.</p>
+</dd>
+<dt><strong>out_gno_tanh</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to use tanh to stabilize outputs of the output GNO, by default False</p>
 </dd>
 <dt><strong>fno_resolution_scaling_factor</strong><span class="classifier">float | None, optional</span></dt><dd><p>factor by which to scale output of FNO, by default None</p>
 </dd>
@@ -235,7 +252,7 @@ to use in FNO, by default (16, 16, 16)</p>
 <dt><strong>if passed, sets n_modes separately for each FNO layer.</strong></dt><dd></dd>
 <dt><strong>fno_block_precision</strong><span class="classifier">str, defaults to ‘full’</span></dt><dd><p>data precision to compute within fno block</p>
 </dd>
-<dt><strong>fno_use_channel_mlp</strong><span class="classifier">bool, defaults to False</span></dt><dd><p>Whether to use a ChannelMLP layer after each FNO block.</p>
+<dt><strong>fno_use_channel_mlp</strong><span class="classifier">bool, defaults to True</span></dt><dd><p>Whether to use a ChannelMLP layer after each FNO block.</p>
 </dd>
 <dt><strong>fno_channel_mlp_dropout</strong><span class="classifier">float, defaults to 0</span></dt><dd><p>dropout parameter of above ChannelMLP.</p>
 </dd>
@@ -282,17 +299,6 @@ If None, adaptive mesh embedding is not used.</p>
 </dl>
 </dd>
 </dl>
-<p class="rubric">Methods</p>
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.models.GINO.forward" title="neuralop.models.GINO.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>(x, input_geom, latent_queries, ...)</p></td>
-<td><p>The GINO's forward call: Input GNO --&gt; FNOBlocks --&gt; output GNO + projection to output queries</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">latent_embedding</span></code>(in_p[, ada_in])</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
 <dl class="py method">
 <dt class="sig sig-object py" id="neuralop.models.GINO.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_geom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latent_queries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_queries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latent_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ada_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/models/gino.html#GINO.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.models.GINO.forward" title="Link to this definition"></a></dt>
