@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>neuralop.data.datasets.car_cfd_dataset &#8212; neuraloperator 0.3.0 documentation</title> 
+<link rel="stylesheet" href="../../../../_static/tensorly_style.css">
+<link rel="apple-touch-icon" sizes="180x180" href="../../../../_static/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../../../_static/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../../../_static/favicon/favicon-16x16.png">
+<link rel="manifest" href="../../../../_static/favicon/site.webmanifest">
+<link rel="mask-icon" href="../../../../_static/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="../../../../_static/favicon/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/tensorly_style.css?v=a02e9698" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+    <script src="../../../../_static/documentation_options.js?v=e259d695"></script>
+    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+ <script src="../../../../_static/navbar_burger.js"></script>
+ <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+ 
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  </head>
+<body  class="has-navbar-fixed-top">
+
+  <header>
+    <navbar>
+      <nav class="navbar top-navbar is-fixed-top has-shadow is-flex-wrap-wrap" role="navigation" aria-label="main top navigation">
+        <div class="navbar-brand">
+        
+
+          <a class="navbar-item" href="../../../../index.html">
+            <img src="../../../../_static/neuraloperator_logo.png" height="28">
+          </a>
+          <a class="navbar-item is-hidden-desktop" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon"><i class="fab fa-github"></i></span>
+          </a>
+
+          <a role="button" class="navbar-burger" data-target="top-nav-menu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+
+        </div>
+        
+        <div class="navbar-menu" id="top-nav-menu">
+        
+
+          <div class="navbar-start">
+            
+              <a class="navbar-item" href="../../../../install.html">
+              Install
+            </a>
+              <a class="navbar-item" href="../../../../user_guide/index.html">
+              User Guide
+            </a>
+              <a class="navbar-item" href="../../../../modules/api.html">
+              API
+            </a>
+              <a class="navbar-item" href="../../../../auto_examples/index.html">
+              Examples
+            </a>
+          </div>
+        
+          <div class="navbar-end">
+            <div class="navbar-item">
+            
+            <a class="button is-hidden-touch is-dark" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon-text">
+                <span class="icon is-large">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Github</span>
+              </span>
+            </a>
+
+            </div> 
+          </div> 
+        </div> 
+
+      </nav>
+      
+    </navbar>
+  </header>
+
+
+  <div id="column-container">
+  <div class="columns is-mobile is-centered">
+	
+  
+
+  <div class="column main-column">
+
+    
+    <div class="main-section">
+
+      
+      
+
+      <div class="container content main-content">
+        
+  <h1>Source code for neuralop.data.datasets.car_cfd_dataset</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span> <span class="nn">.mesh_datamodule</span> <span class="kn">import</span> <span class="n">MeshDataModule</span>
+<span class="kn">from</span> <span class="nn">.web_utils</span> <span class="kn">import</span> <span class="n">download_from_zenodo_record</span>
+
+<div class="viewcode-block" id="CarCFDDataset">
+<a class="viewcode-back" href="../../../../modules/generated/neuralop.data.datasets.car_cfd_dataset.CarCFDDataset.html#neuralop.data.datasets.car_cfd_dataset.CarCFDDataset">[docs]</a>
+<span class="k">class</span> <span class="nc">CarCFDDataset</span><span class="p">(</span><span class="n">MeshDataModule</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;CarCFDDataset is a processed version of the dataset introduced in</span>
+<span class="sd">    [1]_, which encodes a triangular mesh over the surface of a 3D model car</span>
+<span class="sd">    and provides the air pressure at each centroid and vertex of the mesh when</span>
+<span class="sd">    the car is placed in a simulated wind tunnel with a recorded inlet velocity.</span>
+<span class="sd">    In our case, inputs are a signed distance function evaluated over a regular</span>
+<span class="sd">    3D grid of query points, as well as the inlet velocity. Outputs are pressure </span>
+<span class="sd">    values at each centroid of the triangle mesh.</span>
+<span class="sd">    </span>
+<span class="sd">        .. warning:: </span>
+
+<span class="sd">        ``CarCFDDataset`` inherits from ``MeshDataModule``, which requires the optional ``open3d`` dependency.</span>
+<span class="sd">        See :ref:`open3d_dependency` for more information. </span>
+
+<span class="sd">    We also add additional manifest files to split the provided examples</span>
+<span class="sd">    into training and testing sets, as well as remove instances that are corrupted.</span>
+
+<span class="sd">    Data is also stored on Zenodo: https://zenodo.org/records/13936501</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    root_dir : Union[str, Path]</span>
+<span class="sd">        root directory at which data is stored.</span>
+<span class="sd">    n_train : int, optional</span>
+<span class="sd">        Number of training instances to load, by default 1</span>
+<span class="sd">    n_test : int, optional</span>
+<span class="sd">        Number of testing instances to load, by default 1</span>
+<span class="sd">    query_res : List[int], optional</span>
+<span class="sd">        Dimension-wise resolution of signed distance function </span>
+<span class="sd">        (SDF) query cube, by default [32,32,32]</span>
+<span class="sd">    download : bool, optional</span>
+<span class="sd">        Whether to download data from Zenodo, by default True</span>
+<span class="sd">    </span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    train_loader: torch.utils.data.DataLoader</span>
+<span class="sd">        dataloader of training examples</span>
+<span class="sd">    test_loader: torch.utils.data.DataLoader</span>
+<span class="sd">        dataloader of testing examples</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] :</span>
+<span class="sd">    </span>
+<span class="sd">    Umetani, N. and Bickel, B. (2018). &quot;Learning three-dimensional flow for interactive </span>
+<span class="sd">        aerodynamic design&quot;. ACM Transactions on Graphics, 2018. </span>
+<span class="sd">        https://dl.acm.org/doi/10.1145/3197517.3201325.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+        <span class="n">root_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
+        <span class="n">n_train</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">n_test</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">query_res</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">32</span><span class="p">],</span>
+        <span class="n">download</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the CarCFDDataset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zenodo_record_id</span> <span class="o">=</span> <span class="s2">&quot;13936501&quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">root_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">root_dir</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">root_dir</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">root_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">download</span><span class="p">:</span>
+            <span class="n">download_from_zenodo_record</span><span class="p">(</span><span class="n">record_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">zenodo_record_id</span><span class="p">,</span>
+                                        <span class="n">root</span><span class="o">=</span><span class="n">root_dir</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">root_dir</span><span class="o">=</span><span class="n">root_dir</span><span class="p">,</span>
+            <span class="n">item_dir_name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">n_train</span><span class="o">=</span><span class="n">n_train</span><span class="p">,</span>
+            <span class="n">n_test</span><span class="o">=</span><span class="n">n_test</span><span class="p">,</span>
+            <span class="n">query_res</span><span class="o">=</span><span class="n">query_res</span><span class="p">,</span>
+            <span class="n">attributes</span><span class="o">=</span><span class="s1">&#39;press&#39;</span>
+        <span class="p">)</span></div>
+
+</pre></div>
+
+      </div>
+
+      
+
+        <footer class="footer">
+    <div class="content has-text-centered">
+        <div class="block">
+          &copy; Copyright 2024, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+        </div>
+    </div>
+  </footer>
+
+    </div>
+
+  </div>  
+
+	
+
+  </div>  
+  </div> 
+
+  
+  <script>
+    function toggle_sidebar() {
+        var element = document.getElementById("sidebar");
+        var container = document.getElementById("column-container");
+        var localtoccolumn = document.getElementById("localtoc-column");
+        element.classList.toggle("hide-tablet");
+        element.classList.toggle("is-hidden-mobile");
+        container.classList.toggle("sidemenu-hidden");
+        localtoccolumn.classList.toggle("is-one-fifth-widescreen");
+        localtoccolumn.classList.toggle("is-2-desktop");
+        localtoccolumn.classList.toggle("is-3-desktop");
+    }
+  </script> 
+
+
+
+  </body>
+</html>

@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>neuralop.data.datasets.load_darcy_flow_small &#8212; neuraloperator 0.3.0 documentation</title> 
+    <title>neuralop.data.datasets.car_cfd_dataset.CarCFDDataset &#8212; neuraloperator 0.3.0 documentation</title> 
 <link rel="stylesheet" href="../../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../_static/favicon/favicon-32x32.png">
@@ -31,8 +31,8 @@
  
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="neuralop.data.datasets.darcy.DarcyDataset" href="neuralop.data.datasets.darcy.DarcyDataset.html" />
-    <link rel="prev" title="neuralop.losses.MSELoss" href="neuralop.losses.MSELoss.html" />
+    <link rel="next" title="neuralop.data.transforms.data_processors.DefaultDataProcessor" href="neuralop.data.transforms.data_processors.DefaultDataProcessor.html" />
+    <link rel="prev" title="neuralop.data.datasets.navier_stokes.NavierStokesDataset" href="neuralop.data.datasets.navier_stokes.NavierStokesDataset.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   </head>
@@ -160,12 +160,63 @@
 
       <div class="container content main-content">
         
-  <section id="neuralop-data-datasets-load-darcy-flow-small">
-<h1><a class="reference internal" href="../api.html#module-neuralop.data.datasets" title="neuralop.data.datasets"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.datasets</span></code></a>.load_darcy_flow_small<a class="headerlink" href="#neuralop-data-datasets-load-darcy-flow-small" title="Link to this heading"></a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="neuralop.data.datasets.load_darcy_flow_small">
-<span class="sig-prename descclassname"><span class="pre">neuralop.data.datasets.</span></span><span class="sig-name descname"><span class="pre">load_darcy_flow_small</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_tests</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_batch_sizes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PosixPath('/home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/data')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_resolutions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[16,</span> <span class="pre">32]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encode_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encode_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'channel-wise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/data/datasets/darcy.html#load_darcy_flow_small"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.data.datasets.load_darcy_flow_small" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+  <section id="neuralop-data-datasets-car-cfd-dataset-carcfddataset">
+<h1><a class="reference internal" href="../api.html#module-neuralop.data.datasets.car_cfd_dataset" title="neuralop.data.datasets.car_cfd_dataset"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.datasets.car_cfd_dataset</span></code></a>.CarCFDDataset<a class="headerlink" href="#neuralop-data-datasets-car-cfd-dataset-carcfddataset" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="neuralop.data.datasets.car_cfd_dataset.CarCFDDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.data.datasets.car_cfd_dataset.</span></span><span class="sig-name descname"><span class="pre">CarCFDDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_res</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[32,</span> <span class="pre">32,</span> <span class="pre">32]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/data/datasets/car_cfd_dataset.html#CarCFDDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.data.datasets.car_cfd_dataset.CarCFDDataset" title="Link to this definition"></a></dt>
+<dd><p>CarCFDDataset is a processed version of the dataset introduced in
+<a class="reference internal" href="#rfaac2f8b9be8-1" id="id1">[1]</a>, which encodes a triangular mesh over the surface of a 3D model car
+and provides the air pressure at each centroid and vertex of the mesh when
+the car is placed in a simulated wind tunnel with a recorded inlet velocity.
+In our case, inputs are a signed distance function evaluated over a regular
+3D grid of query points, as well as the inlet velocity. Outputs are pressure 
+values at each centroid of the triangle mesh.</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">CarCFDDataset</span></code> inherits from <code class="docutils literal notranslate"><span class="pre">MeshDataModule</span></code>, which requires the optional <code class="docutils literal notranslate"><span class="pre">open3d</span></code> dependency.
+See <a class="reference internal" href="../../install.html#open3d-dependency"><span class="std std-ref">Fast 3D spatial computing with Open3D</span></a> for more information.</p>
+</div></blockquote>
+<p>We also add additional manifest files to split the provided examples
+into training and testing sets, as well as remove instances that are corrupted.</p>
+<p>Data is also stored on Zenodo: <a class="reference external" href="https://zenodo.org/records/13936501">https://zenodo.org/records/13936501</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>root_dir</strong><span class="classifier">Union[str, Path]</span></dt><dd><p>root directory at which data is stored.</p>
+</dd>
+<dt><strong>n_train</strong><span class="classifier">int, optional</span></dt><dd><p>Number of training instances to load, by default 1</p>
+</dd>
+<dt><strong>n_test</strong><span class="classifier">int, optional</span></dt><dd><p>Number of testing instances to load, by default 1</p>
+</dd>
+<dt><strong>query_res</strong><span class="classifier">List[int], optional</span></dt><dd><p>Dimension-wise resolution of signed distance function 
+(SDF) query cube, by default [32,32,32]</p>
+</dd>
+<dt><strong>download</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to download data from Zenodo, by default True</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>train_loader: torch.utils.data.DataLoader</strong></dt><dd><p>dataloader of training examples</p>
+</dd>
+<dt><strong>test_loader: torch.utils.data.DataLoader</strong></dt><dd><p>dataloader of testing examples</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="rfaac2f8b9be8-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>:</p>
+</div>
+</div>
+<dl class="simple">
+<dt>Umetani, N. and Bickel, B. (2018). “Learning three-dimensional flow for interactive </dt><dd><p>aerodynamic design”. ACM Transactions on Graphics, 2018. 
+<a class="reference external" href="https://dl.acm.org/doi/10.1145/3197517.3201325">https://dl.acm.org/doi/10.1145/3197517.3201325</a>.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <div class="clearer"></div></section>
 
@@ -175,16 +226,16 @@
       
         <nav class="pagination" role="navigation" aria-label="pagination">
     
-    <a class="button pagination-previous" href="neuralop.losses.MSELoss.html" title="previous page" accesskey="p">
+    <a class="button pagination-previous" href="neuralop.data.datasets.navier_stokes.NavierStokesDataset.html" title="previous page" accesskey="p">
         <span class="icon">
             <i class="fa fa-arrow-circle-left"></i>
         </span>
-        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.losses</span></code>.MSELoss</span>
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.datasets.navier_stokes</span></code>.NavierStokesDataset</span>
     </a>
     
     
-    <a class="button pagination-next" href="neuralop.data.datasets.darcy.DarcyDataset.html" title="next page" accesskey="n">
-        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.datasets.darcy</span></code>.DarcyDataset </span>
+    <a class="button pagination-next" href="neuralop.data.transforms.data_processors.DefaultDataProcessor.html" title="next page" accesskey="n">
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.transforms.data_processors</span></code>.DefaultDataProcessor </span>
         <span class="icon">
             <i class="fa fa-arrow-circle-right"></i>
         </span>
@@ -220,8 +271,8 @@
 
         <div class="menu menu-list localtoc-list">
         <ul>
-<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.datasets</span></code>.load_darcy_flow_small</a><ul>
-<li><a class="reference internal" href="#neuralop.data.datasets.load_darcy_flow_small"><code class="docutils literal notranslate"><span class="pre">load_darcy_flow_small()</span></code></a></li>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.datasets.car_cfd_dataset</span></code>.CarCFDDataset</a><ul>
+<li><a class="reference internal" href="#neuralop.data.datasets.car_cfd_dataset.CarCFDDataset"><code class="docutils literal notranslate"><span class="pre">CarCFDDataset</span></code></a></li>
 </ul>
 </li>
 </ul>

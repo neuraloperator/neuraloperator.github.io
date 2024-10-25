@@ -442,6 +442,28 @@ training a machine learning model to minimize a loss function on a dataset:</p>
 </tr>
 </tbody>
 </table>
+<p>We provide downloadable datasets for Darcy-Flow, Navier-Stokes, and Car-CFD.</p>
+<span class="target" id="module-neuralop.data.datasets.darcy"></span><table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.data.datasets.darcy.DarcyDataset.html#neuralop.data.datasets.darcy.DarcyDataset" title="neuralop.data.datasets.darcy.DarcyDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DarcyDataset</span></code></a>(root_dir, n_train, n_tests, ...)</p></td>
+<td><p>DarcyDataset stores data generated according to Darcy's Law.</p></td>
+</tr>
+</tbody>
+</table>
+<span class="target" id="module-neuralop.data.datasets.navier_stokes"></span><table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.data.datasets.navier_stokes.NavierStokesDataset.html#neuralop.data.datasets.navier_stokes.NavierStokesDataset" title="neuralop.data.datasets.navier_stokes.NavierStokesDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NavierStokesDataset</span></code></a>(root_dir, n_train, ...)</p></td>
+<td><p>NavierStokesDataset stores data generated according to the 2d incompressible Navier-Stokes equations.</p></td>
+</tr>
+</tbody>
+</table>
+<span class="target" id="module-neuralop.data.datasets.car_cfd_dataset"></span><table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.data.datasets.car_cfd_dataset.CarCFDDataset.html#neuralop.data.datasets.car_cfd_dataset.CarCFDDataset" title="neuralop.data.datasets.car_cfd_dataset.CarCFDDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CarCFDDataset</span></code></a>(root_dir[, n_train, n_test, ...])</p></td>
+<td><p>CarCFDDataset is a processed version of the dataset introduced in <a class="reference internal" href="generated/neuralop.data.datasets.car_cfd_dataset.CarCFDDataset.html#rfaac2f8b9be8-1" id="id11"><span>[Rfaac2f8b9be8-1]</span></a>, which encodes a triangular mesh over the surface of a 3D model car and provides the air pressure at each centroid and vertex of the mesh when the car is placed in a simulated wind tunnel with a recorded inlet velocity.</p></td>
+</tr>
+</tbody>
+</table>
 <hr class="docutils" />
 <section id="dataprocessors">
 <h3>DataProcessors<a class="headerlink" href="#dataprocessors" title="Link to this heading"></a></h3>
