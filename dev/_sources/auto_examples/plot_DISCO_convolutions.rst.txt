@@ -227,14 +227,14 @@ Initialize the convolution and set the weights to something resembling an edge f
 
 .. code-block:: Python
 
-    conv = DiscreteContinuousConv2d(1, 1, grid_in=grid_in, grid_out=grid_out, quad_weights=q_in, kernel_shape=[2,4], radius_cutoff=5/nyo, periodic=False).float()
+    conv = DiscreteContinuousConv2d(1, 1, grid_in=grid_in, grid_out=grid_out, quadrature_weights=q_in, kernel_shape=[2,4], radius_cutoff=5/nyo, periodic=False).float()
 
     # initialize a kernel resembling an edge filter
     w = torch.zeros_like(conv.weight)
     w[0,0,1] = 1.0
     w[0,0,3] = -1.0
     conv.weight = nn.Parameter(w)
-    psi = conv.get_psi()
+    psi = conv.get_local_filter_matrix()
 
 
 
@@ -332,7 +332,7 @@ in order to compute the convolved image, we need to first bring it into the righ
 
 
     plt.figure(figsize=(4,6), )
-    plt.imshow(conv_equi.get_psi()[0].detach(), cmap=cmap)
+    plt.imshow(conv_equi.get_local_filter_matrix()[0].detach(), cmap=cmap)
     plt.colorbar()
 
     # # %%
@@ -357,7 +357,7 @@ in order to compute the convolved image, we need to first bring it into the righ
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7efdd61e28e0>
+    <matplotlib.colorbar.Colorbar object at 0x7f07129275e0>
 
 
 
@@ -365,7 +365,7 @@ in order to compute the convolved image, we need to first bring it into the righ
 
 .. code-block:: Python
 
-    convt = DiscreteContinuousConvTranspose2d(1, 1, grid_in=grid_out, grid_out=grid_in, quad_weights=q_out, kernel_shape=[2,4], radius_cutoff=3/nyo, periodic=False).float()
+    convt = DiscreteContinuousConvTranspose2d(1, 1, grid_in=grid_out, grid_out=grid_in, quadrature_weights=q_out, kernel_shape=[2,4], radius_cutoff=3/nyo, periodic=False).float()
 
     # initialize a flat
     w = torch.zeros_like(conv.weight)
@@ -448,7 +448,7 @@ in order to compute the convolved image, we need to first bring it into the righ
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 36.190 seconds)
+   **Total running time of the script:** (0 minutes 36.629 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_DISCO_convolutions.py:
