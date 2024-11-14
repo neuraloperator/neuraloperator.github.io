@@ -210,12 +210,7 @@ Loading test dataloader at resolution (64, 128) with 50 samples and batch-size=1
 <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>self.sht_grids=[&#39;equiangular&#39;, &#39;equiangular&#39;]
-self.sht_grids=[&#39;equiangular&#39;, &#39;equiangular&#39;]
-self.sht_grids=[&#39;equiangular&#39;, &#39;equiangular&#39;]
-self.sht_grids=[&#39;equiangular&#39;, &#39;equiangular&#39;]
-
-Our model has 275555 parameters.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Our model has 275555 parameters.
 </pre></div>
 </div>
 <p>Create the optimizer</p>
@@ -298,13 +293,13 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f8cccc411f0&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fc09cc49eb0&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f8cccc41ac0&gt;
+ * Train: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fc09cc49e20&gt;
 
- * Test: {&#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f8cccc41ac0&gt;}
+ * Test: {&#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fc09cc49e20&gt;}
 </pre></div>
 </div>
 <p>Create the trainer</p>
@@ -329,22 +324,22 @@ Parameter Group 0
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Training on 200 samples
 Testing on [50, 50] samples         on resolutions [(32, 64), (64, 128)].
 Raw outputs of shape torch.Size([4, 3, 32, 64])
-[0] time=3.62, avg_loss=2.5873, train_err=10.3491
-Eval: (32, 64)_l2=1.6625, (64, 128)_l2=2.3805
-[3] time=3.59, avg_loss=0.4299, train_err=1.7195
-Eval: (32, 64)_l2=0.3705, (64, 128)_l2=2.3807
-[6] time=3.56, avg_loss=0.2634, train_err=1.0535
-Eval: (32, 64)_l2=0.3257, (64, 128)_l2=2.3691
-[9] time=3.56, avg_loss=0.2119, train_err=0.8477
-Eval: (32, 64)_l2=0.2609, (64, 128)_l2=2.3360
-[12] time=3.55, avg_loss=0.1822, train_err=0.7286
-Eval: (32, 64)_l2=0.2307, (64, 128)_l2=2.3128
-[15] time=3.56, avg_loss=0.1581, train_err=0.6322
-Eval: (32, 64)_l2=0.1898, (64, 128)_l2=2.3094
-[18] time=3.53, avg_loss=0.1431, train_err=0.5725
-Eval: (32, 64)_l2=0.1784, (64, 128)_l2=2.3245
+[0] time=3.59, avg_loss=2.6974, train_err=10.7894
+Eval: (32, 64)_l2=2.2115, (64, 128)_l2=2.5978
+[3] time=3.54, avg_loss=0.4512, train_err=1.8049
+Eval: (32, 64)_l2=0.6419, (64, 128)_l2=2.5442
+[6] time=3.53, avg_loss=0.2877, train_err=1.1508
+Eval: (32, 64)_l2=0.3412, (64, 128)_l2=2.4079
+[9] time=3.52, avg_loss=0.2351, train_err=0.9405
+Eval: (32, 64)_l2=0.3337, (64, 128)_l2=2.3914
+[12] time=3.53, avg_loss=0.2194, train_err=0.8777
+Eval: (32, 64)_l2=0.3049, (64, 128)_l2=2.3620
+[15] time=3.52, avg_loss=0.1890, train_err=0.7560
+Eval: (32, 64)_l2=0.2852, (64, 128)_l2=2.3165
+[18] time=3.52, avg_loss=0.1582, train_err=0.6328
+Eval: (32, 64)_l2=0.2649, (64, 128)_l2=2.3177
 
-{&#39;train_err&#39;: 0.5559453934431076, &#39;avg_loss&#39;: 0.1389863483607769, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 3.525268703999984}
+{&#39;train_err&#39;: 0.6165547275543213, &#39;avg_loss&#39;: 0.15413868188858032, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 3.5267121530000054}
 </pre></div>
 </div>
 <p>Plot the prediction, and compare with the ground-truth
@@ -391,7 +386,7 @@ ii) can be trained quickly on CPU</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_plot_SFNO_swe_001.png" srcset="../_images/sphx_glr_plot_SFNO_swe_001.png" alt="Inputs, ground-truth output and prediction., Input x (32, 64), Ground-truth y, Model prediction, Input x (64, 128), Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 27.116 seconds)</p>
+<img src="../_images/sphx_glr_plot_SFNO_swe_001.png" srcset="../_images/sphx_glr_plot_SFNO_swe_001.png" alt="Inputs, ground-truth output and prediction., Input x (32, 64), Ground-truth y, Model prediction, Input x (64, 128), Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 26.584 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-sfno-swe-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/af3a515d2684655c6a5a8e0df87a4cf9/plot_SFNO_swe.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_SFNO_swe.ipynb</span></code></a></p>
