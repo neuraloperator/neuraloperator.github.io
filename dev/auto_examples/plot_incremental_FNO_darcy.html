@@ -293,15 +293,15 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f0e6277eac0&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f8cdc613910&gt;
 
 ### LOSSES ###
 
 ### INCREMENTAL RESOLUTION + GRADIENT EXPLAINED ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f0e776900d0&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f8cc39b83a0&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f0e776900d0&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f0e77690a00&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f8cc39b83a0&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f8cc39b80d0&gt;}
 </pre></div>
 </div>
 <p>Set up the IncrementalTrainer
@@ -355,13 +355,13 @@ uses the incremental_loss_eps parameter</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Training on 100 samples
 Testing on [50, 50] samples         on resolutions [16, 32].
 Raw outputs of shape torch.Size([16, 1, 8, 8])
-[0] time=0.24, avg_loss=0.8115, train_err=11.5929
+[0] time=0.25, avg_loss=0.8115, train_err=11.5929
 Eval: 16_h1=0.7332, 16_l2=0.5739, 32_h1=0.7863, 32_l2=0.5720
-[1] time=0.23, avg_loss=0.6661, train_err=9.5159
+[1] time=0.22, avg_loss=0.6661, train_err=9.5159
 Eval: 16_h1=0.8889, 16_l2=0.7005, 32_h1=1.1195, 32_l2=0.7407
 [2] time=0.22, avg_loss=0.6497, train_err=9.2815
 Eval: 16_h1=0.6372, 16_l2=0.4883, 32_h1=0.6967, 32_l2=0.5000
-[3] time=0.22, avg_loss=0.5559, train_err=7.9411
+[3] time=0.23, avg_loss=0.5559, train_err=7.9411
 Eval: 16_h1=0.6112, 16_l2=0.4348, 32_h1=0.7432, 32_l2=0.4530
 [4] time=0.22, avg_loss=0.4852, train_err=6.9312
 Eval: 16_h1=0.5762, 16_l2=0.4037, 32_h1=0.7138, 32_l2=0.4262
@@ -378,9 +378,9 @@ Eval: 16_h1=0.4780, 16_l2=0.3197, 32_h1=0.6826, 32_l2=0.3563
 Incre Res Update: change index to 1
 Incre Res Update: change sub to 1
 Incre Res Update: change res to 16
-[10] time=0.28, avg_loss=0.4253, train_err=6.0757
+[10] time=0.29, avg_loss=0.4253, train_err=6.0757
 Eval: 16_h1=0.4069, 16_l2=0.2959, 32_h1=0.4904, 32_l2=0.2928
-[11] time=0.27, avg_loss=0.3745, train_err=5.3500
+[11] time=0.28, avg_loss=0.3745, train_err=5.3500
 Eval: 16_h1=0.3820, 16_l2=0.2869, 32_h1=0.4769, 32_l2=0.3026
 [12] time=0.28, avg_loss=0.3405, train_err=4.8636
 Eval: 16_h1=0.3404, 16_l2=0.2598, 32_h1=0.4410, 32_l2=0.2731
@@ -388,18 +388,18 @@ Eval: 16_h1=0.3404, 16_l2=0.2598, 32_h1=0.4410, 32_l2=0.2731
 Eval: 16_h1=0.3231, 16_l2=0.2452, 32_h1=0.4245, 32_l2=0.2586
 [14] time=0.28, avg_loss=0.2896, train_err=4.1368
 Eval: 16_h1=0.3130, 16_l2=0.2380, 32_h1=0.4161, 32_l2=0.2522
-[15] time=0.28, avg_loss=0.2789, train_err=3.9843
+[15] time=0.29, avg_loss=0.2789, train_err=3.9843
 Eval: 16_h1=0.3072, 16_l2=0.2324, 32_h1=0.4151, 32_l2=0.2455
 [16] time=0.28, avg_loss=0.2690, train_err=3.8434
 Eval: 16_h1=0.3042, 16_l2=0.2305, 32_h1=0.4100, 32_l2=0.2425
 [17] time=0.28, avg_loss=0.2637, train_err=3.7674
 Eval: 16_h1=0.2954, 16_l2=0.2229, 32_h1=0.4023, 32_l2=0.2354
-[18] time=0.28, avg_loss=0.2557, train_err=3.6533
+[18] time=0.29, avg_loss=0.2557, train_err=3.6533
 Eval: 16_h1=0.2756, 16_l2=0.2105, 32_h1=0.3780, 32_l2=0.2269
 [19] time=0.28, avg_loss=0.2395, train_err=3.4208
 Eval: 16_h1=0.2735, 16_l2=0.2106, 32_h1=0.3738, 32_l2=0.2303
 
-{&#39;train_err&#39;: 3.4207682268960133, &#39;avg_loss&#39;: 0.23945377588272096, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 0.2815485109999827, &#39;16_h1&#39;: tensor(0.2735), &#39;16_l2&#39;: tensor(0.2106), &#39;32_h1&#39;: tensor(0.3738), &#39;32_l2&#39;: tensor(0.2303)}
+{&#39;train_err&#39;: 3.4207682268960133, &#39;avg_loss&#39;: 0.23945377588272096, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 0.2821420150000904, &#39;16_h1&#39;: tensor(0.2735), &#39;16_l2&#39;: tensor(0.2106), &#39;32_h1&#39;: tensor(0.3738), &#39;32_l2&#39;: tensor(0.2303)}
 </pre></div>
 </div>
 <p>Plot the prediction, and compare with the ground-truth
@@ -449,7 +449,7 @@ ii) can be trained quickly on CPU</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" srcset="../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" alt="Inputs, ground-truth output and prediction., Input x, Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 7.019 seconds)</p>
+<img src="../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" srcset="../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" alt="Inputs, ground-truth output and prediction., Input x, Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 7.106 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-incremental-fno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/082e73328a5caf8c1fe9ad7fe05cf68f/plot_incremental_FNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_incremental_FNO_darcy.ipynb</span></code></a></p>
