@@ -331,11 +331,7 @@ for (n, m) in zip(max_n_modes, n_modes).</p>
 <dd><p>FNO’s forward pass</p>
 <ol class="arabic simple">
 <li><p>Applies optional positional encoding</p></li>
-<li><dl class="simple">
-<dt>Sends inputs through a lifting layer to a high-dimensional latent</dt><dd><p>space</p>
-</dd>
-</dl>
-</li>
+<li><p>Sends inputs through a lifting layer to a high-dimensional latent space</p></li>
 <li><p>Applies optional domain padding to high-dimensional intermediate function representation</p></li>
 <li><p>Applies <cite>n_layers</cite> Fourier/FNO layers in sequence (SpectralConvolution + skip connections, nonlinearity)</p></li>
 <li><p>If domain padding was applied, domain padding is removed</p></li>
