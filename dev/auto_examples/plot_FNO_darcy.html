@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Training an FNO on Darcy-Flow &#8212; neuraloperator 0.3.0 documentation</title> 
+    <title>Training an FNO on Darcy-Flow &#8212; neuraloperator 0.4.0 documentation</title> 
 <link rel="stylesheet" href="../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../_static/favicon/favicon-32x32.png">
@@ -23,7 +23,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
 
   
-    <script src="../_static/documentation_options.js?v=e259d695"></script>
+    <script src="../_static/documentation_options.js?v=6c02275b"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
  <script src="../_static/navbar_burger.js"></script>
@@ -302,13 +302,13 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f3088d7b1c0&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7efc51c803a0&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f3084bbe490&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7efc2cc7aca0&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f3084bbe490&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f3084bbe730&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7efc2cc7aca0&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7efc2cc7a580&gt;}
 </pre></div>
 </div>
 <p>Create the trainer:</p>
@@ -334,22 +334,22 @@ Parameter Group 0
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Training on 1000 samples
 Testing on [50, 50] samples         on resolutions [16, 32].
 Raw outputs of shape torch.Size([32, 1, 16, 16])
-[0] time=2.55, avg_loss=0.6321, train_err=19.7545
+[0] time=2.66, avg_loss=0.6321, train_err=19.7545
 Eval: 16_h1=0.3228, 16_l2=0.2567, 32_h1=0.4432, 32_l2=0.2759
-[3] time=2.53, avg_loss=0.2116, train_err=6.6120
+[3] time=2.64, avg_loss=0.2116, train_err=6.6120
 Eval: 16_h1=0.2058, 16_l2=0.1716, 32_h1=0.3869, 32_l2=0.2037
-[6] time=2.53, avg_loss=0.1687, train_err=5.2734
+[6] time=2.65, avg_loss=0.1687, train_err=5.2734
 Eval: 16_h1=0.1864, 16_l2=0.1414, 32_h1=0.3874, 32_l2=0.1798
-[9] time=2.52, avg_loss=0.1457, train_err=4.5546
+[9] time=2.63, avg_loss=0.1457, train_err=4.5546
 Eval: 16_h1=0.1864, 16_l2=0.1451, 32_h1=0.4279, 32_l2=0.1923
-[12] time=2.53, avg_loss=0.1348, train_err=4.2138
+[12] time=2.64, avg_loss=0.1348, train_err=4.2138
 Eval: 16_h1=0.1892, 16_l2=0.1436, 32_h1=0.4446, 32_l2=0.1909
-[15] time=2.52, avg_loss=0.1176, train_err=3.6743
+[15] time=2.63, avg_loss=0.1176, train_err=3.6743
 Eval: 16_h1=0.1565, 16_l2=0.1118, 32_h1=0.3807, 32_l2=0.1519
-[18] time=2.52, avg_loss=0.0866, train_err=2.7047
+[18] time=2.64, avg_loss=0.0866, train_err=2.7047
 Eval: 16_h1=0.1576, 16_l2=0.1159, 32_h1=0.4055, 32_l2=0.1698
 
-{&#39;train_err&#39;: 2.8488178942352533, &#39;avg_loss&#39;: 0.0911621726155281, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 2.5373752790000026}
+{&#39;train_err&#39;: 2.8488178942352533, &#39;avg_loss&#39;: 0.0911621726155281, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 2.6428046959999847}
 </pre></div>
 </div>
 </section>
@@ -452,7 +452,7 @@ are parameterized with a list of <cite>test_resolutions</cite> to choose from.</
 <p>However, as you can see, these predictions are noisier than we would expect for a model evaluated
 at the same resolution at which it was trained. Leveraging the FNO’s discretization-invariance, there
 are other ways to scale the outputs of the FNO to train a true super-resolution capability.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 52.005 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 54.241 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-fno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/e81e8f640b2a3cda84c542bbc8f36a54/plot_FNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_FNO_darcy.ipynb</span></code></a></p>
