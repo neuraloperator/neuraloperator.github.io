@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Training a SFNO on the spherical Shallow Water equations &#8212; neuraloperator 1.0.0 documentation</title> 
+    <title>Training a SFNO on the spherical Shallow Water equations &#8212; neuraloperator 1.0.1 documentation</title> 
 <link rel="stylesheet" href="../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../_static/favicon/favicon-32x32.png">
@@ -23,7 +23,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
 
   
-    <script src="../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../_static/documentation_options.js?v=292eb321"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
  <script src="../_static/navbar_burger.js"></script>
@@ -292,13 +292,13 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f933f3b3770&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f569bfdf770&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f933f3b3620&gt;
+ * Train: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f569bfdf620&gt;
 
- * Test: {&#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f933f3b3620&gt;}
+ * Test: {&#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f569bfdf620&gt;}
 </pre></div>
 </div>
 <p>Create the trainer</p>
@@ -323,22 +323,22 @@ Parameter Group 0
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Training on 200 samples
 Testing on [50, 50] samples         on resolutions [(32, 64), (64, 128)].
 Raw outputs of shape torch.Size([4, 3, 32, 64])
-[0] time=3.65, avg_loss=2.5137, train_err=10.0548
-Eval: (32, 64)_l2=1.4288, (64, 128)_l2=2.4680
-[3] time=3.56, avg_loss=0.4268, train_err=1.7070
-Eval: (32, 64)_l2=0.4359, (64, 128)_l2=2.4386
-[6] time=3.59, avg_loss=0.2812, train_err=1.1249
-Eval: (32, 64)_l2=0.2974, (64, 128)_l2=2.3786
-[9] time=3.58, avg_loss=0.2250, train_err=0.9000
-Eval: (32, 64)_l2=0.2861, (64, 128)_l2=2.3544
-[12] time=3.72, avg_loss=0.1917, train_err=0.7668
-Eval: (32, 64)_l2=0.2026, (64, 128)_l2=2.3530
-[15] time=3.56, avg_loss=0.1667, train_err=0.6666
-Eval: (32, 64)_l2=0.1933, (64, 128)_l2=2.3475
-[18] time=3.56, avg_loss=0.1537, train_err=0.6150
-Eval: (32, 64)_l2=0.1808, (64, 128)_l2=2.3362
+[0] time=3.71, avg_loss=2.5890, train_err=10.3559
+Eval: (32, 64)_l2=2.0514, (64, 128)_l2=2.5055
+[3] time=3.64, avg_loss=0.4467, train_err=1.7867
+Eval: (32, 64)_l2=0.6580, (64, 128)_l2=2.5187
+[6] time=3.60, avg_loss=0.2807, train_err=1.1226
+Eval: (32, 64)_l2=0.5458, (64, 128)_l2=2.4767
+[9] time=3.59, avg_loss=0.2355, train_err=0.9419
+Eval: (32, 64)_l2=0.5549, (64, 128)_l2=2.4920
+[12] time=3.65, avg_loss=0.2170, train_err=0.8680
+Eval: (32, 64)_l2=0.5206, (64, 128)_l2=2.4921
+[15] time=3.68, avg_loss=0.1824, train_err=0.7297
+Eval: (32, 64)_l2=0.4906, (64, 128)_l2=2.4846
+[18] time=3.62, avg_loss=0.1764, train_err=0.7054
+Eval: (32, 64)_l2=0.4640, (64, 128)_l2=2.4902
 
-{&#39;train_err&#39;: 0.6190691566467286, &#39;avg_loss&#39;: 0.15476728916168214, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 3.61863665300001}
+{&#39;train_err&#39;: 0.6676547992229461, &#39;avg_loss&#39;: 0.16691369980573653, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 3.599016188000064}
 </pre></div>
 </div>
 <p>Plot the prediction, and compare with the ground-truth
@@ -385,7 +385,7 @@ ii) can be trained quickly on CPU</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_plot_SFNO_swe_001.png" srcset="../_images/sphx_glr_plot_SFNO_swe_001.png" alt="Inputs, ground-truth output and prediction., Input x (32, 64), Ground-truth y, Model prediction, Input x (64, 128), Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 28.228 seconds)</p>
+<img src="../_images/sphx_glr_plot_SFNO_swe_001.png" srcset="../_images/sphx_glr_plot_SFNO_swe_001.png" alt="Inputs, ground-truth output and prediction., Input x (32, 64), Ground-truth y, Model prediction, Input x (64, 128), Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 28.830 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-sfno-swe-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/af3a515d2684655c6a5a8e0df87a4cf9/plot_SFNO_swe.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_SFNO_swe.ipynb</span></code></a></p>
