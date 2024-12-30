@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>neuralop.models.UNO &#8212; neuraloperator 1.0.2 documentation</title> 
+<link rel="stylesheet" href="../../_static/tensorly_style.css">
+<link rel="apple-touch-icon" sizes="180x180" href="../../_static/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../_static/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../_static/favicon/favicon-16x16.png">
+<link rel="manifest" href="../../_static/favicon/site.webmanifest">
+<link rel="mask-icon" href="../../_static/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="../../_static/favicon/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/tensorly_style.css?v=a02e9698" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+    <script src="../../_static/documentation_options.js?v=1ed6394b"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+ <script src="../../_static/navbar_burger.js"></script>
+ <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+ 
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="neuralop.layers.spectral_convolution.SpectralConv" href="neuralop.layers.spectral_convolution.SpectralConv.html" />
+    <link rel="prev" title="neuralop.models.GINO" href="neuralop.models.GINO.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  </head>
+<body  class="has-navbar-fixed-top">
+
+  <header>
+    <navbar>
+      <nav class="navbar top-navbar is-fixed-top has-shadow is-flex-wrap-wrap" role="navigation" aria-label="main top navigation">
+        <div class="navbar-brand">
+        
+
+          <a class="navbar-item" href="../../index.html">
+            <img src="../../_static/neuraloperator_logo.png" height="28">
+          </a>
+          <a class="navbar-item is-hidden-desktop" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon"><i class="fab fa-github"></i></span>
+          </a>
+
+          <a role="button" class="navbar-burger" data-target="top-nav-menu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+
+        </div>
+        
+        <div class="navbar-menu" id="top-nav-menu">
+        
+
+          <div class="navbar-start">
+            
+              <a class="navbar-item" href="../../install.html">
+              Install
+            </a>
+              <a class="navbar-item" href="../../user_guide/index.html">
+              User Guide
+            </a>
+              <a class="navbar-item" href="../api.html">
+              API
+            </a>
+              <a class="navbar-item" href="../../auto_examples/index.html">
+              Examples
+            </a>
+          </div>
+        
+          <div class="navbar-end">
+            <div class="navbar-item">
+            
+            <a class="button is-hidden-touch is-dark" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon-text">
+                <span class="icon is-large">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Github</span>
+              </span>
+            </a>
+
+            </div> 
+          </div> 
+        </div> 
+
+      </nav>
+      
+    </navbar>
+  </header>
+
+
+  <div id="column-container">
+  <div class="columns is-mobile is-centered">
+	
+  
+      <div class="column is-10-mobile is-one-third-tablet is-3-desktop is-hidden-mobile" id="sidebar">
+    
+    <aside class="sticky-nav sidebar-menu">
+<div class="sidebar-search">
+  <form class="field" id="searchbox" role="search" action="../../search.html" method="get">
+    <!-- <label class="label" id="searchlabel">Quick search</label> -->
+    <div class="field has-addons">
+      <div class="control is-expanded">
+        <input class="input" type="text" placeholder="Search the doc" name="q" aria-labelledby="searchlabel autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      </div>
+      <div class="control">
+        <input class="button is-info" type="submit" value="Go" />
+      </div>
+    </div>
+  </form>
+  <script>document.getElementById('searchbox').style.display = "block"</script>
+
+</div>
+      
+      <div class="sidebar-menu-toc">
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing NeuralOperator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">NeuralOperator User Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#models">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.layers">Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#model-dispatching">Model Dispatching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#training">Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#data">Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Gallery of examples</a></li>
+</ul>
+ 
+      </div>
+    </aside>
+  </div>
+  
+
+  <div class="column main-column">
+
+    
+    <div class="main-section">
+
+      
+      
+      <div class="side-menu-toggle">
+        <button class="button" id="toggle-sidebar" onclick="toggle_sidebar()">
+          <span class="icon"><i class="fa fa-bars" aria-hidden="true"></i></span>
+          <span>menu</span> 
+        </button>
+      </div>
+      
+
+      <div class="container content main-content">
+        
+  <section id="neuralop-models-uno">
+<h1><a class="reference internal" href="../api.html#module-neuralop.models" title="neuralop.models"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.models</span></code></a>.UNO<a class="headerlink" href="#neuralop-models-uno" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="neuralop.models.UNO">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.models.</span></span><span class="sig-name descname"><span class="pre">UNO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lifting_channels=256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">projection_channels=256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positional_embedding='grid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_layers=4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uno_out_channels=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uno_n_modes=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uno_scalings=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">horizontal_skips_map=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incremental_n_modes=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_mlp_dropout=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_mlp_expansion=0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">non_linearity=&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preactivation=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fno_skip='linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">horizontal_skip='linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_mlp_skip='soft-gating'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separable=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factorization=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rank=1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_rank_modes=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">integral_operator=&lt;class</span> <span class="pre">'neuralop.layers.spectral_convolution.SpectralConv'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operator_block=&lt;class</span> <span class="pre">'neuralop.layers.fno_block.FNOBlocks'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implementation='factorized'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decomposition_kwargs={}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain_padding=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain_padding_mode='one-sided'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/models/uno.html#UNO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.models.UNO" title="Link to this definition"></a></dt>
+<dd><p>U-Shaped Neural Operator, as described in  <a class="reference internal" href="#ra5b933fe5a53-1" id="id1">[1]</a>.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>in_channels</strong><span class="classifier">int, optional</span></dt><dd><p>Number of input channels, by default 3</p>
+</dd>
+<dt><strong>out_channels</strong><span class="classifier">int, optional</span></dt><dd><p>Number of output channels, by default 1</p>
+</dd>
+<dt><strong>hidden_channels</strong><span class="classifier">int</span></dt><dd><p>initial width of the UNO (i.e. number of channels)</p>
+</dd>
+<dt><strong>lifting_channels</strong><span class="classifier">int, optional</span></dt><dd><p>number of hidden channels of the lifting block of the FNO, by default 256</p>
+</dd>
+<dt><strong>projection_channels</strong><span class="classifier">int, optional</span></dt><dd><p>number of hidden channels of the projection block of the FNO, by default 256</p>
+</dd>
+<dt><strong>positional_embedding</strong><span class="classifier">str literal | GridEmbedding2D | GridEmbeddingND | None</span></dt><dd><p>if “grid”, appends a grid positional embedding with default settings to 
+the last channels of raw input. Assumes the inputs are discretized
+over a grid with entry [0,0,…] at the origin and side lengths of 1.
+If an initialized GridEmbedding, uses this module directly
+See <cite>neuralop.embeddings.GridEmbeddingND</cite> for details
+if None, does nothing</p>
+</dd>
+<dt><strong>n_layers</strong><span class="classifier">int, optional</span></dt><dd><p>Number of Fourier Layers, by default 4</p>
+</dd>
+<dt><strong>uno_out_channels: list</strong></dt><dd><p>Number of output channel of each Fourier Layers.
+Eaxmple: For a Five layer UNO uno_out_channels can be [32,64,64,64,32]</p>
+</dd>
+<dt><strong>uno_n_modes: list</strong></dt><dd><p>Number of Fourier Modes to use in integral operation of each Fourier Layers (along each dimension).
+Example: For a five layer UNO with 2D input the uno_n_modes can be: [[5,5],[5,5],[5,5],[5,5],[5,5]]</p>
+</dd>
+<dt><strong>uno_scalings: list</strong></dt><dd><p>Scaling Factors for each Fourier Layers
+Example: For a five layer UNO with 2D input, the uno_scalings can be : [[1.0,1.0],[0.5,0.5],[1,1],[1,1],[2,2]]</p>
+</dd>
+<dt><strong>horizontal_skips_map: Dict, optional</strong></dt><dd><p>a map {…., b: a, ….} denoting horizontal skip connection from a-th layer to
+b-th layer. If None default skip connection is applied.
+Example: For a 5 layer UNO architecture, the skip connections can be
+horizontal_skips_map ={4:0,3:1}</p>
+</dd>
+<dt><strong>incremental_n_modes</strong><span class="classifier">None or int tuple, default is None</span></dt><dd><ul class="simple">
+<li><p>If not None, this allows to incrementally increase the number of modes in Fourier domain
+during training. Has to verify n &lt;= N for (n, m) in zip(incremental_n_modes, n_modes).</p></li>
+<li><p>If None, all the n_modes are used.</p></li>
+</ul>
+<p>This can be updated dynamically during training.</p>
+</dd>
+<dt><strong>channel_mlp_dropout: float, optional</strong></dt><dd><p>dropout parameter for channelMLP after each FNO Block</p>
+</dd>
+<dt><strong>channel_mlp_expansions: float, optional</strong></dt><dd><p>expansion parameter for channelMLP after each FNO block</p>
+</dd>
+<dt><strong>non_linearity</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>Non-Linearity module to use, by default F.gelu</p>
+</dd>
+<dt><strong>norm</strong><span class="classifier">F.module, optional</span></dt><dd><p>Normalization layer to use, by default None</p>
+</dd>
+<dt><strong>preactivation</strong><span class="classifier">bool, default is False</span></dt><dd><p>if True, use resnet-style preactivation</p>
+</dd>
+<dt><strong>skip</strong><span class="classifier">{‘linear’, ‘identity’, ‘soft-gating’}, optional</span></dt><dd><p>Type of skip connection to use, by default ‘soft-gating’</p>
+</dd>
+<dt><strong>separable</strong><span class="classifier">bool, default is False</span></dt><dd><p>if True, use a depthwise separable spectral convolution</p>
+</dd>
+<dt><strong>factorization</strong><span class="classifier">str or None, {‘tucker’, ‘cp’, ‘tt’}</span></dt><dd><p>Tensor factorization of the parameters weight to use, by default None.
+* If None, a dense tensor parametrizes the Spectral convolutions
+* Otherwise, the specified tensor factorization is used.</p>
+</dd>
+<dt><strong>joint_factorization</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether all the Fourier Layers should be parametrized by a single tensor (vs one per layer), by default False</p>
+</dd>
+<dt><strong>rank</strong><span class="classifier">float or rank, optional</span></dt><dd><p>Rank of the tensor factorization of the Fourier weights, by default 1.0</p>
+</dd>
+<dt><strong>fixed_rank_modes</strong><span class="classifier">bool, optional</span></dt><dd><p>Modes to not factorize, by default False</p>
+</dd>
+<dt><strong>implementation</strong><span class="classifier">{‘factorized’, ‘reconstructed’}, optional, default is ‘factorized’</span></dt><dd><p>If factorization is not None, forward mode to use::
+* <cite>reconstructed</cite> : the full weight tensor is reconstructed from the factorization and used for the forward pass
+* <cite>factorized</cite> : the input is directly contracted with the factors of the decomposition</p>
+</dd>
+<dt><strong>decomposition_kwargs</strong><span class="classifier">dict, optional, default is {}</span></dt><dd><p>Optionaly additional parameters to pass to the tensor decomposition</p>
+</dd>
+<dt><strong>domain_padding</strong><span class="classifier">None or float, optional</span></dt><dd><p>If not None, percentage of padding to use, by default None</p>
+</dd>
+<dt><strong>domain_padding_mode</strong><span class="classifier">{‘symmetric’, ‘one-sided’}, optional</span></dt><dd><p>How to perform domain padding, by default ‘one-sided’</p>
+</dd>
+<dt><strong>fft_norm</strong><span class="classifier">str, optional</span></dt><dd><p>by default ‘forward’</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.models.UNO.forward" title="neuralop.models.UNO.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>(x, **kwargs)</p></td>
+<td><p>Define the computation performed at every call.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="ra5b933fe5a53-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>:</p>
+</div>
+</div>
+<dl class="simple">
+<dt>Rahman, M.A., Ross, Z., Azizzadenesheli, K. “U-NO: U-shaped </dt><dd><p>Neural Operators” (2022). TMLR 2022, <a class="reference external" href="https://arxiv.org/pdf/2204.11127">https://arxiv.org/pdf/2204.11127</a>.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralop.models.UNO.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/models/uno.html#UNO.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.models.UNO.forward" title="Link to this definition"></a></dt>
+<dd><p>Define the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<div class="clearer"></div></section>
+
+
+      </div>
+
+      
+        <nav class="pagination" role="navigation" aria-label="pagination">
+    
+    <a class="button pagination-previous" href="neuralop.models.GINO.html" title="previous page" accesskey="p">
+        <span class="icon">
+            <i class="fa fa-arrow-circle-left"></i>
+        </span>
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.models</span></code>.GINO</span>
+    </a>
+    
+    
+    <a class="button pagination-next" href="neuralop.layers.spectral_convolution.SpectralConv.html" title="next page" accesskey="n">
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.spectral_convolution</span></code>.SpectralConv </span>
+        <span class="icon">
+            <i class="fa fa-arrow-circle-right"></i>
+        </span>
+    </a>
+    
+</nav>
+
+      
+
+        <footer class="footer">
+    <div class="content has-text-centered">
+        <div class="block">
+          &copy; Copyright 2024, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+        </div>
+    </div>
+  </footer>
+
+    </div>
+
+  </div>  
+
+	
+    
+    <div class="column is-hidden-touch is-2-desktop is-one-fifth-widescreen" id="localtoc-column">
+
+    <aside class="sticky-nav localtoc"> 
+        <p class="menu-label"> 
+            <span class="icon-text">
+                <span class="icon"><i class="fas fa-duotone fa-list"></i></span>
+                <span> On this page </span>
+            </span>
+        </p>
+
+        <div class="menu menu-list localtoc-list">
+        <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.models</span></code>.UNO</a><ul>
+<li><a class="reference internal" href="#neuralop.models.UNO"><code class="docutils literal notranslate"><span class="pre">UNO</span></code></a><ul>
+<li><a class="reference internal" href="#neuralop.models.UNO.forward"><code class="docutils literal notranslate"><span class="pre">UNO.forward()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+    </aside>
+    </div>
+
+  
+
+  </div>  
+  </div> 
+
+  
+  <script>
+    function toggle_sidebar() {
+        var element = document.getElementById("sidebar");
+        var container = document.getElementById("column-container");
+        var localtoccolumn = document.getElementById("localtoc-column");
+        element.classList.toggle("hide-tablet");
+        element.classList.toggle("is-hidden-mobile");
+        container.classList.toggle("sidemenu-hidden");
+        localtoccolumn.classList.toggle("is-one-fifth-widescreen");
+        localtoccolumn.classList.toggle("is-2-desktop");
+        localtoccolumn.classList.toggle("is-3-desktop");
+    }
+  </script> 
+
+
+
+  </body>
+</html>

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>neuralop.layers.gno_block &#8212; neuraloperator 1.0.2 documentation</title> 
+<link rel="stylesheet" href="../../../_static/tensorly_style.css">
+<link rel="apple-touch-icon" sizes="180x180" href="../../../_static/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../../_static/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../../_static/favicon/favicon-16x16.png">
+<link rel="manifest" href="../../../_static/favicon/site.webmanifest">
+<link rel="mask-icon" href="../../../_static/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="../../../_static/favicon/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+    <script src="../../../_static/documentation_options.js?v=1ed6394b"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+ <script src="../../../_static/navbar_burger.js"></script>
+ <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+ 
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  </head>
+<body  class="has-navbar-fixed-top">
+
+  <header>
+    <navbar>
+      <nav class="navbar top-navbar is-fixed-top has-shadow is-flex-wrap-wrap" role="navigation" aria-label="main top navigation">
+        <div class="navbar-brand">
+        
+
+          <a class="navbar-item" href="../../../index.html">
+            <img src="../../../_static/neuraloperator_logo.png" height="28">
+          </a>
+          <a class="navbar-item is-hidden-desktop" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon"><i class="fab fa-github"></i></span>
+          </a>
+
+          <a role="button" class="navbar-burger" data-target="top-nav-menu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+
+        </div>
+        
+        <div class="navbar-menu" id="top-nav-menu">
+        
+
+          <div class="navbar-start">
+            
+              <a class="navbar-item" href="../../../install.html">
+              Install
+            </a>
+              <a class="navbar-item" href="../../../user_guide/index.html">
+              User Guide
+            </a>
+              <a class="navbar-item" href="../../../modules/api.html">
+              API
+            </a>
+              <a class="navbar-item" href="../../../auto_examples/index.html">
+              Examples
+            </a>
+          </div>
+        
+          <div class="navbar-end">
+            <div class="navbar-item">
+            
+            <a class="button is-hidden-touch is-dark" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon-text">
+                <span class="icon is-large">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Github</span>
+              </span>
+            </a>
+
+            </div> 
+          </div> 
+        </div> 
+
+      </nav>
+      
+    </navbar>
+  </header>
+
+
+  <div id="column-container">
+  <div class="columns is-mobile is-centered">
+	
+  
+
+  <div class="column main-column">
+
+    
+    <div class="main-section">
+
+      
+      
+
+      <div class="container content main-content">
+        
+  <h1>Source code for neuralop.layers.gno_block</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+
+<span class="kn">from</span> <span class="nn">.channel_mlp</span> <span class="kn">import</span> <span class="n">LinearChannelMLP</span>
+<span class="kn">from</span> <span class="nn">.integral_transform</span> <span class="kn">import</span> <span class="n">IntegralTransform</span>
+<span class="kn">from</span> <span class="nn">.neighbor_search</span> <span class="kn">import</span> <span class="n">NeighborSearch</span>
+<span class="kn">from</span> <span class="nn">.embeddings</span> <span class="kn">import</span> <span class="n">SinusoidalEmbedding</span>
+
+
+<div class="viewcode-block" id="GNOBlock">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.gno_block.GNOBlock.html#neuralop.layers.gno_block.GNOBlock">[docs]</a>
+<span class="k">class</span> <span class="nc">GNOBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;GNOBlock implements a Graph Neural Operator layer as described in [1]_.</span>
+
+<span class="sd">    A GNO layer is a resolution-invariant operator that maps a function defined</span>
+<span class="sd">    over one coordinate mesh to another defined over another coordinate mesh using </span>
+<span class="sd">    a pointwise kernel integral that takes contributions from neighbors of distance 1</span>
+<span class="sd">    within a graph constructed via neighbor search with a specified radius. </span>
+
+<span class="sd">    Optionally, if provided, the input and output queries can have a positional embedding</span>
+<span class="sd">    applied using the argument pos_embedding.</span>
+
+<span class="sd">    The kernel integral computed in IntegralTransform </span>
+<span class="sd">    computes one of the following:</span>
+<span class="sd">        (a) \int_{A(x)} k(x, y) dy</span>
+<span class="sd">        (b) \int_{A(x)} k(x, y) * f(y) dy</span>
+<span class="sd">        (c) \int_{A(x)} k(x, y, f(y)) dy</span>
+<span class="sd">        (d) \int_{A(x)} k(x, y, f(y)) * f(y) dy</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    in_channels : int</span>
+<span class="sd">        number of channels in input function. Only used if transform_type</span>
+<span class="sd">        is (c) &quot;nonlinear&quot; or (d) &quot;nonlinear_kernelonly&quot;</span>
+<span class="sd">    out_channels : int</span>
+<span class="sd">        number of channels in output function</span>
+<span class="sd">    coord_dim : int</span>
+<span class="sd">        dimension of domain on which x and y are defined</span>
+<span class="sd">    radius : float</span>
+<span class="sd">        radius in which to search for neighbors</span>
+<span class="sd">    </span>
+<span class="sd">    Other Parameters</span>
+<span class="sd">    -----------------</span>
+<span class="sd">    transform_type : str, optional</span>
+<span class="sd">        Which integral transform to compute. The mapping is:</span>
+<span class="sd">        &#39;linear_kernelonly&#39; -&gt; (a)</span>
+<span class="sd">        &#39;linear&#39; -&gt; (b) [DEFAULT]</span>
+<span class="sd">        &#39;nonlinear_kernelonly&#39; -&gt; (c)</span>
+<span class="sd">        &#39;nonlinear&#39; -&gt; (d)</span>
+<span class="sd">        If the input f is not given then (a) is computed</span>
+<span class="sd">        by default independently of this parameter.</span>
+<span class="sd">    pos_embedding_type: literal {&#39;transformer&#39;, &#39;nerf&#39;} | None</span>
+<span class="sd">        type of positional embedding to use during the kernel integral transform.</span>
+<span class="sd">        see `neuralop.layers.embeddings.SinusoidalEmbedding` for more details.</span>
+<span class="sd">        default `&#39;transformer&#39;`</span>
+<span class="sd">    pos_embedding_channels : int</span>
+<span class="sd">        per-channel dimension of optional positional embedding to use, by default 32</span>
+<span class="sd">    pos_embedding_max_positions: int</span>
+<span class="sd">        `max_positions` parameter for SinusoidalEmbedding of type `&#39;transformer&#39;`. If</span>
+<span class="sd">        `pos_embedding_type != &#39;transformer&#39;`, this value is not used. Default 10000</span>
+<span class="sd">    channel_mlp_layers : List[int], optional</span>
+<span class="sd">        list of layer widths to dynamically construct</span>
+<span class="sd">        LinearChannelMLP network to parameterize kernel k, by default None</span>
+<span class="sd">    channel_mlp_non_linearity : torch.nn function, optional</span>
+<span class="sd">        activation function for ChannelMLPLinear above, by default F.gelu</span>
+<span class="sd">    channel_mlp : nn.Module, optional</span>
+<span class="sd">        ChannelMLP parametrizing the kernel k. Input dimension</span>
+<span class="sd">        should be dim x + dim y or dim x + dim y + dim f.</span>
+<span class="sd">        ChannelMLP should not be pointwise and should only operate across</span>
+<span class="sd">        channels to preserve the discretization-invariance of the </span>
+<span class="sd">        kernel integral. If you have more specific needs than the LinearChannelMLP,</span>
+<span class="sd">        this argument allows you to pass your own Module to parameterize the kernel k. </span>
+<span class="sd">        Default None.</span>
+<span class="sd">    use_open3d_neighbor_search: bool, optional</span>
+<span class="sd">        whether to use open3d or native-PyTorch search</span>
+<span class="sd">    use_torch_scatter_reduce : bool, optional</span>
+<span class="sd">        whether to reduce in integral computation using a function</span>
+<span class="sd">        provided by the extra dependency torch_scatter or the slower</span>
+<span class="sd">        native PyTorch implementation, by default True</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    ---------</span>
+<span class="sd">    ```</span>
+<span class="sd">    &gt;&gt;&gt; gno = GNOBlock(in_channels=2, out_channels=12, coord_dim=3, radius=0.035)</span>
+
+<span class="sd">    &gt;&gt;&gt; gno</span>
+<span class="sd">    GNOBlock(</span>
+<span class="sd">        (pos_embedding): SinusoidalEmbedding()</span>
+<span class="sd">        (neighbor_search): NeighborSearch()</span>
+<span class="sd">        (channel_mlp): LinearChannelMLP(</span>
+<span class="sd">            (fcs): ModuleList(</span>
+<span class="sd">            (0): Linear(in_features=384, out_features=128, bias=True)</span>
+<span class="sd">            (1): Linear(in_features=128, out_features=256, bias=True)</span>
+<span class="sd">            (2): Linear(in_features=256, out_features=128, bias=True)</span>
+<span class="sd">            (3): Linear(in_features=128, out_features=12, bias=True)</span>
+<span class="sd">            )</span>
+<span class="sd">        )</span>
+<span class="sd">        (integral_transform): IntegralTransform(</span>
+<span class="sd">            (channel_mlp): LinearChannelMLP(</span>
+<span class="sd">            (fcs): ModuleList(</span>
+<span class="sd">                (0): Linear(in_features=384, out_features=128, bias=True)</span>
+<span class="sd">                (1): Linear(in_features=128, out_features=256, bias=True)</span>
+<span class="sd">                (2): Linear(in_features=256, out_features=128, bias=True)</span>
+<span class="sd">                (3): Linear(in_features=128, out_features=12, bias=True)</span>
+<span class="sd">            )</span>
+<span class="sd">            )</span>
+<span class="sd">        )</span>
+<span class="sd">    )</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    References</span>
+<span class="sd">    -----------</span>
+<span class="sd">    .. [1] : </span>
+<span class="sd">    </span>
+<span class="sd">    Zongyi Li, Kamyar Azizzadenesheli, Burigede Liu, Kaushik Bhattacharya, </span>
+<span class="sd">        Anima Anandkumar (2020). &quot;Neural Operator: Graph Kernel Network for </span>
+<span class="sd">        Partial Differential Equations.&quot; ArXiV, https://arxiv.org/pdf/2003.03485.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="c1"># main</span>
+                 <span class="n">out_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="c1"># main</span>
+                 <span class="n">coord_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="c1"># main</span>
+                 <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="c1"># main  </span>
+                 <span class="n">transform_type</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span> <span class="c1"># other</span>
+                 <span class="n">pos_embedding_type</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;transformer&#39;</span><span class="p">,</span> <span class="c1"># other</span>
+                 <span class="n">pos_embedding_channels</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="c1"># other</span>
+                 <span class="n">pos_embedding_max_positions</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="c1"># other</span>
+                 <span class="n">channel_mlp_layers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="mi">128</span><span class="p">,</span><span class="mi">256</span><span class="p">,</span><span class="mi">128</span><span class="p">],</span> <span class="c1"># mention ratios in docstring</span>
+                 <span class="n">channel_mlp_non_linearity</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">gelu</span><span class="p">,</span> <span class="c1"># other</span>
+                 <span class="n">channel_mlp</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># other</span>
+                 <span class="n">use_open3d_neighbor_search</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="c1"># other</span>
+                 <span class="n">use_torch_scatter_reduce</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,):</span> <span class="c1"># other</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span> <span class="o">=</span> <span class="n">in_channels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span> <span class="o">=</span> <span class="n">out_channels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coord_dim</span> <span class="o">=</span> <span class="n">coord_dim</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">radius</span>
+
+        <span class="c1"># Apply sinusoidal positional embedding</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pos_embedding_type</span> <span class="o">=</span> <span class="n">pos_embedding_type</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos_embedding_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pos_embedding</span> <span class="o">=</span> <span class="n">SinusoidalEmbedding</span><span class="p">(</span>
+                <span class="n">in_channels</span><span class="o">=</span><span class="n">coord_dim</span><span class="p">,</span>
+                <span class="n">num_frequencies</span><span class="o">=</span><span class="n">pos_embedding_channels</span><span class="p">,</span>
+                <span class="n">embedding_type</span><span class="o">=</span><span class="n">pos_embedding_type</span><span class="p">,</span>
+                <span class="n">max_positions</span><span class="o">=</span><span class="n">pos_embedding_max_positions</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pos_embedding</span> <span class="o">=</span> <span class="kc">None</span>
+                    
+        <span class="c1"># Create in-to-out nb search module</span>
+        <span class="k">if</span> <span class="n">use_open3d_neighbor_search</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">coord_dim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Error: open3d is only designed for 3d data, </span><span class="se">\</span>
+<span class="s2">                GNO instantiated for dim=</span><span class="si">{</span><span class="n">coord_dim</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">neighbor_search</span> <span class="o">=</span> <span class="n">NeighborSearch</span><span class="p">(</span><span class="n">use_open3d</span><span class="o">=</span><span class="n">use_open3d_neighbor_search</span><span class="p">)</span>
+
+        <span class="c1"># create proper kernel input channel dim</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos_embedding</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># x and y dim will be coordinate dim if no pos embedding is applied</span>
+            <span class="n">kernel_in_dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coord_dim</span> <span class="o">*</span> <span class="mi">2</span>
+            <span class="n">kernel_in_dim_str</span> <span class="o">=</span> <span class="s2">&quot;dim(y) + dim(x)&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># x and y dim will be embedding dim if pos embedding is applied</span>
+            <span class="n">kernel_in_dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos_embedding</span><span class="o">.</span><span class="n">out_channels</span> <span class="o">*</span> <span class="mi">2</span>
+            <span class="n">kernel_in_dim_str</span> <span class="o">=</span> <span class="s2">&quot;dim(y_embed) + dim(x_embed)&quot;</span>
+            
+        <span class="k">if</span> <span class="n">transform_type</span> <span class="o">==</span> <span class="s2">&quot;nonlinear&quot;</span> <span class="ow">or</span> <span class="n">transform_type</span> <span class="o">==</span> <span class="s2">&quot;nonlinear_kernelonly&quot;</span><span class="p">:</span>
+            <span class="n">kernel_in_dim</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span>
+            <span class="n">kernel_in_dim_str</span> <span class="o">+=</span> <span class="s2">&quot; + dim(f_y)&quot;</span>
+
+        <span class="k">if</span> <span class="n">channel_mlp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">channel_mlp</span><span class="o">.</span><span class="n">in_channels</span> <span class="o">==</span> <span class="n">kernel_in_dim</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Error: expected ChannelMLP to take</span><span class="se">\</span>
+<span class="s2">                  input with </span><span class="si">{</span><span class="n">kernel_in_dim</span><span class="si">}</span><span class="s2"> channels (feature channels=</span><span class="si">{</span><span class="n">kernel_in_dim_str</span><span class="si">}</span><span class="s2">),</span><span class="se">\</span>
+<span class="s2">                      got </span><span class="si">{</span><span class="n">channel_mlp</span><span class="o">.</span><span class="n">in_channels</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="k">assert</span> <span class="n">channel_mlp</span><span class="o">.</span><span class="n">out_channels</span> <span class="o">==</span> <span class="n">out_channels</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Error: expected ChannelMLP to have</span><span class="se">\</span>
+<span class="s2">                 </span><span class="si">{</span><span class="n">out_channels</span><span class="si">=}</span><span class="s2"> but got </span><span class="si">{</span><span class="n">channel_mlp</span><span class="o">.</span><span class="n">in_channels</span><span class="si">=}</span><span class="s2">.&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">channel_mlp</span> <span class="o">=</span> <span class="n">channel_mlp</span>
+
+        <span class="k">elif</span> <span class="n">channel_mlp_layers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">channel_mlp_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">kernel_in_dim</span><span class="p">:</span>
+                <span class="n">channel_mlp_layers</span> <span class="o">=</span> <span class="p">[</span><span class="n">kernel_in_dim</span><span class="p">]</span> <span class="o">+</span> <span class="n">channel_mlp_layers</span>
+            <span class="k">if</span> <span class="n">channel_mlp_layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span><span class="p">:</span>
+                <span class="n">channel_mlp_layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">channel_mlp</span> <span class="o">=</span> <span class="n">LinearChannelMLP</span><span class="p">(</span><span class="n">layers</span><span class="o">=</span><span class="n">channel_mlp_layers</span><span class="p">,</span> <span class="n">non_linearity</span><span class="o">=</span><span class="n">channel_mlp_non_linearity</span><span class="p">)</span>
+
+        <span class="c1"># Create integral transform module</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">integral_transform</span> <span class="o">=</span> <span class="n">IntegralTransform</span><span class="p">(</span>
+            <span class="n">channel_mlp</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">channel_mlp</span><span class="p">,</span>
+            <span class="n">transform_type</span><span class="o">=</span><span class="n">transform_type</span><span class="p">,</span>
+            <span class="n">use_torch_scatter</span><span class="o">=</span><span class="n">use_torch_scatter_reduce</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="GNOBlock.forward">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.gno_block.GNOBlock.html#neuralop.layers.gno_block.GNOBlock.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">f_y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute a GNO neighbor search and kernel integral transform.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y : torch.Tensor of shape [n, d1]</span>
+<span class="sd">            n points of dimension d1 specifying</span>
+<span class="sd">            the space to integrate over.</span>
+<span class="sd">            If batched, these must remain constant</span>
+<span class="sd">            over the whole batch so no batch dim is needed.</span>
+<span class="sd">        x : torch.Tensor of shape [m, d1], default None</span>
+<span class="sd">            m points of dimension d1 over which the</span>
+<span class="sd">            output function is defined. Must share domain</span>
+<span class="sd">            with y</span>
+<span class="sd">        f_y : torch.Tensor of shape [batch, n, d2] or [n, d2], default None</span>
+<span class="sd">            Function to integrate the kernel against defined</span>
+<span class="sd">            on the points y. The kernel is assumed diagonal</span>
+<span class="sd">            hence its output shape must be d3 for the transforms</span>
+<span class="sd">            (b) or (d). If None, (a) is computed.</span>
+<span class="sd">        </span>
+<span class="sd">        Output</span>
+<span class="sd">        ----------</span>
+<span class="sd">        out_features : torch.Tensor of shape [batch, m, d3] or [m, d3]</span>
+<span class="sd">            Output function given on the points x.</span>
+<span class="sd">            d4 is the output size of the kernel k.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n_in</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">n_out</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">neighbors_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighbor_search</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">queries</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos_embedding</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">y_embed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos_embedding</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+            <span class="n">x_embed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos_embedding</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">y_embed</span> <span class="o">=</span> <span class="n">y</span>
+            <span class="n">x_embed</span> <span class="o">=</span> <span class="n">x</span>
+
+        <span class="c1"># TODO: compute weights using the neighborhood dict</span>
+        <span class="n">out_features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">integral_transform</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">y_embed</span><span class="p">,</span>
+                                               <span class="n">x</span><span class="o">=</span><span class="n">x_embed</span><span class="p">,</span>
+                                               <span class="n">neighbors</span><span class="o">=</span><span class="n">neighbors_dict</span><span class="p">,</span>
+                                               <span class="n">f_y</span><span class="o">=</span><span class="n">f_y</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">out_features</span></div>
+</div>
+
+
+
+</pre></div>
+
+      </div>
+
+      
+
+        <footer class="footer">
+    <div class="content has-text-centered">
+        <div class="block">
+          &copy; Copyright 2024, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+        </div>
+    </div>
+  </footer>
+
+    </div>
+
+  </div>  
+
+	
+
+  </div>  
+  </div> 
+
+  
+  <script>
+    function toggle_sidebar() {
+        var element = document.getElementById("sidebar");
+        var container = document.getElementById("column-container");
+        var localtoccolumn = document.getElementById("localtoc-column");
+        element.classList.toggle("hide-tablet");
+        element.classList.toggle("is-hidden-mobile");
+        container.classList.toggle("sidemenu-hidden");
+        localtoccolumn.classList.toggle("is-one-fifth-widescreen");
+        localtoccolumn.classList.toggle("is-2-desktop");
+        localtoccolumn.classList.toggle("is-3-desktop");
+    }
+  </script> 
+
+
+
+  </body>
+</html>

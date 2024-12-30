@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>neuralop.layers.coda_blocks &#8212; neuraloperator 1.0.2 documentation</title> 
+<link rel="stylesheet" href="../../../_static/tensorly_style.css">
+<link rel="apple-touch-icon" sizes="180x180" href="../../../_static/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../../_static/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../../_static/favicon/favicon-16x16.png">
+<link rel="manifest" href="../../../_static/favicon/site.webmanifest">
+<link rel="mask-icon" href="../../../_static/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="../../../_static/favicon/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+    <script src="../../../_static/documentation_options.js?v=1ed6394b"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+ <script src="../../../_static/navbar_burger.js"></script>
+ <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+ 
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  </head>
+<body  class="has-navbar-fixed-top">
+
+  <header>
+    <navbar>
+      <nav class="navbar top-navbar is-fixed-top has-shadow is-flex-wrap-wrap" role="navigation" aria-label="main top navigation">
+        <div class="navbar-brand">
+        
+
+          <a class="navbar-item" href="../../../index.html">
+            <img src="../../../_static/neuraloperator_logo.png" height="28">
+          </a>
+          <a class="navbar-item is-hidden-desktop" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon"><i class="fab fa-github"></i></span>
+          </a>
+
+          <a role="button" class="navbar-burger" data-target="top-nav-menu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+
+        </div>
+        
+        <div class="navbar-menu" id="top-nav-menu">
+        
+
+          <div class="navbar-start">
+            
+              <a class="navbar-item" href="../../../install.html">
+              Install
+            </a>
+              <a class="navbar-item" href="../../../user_guide/index.html">
+              User Guide
+            </a>
+              <a class="navbar-item" href="../../../modules/api.html">
+              API
+            </a>
+              <a class="navbar-item" href="../../../auto_examples/index.html">
+              Examples
+            </a>
+          </div>
+        
+          <div class="navbar-end">
+            <div class="navbar-item">
+            
+            <a class="button is-hidden-touch is-dark" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon-text">
+                <span class="icon is-large">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Github</span>
+              </span>
+            </a>
+
+            </div> 
+          </div> 
+        </div> 
+
+      </nav>
+      
+    </navbar>
+  </header>
+
+
+  <div id="column-container">
+  <div class="columns is-mobile is-centered">
+	
+  
+
+  <div class="column main-column">
+
+    
+    <div class="main-section">
+
+      
+      
+
+      <div class="container content main-content">
+        
+  <h1>Source code for neuralop.layers.coda_blocks</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="kn">from</span> <span class="nn">.fno_block</span> <span class="kn">import</span> <span class="n">FNOBlocks</span>
+<span class="kn">from</span> <span class="nn">.spectral_convolution</span> <span class="kn">import</span> <span class="n">SpectralConv</span>
+
+<span class="n">einsum_symbols</span> <span class="o">=</span> <span class="s2">&quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;</span>
+
+<div class="viewcode-block" id="CODABlocks">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.coda_blocks.CODABlocks.html#neuralop.layers.coda_blocks.CODABlocks">[docs]</a>
+<span class="k">class</span> <span class="nc">CODABlocks</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Co-domain Attention Blocks (CODABlocks) implement the transformer</span>
+<span class="sd">    architecture in the operator learning framework, as described in [1]_.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n_modes : list</span>
+<span class="sd">        Number of modes for each dimension used in K, Q, V operator.</span>
+<span class="sd">    n_heads : int</span>
+<span class="sd">        Number of heads for the attention mechanism.</span>
+<span class="sd">    token_codimension : int</span>
+<span class="sd">        Co-dimension of each variable, i.e. number of</span>
+<span class="sd">        output channels associated with each variable.</span>
+<span class="sd">    head_codimension : int</span>
+<span class="sd">        Co-dimension of each output token for each head.</span>
+<span class="sd">    codimension_size : int</span>
+<span class="sd">        Size of the codimension for the whole function. Only used for permutation_eq = False.</span>
+<span class="sd">    per_channel_attention : bool, optional</span>
+<span class="sd">        Whether to use per-channel attention. Default is True (overwrites token_codimension to 1).</span>
+<span class="sd">    permutation_eq : bool, optional</span>
+<span class="sd">        Whether to use permutation equivariant mixer layer after the attention mechanism.</span>
+<span class="sd">    norm : literal `{&#39;instance_norm&#39;}` or None</span>
+<span class="sd">        Normalization module to be used. If &#39;instance_norm&#39;, instance normalization</span>
+<span class="sd">        is applied to the token outputs of the attention module.</span>
+<span class="sd">        Defaults to `&#39;instance_norm&#39;`</span>
+<span class="sd">    temperature : float</span>
+<span class="sd">        Temperature parameter for the attention mechanism.</span>
+<span class="sd">    nonlinear_attention : bool, optional</span>
+<span class="sd">        Whether to use non-linear activation for K, Q, V operator.</span>
+<span class="sd">    scale : int</span>
+<span class="sd">        Scale for downsampling Q, K functions before calculating the attention matrix.</span>
+<span class="sd">        Higher scale will downsample more.</span>
+<span class="sd">    output_scaling_factor : float</span>
+<span class="sd">        Scaling factor for the output.</span>
+<span class="sd">    </span>
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    incremental_n_modes : list</span>
+<span class="sd">        Incremental number of modes for each dimension (for incremental training).</span>
+<span class="sd">    use_channel_mlp : bool, optional</span>
+<span class="sd">        Whether to use MLP layers to parameterize skip connections. Default is True.</span>
+<span class="sd">    channel_mlp_expansion : float, optional</span>
+<span class="sd">        Expansion parameter for self.channel_mlp. Default is 0.5.</span>
+<span class="sd">    non_linearity : callable</span>
+<span class="sd">        Non-linearity function to be used.</span>
+<span class="sd">    preactivation : bool, optional</span>
+<span class="sd">        Whether to use preactivation. Default is False.</span>
+<span class="sd">    fno_skip : str, optional</span>
+<span class="sd">        Type of skip connection to be used. Default is &#39;linear&#39;.</span>
+<span class="sd">    channel_mlp_skip : str, optional</span>
+<span class="sd">        Module to use for ChannelMLP skip connections. Default is &quot;linear&quot;.</span>
+<span class="sd">    separable : bool, optional</span>
+<span class="sd">        Whether to use separable convolutions. Default is False.</span>
+<span class="sd">    factorization : str, optional</span>
+<span class="sd">        Type of factorization to be used. Default is &#39;tucker&#39;.</span>
+<span class="sd">    rank : float, optional</span>
+<span class="sd">        Rank of the factorization. Default is 1.0.</span>
+<span class="sd">    conv_module : callable</span>
+<span class="sd">        Spectral convolution module to be used.</span>
+<span class="sd">    joint_factorization : bool, optional</span>
+<span class="sd">        Whether to factorize all spectralConv weights as one tensor. Default is False.</span>
+<span class="sd">    </span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1]: M. Rahman, R. George, M. Elleithy, D. Leibovici, Z. Li, B. Bonev, </span>
+<span class="sd">        C. White, J. Berner, R. Yeh, J. Kossaifi, K. Azizzadenesheli, A. Anandkumar (2024).</span>
+<span class="sd">        &quot;Pretraining Codomain Attention Neural Operators for Solving Multiphysics PDEs.&quot;</span>
+<span class="sd">        arxiv:2403.12553</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">n_modes</span><span class="p">,</span>
+        <span class="n">n_heads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">token_codimension</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">head_codimension</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">codimension_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">per_channel_attention</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">permutation_eq</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">norm</span><span class="o">=</span><span class="s2">&quot;instance_norm&quot;</span><span class="p">,</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">nonlinear_attention</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">output_scaling_factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">incremental_n_modes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">non_linearity</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">gelu</span><span class="p">,</span>
+        <span class="n">use_channel_mlp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">channel_mlp_expansion</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">fno_skip</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+        <span class="n">channel_mlp_skip</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+        <span class="n">preactivation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">separable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">factorization</span><span class="o">=</span><span class="s1">&#39;tucker&#39;</span><span class="p">,</span>
+        <span class="n">rank</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">joint_factorization</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">conv_module</span><span class="o">=</span><span class="n">SpectralConv</span><span class="p">,</span>
+        <span class="n">fixed_rank_modes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">implementation</span><span class="o">=</span><span class="s1">&#39;factorized&#39;</span><span class="p">,</span>
+        <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">_kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Co-dimension of each variable/token. The token embedding space is</span>
+        <span class="c1"># identical to the variable space, so their dimensionalities are equal.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span> <span class="o">=</span> <span class="n">token_codimension</span>
+
+        <span class="c1"># codim of attention from each head</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">head_codimension</span> <span class="o">=</span> <span class="p">(</span><span class="n">head_codimension</span>
+                                 <span class="k">if</span> <span class="n">head_codimension</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                                 <span class="k">else</span> <span class="n">token_codimension</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_heads</span> <span class="o">=</span> <span class="n">n_heads</span>  <span class="c1"># number of heads</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_scaling_factor</span> <span class="o">=</span> <span class="n">output_scaling_factor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="n">temperature</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_modes</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">norm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">norm_module</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Identity</span>
+        <span class="k">elif</span> <span class="n">norm</span> <span class="o">==</span> <span class="s2">&quot;instance_norm&quot;</span><span class="p">:</span>
+            <span class="n">norm_module</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span>
+                <span class="n">nn</span><span class="o">.</span><span class="n">InstanceNorm2d</span><span class="p">,</span>
+                <span class="n">affine</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="n">partial</span><span class="p">(</span>
+                <span class="n">nn</span><span class="o">.</span><span class="n">InstanceNorm3d</span><span class="p">,</span>
+                <span class="n">affine</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown normalization type </span><span class="si">{</span><span class="n">norm</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># K,Q,V operator with or without non_liniarity</span>
+        <span class="k">if</span> <span class="n">nonlinear_attention</span><span class="p">:</span>
+            <span class="n">kqv_activation</span> <span class="o">=</span> <span class="n">non_linearity</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">kqv_activation</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Identity</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">permutation_eq</span> <span class="o">=</span> <span class="n">permutation_eq</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">codimension_size</span> <span class="o">=</span> <span class="n">codimension_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mixer_token_codimension</span> <span class="o">=</span> <span class="n">token_codimension</span>
+
+        <span class="k">if</span> <span class="n">per_channel_attention</span><span class="p">:</span>
+            <span class="c1"># for per channel attention, forcing the values of token dims</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">head_codimension</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># this scale used for downsampling Q,K functions</span>
+        <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="mi">2</span> <span class="k">if</span> <span class="n">per_channel_attention</span> <span class="k">else</span> <span class="mi">1</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_heads</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
+
+        <span class="n">mixer_modes</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">//</span> <span class="n">scale</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">n_modes</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">decomposition_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">decomposition_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">common_args</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">use_channel_mlp</span><span class="o">=</span><span class="n">use_channel_mlp</span><span class="p">,</span>
+            <span class="n">preactivation</span><span class="o">=</span><span class="n">preactivation</span><span class="p">,</span>
+            <span class="n">channel_mlp_skip</span><span class="o">=</span><span class="n">channel_mlp_skip</span><span class="p">,</span>
+            <span class="n">mlp_dropout</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">incremental_n_modes</span><span class="o">=</span><span class="n">incremental_n_modes</span><span class="p">,</span>
+            <span class="n">rank</span><span class="o">=</span><span class="n">rank</span><span class="p">,</span>
+            <span class="n">channel_mlp_expansion</span><span class="o">=</span><span class="n">channel_mlp_expansion</span><span class="p">,</span>
+            <span class="n">fixed_rank_modes</span><span class="o">=</span><span class="n">fixed_rank_modes</span><span class="p">,</span>
+            <span class="n">implementation</span><span class="o">=</span><span class="n">implementation</span><span class="p">,</span>
+            <span class="n">separable</span><span class="o">=</span><span class="n">separable</span><span class="p">,</span>
+            <span class="n">factorization</span><span class="o">=</span><span class="n">factorization</span><span class="p">,</span>
+            <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="n">decomposition_kwargs</span><span class="p">,</span>
+            <span class="n">joint_factorization</span><span class="o">=</span><span class="n">joint_factorization</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">kqv_args</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">in_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span><span class="p">,</span>
+            <span class="n">out_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_heads</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">head_codimension</span><span class="p">,</span>
+            <span class="n">n_modes</span><span class="o">=</span><span class="n">mixer_modes</span><span class="p">,</span>
+            <span class="c1"># args below are shared with Projection block</span>
+            <span class="n">non_linearity</span><span class="o">=</span><span class="n">kqv_activation</span><span class="p">,</span>
+            <span class="n">fno_skip</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+            <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">apply_skip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">n_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Key</span> <span class="o">=</span> <span class="n">FNOBlocks</span><span class="p">(</span>
+            <span class="n">output_scaling_factor</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="n">scale</span><span class="p">,</span>
+            <span class="n">conv_module</span><span class="o">=</span><span class="n">conv_module</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kqv_args</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">common_args</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Query</span> <span class="o">=</span> <span class="n">FNOBlocks</span><span class="p">(</span>
+            <span class="n">output_scaling_factor</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="n">scale</span><span class="p">,</span>
+            <span class="n">conv_module</span><span class="o">=</span><span class="n">conv_module</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kqv_args</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">common_args</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Value</span> <span class="o">=</span> <span class="n">FNOBlocks</span><span class="p">(</span>
+            <span class="n">output_scaling_factor</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">conv_module</span><span class="o">=</span><span class="n">conv_module</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kqv_args</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">common_args</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_heads</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">head_codimension</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">multi_head_proj</span> <span class="o">=</span> <span class="n">FNOBlocks</span><span class="p">(</span>
+                <span class="n">in_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_heads</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">head_codimension</span><span class="p">,</span>
+                <span class="n">out_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span><span class="p">,</span>
+                <span class="n">n_modes</span><span class="o">=</span><span class="n">n_modes</span><span class="p">,</span>
+                <span class="n">output_scaling_factor</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="c1"># args below are shared with KQV blocks</span>
+                <span class="n">apply_skip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">non_linearity</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Identity</span><span class="p">(),</span>
+                <span class="n">fno_skip</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+                <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">conv_module</span><span class="o">=</span><span class="n">conv_module</span><span class="p">,</span>
+                <span class="n">n_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">common_args</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">multi_head_proj</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">attention_normalizer</span> <span class="o">=</span> <span class="n">norm_module</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span><span class="p">)</span>
+
+        <span class="n">mixer_args</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">n_modes</span><span class="o">=</span><span class="n">n_modes</span><span class="p">,</span>
+            <span class="n">output_scaling_factor</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">non_linearity</span><span class="o">=</span><span class="n">non_linearity</span><span class="p">,</span>
+            <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;instance_norm&#39;</span><span class="p">,</span>
+            <span class="n">fno_skip</span><span class="o">=</span><span class="n">fno_skip</span><span class="p">,</span>
+            <span class="n">conv_module</span><span class="o">=</span><span class="n">conv_module</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># We have an option to make the last operator (MLP in regular</span>
+        <span class="c1"># Transformer block) permutation equivariant. i.e., applying the</span>
+        <span class="c1"># operator per variable or applying the operator on the whole channel</span>
+        <span class="c1"># (like regular FNO).</span>
+        <span class="k">if</span> <span class="n">permutation_eq</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mixer</span> <span class="o">=</span> <span class="n">FNOBlocks</span><span class="p">(</span>
+                <span class="n">in_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mixer_token_codimension</span><span class="p">,</span>
+                <span class="n">out_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mixer_token_codimension</span><span class="p">,</span>
+                <span class="n">apply_skip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">n_layers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">mixer_args</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">common_args</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">norm1</span> <span class="o">=</span> <span class="n">norm_module</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">norm2</span> <span class="o">=</span> <span class="n">norm_module</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mixer_token_codimension</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mixer_out_normalizer</span> <span class="o">=</span> <span class="n">norm_module</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mixer_token_codimension</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mixer</span> <span class="o">=</span> <span class="n">FNOBlocks</span><span class="p">(</span>
+                <span class="n">in_channels</span><span class="o">=</span><span class="n">codimension_size</span><span class="p">,</span>
+                <span class="n">out_channels</span><span class="o">=</span><span class="n">codimension_size</span><span class="p">,</span>
+                <span class="n">n_layers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">mixer_args</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">common_args</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">norm1</span> <span class="o">=</span> <span class="n">norm_module</span><span class="p">(</span><span class="n">codimension_size</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">norm2</span> <span class="o">=</span> <span class="n">norm_module</span><span class="p">(</span><span class="n">codimension_size</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mixer_out_normalizer</span> <span class="o">=</span> <span class="n">norm_module</span><span class="p">(</span><span class="n">codimension_size</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CODABlocks.compute_attention">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.coda_blocks.CODABlocks.html#neuralop.layers.coda_blocks.CODABlocks.compute_attention">[docs]</a>
+    <span class="k">def</span> <span class="nf">compute_attention</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokens</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the key-query-value variant of the attention matrix for input token functions.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tokens : torch.Tensor</span>
+<span class="sd">            Input tokens with shape (b * t, d, h, w, ...), where:</span>
+<span class="sd">            b is the batch size,</span>
+<span class="sd">            t is the number of tokens,</span>
+<span class="sd">            d is the token codimension,</span>
+<span class="sd">            and h, w, ... are the domain dimensions.</span>
+<span class="sd">            Assumes input tokens have been normalized.</span>
+<span class="sd">        </span>
+<span class="sd">        batch_size : int</span>
+<span class="sd">            The size of the batch.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Key</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Query</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Value</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">k</span><span class="o">.</span><span class="n">size</span><span class="p">(</span>
+            <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_heads</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Number of channels in k, q, and v should be divisible by number of heads&quot;</span>
+
+        <span class="c1"># reshape from (b*t) (n*d) h w -&gt; b n t (d*h*w ...)</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">//</span> <span class="n">batch_size</span>  <span class="c1"># Compute the number of tokens `t`</span>
+        <span class="c1"># Computer per head token codimension `d`</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_heads</span>
+
+        <span class="c1"># reshape from (b*t) (n*d) h w ... to b n t d h w ...</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_heads</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">*</span><span class="n">k</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">:])</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_heads</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">*</span><span class="n">q</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">:])</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_heads</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">:])</span>
+
+        <span class="n">k</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="c1"># reshape</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_heads</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_heads</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_heads</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># attention mechanism</span>
+        <span class="n">dprod</span> <span class="o">=</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">k</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">))</span> <span class="o">/</span>
+                 <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">temperature</span><span class="p">))</span>
+        <span class="n">dprod</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">dprod</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">attention</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">dprod</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+
+        <span class="c1"># Reshape from (b, n, t, d * h * w) to (b, n, t, d, h, w, ...)</span>
+        <span class="n">attention</span> <span class="o">=</span> <span class="n">attention</span><span class="o">.</span><span class="n">view</span><span class="p">(</span>
+            <span class="n">attention</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+            <span class="n">attention</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+            <span class="n">attention</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+            <span class="n">d</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">tokens</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">:])</span>
+        <span class="n">attention</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">attention</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">attention</span> <span class="o">=</span> <span class="n">attention</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">attention</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">attention</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+                                      <span class="n">attention</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">d</span><span class="p">,</span>
+                                      <span class="o">*</span><span class="n">tokens</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">:])</span>
+
+        <span class="k">return</span> <span class="n">attention</span></div>
+
+
+<div class="viewcode-block" id="CODABlocks.forward">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.coda_blocks.CODABlocks.html#neuralop.layers.coda_blocks.CODABlocks.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        CoDANO&#39;s forward pass. </span>
+
+<span class="sd">        * If ``self.permutation_eq == True``, computes the permutation-equivariant forward pass,\</span>
+<span class="sd">            where the mixer FNO block is applied to each token separately, making\</span>
+<span class="sd">            the final result equivariant to any permutation of tokens.</span>
+
+<span class="sd">        * If ``self.permutation_eq == True``, the mixer is applied to the whole function together,\</span>
+<span class="sd">            and tokens are treated as channels within the same function.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : torch.Tensor</span>
+<span class="sd">            Input tensor with shape (b, t * d, h, w, ...), where</span>
+<span class="sd">            b is the batch size, t is the number of tokens, and d is the token codimension.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">permutation_eq</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_equivariant</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_non_equivariant</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_forward_equivariant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Forward pass with a permutation equivariant mixer layer after the</span>
+<span class="sd">        attention mechanism. Shares the same mixer layer for all tokens, meaning</span>
+<span class="sd">        that outputs are equivariant to permutations of the tokens.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : torch.Tensor</span>
+<span class="sd">            Input tensor with shape (b, t * d, h, w, ...), where</span>
+<span class="sd">            b is the batch size, t is the number of tokens, and d is the token codimension.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">output_shape</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">:]</span>
+
+        <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Number of channels in x should be divisible by token_codimension&quot;</span>
+
+        <span class="c1"># reshape from shape b (t*d) h w ... to (b*t) d h w ...</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">t</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">:])</span>
+
+        <span class="c1"># normalization and attention mechanism</span>
+        <span class="n">tokens_norm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm1</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
+        <span class="n">attention</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_attention</span><span class="p">(</span><span class="n">tokens_norm</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">multi_head_proj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">attention</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">multi_head_proj</span><span class="p">(</span><span class="n">attention</span><span class="p">)</span>
+        <span class="n">attention</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attention_normalizer</span><span class="p">(</span><span class="n">attention</span> <span class="o">+</span> <span class="n">tokens</span><span class="p">)</span>
+        <span class="n">attention_normalized</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm2</span><span class="p">(</span><span class="n">attention</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mixer</span><span class="p">(</span><span class="n">attention_normalized</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mixer_out_normalizer</span><span class="p">(</span><span class="n">output</span><span class="p">)</span> <span class="o">+</span> <span class="n">attention</span>
+
+        <span class="c1"># reshape from shape (b*t) d h w... to b (t d) h w ...</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">//</span> <span class="n">batch_size</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">view</span><span class="p">(</span>
+            <span class="n">batch_size</span><span class="p">,</span>
+            <span class="n">t</span> <span class="o">*</span> <span class="n">output</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+            <span class="o">*</span><span class="n">output</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">:])</span>
+
+        <span class="k">return</span> <span class="n">output</span>
+
+    <span class="k">def</span> <span class="nf">_forward_non_equivariant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Forward pass with a non-permuatation equivariant mixer layer and normalizations.</span>
+<span class="sd">        After attention, the tokens are stacked along the channel dimension before mixing,</span>
+<span class="sd">        meaning that the outputs are not equivariant to the ordering of the tokens.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x: torch.tensor. </span>
+<span class="sd">            Has shape (b, t*d, h, w, ...) </span>
+<span class="sd">            where, t = number of tokens, d = token codimension</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">output_shape</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">:]</span>
+
+        <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Number of channels in x should be divisible by token_codimension&quot;</span>
+
+        <span class="c1"># reshape from shape b (t*d) h w ... to (b*t) d h w ...</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span>
+        <span class="c1"># Normalize the input first</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="n">tokens</span><span class="o">.</span><span class="n">view</span><span class="p">(</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">t</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">:])</span>
+
+        <span class="c1"># apply attention mechanism</span>
+        <span class="n">attention</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_attention</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">multi_head_proj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">attention</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">multi_head_proj</span><span class="p">(</span><span class="n">attention</span><span class="p">)</span>
+
+        <span class="n">attention</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attention_normalizer</span><span class="p">(</span><span class="n">attention</span> <span class="o">+</span> <span class="n">tokens</span><span class="p">)</span>
+
+        <span class="c1"># reshape for shape &#39;(b*t) d h w..&quot; to &quot;b (t*d) h w ...&#39;</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">attention</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">//</span> <span class="n">batch_size</span>
+        <span class="n">attention</span> <span class="o">=</span> <span class="n">attention</span><span class="o">.</span><span class="n">view</span><span class="p">(</span>
+            <span class="n">batch_size</span><span class="p">,</span>
+            <span class="n">t</span> <span class="o">*</span> <span class="n">attention</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+            <span class="o">*</span><span class="n">attention</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">:])</span>
+
+        <span class="n">attention_normalized</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm2</span><span class="p">(</span><span class="n">attention</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mixer</span><span class="p">(</span><span class="n">attention_normalized</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
+
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mixer_out_normalizer</span><span class="p">(</span><span class="n">output</span><span class="p">)</span> <span class="o">+</span> <span class="n">attention</span>
+
+        <span class="k">return</span> <span class="n">output</span></div>
+
+</pre></div>
+
+      </div>
+
+      
+
+        <footer class="footer">
+    <div class="content has-text-centered">
+        <div class="block">
+          &copy; Copyright 2024, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+        </div>
+    </div>
+  </footer>
+
+    </div>
+
+  </div>  
+
+	
+
+  </div>  
+  </div> 
+
+  
+  <script>
+    function toggle_sidebar() {
+        var element = document.getElementById("sidebar");
+        var container = document.getElementById("column-container");
+        var localtoccolumn = document.getElementById("localtoc-column");
+        element.classList.toggle("hide-tablet");
+        element.classList.toggle("is-hidden-mobile");
+        container.classList.toggle("sidemenu-hidden");
+        localtoccolumn.classList.toggle("is-one-fifth-widescreen");
+        localtoccolumn.classList.toggle("is-2-desktop");
+        localtoccolumn.classList.toggle("is-3-desktop");
+    }
+  </script> 
+
+
+
+  </body>
+</html>
