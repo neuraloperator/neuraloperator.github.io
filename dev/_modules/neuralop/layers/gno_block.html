@@ -14,7 +14,7 @@
 <link rel="shortcut icon" href="../../../_static/favicon/favicon.ico">
 <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
@@ -113,22 +113,22 @@
       <div class="container content main-content">
         
   <h1>Source code for neuralop.layers.gno_block</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
 
 
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
-<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn.functional</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">F</span>
 
-<span class="kn">from</span> <span class="nn">.channel_mlp</span> <span class="kn">import</span> <span class="n">LinearChannelMLP</span>
-<span class="kn">from</span> <span class="nn">.integral_transform</span> <span class="kn">import</span> <span class="n">IntegralTransform</span>
-<span class="kn">from</span> <span class="nn">.neighbor_search</span> <span class="kn">import</span> <span class="n">NeighborSearch</span>
-<span class="kn">from</span> <span class="nn">.embeddings</span> <span class="kn">import</span> <span class="n">SinusoidalEmbedding</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.channel_mlp</span><span class="w"> </span><span class="kn">import</span> <span class="n">LinearChannelMLP</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.integral_transform</span><span class="w"> </span><span class="kn">import</span> <span class="n">IntegralTransform</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.neighbor_search</span><span class="w"> </span><span class="kn">import</span> <span class="n">NeighborSearch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.embeddings</span><span class="w"> </span><span class="kn">import</span> <span class="n">SinusoidalEmbedding</span>
 
 
 <div class="viewcode-block" id="GNOBlock">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.gno_block.GNOBlock.html#neuralop.layers.gno_block.GNOBlock">[docs]</a>
-<span class="k">class</span> <span class="nc">GNOBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GNOBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;GNOBlock implements a Graph Neural Operator layer as described in [1]_.</span>
 
 <span class="sd">    A GNO layer is a resolution-invariant operator that maps a function defined</span>
@@ -235,7 +235,7 @@
 <span class="sd">        Anima Anandkumar (2020). &quot;Neural Operator: Graph Kernel Network for </span>
 <span class="sd">        Partial Differential Equations.&quot; ArXiV, https://arxiv.org/pdf/2003.03485.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="c1"># main</span>
                  <span class="n">out_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="c1"># main</span>
                  <span class="n">coord_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="c1"># main</span>
@@ -313,7 +313,7 @@
 
 <div class="viewcode-block" id="GNOBlock.forward">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.gno_block.GNOBlock.html#neuralop.layers.gno_block.GNOBlock.forward">[docs]</a>
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">f_y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">f_y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute a GNO neighbor search and kernel integral transform.</span>
 
 <span class="sd">        Parameters</span>

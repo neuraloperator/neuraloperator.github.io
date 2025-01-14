@@ -14,7 +14,7 @@
 <link rel="shortcut icon" href="../../../_static/favicon/favicon.ico">
 <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
@@ -113,13 +113,13 @@
       <div class="container content main-content">
         
   <h1>Source code for neuralop.layers.differential_conv</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
-<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn.functional</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">F</span>
 
 <div class="viewcode-block" id="FiniteDifferenceConvolution">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.differential_conv.FiniteDifferenceConvolution.html#neuralop.layers.differential_conv.FiniteDifferenceConvolution">[docs]</a>
-<span class="k">class</span> <span class="nc">FiniteDifferenceConvolution</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FiniteDifferenceConvolution</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Finite Difference Convolution Layer introduced in [1]_.</span>
 <span class="sd">        &quot;Neural Operators with Localized Integral and Differential Kernels&quot; (ICML 2024)</span>
 <span class="sd">            https://arxiv.org/abs/2402.16845 </span>
@@ -150,7 +150,7 @@
 <span class="sd">            ICML 2024, https://arxiv.org/abs/2402.16845. </span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span> 
             <span class="n">in_channels</span><span class="p">,</span> 
             <span class="n">out_channels</span><span class="p">,</span> 
@@ -189,7 +189,7 @@
 
 <div class="viewcode-block" id="FiniteDifferenceConvolution.forward">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.differential_conv.FiniteDifferenceConvolution.html#neuralop.layers.differential_conv.FiniteDifferenceConvolution.forward">[docs]</a>
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">grid_width</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">grid_width</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;FiniteDifferenceConvolution&#39;s forward pass. Alternatively,</span>
 <span class="sd">        one could center the conv kernel by subtracting the mean pointwise</span>
 <span class="sd">        in the kernel: ``conv(x, kernel - mean(kernel)) / grid_width``</span>

@@ -14,7 +14,7 @@
 <link rel="shortcut icon" href="../../../../_static/favicon/favicon.ico">
 <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/tensorly_style.css?v=a02e9698" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
@@ -113,23 +113,23 @@
       <div class="container content main-content">
         
   <h1>Source code for neuralop.data.datasets.darcy</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
 
-<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataLoader</span>
 
-<span class="kn">from</span> <span class="nn">.pt_dataset</span> <span class="kn">import</span> <span class="n">PTDataset</span>
-<span class="kn">from</span> <span class="nn">.web_utils</span> <span class="kn">import</span> <span class="n">download_from_zenodo_record</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.pt_dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">PTDataset</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.web_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">download_from_zenodo_record</span>
 
-<span class="kn">from</span> <span class="nn">neuralop.utils</span> <span class="kn">import</span> <span class="n">get_project_root</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_project_root</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">level</span><span class="p">)</span>
 
 <div class="viewcode-block" id="DarcyDataset">
 <a class="viewcode-back" href="../../../../modules/generated/neuralop.data.datasets.darcy.DarcyDataset.html#neuralop.data.datasets.darcy.DarcyDataset">[docs]</a>
-<span class="k">class</span> <span class="nc">DarcyDataset</span><span class="p">(</span><span class="n">PTDataset</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DarcyDataset</span><span class="p">(</span><span class="n">PTDataset</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    DarcyDataset stores data generated according to Darcy&#39;s Law.</span>
 <span class="sd">    Input is a coefficient function and outputs describe flow. </span>
@@ -143,7 +143,7 @@
 <span class="sd">    data_processor: neuralop.data.transforms.DataProcessor to process data examples</span>
 <span class="sd">        optional, default is None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">root_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
                  <span class="n">n_train</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
                  <span class="n">n_tests</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
@@ -246,7 +246,7 @@
 <span class="n">example_data_root</span> <span class="o">=</span> <span class="n">get_project_root</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;neuralop/data/datasets/data&quot;</span>
 <div class="viewcode-block" id="load_darcy_flow_small">
 <a class="viewcode-back" href="../../../../modules/generated/neuralop.data.datasets.load_darcy_flow_small.html#neuralop.data.datasets.darcy.load_darcy_flow_small">[docs]</a>
-<span class="k">def</span> <span class="nf">load_darcy_flow_small</span><span class="p">(</span><span class="n">n_train</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_darcy_flow_small</span><span class="p">(</span><span class="n">n_train</span><span class="p">,</span>
     <span class="n">n_tests</span><span class="p">,</span>
     <span class="n">batch_size</span><span class="p">,</span>
     <span class="n">test_batch_sizes</span><span class="p">,</span>
@@ -290,7 +290,7 @@
 
     
 <span class="c1"># legacy pt Darcy Flow loader</span>
-<span class="k">def</span> <span class="nf">load_darcy_pt</span><span class="p">(</span><span class="n">n_train</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_darcy_pt</span><span class="p">(</span><span class="n">n_train</span><span class="p">,</span>
                   <span class="n">n_tests</span><span class="p">,</span>
                   <span class="n">batch_size</span><span class="p">,</span>
                   <span class="n">test_batch_sizes</span><span class="p">,</span>

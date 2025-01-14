@@ -14,7 +14,7 @@
 <link rel="shortcut icon" href="../../../_static/favicon/favicon.ico">
 <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
@@ -113,37 +113,37 @@
       <div class="container content main-content">
         
   <h1>Source code for neuralop.training.trainer</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">timeit</span> <span class="kn">import</span> <span class="n">default_timer</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">timeit</span><span class="w"> </span><span class="kn">import</span> <span class="n">default_timer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">torch.cuda</span> <span class="kn">import</span> <span class="n">amp</span>
-<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
-<span class="kn">import</span> <span class="nn">torch.distributed</span> <span class="k">as</span> <span class="nn">dist</span>
-<span class="kn">from</span> <span class="nn">torch.nn.parallel</span> <span class="kn">import</span> <span class="n">DistributedDataParallel</span> <span class="k">as</span> <span class="n">DDP</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.cuda</span><span class="w"> </span><span class="kn">import</span> <span class="n">amp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.distributed</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dist</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.nn.parallel</span><span class="w"> </span><span class="kn">import</span> <span class="n">DistributedDataParallel</span> <span class="k">as</span> <span class="n">DDP</span>
 <span class="c1"># Only import wandb and use if installed</span>
 <span class="n">wandb_available</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">wandb</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">wandb</span>
     <span class="n">wandb_available</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
     <span class="n">wandb_available</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="kn">import</span> <span class="nn">neuralop.mpu.comm</span> <span class="k">as</span> <span class="nn">comm</span>
-<span class="kn">from</span> <span class="nn">neuralop.losses</span> <span class="kn">import</span> <span class="n">LpLoss</span>
-<span class="kn">from</span> <span class="nn">.training_state</span> <span class="kn">import</span> <span class="n">load_training_state</span><span class="p">,</span> <span class="n">save_training_state</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">neuralop.mpu.comm</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">comm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.losses</span><span class="w"> </span><span class="kn">import</span> <span class="n">LpLoss</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.training_state</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_training_state</span><span class="p">,</span> <span class="n">save_training_state</span>
 
 
 <div class="viewcode-block" id="Trainer">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.training.Trainer.html#neuralop.training.Trainer">[docs]</a>
-<span class="k">class</span> <span class="nc">Trainer</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Trainer</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A general Trainer class to train neural-operators on given datasets</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
         <span class="n">model</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
@@ -206,7 +206,7 @@
 
 <div class="viewcode-block" id="Trainer.train">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.training.Trainer.html#neuralop.training.Trainer.train">[docs]</a>
-    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">train</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">train_loader</span><span class="p">,</span>
         <span class="n">test_loaders</span><span class="p">,</span>
@@ -350,7 +350,7 @@
 
 <div class="viewcode-block" id="Trainer.train_one_epoch">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.training.Trainer.html#neuralop.training.Trainer.train_one_epoch">[docs]</a>
-    <span class="k">def</span> <span class="nf">train_one_epoch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">training_loss</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">train_one_epoch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">training_loss</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;train_one_epoch trains self.model on train_loader</span>
 <span class="sd">        for one epoch and returns training metrics</span>
 
@@ -422,7 +422,7 @@
         <span class="k">return</span> <span class="n">train_err</span><span class="p">,</span> <span class="n">avg_loss</span><span class="p">,</span> <span class="n">avg_lasso_loss</span><span class="p">,</span> <span class="n">epoch_train_time</span></div>
 
 
-    <span class="k">def</span> <span class="nf">evaluate_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">eval_losses</span><span class="p">,</span> <span class="n">test_loaders</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">eval_losses</span><span class="p">,</span> <span class="n">test_loaders</span><span class="p">):</span>
         <span class="c1"># evaluate and gather metrics across each loader in test_loaders</span>
         <span class="n">all_metrics</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">loader_name</span><span class="p">,</span> <span class="n">loader</span> <span class="ow">in</span> <span class="n">test_loaders</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -436,7 +436,7 @@
     
 <div class="viewcode-block" id="Trainer.evaluate">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.training.Trainer.html#neuralop.training.Trainer.evaluate">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loss_dict</span><span class="p">,</span> <span class="n">data_loader</span><span class="p">,</span> <span class="n">log_prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">epoch</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loss_dict</span><span class="p">,</span> <span class="n">data_loader</span><span class="p">,</span> <span class="n">log_prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">epoch</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Evaluates the model on a dictionary of losses</span>
 
 <span class="sd">        Parameters</span>
@@ -498,7 +498,7 @@
     
 <div class="viewcode-block" id="Trainer.on_epoch_start">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.training.Trainer.html#neuralop.training.Trainer.on_epoch_start">[docs]</a>
-    <span class="k">def</span> <span class="nf">on_epoch_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">on_epoch_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;on_epoch_start runs at the beginning</span>
 <span class="sd">        of each training epoch. This method is a stub</span>
 <span class="sd">        that can be overwritten in more complex cases.</span>
@@ -518,7 +518,7 @@
 
 <div class="viewcode-block" id="Trainer.train_one_batch">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.training.Trainer.html#neuralop.training.Trainer.train_one_batch">[docs]</a>
-    <span class="k">def</span> <span class="nf">train_one_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">sample</span><span class="p">,</span> <span class="n">training_loss</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">train_one_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">sample</span><span class="p">,</span> <span class="n">training_loss</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Run one batch of input through model</span>
 <span class="sd">           and return training loss on outputs</span>
 
@@ -578,7 +578,7 @@
     
 <div class="viewcode-block" id="Trainer.eval_one_batch">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.training.Trainer.html#neuralop.training.Trainer.eval_one_batch">[docs]</a>
-    <span class="k">def</span> <span class="nf">eval_one_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">eval_one_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                        <span class="n">sample</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
                        <span class="n">eval_losses</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
                        <span class="n">return_output</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -632,7 +632,7 @@
     
 <div class="viewcode-block" id="Trainer.log_training">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.training.Trainer.html#neuralop.training.Trainer.log_training">[docs]</a>
-    <span class="k">def</span> <span class="nf">log_training</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+    <span class="k">def</span><span class="w"> </span><span class="nf">log_training</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
             <span class="n">epoch</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
             <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
             <span class="n">avg_loss</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
@@ -684,7 +684,7 @@
     
 <div class="viewcode-block" id="Trainer.log_eval">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.training.Trainer.html#neuralop.training.Trainer.log_eval">[docs]</a>
-    <span class="k">def</span> <span class="nf">log_eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">log_eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">epoch</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
                  <span class="n">eval_metrics</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;log_eval logs outputs from evaluation</span>
@@ -719,7 +719,7 @@
 
 <div class="viewcode-block" id="Trainer.resume_state_from_dir">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.training.Trainer.html#neuralop.training.Trainer.resume_state_from_dir">[docs]</a>
-    <span class="k">def</span> <span class="nf">resume_state_from_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">resume_state_from_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Resume training from save_dir created by `neuralop.training.save_training_state`</span>
 <span class="sd">        </span>
@@ -758,7 +758,7 @@
 
 <div class="viewcode-block" id="Trainer.checkpoint">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.training.Trainer.html#neuralop.training.Trainer.checkpoint">[docs]</a>
-    <span class="k">def</span> <span class="nf">checkpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;checkpoint saves current training state</span>
 <span class="sd">        to a directory for resuming later. Only saves </span>
 <span class="sd">        training state on the first GPU. </span>

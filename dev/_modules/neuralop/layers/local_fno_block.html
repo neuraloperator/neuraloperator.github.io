@@ -14,7 +14,7 @@
 <link rel="shortcut icon" href="../../../_static/favicon/favicon.ico">
 <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
@@ -113,21 +113,21 @@
       <div class="container content main-content">
         
   <h1>Source code for neuralop.layers.local_fno_block</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
-<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn.functional</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">F</span>
 
-<span class="kn">from</span> <span class="nn">.channel_mlp</span> <span class="kn">import</span> <span class="n">ChannelMLP</span>
-<span class="kn">from</span> <span class="nn">.fno_block</span> <span class="kn">import</span> <span class="n">SubModule</span>
-<span class="kn">from</span> <span class="nn">.differential_conv</span> <span class="kn">import</span> <span class="n">FiniteDifferenceConvolution</span>
-<span class="kn">from</span> <span class="nn">.discrete_continuous_convolution</span> <span class="kn">import</span> <span class="n">EquidistantDiscreteContinuousConv2d</span>
-<span class="kn">from</span> <span class="nn">.normalization_layers</span> <span class="kn">import</span> <span class="n">AdaIN</span><span class="p">,</span> <span class="n">InstanceNorm</span>
-<span class="kn">from</span> <span class="nn">.skip_connections</span> <span class="kn">import</span> <span class="n">skip_connection</span>
-<span class="kn">from</span> <span class="nn">.spectral_convolution</span> <span class="kn">import</span> <span class="n">SpectralConv</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">validate_scaling_factor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.channel_mlp</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChannelMLP</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.fno_block</span><span class="w"> </span><span class="kn">import</span> <span class="n">SubModule</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.differential_conv</span><span class="w"> </span><span class="kn">import</span> <span class="n">FiniteDifferenceConvolution</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.discrete_continuous_convolution</span><span class="w"> </span><span class="kn">import</span> <span class="n">EquidistantDiscreteContinuousConv2d</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.normalization_layers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AdaIN</span><span class="p">,</span> <span class="n">InstanceNorm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.skip_connections</span><span class="w"> </span><span class="kn">import</span> <span class="n">skip_connection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.spectral_convolution</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpectralConv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">validate_scaling_factor</span>
 
 
 <span class="n">Number</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
@@ -135,7 +135,7 @@
 
 <div class="viewcode-block" id="LocalFNOBlocks">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.local_fno_block.LocalFNOBlocks.html#neuralop.layers.local_fno_block.LocalFNOBlocks">[docs]</a>
-<span class="k">class</span> <span class="nc">LocalFNOBlocks</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LocalFNOBlocks</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;LocalFNOBlocks implements a sequence of Fourier layers, the operations of which </span>
 <span class="sd">    are first described in [1]_. The exact implementation details of the Fourier </span>
 <span class="sd">    layer architecture are discussed in [2]_. The Fourier layers are placed in parallel </span>
@@ -242,7 +242,7 @@
 <span class="sd">           &quot;Neural Operators with Localized Integral and Differential Kernels&quot; (2024).  </span>
 <span class="sd">           ICML 2024, https://arxiv.org/pdf/2402.16845.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">in_channels</span><span class="p">,</span>
         <span class="n">out_channels</span><span class="p">,</span>
@@ -485,7 +485,7 @@
 
 <div class="viewcode-block" id="LocalFNOBlocks.set_ada_in_embeddings">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.local_fno_block.LocalFNOBlocks.html#neuralop.layers.local_fno_block.LocalFNOBlocks.set_ada_in_embeddings">[docs]</a>
-    <span class="k">def</span> <span class="nf">set_ada_in_embeddings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">embeddings</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_ada_in_embeddings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">embeddings</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets the embeddings of each Ada-IN norm layers</span>
 
 <span class="sd">        Parameters</span>
@@ -504,14 +504,14 @@
 
 <div class="viewcode-block" id="LocalFNOBlocks.forward">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.local_fno_block.LocalFNOBlocks.html#neuralop.layers.local_fno_block.LocalFNOBlocks.forward">[docs]</a>
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">preactivation</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward_with_preactivation</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">output_shape</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward_with_postactivation</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">output_shape</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">forward_with_postactivation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward_with_postactivation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">x_skip_fno</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fno_skips</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">)</span>
         <span class="n">x_skip_fno</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convs</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x_skip_fno</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
 
@@ -558,7 +558,7 @@
 
         <span class="k">return</span> <span class="n">x</span>
 
-    <span class="k">def</span> <span class="nf">forward_with_preactivation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward_with_preactivation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="c1"># Apply non-linear activation (and norm)</span>
         <span class="c1"># before this block&#39;s convolution/forward pass:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">non_linearity</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -603,18 +603,18 @@
         <span class="k">return</span> <span class="n">x</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">n_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">n_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_modes</span>
 
     <span class="nd">@n_modes</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">n_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_modes</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">n_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_modes</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_layers</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">convs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">n_modes</span> <span class="o">=</span> <span class="n">n_modes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_n_modes</span> <span class="o">=</span> <span class="n">n_modes</span>
 
 <div class="viewcode-block" id="LocalFNOBlocks.get_block">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.local_fno_block.LocalFNOBlocks.html#neuralop.layers.local_fno_block.LocalFNOBlocks.get_block">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a sub-FNO Block layer from the jointly parametrized main block</span>
 
 <span class="sd">        The parametrization of an FNOBlock layer is shared with the main one.</span>
@@ -627,7 +627,7 @@
         <span class="k">return</span> <span class="n">SubModule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_block</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span></div>
 
 </pre></div>

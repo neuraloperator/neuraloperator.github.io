@@ -14,7 +14,7 @@
 <link rel="shortcut icon" href="../../../_static/favicon/favicon.ico">
 <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
@@ -120,17 +120,17 @@
 <span class="sd">By default, losses expect arguments y_pred (model predictions) and y (ground y.)</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
 
-<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
-<span class="kn">from</span> <span class="nn">.finite_diff</span> <span class="kn">import</span> <span class="n">central_diff_1d</span><span class="p">,</span> <span class="n">central_diff_2d</span><span class="p">,</span> <span class="n">central_diff_3d</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.finite_diff</span><span class="w"> </span><span class="kn">import</span> <span class="n">central_diff_1d</span><span class="p">,</span> <span class="n">central_diff_2d</span><span class="p">,</span> <span class="n">central_diff_3d</span>
 
 <span class="c1">#loss function with rel/abs Lp loss</span>
 <div class="viewcode-block" id="LpLoss">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.losses.LpLoss.html#neuralop.losses.LpLoss">[docs]</a>
-<span class="k">class</span> <span class="nc">LpLoss</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LpLoss</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    LpLoss provides the L-p norm between two </span>
 <span class="sd">    discretized d-dimensional functions. Note that </span>
@@ -176,7 +176,7 @@
 <span class="sd">    ```</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">measure</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">measure</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="n">d</span>
@@ -193,12 +193,12 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">measure</span> <span class="o">=</span> <span class="n">measure</span>
     
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;L</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="si">}</span><span class="s2">Dloss&quot;</span>
     
 <div class="viewcode-block" id="LpLoss.uniform_quadrature">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.losses.LpLoss.html#neuralop.losses.LpLoss.uniform_quadrature">[docs]</a>
-    <span class="k">def</span> <span class="nf">uniform_quadrature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">uniform_quadrature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        uniform_quadrature creates quadrature weights</span>
 <span class="sd">        scaled by the spatial size of ``x`` to ensure that </span>
@@ -223,7 +223,7 @@
 
 <div class="viewcode-block" id="LpLoss.reduce_all">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.losses.LpLoss.html#neuralop.losses.LpLoss.reduce_all">[docs]</a>
-    <span class="k">def</span> <span class="nf">reduce_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reduce_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        reduce x across the batch according to `self.reduction`</span>
 
@@ -242,7 +242,7 @@
 
 <div class="viewcode-block" id="LpLoss.abs">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.losses.LpLoss.html#neuralop.losses.LpLoss.abs">[docs]</a>
-    <span class="k">def</span> <span class="nf">abs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">quadrature</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">abs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">quadrature</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;absolute Lp-norm</span>
 
 <span class="sd">        Parameters</span>
@@ -273,7 +273,7 @@
 
 <div class="viewcode-block" id="LpLoss.rel">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.losses.LpLoss.html#neuralop.losses.LpLoss.rel">[docs]</a>
-    <span class="k">def</span> <span class="nf">rel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        rel: relative LpLoss</span>
 <span class="sd">        computes ||x-y||/||y||</span>
@@ -297,13 +297,13 @@
         <span class="k">return</span> <span class="n">diff</span></div>
 
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rel</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="H1Loss">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.losses.H1Loss.html#neuralop.losses.H1Loss">[docs]</a>
-<span class="k">class</span> <span class="nc">H1Loss</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">H1Loss</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    H1Loss provides the H1 Sobolev norm between</span>
 <span class="sd">    two d-dimensional discretized functions.</span>
@@ -349,7 +349,7 @@
 <span class="sd">        whether to fix finite difference derivative</span>
 <span class="sd">        computation on the z boundary, by default False</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">measure</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="n">fix_x_bnd</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fix_y_bnd</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fix_z_bnd</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">measure</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="n">fix_x_bnd</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fix_y_bnd</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fix_z_bnd</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="k">assert</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;Currently only implemented for 1, 2, and 3-D.&quot;</span>
@@ -370,12 +370,12 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">measure</span> <span class="o">=</span> <span class="n">measure</span>
     
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;H1_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="si">}</span><span class="s2">DLoss&quot;</span>
      
 <div class="viewcode-block" id="H1Loss.compute_terms">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.losses.H1Loss.html#neuralop.losses.H1Loss.compute_terms">[docs]</a>
-    <span class="k">def</span> <span class="nf">compute_terms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">quadrature</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_terms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">quadrature</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;compute_terms computes the necessary</span>
 <span class="sd">        finite-difference derivative terms for computing</span>
 <span class="sd">        the H1 norm</span>
@@ -436,7 +436,7 @@
 
 <div class="viewcode-block" id="H1Loss.uniform_quadrature">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.losses.H1Loss.html#neuralop.losses.H1Loss.uniform_quadrature">[docs]</a>
-    <span class="k">def</span> <span class="nf">uniform_quadrature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">uniform_quadrature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        uniform_quadrature creates quadrature weights</span>
 <span class="sd">        scaled by the spatial size of ``x`` to ensure that </span>
@@ -461,7 +461,7 @@
     
 <div class="viewcode-block" id="H1Loss.reduce_all">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.losses.H1Loss.html#neuralop.losses.H1Loss.reduce_all">[docs]</a>
-    <span class="k">def</span> <span class="nf">reduce_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reduce_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        reduce x across the batch according to `self.reduction`</span>
 
@@ -480,7 +480,7 @@
         
 <div class="viewcode-block" id="H1Loss.abs">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.losses.H1Loss.html#neuralop.losses.H1Loss.abs">[docs]</a>
-    <span class="k">def</span> <span class="nf">abs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">quadrature</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">abs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">quadrature</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;absolute H1 norm</span>
 
 <span class="sd">        Parameters</span>
@@ -516,7 +516,7 @@
         
 <div class="viewcode-block" id="H1Loss.rel">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.losses.H1Loss.html#neuralop.losses.H1Loss.rel">[docs]</a>
-    <span class="k">def</span> <span class="nf">rel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">quadrature</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">quadrature</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;relative H1-norm</span>
 
 <span class="sd">        Parameters</span>
@@ -551,7 +551,7 @@
         <span class="k">return</span> <span class="n">diff</span></div>
 
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">quadrature</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">quadrature</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -565,7 +565,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rel</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">quadrature</span><span class="o">=</span><span class="n">quadrature</span><span class="p">)</span></div>
 
 
-<span class="k">class</span> <span class="nc">PointwiseQuantileLoss</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PointwiseQuantileLoss</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;PointwiseQuantileLoss computes Quantile Loss described in [1]_</span>
 
 <span class="sd">        Parameters</span>
@@ -588,7 +588,7 @@
 <span class="sd">            Calibrated Uncertainty Quantification for Operator Learning via Conformal Prediction</span>
 <span class="sd">            TMLR 2024, https://openreview.net/pdf?id=cGpegxy12T</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">):</span>
         
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
@@ -600,7 +600,7 @@
         <span class="sa">f</span><span class="s2">&quot;error: expected `reduction` to be one of </span><span class="si">{</span><span class="n">allowed_reductions</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">reduction</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reduction</span> <span class="o">=</span> <span class="n">reduction</span>
     
-    <span class="k">def</span> <span class="nf">reduce_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reduce_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        reduce x across the batch according to `self.reduction`</span>
 
@@ -616,7 +616,7 @@
         
         <span class="k">return</span> <span class="n">x</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        y_pred : torch.tensor</span>
 <span class="sd">            predicted pointwise quantile widths</span>

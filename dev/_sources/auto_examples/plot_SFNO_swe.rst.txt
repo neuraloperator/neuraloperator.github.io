@@ -234,13 +234,13 @@ Creating the losses
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fb4d5797770>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7efc706c5550>
 
     ### LOSSES ###
 
-     * Train: <neuralop.losses.data_losses.LpLoss object at 0x7fb4d5797230>
+     * Train: <neuralop.losses.data_losses.LpLoss object at 0x7efc706c6f90>
 
-     * Test: {'l2': <neuralop.losses.data_losses.LpLoss object at 0x7fb4d5797230>}
+     * Test: {'l2': <neuralop.losses.data_losses.LpLoss object at 0x7efc706c6f90>}
 
 
 
@@ -297,22 +297,22 @@ Train the model on the spherical SWE dataset
     Training on 200 samples
     Testing on [50, 50] samples         on resolutions [(32, 64), (64, 128)].
     Raw outputs of shape torch.Size([4, 3, 32, 64])
-    [0] time=3.64, avg_loss=2.6153, train_err=10.4610
-    Eval: (32, 64)_l2=1.9215, (64, 128)_l2=2.5698
-    [3] time=3.56, avg_loss=0.4020, train_err=1.6079
-    Eval: (32, 64)_l2=0.6090, (64, 128)_l2=2.5933
-    [6] time=3.56, avg_loss=0.2725, train_err=1.0901
-    Eval: (32, 64)_l2=0.5563, (64, 128)_l2=2.4528
-    [9] time=3.56, avg_loss=0.2111, train_err=0.8444
-    Eval: (32, 64)_l2=0.5240, (64, 128)_l2=2.4237
-    [12] time=3.55, avg_loss=0.1804, train_err=0.7218
-    Eval: (32, 64)_l2=0.5369, (64, 128)_l2=2.3901
-    [15] time=3.55, avg_loss=0.1546, train_err=0.6184
-    Eval: (32, 64)_l2=0.4954, (64, 128)_l2=2.3777
-    [18] time=3.55, avg_loss=0.1447, train_err=0.5788
-    Eval: (32, 64)_l2=0.5030, (64, 128)_l2=2.3513
+    [0] time=3.71, avg_loss=2.6141, train_err=10.4563
+    Eval: (32, 64)_l2=1.9617, (64, 128)_l2=2.4036
+    [3] time=3.66, avg_loss=0.4299, train_err=1.7198
+    Eval: (32, 64)_l2=0.5002, (64, 128)_l2=2.2989
+    [6] time=3.65, avg_loss=0.2797, train_err=1.1186
+    Eval: (32, 64)_l2=0.4323, (64, 128)_l2=2.2977
+    [9] time=3.63, avg_loss=0.2403, train_err=0.9611
+    Eval: (32, 64)_l2=0.3789, (64, 128)_l2=2.2562
+    [12] time=3.64, avg_loss=0.2023, train_err=0.8091
+    Eval: (32, 64)_l2=0.3509, (64, 128)_l2=2.2591
+    [15] time=3.54, avg_loss=0.1606, train_err=0.6424
+    Eval: (32, 64)_l2=0.3117, (64, 128)_l2=2.2657
+    [18] time=3.56, avg_loss=0.1496, train_err=0.5983
+    Eval: (32, 64)_l2=0.3111, (64, 128)_l2=2.3021
 
-    {'train_err': 0.5512285715341568, 'avg_loss': 0.1378071428835392, 'avg_lasso_loss': None, 'epoch_train_time': 3.575707410000007}
+    {'train_err': 0.5738213288784028, 'avg_loss': 0.1434553322196007, 'avg_lasso_loss': None, 'epoch_train_time': 3.5294100610000214}
 
 
 
@@ -383,7 +383,7 @@ In practice we would train a Neural Operator on one or multiple GPUs
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (1 minutes 27.556 seconds)
+   **Total running time of the script:** (1 minutes 28.045 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_SFNO_swe.py:

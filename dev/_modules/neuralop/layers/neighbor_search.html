@@ -14,7 +14,7 @@
 <link rel="shortcut icon" href="../../../_static/favicon/favicon.ico">
 <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
@@ -113,13 +113,13 @@
       <div class="container content main-content">
         
   <h1>Source code for neuralop.layers.neighbor_search</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
 
 <span class="c1"># only import open3d if built</span>
 <span class="n">open3d_built</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">open3d.ml.torch.layers</span> <span class="kn">import</span> <span class="n">FixedRadiusSearch</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">open3d.ml.torch.layers</span><span class="w"> </span><span class="kn">import</span> <span class="n">FixedRadiusSearch</span>
     <span class="n">open3d_built</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span><span class="p">:</span>
     <span class="k">pass</span>
@@ -127,7 +127,7 @@
 <span class="c1"># Uses open3d by default which, as of October 2024, requires torch 2.0 and cuda11.*</span>
 <div class="viewcode-block" id="NeighborSearch">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.neighbor_search.NeighborSearch.html#neuralop.layers.neighbor_search.NeighborSearch">[docs]</a>
-<span class="k">class</span> <span class="nc">NeighborSearch</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">NeighborSearch</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Neighborhood search between two arbitrary coordinate meshes.</span>
 <span class="sd">    For each point `x` in `queries`, returns a set of the indices of all points `y` in `data` </span>
@@ -139,7 +139,7 @@
 <span class="sd">        Whether to use open3d or native PyTorch implementation</span>
 <span class="sd">        NOTE: open3d implementation requires 3d data</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">use_open3d</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">use_open3d</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">use_open3d</span> <span class="ow">and</span> <span class="n">open3d_built</span><span class="p">:</span> <span class="c1"># slightly faster, works on GPU in 3d only</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">search_fn</span> <span class="o">=</span> <span class="n">FixedRadiusSearch</span><span class="p">()</span>
@@ -151,7 +151,7 @@
         
 <div class="viewcode-block" id="NeighborSearch.forward">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.neighbor_search.NeighborSearch.html#neuralop.layers.neighbor_search.NeighborSearch.forward">[docs]</a>
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">queries</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">queries</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Find the neighbors, in data, of each point in queries</span>
 <span class="sd">        within a ball of radius. Returns in CRS format.</span>
@@ -198,7 +198,7 @@
 
 <div class="viewcode-block" id="native_neighbor_search">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.neighbor_search.native_neighbor_search.html#neuralop.layers.neighbor_search.native_neighbor_search">[docs]</a>
-<span class="k">def</span> <span class="nf">native_neighbor_search</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">queries</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">native_neighbor_search</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">queries</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Native PyTorch implementation of a neighborhood search</span>
 <span class="sd">    between two arbitrary coordinate meshes.</span>

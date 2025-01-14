@@ -14,7 +14,7 @@
 <link rel="shortcut icon" href="../../../_static/favicon/favicon.ico">
 <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
@@ -113,22 +113,22 @@
       <div class="container content main-content">
         
   <h1>Source code for neuralop.layers.coda_blocks</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
-<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
-<span class="kn">from</span> <span class="nn">.fno_block</span> <span class="kn">import</span> <span class="n">FNOBlocks</span>
-<span class="kn">from</span> <span class="nn">.spectral_convolution</span> <span class="kn">import</span> <span class="n">SpectralConv</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn.functional</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">F</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.fno_block</span><span class="w"> </span><span class="kn">import</span> <span class="n">FNOBlocks</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.spectral_convolution</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpectralConv</span>
 
 <span class="n">einsum_symbols</span> <span class="o">=</span> <span class="s2">&quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;</span>
 
 <div class="viewcode-block" id="CODABlocks">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.coda_blocks.CODABlocks.html#neuralop.layers.coda_blocks.CODABlocks">[docs]</a>
-<span class="k">class</span> <span class="nc">CODABlocks</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CODABlocks</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Co-domain Attention Blocks (CODABlocks) implement the transformer</span>
 <span class="sd">    architecture in the operator learning framework, as described in [1]_.</span>
 
@@ -197,7 +197,7 @@
 <span class="sd">        &quot;Pretraining Codomain Attention Neural Operators for Solving Multiphysics PDEs.&quot;</span>
 <span class="sd">        arxiv:2403.12553</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">n_modes</span><span class="p">,</span>
         <span class="n">n_heads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
@@ -385,7 +385,7 @@
 
 <div class="viewcode-block" id="CODABlocks.compute_attention">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.coda_blocks.CODABlocks.html#neuralop.layers.coda_blocks.CODABlocks.compute_attention">[docs]</a>
-    <span class="k">def</span> <span class="nf">compute_attention</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokens</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_attention</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokens</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute the key-query-value variant of the attention matrix for input token functions.</span>
 
@@ -451,7 +451,7 @@
 
 <div class="viewcode-block" id="CODABlocks.forward">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.coda_blocks.CODABlocks.html#neuralop.layers.coda_blocks.CODABlocks.forward">[docs]</a>
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        CoDANO&#39;s forward pass. </span>
 
@@ -475,7 +475,7 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_non_equivariant</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_forward_equivariant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_forward_equivariant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Forward pass with a permutation equivariant mixer layer after the</span>
 <span class="sd">        attention mechanism. Shares the same mixer layer for all tokens, meaning</span>
@@ -518,7 +518,7 @@
 
         <span class="k">return</span> <span class="n">output</span>
 
-    <span class="k">def</span> <span class="nf">_forward_non_equivariant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_forward_non_equivariant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Forward pass with a non-permuatation equivariant mixer layer and normalizations.</span>
 <span class="sd">        After attention, the tokens are stacked along the channel dimension before mixing,</span>

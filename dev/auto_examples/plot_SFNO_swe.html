@@ -15,7 +15,7 @@
 <link rel="shortcut icon" href="../_static/favicon/favicon.ico">
 <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/tensorly_style.css?v=a02e9698" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
@@ -173,15 +173,15 @@ to download the full example code.</p>
 <span id="sphx-glr-auto-examples-plot-sfno-swe-py"></span><h1>Training a SFNO on the spherical Shallow Water equations<a class="headerlink" href="#training-a-sfno-on-the-spherical-shallow-water-equations" title="Link to this heading"></a></h1>
 <p>In this example, we demonstrate how to use the small Spherical Shallow Water Equations example we ship with the package
 to train a Spherical Fourier-Neural Operator</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">neuralop.models</span> <span class="kn">import</span> <span class="n">SFNO</span>
-<span class="kn">from</span> <span class="nn">neuralop</span> <span class="kn">import</span> <span class="n">Trainer</span>
-<span class="kn">from</span> <span class="nn">neuralop.training</span> <span class="kn">import</span> <span class="n">AdamW</span>
-<span class="kn">from</span> <span class="nn">neuralop.data.datasets</span> <span class="kn">import</span> <span class="n">load_spherical_swe</span>
-<span class="kn">from</span> <span class="nn">neuralop.utils</span> <span class="kn">import</span> <span class="n">count_model_params</span>
-<span class="kn">from</span> <span class="nn">neuralop</span> <span class="kn">import</span> <span class="n">LpLoss</span><span class="p">,</span> <span class="n">H1Loss</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">SFNO</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neuralop</span><span class="w"> </span><span class="kn">import</span> <span class="n">Trainer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.training</span><span class="w"> </span><span class="kn">import</span> <span class="n">AdamW</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.data.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_spherical_swe</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">count_model_params</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neuralop</span><span class="w"> </span><span class="kn">import</span> <span class="n">LpLoss</span><span class="p">,</span> <span class="n">H1Loss</span>
 
 <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda:0&#39;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
 </pre></div>
@@ -292,13 +292,13 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fb4d5797770&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7efc706c5550&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fb4d5797230&gt;
+ * Train: &lt;neuralop.losses.data_losses.LpLoss object at 0x7efc706c6f90&gt;
 
- * Test: {&#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fb4d5797230&gt;}
+ * Test: {&#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7efc706c6f90&gt;}
 </pre></div>
 </div>
 <p>Create the trainer</p>
@@ -323,22 +323,22 @@ Parameter Group 0
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Training on 200 samples
 Testing on [50, 50] samples         on resolutions [(32, 64), (64, 128)].
 Raw outputs of shape torch.Size([4, 3, 32, 64])
-[0] time=3.64, avg_loss=2.6153, train_err=10.4610
-Eval: (32, 64)_l2=1.9215, (64, 128)_l2=2.5698
-[3] time=3.56, avg_loss=0.4020, train_err=1.6079
-Eval: (32, 64)_l2=0.6090, (64, 128)_l2=2.5933
-[6] time=3.56, avg_loss=0.2725, train_err=1.0901
-Eval: (32, 64)_l2=0.5563, (64, 128)_l2=2.4528
-[9] time=3.56, avg_loss=0.2111, train_err=0.8444
-Eval: (32, 64)_l2=0.5240, (64, 128)_l2=2.4237
-[12] time=3.55, avg_loss=0.1804, train_err=0.7218
-Eval: (32, 64)_l2=0.5369, (64, 128)_l2=2.3901
-[15] time=3.55, avg_loss=0.1546, train_err=0.6184
-Eval: (32, 64)_l2=0.4954, (64, 128)_l2=2.3777
-[18] time=3.55, avg_loss=0.1447, train_err=0.5788
-Eval: (32, 64)_l2=0.5030, (64, 128)_l2=2.3513
+[0] time=3.71, avg_loss=2.6141, train_err=10.4563
+Eval: (32, 64)_l2=1.9617, (64, 128)_l2=2.4036
+[3] time=3.66, avg_loss=0.4299, train_err=1.7198
+Eval: (32, 64)_l2=0.5002, (64, 128)_l2=2.2989
+[6] time=3.65, avg_loss=0.2797, train_err=1.1186
+Eval: (32, 64)_l2=0.4323, (64, 128)_l2=2.2977
+[9] time=3.63, avg_loss=0.2403, train_err=0.9611
+Eval: (32, 64)_l2=0.3789, (64, 128)_l2=2.2562
+[12] time=3.64, avg_loss=0.2023, train_err=0.8091
+Eval: (32, 64)_l2=0.3509, (64, 128)_l2=2.2591
+[15] time=3.54, avg_loss=0.1606, train_err=0.6424
+Eval: (32, 64)_l2=0.3117, (64, 128)_l2=2.2657
+[18] time=3.56, avg_loss=0.1496, train_err=0.5983
+Eval: (32, 64)_l2=0.3111, (64, 128)_l2=2.3021
 
-{&#39;train_err&#39;: 0.5512285715341568, &#39;avg_loss&#39;: 0.1378071428835392, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 3.575707410000007}
+{&#39;train_err&#39;: 0.5738213288784028, &#39;avg_loss&#39;: 0.1434553322196007, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 3.5294100610000214}
 </pre></div>
 </div>
 <p>Plot the prediction, and compare with the ground-truth
@@ -385,7 +385,7 @@ ii) can be trained quickly on CPU</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_plot_SFNO_swe_001.png" srcset="../_images/sphx_glr_plot_SFNO_swe_001.png" alt="Inputs, ground-truth output and prediction., Input x (32, 64), Ground-truth y, Model prediction, Input x (64, 128), Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 27.556 seconds)</p>
+<img src="../_images/sphx_glr_plot_SFNO_swe_001.png" srcset="../_images/sphx_glr_plot_SFNO_swe_001.png" alt="Inputs, ground-truth output and prediction., Input x (32, 64), Ground-truth y, Model prediction, Input x (64, 128), Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 28.045 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-sfno-swe-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/af3a515d2684655c6a5a8e0df87a4cf9/plot_SFNO_swe.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_SFNO_swe.ipynb</span></code></a></p>

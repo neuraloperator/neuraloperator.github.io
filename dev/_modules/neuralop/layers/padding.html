@@ -14,7 +14,7 @@
 <link rel="shortcut icon" href="../../../_static/favicon/favicon.ico">
 <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
@@ -113,17 +113,17 @@
       <div class="container content main-content">
         
   <h1>Source code for neuralop.layers.padding</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
-<span class="kn">from</span> <span class="nn">torch.nn</span> <span class="kn">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">F</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">F</span>
 
-<span class="kn">from</span> <span class="nn">neuralop.utils</span> <span class="kn">import</span> <span class="n">validate_scaling_factor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">validate_scaling_factor</span>
 
 
 <div class="viewcode-block" id="DomainPadding">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.padding.DomainPadding.html#neuralop.layers.padding.DomainPadding">[docs]</a>
-<span class="k">class</span> <span class="nc">DomainPadding</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DomainPadding</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Applies domain padding scaled automatically to the input&#39;s resolution</span>
 
 <span class="sd">    Parameters</span>
@@ -141,7 +141,7 @@
 <span class="sd">    `(batch-size, channels, d1, ...., dN)`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">domain_padding</span><span class="p">,</span>
         <span class="n">padding_mode</span><span class="o">=</span><span class="s2">&quot;one-sided&quot;</span><span class="p">,</span>
@@ -162,14 +162,14 @@
 
 <div class="viewcode-block" id="DomainPadding.forward">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.padding.DomainPadding.html#neuralop.layers.padding.DomainPadding.forward">[docs]</a>
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;forward pass: pad the input&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DomainPadding.pad">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.padding.DomainPadding.html#neuralop.layers.padding.DomainPadding.pad">[docs]</a>
-    <span class="k">def</span> <span class="nf">pad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Take an input and pad it by the desired fraction</span>
 
 <span class="sd">        The amount of padding will be automatically scaled with the resolution</span>
@@ -270,7 +270,7 @@
 
 <div class="viewcode-block" id="DomainPadding.unpad">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.padding.DomainPadding.html#neuralop.layers.padding.DomainPadding.unpad">[docs]</a>
-    <span class="k">def</span> <span class="nf">unpad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">unpad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove the padding from padding inputs&quot;&quot;&quot;</span>
         <span class="n">unpad_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unpad_indices</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="n">unpad_indices</span><span class="p">]</span></div>

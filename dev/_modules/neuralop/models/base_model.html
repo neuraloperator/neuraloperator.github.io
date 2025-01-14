@@ -14,7 +14,7 @@
 <link rel="shortcut icon" href="../../../_static/favicon/favicon.ico">
 <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
@@ -113,14 +113,14 @@
       <div class="container content main-content">
         
   <h1>Source code for neuralop.models.base_model</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">inspect</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
 <span class="c1"># Author: Jean Kossaifi</span>
 
-<span class="k">class</span> <span class="nc">BaseModel</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BaseModel</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Based class for all Models</span>
 
 <span class="sd">    This class has two main functionalities:</span>
@@ -140,7 +140,7 @@
     <span class="n">_models</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="n">_version</span> <span class="o">=</span> <span class="s1">&#39;0.1.0&#39;</span>
 
-    <span class="k">def</span> <span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;When a subclass is created, register it in _models</span>
 <span class="sd">        We look for an existing name attribute. </span>
 <span class="sd">        If not give, then we use the class&#39; name.</span>
@@ -154,7 +154,7 @@
             <span class="n">BaseModel</span><span class="o">.</span><span class="n">_models</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span> <span class="o">=</span> <span class="bp">cls</span>
             <span class="bp">cls</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span>
 
-    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Verify arguments and save init kwargs for loading/saving</span>
 
 <span class="sd">        We inspect the class&#39; signature and check for unused parameters, or </span>
@@ -192,7 +192,7 @@
 
         <span class="k">return</span> <span class="n">instance</span>
 
-    <span class="k">def</span> <span class="nf">state_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">destination</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">keep_vars</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">state_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">destination</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">keep_vars</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        state_dict subclasses nn.Module.state_dict() and adds a metadata field</span>
 <span class="sd">        to track the model version and ensure only compatible saves are loaded.</span>
@@ -218,7 +218,7 @@
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Attempting to update metadata for a module with metadata already in self.state_dict()&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">state_dict</span>
 
-    <span class="k">def</span> <span class="nf">load_state_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state_dict</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">assign</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_state_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state_dict</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">assign</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;load_state_dict subclasses nn.Module.load_state_dict() and adds a metadata field</span>
 <span class="sd">        to track the model version and ensure only compatible saves are loaded.</span>
 
@@ -253,7 +253,7 @@
             <span class="c1"># remove state dict metadata at the end to ensure proper loading with PyTorch module</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">state_dict</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="n">strict</span><span class="p">,</span> <span class="n">assign</span><span class="o">=</span><span class="n">assign</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">save_checkpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_folder</span><span class="p">,</span> <span class="n">save_name</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_checkpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_folder</span><span class="p">,</span> <span class="n">save_name</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Saves the model state and init param in the given folder under the given name</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">save_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">save_folder</span><span class="p">)</span>
@@ -268,13 +268,13 @@
         <span class="c1"># with open(metadata_filepath, &#39;w&#39;) as f:</span>
         <span class="c1">#     json.dump(self._init_kwargs, f)</span>
 
-    <span class="k">def</span> <span class="nf">load_checkpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_folder</span><span class="p">,</span> <span class="n">save_name</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_checkpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_folder</span><span class="p">,</span> <span class="n">save_name</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">save_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">save_folder</span><span class="p">)</span>
         <span class="n">state_dict_filepath</span> <span class="o">=</span> <span class="n">save_folder</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">save_name</span><span class="si">}</span><span class="s1">_state_dict.pt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">as_posix</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">state_dict_filepath</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="n">map_location</span><span class="p">))</span>
     
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_checkpoint</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">save_folder</span><span class="p">,</span> <span class="n">save_name</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_checkpoint</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">save_folder</span><span class="p">,</span> <span class="n">save_name</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">save_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">save_folder</span><span class="p">)</span>
 
         <span class="n">metadata_filepath</span> <span class="o">=</span> <span class="n">save_folder</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">save_name</span><span class="si">}</span><span class="s1">_metadata.pkl&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">as_posix</span><span class="p">()</span>
@@ -299,7 +299,7 @@
 
 <div class="viewcode-block" id="available_models">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.models.base_model.available_models.html#neuralop.models.base_model.available_models">[docs]</a>
-<span class="k">def</span> <span class="nf">available_models</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">available_models</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;List the available neural operators&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">BaseModel</span><span class="o">.</span><span class="n">_models</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
 
@@ -307,7 +307,7 @@
 
 <div class="viewcode-block" id="get_model">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.models.base_model.get_model.html#neuralop.models.base_model.get_model">[docs]</a>
-<span class="k">def</span> <span class="nf">get_model</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_model</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns an instantiated model for the given config</span>
 
 <span class="sd">    * Reads the model to be used from config[&#39;arch&#39;]</span>

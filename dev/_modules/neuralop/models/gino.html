@@ -14,7 +14,7 @@
 <link rel="shortcut icon" href="../../../_static/favicon/favicon.ico">
 <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
@@ -113,22 +113,22 @@
       <div class="container content main-content">
         
   <h1>Source code for neuralop.models.gino</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
-<span class="kn">import</span> <span class="nn">time</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn.functional</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">F</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 
-<span class="kn">from</span> <span class="nn">.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.base_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
 
-<span class="kn">from</span> <span class="nn">..layers.channel_mlp</span> <span class="kn">import</span> <span class="n">ChannelMLP</span>
-<span class="kn">from</span> <span class="nn">..layers.embeddings</span> <span class="kn">import</span> <span class="n">SinusoidalEmbedding</span>
-<span class="kn">from</span> <span class="nn">..layers.fno_block</span> <span class="kn">import</span> <span class="n">FNOBlocks</span>
-<span class="kn">from</span> <span class="nn">..layers.spectral_convolution</span> <span class="kn">import</span> <span class="n">SpectralConv</span>
-<span class="kn">from</span> <span class="nn">..layers.gno_block</span> <span class="kn">import</span> <span class="n">GNOBlock</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..layers.channel_mlp</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChannelMLP</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..layers.embeddings</span><span class="w"> </span><span class="kn">import</span> <span class="n">SinusoidalEmbedding</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..layers.fno_block</span><span class="w"> </span><span class="kn">import</span> <span class="n">FNOBlocks</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..layers.spectral_convolution</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpectralConv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..layers.gno_block</span><span class="w"> </span><span class="kn">import</span> <span class="n">GNOBlock</span>
 
 <div class="viewcode-block" id="GINO">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.models.GINO.html#neuralop.models.GINO">[docs]</a>
-<span class="k">class</span> <span class="nc">GINO</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GINO</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;GINO: Geometry-informed Neural Operator. Learns a mapping between</span>
 <span class="sd">       functions presented over arbitrary coordinate meshes. The model carries</span>
 <span class="sd">       global integration through spectral convolution layers in an intermediate</span>
@@ -257,7 +257,7 @@
 <span class="sd">            Geometry-Informed Neural Operator for Large-Scale 3D PDEs. NeurIPS 2023,</span>
 <span class="sd">            https://proceedings.neurips.cc/paper_files/paper/2023/hash/70518ea42831f02afc3a2828993935ad-Abstract-Conference.html</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">in_channels</span><span class="p">,</span>
         <span class="n">out_channels</span><span class="p">,</span>
@@ -445,7 +445,7 @@
                               <span class="n">non_linearity</span><span class="o">=</span><span class="n">fno_non_linearity</span><span class="p">)</span> 
 
     <span class="c1">#returns: (fno_hidden_channels, n_1, n_2, ...)</span>
-    <span class="k">def</span> <span class="nf">latent_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_p</span><span class="p">,</span> <span class="n">ada_in</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">latent_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_p</span><span class="p">,</span> <span class="n">ada_in</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
         <span class="c1"># in_p : (batch, n_1 , ... , n_k, in_channels + k)</span>
         <span class="c1"># ada_in : (fno_ada_in_dim, )</span>
@@ -473,7 +473,7 @@
     
 <div class="viewcode-block" id="GINO.forward">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.models.GINO.html#neuralop.models.GINO.forward">[docs]</a>
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_geom</span><span class="p">,</span> <span class="n">latent_queries</span><span class="p">,</span> <span class="n">output_queries</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">latent_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ada_in</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_geom</span><span class="p">,</span> <span class="n">latent_queries</span><span class="p">,</span> <span class="n">output_queries</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">latent_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ada_in</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The GINO&#39;s forward call:</span>
 <span class="sd">        Input GNO --&gt; FNOBlocks --&gt; output GNO + projection to output queries</span>
 

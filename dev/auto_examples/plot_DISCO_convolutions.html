@@ -15,7 +15,7 @@
 <link rel="shortcut icon" href="../_static/favicon/favicon.ico">
 <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/tensorly_style.css?v=a02e9698" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
@@ -174,23 +174,23 @@ to download the full example code.</p>
 used in the localized neural operator framework. These modules can be used on both equidistant
 and unstructured grids.</p>
 <p>Preparation</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
 
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">image</span>
 
-<span class="kn">from</span> <span class="nn">torch_harmonics.quadrature</span> <span class="kn">import</span> <span class="n">legendre_gauss_weights</span><span class="p">,</span> <span class="n">lobatto_weights</span><span class="p">,</span> <span class="n">clenshaw_curtiss_weights</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch_harmonics.quadrature</span><span class="w"> </span><span class="kn">import</span> <span class="n">legendre_gauss_weights</span><span class="p">,</span> <span class="n">lobatto_weights</span><span class="p">,</span> <span class="n">clenshaw_curtiss_weights</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 
 <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;inferno&quot;</span>
 <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda:0&#39;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
 
-<span class="kn">from</span> <span class="nn">neuralop.layers.discrete_continuous_convolution</span> <span class="kn">import</span> <span class="n">DiscreteContinuousConv2d</span><span class="p">,</span> <span class="n">DiscreteContinuousConvTranspose2d</span><span class="p">,</span> <span class="n">EquidistantDiscreteContinuousConv2d</span><span class="p">,</span> <span class="n">EquidistantDiscreteContinuousConvTranspose2d</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.layers.discrete_continuous_convolution</span><span class="w"> </span><span class="kn">import</span> <span class="n">DiscreteContinuousConv2d</span><span class="p">,</span> <span class="n">DiscreteContinuousConvTranspose2d</span><span class="p">,</span> <span class="n">EquidistantDiscreteContinuousConv2d</span><span class="p">,</span> <span class="n">EquidistantDiscreteContinuousConvTranspose2d</span>
 </pre></div>
 </div>
 <p>Let’s start by loading an example image</p>
@@ -330,7 +330,7 @@ torch.Size([119, 89])
 <span class="c1"># plt.show()</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_plot_DISCO_convolutions_006.png" srcset="../_images/sphx_glr_plot_DISCO_convolutions_006.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7fb4c233ca50&gt;
+<img src="../_images/sphx_glr_plot_DISCO_convolutions_006.png" srcset="../_images/sphx_glr_plot_DISCO_convolutions_006.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7efc5d69ad50&gt;
 </pre></div>
 </div>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">convt</span> <span class="o">=</span> <span class="n">DiscreteContinuousConvTranspose2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">grid_in</span><span class="o">=</span><span class="n">grid_out</span><span class="p">,</span> <span class="n">grid_out</span><span class="o">=</span><span class="n">grid_in</span><span class="p">,</span> <span class="n">quadrature_weights</span><span class="o">=</span><span class="n">q_out</span><span class="p">,</span> <span class="n">kernel_shape</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">radius_cutoff</span><span class="o">=</span><span class="mi">3</span><span class="o">/</span><span class="n">nyo</span><span class="p">,</span> <span class="n">periodic</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
@@ -381,7 +381,7 @@ torch.Size([119, 89])
 <img src="../_images/sphx_glr_plot_DISCO_convolutions_008.png" srcset="../_images/sphx_glr_plot_DISCO_convolutions_008.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>torch.Size([1, 1, 120, 90])
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 31.267 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 33.017 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-disco-convolutions-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/38d20cb4d1344392d40c819f90342451/plot_DISCO_convolutions.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_DISCO_convolutions.ipynb</span></code></a></p>
