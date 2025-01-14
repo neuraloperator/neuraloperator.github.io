@@ -197,10 +197,10 @@ be trained on a CPU in a few seconds, whereas normally we would train on one or 
 <span class="n">data_processor</span> <span class="o">=</span> <span class="n">data_processor</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:93: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don&#39;t have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:99: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don&#39;t have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
   data = torch.load(
 Loading test db for resolution 16 with 100 samples
-/home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:172: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don&#39;t have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+/home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:189: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don&#39;t have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
   data = torch.load(Path(root_dir).joinpath(f&quot;{dataset_name}_test_{res}.pt&quot;).as_posix())
 Loading test db for resolution 32 with 50 samples
 </pre></div>
@@ -302,13 +302,13 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f5bbea88910&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f8a56290b90&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f5bbea8a0d0&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f8a56291310&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f5bbea8a0d0&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f5bbea88690&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f8a56291310&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f8a56290a50&gt;}
 </pre></div>
 </div>
 <p>Create the trainer:</p>
@@ -334,22 +334,22 @@ Parameter Group 0
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Training on 1000 samples
 Testing on [50, 50] samples         on resolutions [16, 32].
 Raw outputs of shape torch.Size([32, 1, 16, 16])
-[0] time=2.44, avg_loss=0.6956, train_err=21.7383
+[0] time=2.48, avg_loss=0.6956, train_err=21.7383
 Eval: 16_h1=0.4298, 16_l2=0.3487, 32_h1=0.5847, 32_l2=0.3542
 [3] time=2.44, avg_loss=0.2103, train_err=6.5705
 Eval: 16_h1=0.2030, 16_l2=0.1384, 32_h1=0.5075, 32_l2=0.1774
-[6] time=2.44, avg_loss=0.1911, train_err=5.9721
+[6] time=2.45, avg_loss=0.1911, train_err=5.9721
 Eval: 16_h1=0.2099, 16_l2=0.1374, 32_h1=0.4907, 32_l2=0.1783
-[9] time=2.45, avg_loss=0.1410, train_err=4.4073
+[9] time=2.43, avg_loss=0.1410, train_err=4.4073
 Eval: 16_h1=0.2052, 16_l2=0.1201, 32_h1=0.5268, 32_l2=0.1615
-[12] time=2.47, avg_loss=0.1422, train_err=4.4434
+[12] time=2.43, avg_loss=0.1422, train_err=4.4434
 Eval: 16_h1=0.2131, 16_l2=0.1285, 32_h1=0.5413, 32_l2=0.1741
-[15] time=2.45, avg_loss=0.1198, train_err=3.7424
+[15] time=2.44, avg_loss=0.1198, train_err=3.7424
 Eval: 16_h1=0.1984, 16_l2=0.1137, 32_h1=0.5255, 32_l2=0.1569
-[18] time=2.47, avg_loss=0.1104, train_err=3.4502
+[18] time=2.43, avg_loss=0.1104, train_err=3.4502
 Eval: 16_h1=0.2039, 16_l2=0.1195, 32_h1=0.5062, 32_l2=0.1603
 
-{&#39;train_err&#39;: 2.9605126455426216, &#39;avg_loss&#39;: 0.0947364046573639, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 2.4835143990000006}
+{&#39;train_err&#39;: 2.9605126455426216, &#39;avg_loss&#39;: 0.0947364046573639, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 2.470972223999979}
 </pre></div>
 </div>
 </section>
@@ -452,7 +452,7 @@ are parameterized with a list of <cite>test_resolutions</cite> to choose from.</
 <p>However, as you can see, these predictions are noisier than we would expect for a model evaluated
 at the same resolution at which it was trained. Leveraging the FNO’s discretization-invariance, there
 are other ways to scale the outputs of the FNO to train a true super-resolution capability.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 50.349 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 49.987 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-fno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/e81e8f640b2a3cda84c542bbc8f36a54/plot_FNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_FNO_darcy.ipynb</span></code></a></p>

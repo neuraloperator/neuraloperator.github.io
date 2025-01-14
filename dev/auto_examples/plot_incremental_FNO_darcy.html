@@ -196,10 +196,10 @@ meta-learning algorithm</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:93: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don&#39;t have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:99: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don&#39;t have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
   data = torch.load(
 Loading test db for resolution 16 with 100 samples
-/home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:172: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don&#39;t have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+/home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:189: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don&#39;t have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
   data = torch.load(Path(root_dir).joinpath(f&quot;{dataset_name}_test_{res}.pt&quot;).as_posix())
 Loading test db for resolution 32 with 50 samples
 </pre></div>
@@ -293,15 +293,15 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f5bd617fce0&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f8a6c987490&gt;
 
 ### LOSSES ###
 
 ### INCREMENTAL RESOLUTION + GRADIENT EXPLAINED ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f5bbead2850&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f8a562de990&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f5bbead2850&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f5bd617ed70&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f8a562de990&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f8a6c986d70&gt;}
 </pre></div>
 </div>
 <p>Set up the IncrementalTrainer
@@ -355,17 +355,17 @@ uses the incremental_loss_eps parameter</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Training on 100 samples
 Testing on [50, 50] samples         on resolutions [16, 32].
 Raw outputs of shape torch.Size([16, 1, 8, 8])
-[0] time=0.22, avg_loss=0.9239, train_err=13.1989
+[0] time=0.23, avg_loss=0.9239, train_err=13.1989
 Eval: 16_h1=0.8702, 16_l2=0.5536, 32_h1=0.9397, 32_l2=0.5586
-[1] time=0.21, avg_loss=0.7589, train_err=10.8413
+[1] time=0.22, avg_loss=0.7589, train_err=10.8413
 Eval: 16_h1=0.7880, 16_l2=0.5167, 32_h1=0.9011, 32_l2=0.5234
-[2] time=0.20, avg_loss=0.6684, train_err=9.5484
+[2] time=0.21, avg_loss=0.6684, train_err=9.5484
 Eval: 16_h1=0.7698, 16_l2=0.4235, 32_h1=0.9175, 32_l2=0.4405
-[3] time=0.21, avg_loss=0.6082, train_err=8.6886
+[3] time=0.20, avg_loss=0.6082, train_err=8.6886
 Eval: 16_h1=0.7600, 16_l2=0.4570, 32_h1=1.0126, 32_l2=0.5005
 [4] time=0.21, avg_loss=0.5604, train_err=8.0054
 Eval: 16_h1=0.8301, 16_l2=0.4577, 32_h1=1.1722, 32_l2=0.4987
-[5] time=0.21, avg_loss=0.5366, train_err=7.6663
+[5] time=0.20, avg_loss=0.5366, train_err=7.6663
 Eval: 16_h1=0.8099, 16_l2=0.4076, 32_h1=1.1414, 32_l2=0.4436
 [6] time=0.21, avg_loss=0.5050, train_err=7.2139
 Eval: 16_h1=0.7204, 16_l2=0.3888, 32_h1=0.9945, 32_l2=0.4285
@@ -378,7 +378,7 @@ Eval: 16_h1=0.5841, 16_l2=0.3159, 32_h1=0.8551, 32_l2=0.3587
 Incre Res Update: change index to 1
 Incre Res Update: change sub to 1
 Incre Res Update: change res to 16
-[10] time=0.27, avg_loss=0.5158, train_err=7.3681
+[10] time=0.26, avg_loss=0.5158, train_err=7.3681
 Eval: 16_h1=0.5133, 16_l2=0.3167, 32_h1=0.6120, 32_l2=0.3022
 [11] time=0.25, avg_loss=0.4536, train_err=6.4795
 Eval: 16_h1=0.4680, 16_l2=0.3422, 32_h1=0.6436, 32_l2=0.3659
@@ -399,7 +399,7 @@ Eval: 16_h1=0.3251, 16_l2=0.2116, 32_h1=0.4519, 32_l2=0.2245
 [19] time=0.26, avg_loss=0.2802, train_err=4.0024
 Eval: 16_h1=0.3201, 16_l2=0.2110, 32_h1=0.4533, 32_l2=0.2245
 
-{&#39;train_err&#39;: 4.002395851271493, &#39;avg_loss&#39;: 0.2801677095890045, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 0.26419909200001257, &#39;16_h1&#39;: tensor(0.3201), &#39;16_l2&#39;: tensor(0.2110), &#39;32_h1&#39;: tensor(0.4533), &#39;32_l2&#39;: tensor(0.2245)}
+{&#39;train_err&#39;: 4.002395851271493, &#39;avg_loss&#39;: 0.2801677095890045, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 0.26044575699995676, &#39;16_h1&#39;: tensor(0.3201), &#39;16_l2&#39;: tensor(0.2110), &#39;32_h1&#39;: tensor(0.4533), &#39;32_l2&#39;: tensor(0.2245)}
 </pre></div>
 </div>
 <p>Plot the prediction, and compare with the ground-truth
@@ -449,7 +449,7 @@ ii) can be trained quickly on CPU</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" srcset="../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" alt="Inputs, ground-truth output and prediction., Input x, Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 6.578 seconds)</p>
+<img src="../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" srcset="../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" alt="Inputs, ground-truth output and prediction., Input x, Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 6.539 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-incremental-fno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/082e73328a5caf8c1fe9ad7fe05cf68f/plot_incremental_FNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_incremental_FNO_darcy.ipynb</span></code></a></p>
