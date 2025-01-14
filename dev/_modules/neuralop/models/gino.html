@@ -475,7 +475,12 @@
 <a class="viewcode-back" href="../../../modules/generated/neuralop.models.GINO.html#neuralop.models.GINO.forward">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_geom</span><span class="p">,</span> <span class="n">latent_queries</span><span class="p">,</span> <span class="n">output_queries</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">latent_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ada_in</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The GINO&#39;s forward call:</span>
-<span class="sd">        Input GNO --&gt; FNOBlocks --&gt; output GNO + projection to output queries</span>
+<span class="sd">        Input GNO --&gt; FNOBlocks --&gt; output GNO + projection to output queries.</span>
+
+<span class="sd">        .. note ::</span>
+<span class="sd">            GINO currently supports batching **only in cases where the geometry of</span>
+<span class="sd">            inputs and outputs is shared across the entire batch**. Inputs can have a batch dim</span>
+<span class="sd">            in ``x`` and ``latent_features``, but it must be shared for both. </span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -488,7 +493,7 @@
 <span class="sd">            shape (1, n_gridpts_1, .... n_gridpts_n, gno_coord_dim)</span>
 <span class="sd">        output_queries : torch.Tensor</span>
 <span class="sd">            points at which to query the final GNO layer to get output</span>
-<span class="sd">            shape (batch, n_out, gno_coord_dim)</span>
+<span class="sd">            shape (n_out, gno_coord_dim)</span>
 <span class="sd">        x : torch.Tensor, optional</span>
 <span class="sd">            input function a defined on the input domain `input_geom`</span>
 <span class="sd">            shape (batch, n_in, in_channels). Default None</span>
