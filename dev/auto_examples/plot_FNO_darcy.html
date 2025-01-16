@@ -302,13 +302,13 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f9fca484e10&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f0618cb9950&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f9fca485310&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f0618cbb750&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f9fca485310&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f9fca484cd0&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f0618cbb750&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f0618cb8f50&gt;}
 </pre></div>
 </div>
 <p>Create the trainer:</p>
@@ -334,22 +334,22 @@ Parameter Group 0
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Training on 1000 samples
 Testing on [50, 50] samples         on resolutions [16, 32].
 Raw outputs of shape torch.Size([32, 1, 16, 16])
-[0] time=2.52, avg_loss=0.6956, train_err=21.7383
+[0] time=2.49, avg_loss=0.6956, train_err=21.7383
 Eval: 16_h1=0.4298, 16_l2=0.3487, 32_h1=0.5847, 32_l2=0.3542
-[3] time=2.48, avg_loss=0.2103, train_err=6.5705
+[3] time=2.50, avg_loss=0.2103, train_err=6.5705
 Eval: 16_h1=0.2030, 16_l2=0.1384, 32_h1=0.5075, 32_l2=0.1774
-[6] time=2.48, avg_loss=0.1911, train_err=5.9721
+[6] time=2.50, avg_loss=0.1911, train_err=5.9721
 Eval: 16_h1=0.2099, 16_l2=0.1374, 32_h1=0.4907, 32_l2=0.1783
-[9] time=2.50, avg_loss=0.1410, train_err=4.4073
+[9] time=2.51, avg_loss=0.1410, train_err=4.4073
 Eval: 16_h1=0.2052, 16_l2=0.1201, 32_h1=0.5268, 32_l2=0.1615
-[12] time=2.50, avg_loss=0.1422, train_err=4.4434
+[12] time=2.49, avg_loss=0.1422, train_err=4.4434
 Eval: 16_h1=0.2131, 16_l2=0.1285, 32_h1=0.5413, 32_l2=0.1741
 [15] time=2.52, avg_loss=0.1198, train_err=3.7424
 Eval: 16_h1=0.1984, 16_l2=0.1137, 32_h1=0.5255, 32_l2=0.1569
-[18] time=2.49, avg_loss=0.1104, train_err=3.4502
+[18] time=2.48, avg_loss=0.1104, train_err=3.4502
 Eval: 16_h1=0.2039, 16_l2=0.1195, 32_h1=0.5062, 32_l2=0.1603
 
-{&#39;train_err&#39;: 2.9605126455426216, &#39;avg_loss&#39;: 0.0947364046573639, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 2.517003385999942}
+{&#39;train_err&#39;: 2.9605126455426216, &#39;avg_loss&#39;: 0.0947364046573639, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 2.4753700930000377}
 </pre></div>
 </div>
 </section>
@@ -452,7 +452,7 @@ are parameterized with a list of <cite>test_resolutions</cite> to choose from.</
 <p>However, as you can see, these predictions are noisier than we would expect for a model evaluated
 at the same resolution at which it was trained. Leveraging the FNO’s discretization-invariance, there
 are other ways to scale the outputs of the FNO to train a true super-resolution capability.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 51.090 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 51.125 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-fno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/e81e8f640b2a3cda84c542bbc8f36a54/plot_FNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_FNO_darcy.ipynb</span></code></a></p>

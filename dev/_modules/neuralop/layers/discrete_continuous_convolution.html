@@ -125,9 +125,15 @@
 
 <span class="c1"># import the base class from torch-harmonics</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch_harmonics.quadrature</span><span class="w"> </span><span class="kn">import</span> <span class="n">_precompute_grid</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">torch_harmonics.convolution</span><span class="w"> </span><span class="kn">import</span> <span class="n">_compute_support_vals_isotropic</span><span class="p">,</span> <span class="n">_compute_support_vals_anisotropic</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch_harmonics.filter_basis</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">PiecewiseLinearFilterBasis</span><span class="p">,</span> 
+                                          <span class="n">MorletFilterBasis</span><span class="p">,</span> 
+                                          <span class="n">ZernikeFilterBasis</span><span class="p">)</span>
 
-<span class="c1">#def _compute_kernel_basis_isotropic()</span>
+<span class="n">basis_type_classes</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;piecewise_linear&#39;</span><span class="p">:</span> <span class="n">PiecewiseLinearFilterBasis</span><span class="p">,</span>
+    <span class="s1">&#39;morlet&#39;</span><span class="p">:</span> <span class="n">MorletFilterBasis</span><span class="p">,</span>
+    <span class="s1">&#39;zernike&#39;</span><span class="p">:</span> <span class="n">ZernikeFilterBasis</span>
+<span class="p">}</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_normalize_convolution_filter_matrix</span><span class="p">(</span><span class="n">psi_idx</span><span class="p">,</span>
                                      <span class="n">psi_vals</span><span class="p">,</span>
@@ -186,6 +192,7 @@
                                       <span class="n">kernel_shape</span><span class="p">,</span>
                                       <span class="n">quadrature_weights</span><span class="p">,</span>
                                       <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                      <span class="n">basis_type</span><span class="o">=</span><span class="s1">&#39;piecewise_linear&#39;</span><span class="p">,</span>
                                       <span class="n">radius_cutoff</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
                                       <span class="n">periodic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                       <span class="n">transpose_normalization</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -209,8 +216,34 @@
 <span class="sd">    function also returns the translated filters at positions </span>
 <span class="sd">    $T^{-1}_j \omega_i = T^{-1}_j T_i \nu$, but assumes a non-periodic subset of the</span>
 <span class="sd">    euclidean plane.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
 
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    grid_in : ``torch.Tensor``</span>
+<span class="sd">        coordinate grid on which input function is provided</span>
+<span class="sd">    grid_out : ``torch.Tensor``</span>
+<span class="sd">        coordinate grid on which output function is queried</span>
+<span class="sd">    kernel_shape: ``Union[int, List[int]]``</span>
+<span class="sd">        Dimensions of the convolution kernel, either one int or a two-int tuple.</span>
+<span class="sd">        If one int k, the kernel will be a square of shape (k,k), meaning the convolution </span>
+<span class="sd">        will be &#39;isotropic&#39;: both directions are equally scaled in feature space</span>
+<span class="sd">        If two ints (k1,k2), the kernel will be a rectangle of shape (k1,k2), meaning the convolution</span>
+<span class="sd">        will  be &#39;anisotropic&#39;: one direction will be compressed or stretched in feature space.</span>
+<span class="sd">    quadrature_weights : ``torch.Tensor``</span>
+<span class="sd">        tensor of weights for each grid point in the input</span>
+<span class="sd">    normalize : ``bool``, optional</span>
+<span class="sd">        whether to normalize the precomputed filter tensor, by default True</span>
+<span class="sd">    basis_type: str literal ``{&#39;piecewise_linear&#39;, &#39;morlet&#39;, &#39;zernike&#39;}``</span>
+<span class="sd">        choice of basis functions to use for convolution filter tensor. </span>
+<span class="sd">    radius_cutoff : ``float``, optional</span>
+<span class="sd">        radius cutoff parameter for computing basis functions, by default 0.01</span>
+<span class="sd">    periodic : ``bool``, optional</span>
+<span class="sd">        whether the domain is assumed to be periodic, by default False</span>
+<span class="sd">    transpose_normalization : ``bool``, optional</span>
+<span class="sd">        whether to transpose the normalized filter tensor, by default False</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="c1"># check that input arrays are valid point clouds in 2D</span>
     <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid_in</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
     <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid_out</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
@@ -220,12 +253,6 @@
     <span class="n">n_in</span> <span class="o">=</span> <span class="n">grid_in</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">n_out</span> <span class="o">=</span> <span class="n">grid_out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kernel_shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">kernel_handle</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">_compute_support_vals_isotropic</span><span class="p">,</span> <span class="n">nr</span><span class="o">=</span><span class="n">kernel_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">r_cutoff</span><span class="o">=</span><span class="n">radius_cutoff</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">kernel_shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">kernel_handle</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">_compute_support_vals_anisotropic</span><span class="p">,</span> <span class="n">nr</span><span class="o">=</span><span class="n">kernel_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nphi</span><span class="o">=</span><span class="n">kernel_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">r_cutoff</span><span class="o">=</span><span class="n">radius_cutoff</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;kernel_shape should be either one- or two-dimensional.&quot;</span><span class="p">)</span>
 
     <span class="n">grid_in</span> <span class="o">=</span> <span class="n">grid_in</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_in</span><span class="p">)</span>
     <span class="n">grid_out</span> <span class="o">=</span> <span class="n">grid_out</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_out</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -238,7 +265,12 @@
     <span class="n">r</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">diffs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">diffs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">phi</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">diffs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">diffs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">pi</span>
 
-    <span class="n">idx</span><span class="p">,</span> <span class="n">vals</span> <span class="o">=</span> <span class="n">kernel_handle</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">phi</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">basis_type</span> <span class="ow">in</span> <span class="n">basis_type_classes</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="sa">f</span><span class="s2">&quot;Error: expected one of &quot;</span>
+    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basis_type_classes</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">basis_type</span><span class="si">}</span><span class="s2">&quot;</span>
+    
+    <span class="c1"># if a basis name is provided, instantiate it with the provided kernel shape</span>
+    <span class="n">basis_type</span> <span class="o">=</span> <span class="n">basis_type_classes</span><span class="p">[</span><span class="n">basis_type</span><span class="p">](</span><span class="n">kernel_shape</span><span class="p">)</span>
+    <span class="n">idx</span><span class="p">,</span> <span class="n">vals</span> <span class="o">=</span> <span class="n">basis_type</span><span class="o">.</span><span class="n">compute_support_vals</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">r_cutoff</span><span class="o">=</span><span class="n">radius_cutoff</span><span class="p">)</span>
 
     <span class="n">idx</span> <span class="o">=</span> <span class="n">idx</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
@@ -265,12 +297,13 @@
 <span class="sd">        number of input channels</span>
 <span class="sd">    out_channels : int</span>
 <span class="sd">        number of output channels</span>
-<span class="sd">    kernel_shape : int or [int, int]</span>
-<span class="sd">        shape of convolution kernel</span>
-<span class="sd">        </span>
-<span class="sd">        * If a single int is passed, kernel will isotropic</span>
+<span class="sd">    kernel_shape : ``Union[int, List[int]]``</span>
+<span class="sd">        Dimensions of the convolution kernel, either one int or a two-int tuple.</span>
+<span class="sd">        * If one int k, the kernel will be a square of shape (k,k), meaning the convolution </span>
+<span class="sd">        will be &#39;isotropic&#39;: both directions are equally scaled in feature space.</span>
 
-<span class="sd">        * If a list of two nonequal ints are passed, kernel will be anisotropic.</span>
+<span class="sd">        * If two ints (k1,k2), the kernel will be a rectangle of shape (k1,k2), meaning the convolution</span>
+<span class="sd">        will  be &#39;anisotropic&#39;: one direction will be compressed or stretched in feature space.</span>
 <span class="sd">    groups : int, optional</span>
 <span class="sd">        number of groups in the convolution, default 1</span>
 <span class="sd">    bias : bool, optional</span>
@@ -358,9 +391,15 @@
 <span class="sd">        output grid in the form of a point cloud (n_out, 2).</span>
 <span class="sd">        Can also pass a string to generate a regular (tensor) grid.</span>
 <span class="sd">        For exact options see ``torch_harmonics.quadrature``.</span>
-<span class="sd">    kernel_shape: Union[int, List[int]]</span>
-<span class="sd">        kernel shape. Expects either a single integer for isotropic</span>
-<span class="sd">        kernels or two integers for anisotropic kernels</span>
+<span class="sd">    kernel_shape : ``Union[int, List[int]]``</span>
+<span class="sd">        Dimensions of the convolution kernel, either one int or a two-int tuple.</span>
+<span class="sd">        * If one int k, the kernel will be a square of shape (k,k), meaning the convolution </span>
+<span class="sd">        will be &#39;isotropic&#39;: both directions are equally scaled in feature space.</span>
+
+<span class="sd">        * If two ints (k1,k2), the kernel will be a rectangle of shape (k1,k2), meaning the convolution</span>
+<span class="sd">        will  be &#39;anisotropic&#39;: one direction will be compressed or stretched in feature space.</span>
+<span class="sd">    basis_type: str literal ``{&#39;piecewise_linear&#39;, &#39;morlet&#39;, &#39;zernike&#39;}``</span>
+<span class="sd">        choice of basis functions to use for convolution filter tensor. </span>
 <span class="sd">    n_in: Tuple[int], optional</span>
 <span class="sd">        number of input points along each dimension. Only used</span>
 <span class="sd">        if grid_in is passed as a str. See ``torch_harmonics.quadrature``.</span>
@@ -398,6 +437,7 @@
         <span class="n">grid_in</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
         <span class="n">grid_out</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
         <span class="n">kernel_shape</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
+        <span class="n">basis_type</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;piecewise_linear&quot;</span><span class="p">,</span>
         <span class="n">n_in</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">n_out</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">quadrature_weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -461,6 +501,7 @@
                                                       <span class="n">grid_out</span><span class="p">,</span>
                                                       <span class="bp">self</span><span class="o">.</span><span class="n">kernel_shape</span><span class="p">,</span>
                                                       <span class="n">quadrature_weights</span><span class="p">,</span>
+                                                      <span class="n">basis_type</span><span class="o">=</span><span class="n">basis_type</span><span class="p">,</span>
                                                       <span class="n">radius_cutoff</span><span class="o">=</span><span class="n">radius_cutoff</span><span class="p">,</span>
                                                       <span class="n">periodic</span><span class="o">=</span><span class="n">periodic</span><span class="p">)</span>
 
@@ -541,8 +582,15 @@
 <span class="sd">        output grid in the form of a point cloud (n_out, 2).</span>
 <span class="sd">        Can also pass a string to generate a regular (tensor) grid.</span>
 <span class="sd">        For exact options see ``torch_harmonics.quadrature``.</span>
-<span class="sd">    kernel_shape: Union[int, List[int]]</span>
-<span class="sd">        kernel shape. Expects either a single integer for isotropic kernels or two integers for anisotropic kernels</span>
+<span class="sd">    kernel_shape : ``Union[int, List[int]]``</span>
+<span class="sd">        Dimensions of the convolution kernel, either one int or a two-int tuple.</span>
+<span class="sd">        * If one int k, the kernel will be a square of shape (k,k), meaning the convolution </span>
+<span class="sd">        will be &#39;isotropic&#39;: both directions are equally scaled in feature space.</span>
+
+<span class="sd">        * If two ints (k1,k2), the kernel will be a rectangle of shape (k1,k2), meaning the convolution</span>
+<span class="sd">        will  be &#39;anisotropic&#39;: one direction will be compressed or stretched in feature space.</span>
+<span class="sd">    basis_type: str literal ``{&#39;piecewise_linear&#39;, &#39;morlet&#39;, &#39;zernike&#39;}``</span>
+<span class="sd">        choice of basis functions to use for convolution filter tensor. </span>
 <span class="sd">    n_in: Tuple[int], optional</span>
 <span class="sd">        number of input points along each dimension. Only used</span>
 <span class="sd">        if grid_in is passed as a str. See ``torch_harmonics.quadrature``.</span>
@@ -577,6 +625,7 @@
         <span class="n">grid_in</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
         <span class="n">grid_out</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
         <span class="n">kernel_shape</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
+        <span class="n">basis_type</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;piecewise_linear&quot;</span><span class="p">,</span>
         <span class="n">n_in</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">n_out</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">quadrature_weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -639,7 +688,8 @@
         <span class="c1"># precompute the transposed tensor</span>
         <span class="n">idx</span><span class="p">,</span> <span class="n">vals</span> <span class="o">=</span> <span class="n">_precompute_convolution_filter_matrix</span><span class="p">(</span>
             <span class="n">grid_out</span><span class="p">,</span> <span class="n">grid_in</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_shape</span><span class="p">,</span> <span class="n">quadrature_weights</span><span class="p">,</span> 
-            <span class="n">radius_cutoff</span><span class="o">=</span><span class="n">radius_cutoff</span><span class="p">,</span> <span class="n">periodic</span><span class="o">=</span><span class="n">periodic</span><span class="p">,</span> <span class="n">transpose_normalization</span><span class="o">=</span><span class="kc">True</span>
+            <span class="n">basis_type</span><span class="o">=</span><span class="n">basis_type</span><span class="p">,</span> <span class="n">radius_cutoff</span><span class="o">=</span><span class="n">radius_cutoff</span><span class="p">,</span> <span class="n">periodic</span><span class="o">=</span><span class="n">periodic</span><span class="p">,</span> 
+            <span class="n">transpose_normalization</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span>
 
         <span class="c1"># to improve performance, we make psi a matrix by merging the first two dimensions</span>
@@ -725,8 +775,15 @@
 <span class="sd">        of out_shape must be less than or equal to the side lengths</span>
 <span class="sd">        of in_shape, and must be integer divisions of the corresponding</span>
 <span class="sd">        in_shape side lengths.</span>
-<span class="sd">    kernel_shape: Union[int, List[int]]</span>
-<span class="sd">        kernel shape. Expects either a single integer for isotropic kernels or two integers for anisotropic kernels</span>
+<span class="sd">    kernel_shape : ``Union[int, List[int]]``</span>
+<span class="sd">        Dimensions of the convolution kernel, either one int or a two-int tuple.</span>
+<span class="sd">        * If one int k, the kernel will be a square of shape (k,k), meaning the convolution </span>
+<span class="sd">        will be &#39;isotropic&#39;: both directions are equally scaled in feature space.</span>
+
+<span class="sd">        * If two ints (k1,k2), the kernel will be a rectangle of shape (k1,k2), meaning the convolution</span>
+<span class="sd">        will  be &#39;anisotropic&#39;: one direction will be compressed or stretched in feature space.</span>
+<span class="sd">    basis_type: str literal ``{&#39;piecewise_linear&#39;, &#39;morlet&#39;, &#39;zernike&#39;}``</span>
+<span class="sd">        choice of basis functions to use for convolution filter tensor. </span>
 <span class="sd">    domain_length: torch.Tensor, optional</span>
 <span class="sd">        extent/length of the physical domain. Assumes square domain [-1, 1]^2 by default</span>
 <span class="sd">    periodic: bool, optional</span>
@@ -754,6 +811,7 @@
         <span class="n">in_shape</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
         <span class="n">out_shape</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
         <span class="n">kernel_shape</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
+        <span class="n">basis_type</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;piecewise_linear&quot;</span><span class="p">,</span>
         <span class="n">domain_length</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">periodic</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">groups</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
@@ -803,6 +861,7 @@
                                                       <span class="n">grid_out</span><span class="p">,</span>
                                                       <span class="bp">self</span><span class="o">.</span><span class="n">kernel_shape</span><span class="p">,</span>
                                                       <span class="n">quadrature_weights</span><span class="p">,</span>
+                                                      <span class="n">basis_type</span><span class="o">=</span><span class="n">basis_type</span><span class="p">,</span>
                                                       <span class="n">radius_cutoff</span><span class="o">=</span><span class="n">radius_cutoff</span><span class="p">,</span>
                                                       <span class="n">periodic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                                       <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -879,8 +938,15 @@
 <span class="sd">        of out_shape must be greater than or equal to the side lengths</span>
 <span class="sd">        of in_shape, and must be integer multiples of the corresponding</span>
 <span class="sd">        in_shape side lengths.</span>
-<span class="sd">    kernel_shape: Union[int, List[int]]</span>
-<span class="sd">        kernel shape. Expects either a single integer for isotropic kernels or two integers for anisotropic kernels</span>
+<span class="sd">    kernel_shape : ``Union[int, List[int]]``</span>
+<span class="sd">        Dimensions of the convolution kernel, either one int or a two-int tuple.</span>
+<span class="sd">        * If one int k, the kernel will be a square of shape (k,k), meaning the convolution </span>
+<span class="sd">        will be &#39;isotropic&#39;: both directions are equally scaled in feature space.</span>
+
+<span class="sd">        * If two ints (k1,k2), the kernel will be a rectangle of shape (k1,k2), meaning the convolution</span>
+<span class="sd">        will  be &#39;anisotropic&#39;: one direction will be compressed or stretched in feature space.</span>
+<span class="sd">    basis_type: str literal ``{&#39;piecewise_linear&#39;, &#39;morlet&#39;, &#39;zernike&#39;}``</span>
+<span class="sd">        choice of basis functions to use for convolution filter tensor. </span>
 <span class="sd">    domain_length: torch.Tensor, optional</span>
 <span class="sd">        extent/length of the physical domain. Assumes square domain [-1, 1]^2 by default</span>
 <span class="sd">    periodic: bool, optional</span>
@@ -908,6 +974,7 @@
         <span class="n">in_shape</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
         <span class="n">out_shape</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
         <span class="n">kernel_shape</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
+        <span class="n">basis_type</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;piecewise_linear&quot;</span><span class="p">,</span>
         <span class="n">domain_length</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">periodic</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">groups</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
@@ -962,6 +1029,7 @@
                                                       <span class="n">grid_out</span><span class="p">,</span>
                                                       <span class="bp">self</span><span class="o">.</span><span class="n">kernel_shape</span><span class="p">,</span>
                                                       <span class="n">quadrature_weights</span><span class="p">,</span>
+                                                      <span class="n">basis_type</span><span class="o">=</span><span class="n">basis_type</span><span class="p">,</span>
                                                       <span class="n">radius_cutoff</span><span class="o">=</span><span class="n">radius_cutoff</span><span class="p">,</span>
                                                       <span class="n">periodic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                                       <span class="n">transpose_normalization</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
