@@ -323,7 +323,9 @@ and <code class="code docutils literal notranslate"><span class="pre">compl_mul2
 of size <cite>n</cite> along each dim that indexes Fourier modes <code class="code docutils literal notranslate"><span class="pre">0,</span> <span class="pre">1,</span> <span class="pre">2,</span> <span class="pre">...</span> <span class="pre">n//2,</span> <span class="pre">-n//2,</span> <span class="pre">-n//2</span> <span class="pre">-</span> <span class="pre">1,</span> <span class="pre">...-1</span></code>. Since our
 inputs are real-valued, we take the real-valued FFT, which is skew-symmetric, so information is repeated across
 one axis. Therefore it is sufficient to keep only two of the four corners of the FFT matrix.</p>
-<p>Equivalently, we could also apply a periodic FFT-shift using <code class="code docutils literal notranslate"><span class="pre">torch.fft.fftshift</span></code> to move the zero-frequency component
+<p><strong>Shifting the FFT signal</strong>
+.. _fft_shift_explanation :
+Equivalently, we could also apply a periodic FFT-shift using <code class="code docutils literal notranslate"><span class="pre">torch.fft.fftshift</span></code> to move the zero-frequency component
 to the center of the FFT matrix, such that the matrix would be indexed with modes <code class="code docutils literal notranslate"><span class="pre">-n//2,</span> <span class="pre">-n//2</span> <span class="pre">+</span> <span class="pre">1,</span> <span class="pre">...-1,</span> <span class="pre">0,</span> <span class="pre">1,</span> <span class="pre">...</span></code>
 as shown below:</p>
 <figure class="align-default" id="id7">
