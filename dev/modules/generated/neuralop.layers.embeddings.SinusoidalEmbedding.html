@@ -167,25 +167,28 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.embeddings.</span></span><span class="sig-name descname"><span class="pre">SinusoidalEmbedding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_frequencies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'transformer'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_positions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/embeddings.html#SinusoidalEmbedding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.embeddings.SinusoidalEmbedding" title="Link to this definition"></a></dt>
 <dd><p>SinusoidalEmbedding provides a unified sinusoidal positional embedding
 in the styles of Transformers <a class="reference internal" href="#r2f544174e18d-1" id="id1">[1]</a> and Neural Radiance Fields (NERFs) <a class="reference internal" href="#r2f544174e18d-2" id="id2">[2]</a>.</p>
-<dl class="field-list">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl>
-<dt><strong>in_channels</strong><span class="classifier">int</span></dt><dd><p>Number of input channels to embed</p>
-</dd>
-<dt><strong>num_freqs</strong><span class="classifier">int, optional</span></dt><dd><p>Number of frequencies in positional embedding.
+<p>Expects inputs of shape <code class="docutils literal notranslate"><span class="pre">(batch,</span> <span class="pre">n_in,</span> <span class="pre">in_channels)</span></code> or <code class="docutils literal notranslate"><span class="pre">(n_in,</span> <span class="pre">in_channels)</span></code>
+Parameters
+———-
+in_channels : <code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+<blockquote>
+<div><p>Number of input channels to embed</p>
+</div></blockquote>
+<dl>
+<dt>num_freqs<span class="classifier"><code class="docutils literal notranslate"><span class="pre">int</span></code>, optional</span></dt><dd><p>Number of frequencies in positional embedding.
 By default, set to the number of input channels</p>
 </dd>
-<dt><strong>embedding</strong><span class="classifier">{‘transformer’, ‘nerf’}</span></dt><dd><p>Type of embedding to apply. For a function with N input channels, 
+<dt>embedding<span class="classifier"><code class="docutils literal notranslate"><span class="pre">{'transformer',</span> <span class="pre">'nerf'}</span></code></span></dt><dd><p>Type of embedding to apply. For a function with N input channels, 
 each channel value p is embedded via a function g with 2L channels 
 such that g(p) is a 2L-dim vector. For 0 &lt;= k &lt; L:</p>
 <ul>
-<li><p>‘transformer’ for transformer-style encoding.</p>
+<li><p><code class="docutils literal notranslate"><span class="pre">'transformer'</span></code> for transformer-style encoding.</p>
 <blockquote>
 <div><p>g(p)_k = sin((p / max_positions) ^ {k / N})</p>
 <p>g(p)_{k+1} = cos((p / max_positions) ^ {k / N})</p>
 </div></blockquote>
 </li>
-<li><p>‘nerf’ : NERF-style encoding.</p>
+<li><p><code class="docutils literal notranslate"><span class="pre">'nerf'</span></code> : NERF-style encoding.</p>
 <blockquote>
 <div><p>g(p)_k = sin(2^(k) * Pi * p)</p>
 <p>g(p)_{k+1} = cos(2^(k) * Pi * p)</p>
@@ -193,14 +196,14 @@ such that g(p) is a 2L-dim vector. For 0 &lt;= k &lt; L:</p>
 </li>
 </ul>
 </dd>
-<dt><strong>max_positions</strong><span class="classifier">int, optional</span></dt><dd><p>Maximum number of positions for the encoding, default 10000
+<dt>max_positions<span class="classifier"><code class="docutils literal notranslate"><span class="pre">int</span></code>, optional</span></dt><dd><p>Maximum number of positions for the encoding, default 10000
 Only used if <cite>embedding == transformer</cite>.</p>
 </dd>
 </dl>
-</dd>
-<dt class="field-even">Attributes<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><a class="reference internal" href="#neuralop.layers.embeddings.SinusoidalEmbedding.out_channels" title="neuralop.layers.embeddings.SinusoidalEmbedding.out_channels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">out_channels</span></code></a></dt><dd><p>out_channels: required property for linking/composing model layers</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><a class="reference internal" href="#neuralop.layers.embeddings.SinusoidalEmbedding.out_channels" title="neuralop.layers.embeddings.SinusoidalEmbedding.out_channels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">out_channels</span></code></a></dt><dd><p>required property for linking/composing model layers</p>
 </dd>
 </dl>
 </dd>
@@ -217,29 +220,21 @@ Only used if <cite>embedding == transformer</cite>.</p>
 <div role="list" class="citation-list">
 <div class="citation" id="r2f544174e18d-1" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
-<p>:</p>
-</div>
-</div>
-<dl class="simple">
-<dt>Vaswani, A. et al (2017)</dt><dd><p>“Attention Is All You Need”. 
+<p>: Vaswani, A. et al (2017)
+“Attention Is All You Need”. 
 NeurIPS 2017, <a class="reference external" href="https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf">https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf</a>.</p>
-</dd>
-</dl>
-<div role="list" class="citation-list">
+</div>
 <div class="citation" id="r2f544174e18d-2" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
-<p>:</p>
-</div>
-</div>
-<dl class="simple">
-<dt>Mildenhall, B. et al (2020)</dt><dd><p>“NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis”.
+<p>: Mildenhall, B. et al (2020)
+“NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis”.
 ArXiv, <a class="reference external" href="https://arxiv.org/pdf/2003.08934">https://arxiv.org/pdf/2003.08934</a>.</p>
-</dd>
-</dl>
+</div>
+</div>
 <dl class="py property">
 <dt class="sig sig-object py" id="neuralop.layers.embeddings.SinusoidalEmbedding.out_channels">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">out_channels</span></span><a class="headerlink" href="#neuralop.layers.embeddings.SinusoidalEmbedding.out_channels" title="Link to this definition"></a></dt>
-<dd><p>out_channels: required property for linking/composing model layers</p>
+<dd><p>required property for linking/composing model layers</p>
 </dd></dl>
 
 <dl class="py method">
@@ -248,7 +243,8 @@ ArXiv, <a class="reference external" href="https://arxiv.org/pdf/2003.08934">htt
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>x: torch.Tensor, shape (n_in, self.in_channels) or (batch, n_in, self.in_channels)</strong></dt><dd></dd>
+<dt><strong>x: ``torch.Tensor``</strong></dt><dd><p>shape <code class="docutils literal notranslate"><span class="pre">(n_in,</span> <span class="pre">self.in_channels)</span></code> or <code class="docutils literal notranslate"><span class="pre">(batch,</span> <span class="pre">n_in,</span> <span class="pre">self.in_channels)</span></code></p>
+</dd>
 </dl>
 </dd>
 </dl>

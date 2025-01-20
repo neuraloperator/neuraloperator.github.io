@@ -165,10 +165,20 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.layers.embeddings.GridEmbedding2D">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.embeddings.</span></span><span class="sig-name descname"><span class="pre">GridEmbedding2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_boundaries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[[0,</span> <span class="pre">1],</span> <span class="pre">[0,</span> <span class="pre">1]]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/embeddings.html#GridEmbedding2D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.embeddings.GridEmbedding2D" title="Link to this definition"></a></dt>
-<dd><p>A simple positional embedding as a regular 2D grid</p>
-<dl class="field-list simple">
-<dt class="field-odd">Attributes<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
+<dd><p><code class="docutils literal notranslate"><span class="pre">GridEmbedding2D</span></code> applies a simple positional 
+embedding as a regular 2D grid. Expects inputs of shape
+<code class="docutils literal notranslate"><span class="pre">(batch,</span> <span class="pre">channels,</span> <span class="pre">d_1,</span> <span class="pre">d_2)</span></code></p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>in_channels</strong><span class="classifier"><code class="docutils literal notranslate"><span class="pre">int</span></code></span></dt><dd><p>number of channels in input. Fixed for output channel interface</p>
+</dd>
+<dt><strong>grid_boundaries</strong><span class="classifier"><code class="docutils literal notranslate"><span class="pre">list</span></code>, optional</span></dt><dd><p>coordinate boundaries of input grid, by default [[0, 1], [0, 1]]</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
 <dt><strong>out_channels</strong></dt><dd></dd>
 </dl>
 </dd>
