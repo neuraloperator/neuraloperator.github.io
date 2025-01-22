@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>neuralop.layers.local_fno_block &#8212; neuraloperator 1.0.2 documentation</title> 
+    <title>neuralop.layers.local_no_block &#8212; neuraloperator 1.0.2 documentation</title> 
 <link rel="stylesheet" href="../../../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../../../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../../_static/favicon/favicon-32x32.png">
@@ -112,7 +112,7 @@
 
       <div class="container content main-content">
         
-  <h1>Source code for neuralop.layers.local_fno_block</h1><div class="highlight"><pre>
+  <h1>Source code for neuralop.layers.local_no_block</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
@@ -133,10 +133,10 @@
 <span class="n">Number</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="LocalFNOBlocks">
-<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.local_fno_block.LocalFNOBlocks.html#neuralop.layers.local_fno_block.LocalFNOBlocks">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">LocalFNOBlocks</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;LocalFNOBlocks implements a sequence of Fourier layers, the operations of which </span>
+<div class="viewcode-block" id="LocalNOBlocks">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.local_no_block.LocalNOBlocks.html#neuralop.layers.local_no_block.LocalNOBlocks">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LocalNOBlocks</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;LocalNOBlocks implements a sequence of Fourier layers, the operations of which </span>
 <span class="sd">    are first described in [1]_. The exact implementation details of the Fourier </span>
 <span class="sd">    layer architecture are discussed in [2]_. The Fourier layers are placed in parallel </span>
 <span class="sd">    with differential kernel layers and local integral layers, as described in [3]_.</span>
@@ -184,7 +184,7 @@
 <span class="sd">        Whether to mix derivatives across channels.</span>
 <span class="sd">    max_n_modes : int, List[int], optional</span>
 <span class="sd">        maximum number of modes to keep along each dimension, by default None</span>
-<span class="sd">    fno_block_precision : str, optional</span>
+<span class="sd">    local_no_block_precision : str, optional</span>
 <span class="sd">        floating point precision to use for computations, by default &quot;full&quot;</span>
 <span class="sd">    channel_mlp_dropout : int, optional</span>
 <span class="sd">        dropout parameter for self.channel_mlp, by default 0</span>
@@ -203,8 +203,8 @@
 <span class="sd">        whether to call forward pass with pre-activation, by default False</span>
 <span class="sd">        if True, call nonlinear activation and norm before Fourier convolution</span>
 <span class="sd">        if False, call activation and norms after Fourier convolutions</span>
-<span class="sd">    fno_skip : str, optional</span>
-<span class="sd">        module to use for FNO skip connections, by default &quot;linear&quot;</span>
+<span class="sd">    local_no_skip : str, optional</span>
+<span class="sd">        module to use for Local NO skip connections, by default &quot;linear&quot;</span>
 <span class="sd">        see layers.skip_connections for more details</span>
 <span class="sd">    channel_mlp_skip : str, optional</span>
 <span class="sd">        module to use for ChannelMLP skip connections, by default &quot;soft-gating&quot;</span>
@@ -213,7 +213,7 @@
 <span class="sd">    Other Parameters</span>
 <span class="sd">    -------------------</span>
 <span class="sd">    complex_data : bool, optional</span>
-<span class="sd">        whether the FNO&#39;s data takes on complex values in space, by default False</span>
+<span class="sd">        whether the Local NO&#39;s data takes on complex values in space, by default False</span>
 <span class="sd">    separable : bool, optional</span>
 <span class="sd">        separable parameter for SpectralConv, by default False</span>
 <span class="sd">    factorization : str, optional</span>
@@ -221,7 +221,7 @@
 <span class="sd">    rank : float, optional</span>
 <span class="sd">        rank parameter for SpectralConv, by default 1.0</span>
 <span class="sd">    conv_module : BaseConv, optional</span>
-<span class="sd">        module to use for convolutions in FNO block, by default SpectralConv</span>
+<span class="sd">        module to use for convolutions in Local NO block, by default SpectralConv</span>
 <span class="sd">    joint_factorization : bool, optional</span>
 <span class="sd">        whether to factorize all spectralConv weights as one tensor, by default False</span>
 <span class="sd">    fixed_rank_modes : bool, optional</span>
@@ -261,7 +261,7 @@
         <span class="n">fin_diff_kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
         <span class="n">mix_derivatives</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">max_n_modes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">fno_block_precision</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">,</span>
+        <span class="n">local_no_block_precision</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">,</span>
         <span class="n">use_channel_mlp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">channel_mlp_dropout</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="n">channel_mlp_expansion</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
@@ -270,7 +270,7 @@
         <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">ada_in_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">preactivation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">fno_skip</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
+        <span class="n">local_no_skip</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
         <span class="n">channel_mlp_skip</span><span class="o">=</span><span class="s2">&quot;soft-gating&quot;</span><span class="p">,</span>
         <span class="n">separable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">factorization</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -311,7 +311,7 @@
         <span class="p">]</span> <span class="o">=</span> <span class="n">validate_scaling_factor</span><span class="p">(</span><span class="n">resolution_scaling_factor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">,</span> <span class="n">n_layers</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">max_n_modes</span> <span class="o">=</span> <span class="n">max_n_modes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fno_block_precision</span> <span class="o">=</span> <span class="n">fno_block_precision</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">local_no_block_precision</span> <span class="o">=</span> <span class="n">local_no_block_precision</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span> <span class="o">=</span> <span class="n">in_channels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span> <span class="o">=</span> <span class="n">out_channels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_layers</span> <span class="o">=</span> <span class="n">n_layers</span>
@@ -321,7 +321,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">factorization</span> <span class="o">=</span> <span class="n">factorization</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fixed_rank_modes</span> <span class="o">=</span> <span class="n">fixed_rank_modes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">decomposition_kwargs</span> <span class="o">=</span> <span class="n">decomposition_kwargs</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fno_skip</span> <span class="o">=</span> <span class="n">fno_skip</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">local_no_skip</span> <span class="o">=</span> <span class="n">local_no_skip</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">channel_mlp_skip</span> <span class="o">=</span> <span class="n">channel_mlp_skip</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">use_channel_mlp</span> <span class="o">=</span> <span class="n">use_channel_mlp</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">channel_mlp_expansion</span> <span class="o">=</span> <span class="n">channel_mlp_expansion</span>
@@ -371,12 +371,12 @@
             <span class="p">]</span>
         <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">fno_skips</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">local_no_skips</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
             <span class="p">[</span>
                 <span class="n">skip_connection</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span><span class="p">,</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span><span class="p">,</span>
-                    <span class="n">skip_type</span><span class="o">=</span><span class="n">fno_skip</span><span class="p">,</span>
+                    <span class="n">skip_type</span><span class="o">=</span><span class="n">local_no_skip</span><span class="p">,</span>
                     <span class="n">n_dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span><span class="p">)</span>
@@ -483,8 +483,8 @@
                 <span class="s2">&quot;[instance_norm, group_norm, ada_in]&quot;</span>
             <span class="p">)</span>
 
-<div class="viewcode-block" id="LocalFNOBlocks.set_ada_in_embeddings">
-<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.local_fno_block.LocalFNOBlocks.html#neuralop.layers.local_fno_block.LocalFNOBlocks.set_ada_in_embeddings">[docs]</a>
+<div class="viewcode-block" id="LocalNOBlocks.set_ada_in_embeddings">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.local_no_block.LocalNOBlocks.html#neuralop.layers.local_no_block.LocalNOBlocks.set_ada_in_embeddings">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_ada_in_embeddings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">embeddings</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets the embeddings of each Ada-IN norm layers</span>
 
@@ -502,8 +502,8 @@
                 <span class="n">norm</span><span class="o">.</span><span class="n">set_embedding</span><span class="p">(</span><span class="n">embedding</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="LocalFNOBlocks.forward">
-<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.local_fno_block.LocalFNOBlocks.html#neuralop.layers.local_fno_block.LocalFNOBlocks.forward">[docs]</a>
+<div class="viewcode-block" id="LocalNOBlocks.forward">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.local_no_block.LocalNOBlocks.html#neuralop.layers.local_no_block.LocalNOBlocks.forward">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">preactivation</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward_with_preactivation</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">output_shape</span><span class="p">)</span>
@@ -512,8 +512,8 @@
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">forward_with_postactivation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">x_skip_fno</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fno_skips</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">)</span>
-        <span class="n">x_skip_fno</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convs</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x_skip_fno</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
+        <span class="n">x_skip_local_no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_no_skips</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x_skip_local_no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convs</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x_skip_local_no</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mlp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">x_skip_mlp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_mlp_skips</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">)</span>
@@ -522,7 +522,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stabilizer</span> <span class="o">==</span> <span class="s2">&quot;tanh&quot;</span><span class="p">:</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
-        <span class="n">x_fno</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convs</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
+        <span class="n">x_local_no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convs</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">differential_idx_list</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
             <span class="n">grid_width_scaling_factor</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_in_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -537,12 +537,12 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">x_localconv</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="n">x_fno_diff_disco</span> <span class="o">=</span> <span class="n">x_fno</span> <span class="o">+</span> <span class="n">x_differential</span> <span class="o">+</span> <span class="n">x_localconv</span>
+        <span class="n">x_local_no_diff_disco</span> <span class="o">=</span> <span class="n">x_local_no</span> <span class="o">+</span> <span class="n">x_differential</span> <span class="o">+</span> <span class="n">x_localconv</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">x_fno_diff_disco</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">n_norms</span> <span class="o">*</span> <span class="n">index</span><span class="p">](</span><span class="n">x_fno_diff_disco</span><span class="p">)</span>
+            <span class="n">x_local_no_diff_disco</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">n_norms</span> <span class="o">*</span> <span class="n">index</span><span class="p">](</span><span class="n">x_local_no_diff_disco</span><span class="p">)</span>
 
-        <span class="n">x</span> <span class="o">=</span> <span class="n">x_fno_diff_disco</span> <span class="o">+</span> <span class="n">x_skip_fno</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x_local_no_diff_disco</span> <span class="o">+</span> <span class="n">x_skip_local_no</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mlp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">index</span> <span class="o">&lt;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_layers</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)):</span>
             <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">non_linearity</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -577,8 +577,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">x_localconv</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="n">x_skip_fno</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fno_skips</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">)</span>
-        <span class="n">x_skip_local_fno</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convs</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x_skip_fno</span> <span class="o">+</span> <span class="n">x_differential</span> <span class="o">+</span> <span class="n">x_localconv</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
+        <span class="n">x_skip_local_no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_no_skips</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x_skip_local_local_no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convs</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x_skip_local_no</span> <span class="o">+</span> <span class="n">x_differential</span> <span class="o">+</span> <span class="n">x_localconv</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mlp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">x_skip_mlp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_mlp_skips</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">)</span>
@@ -587,9 +587,9 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stabilizer</span> <span class="o">==</span> <span class="s2">&quot;tanh&quot;</span><span class="p">:</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
-        <span class="n">x_fno</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convs</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
+        <span class="n">x_local_no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convs</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
 
-        <span class="n">x</span> <span class="o">=</span> <span class="n">x_fno</span> <span class="o">+</span> <span class="n">x_skip_local_fno</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x_local_no</span> <span class="o">+</span> <span class="n">x_skip_local_local_no</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mlp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_layers</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
@@ -612,12 +612,12 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">convs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">n_modes</span> <span class="o">=</span> <span class="n">n_modes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_n_modes</span> <span class="o">=</span> <span class="n">n_modes</span>
 
-<div class="viewcode-block" id="LocalFNOBlocks.get_block">
-<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.local_fno_block.LocalFNOBlocks.html#neuralop.layers.local_fno_block.LocalFNOBlocks.get_block">[docs]</a>
+<div class="viewcode-block" id="LocalNOBlocks.get_block">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.local_no_block.LocalNOBlocks.html#neuralop.layers.local_no_block.LocalNOBlocks.get_block">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a sub-FNO Block layer from the jointly parametrized main block</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a sub-NO Block layer from the jointly parametrized main block</span>
 
-<span class="sd">        The parametrization of an FNOBlock layer is shared with the main one.</span>
+<span class="sd">        The parametrization of an LocalNOBlock layer is shared with the main one.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_layers</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>

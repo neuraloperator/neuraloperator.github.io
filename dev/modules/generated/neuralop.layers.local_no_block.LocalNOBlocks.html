@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>neuralop.layers.local_fno_block.LocalFNOBlocks &#8212; neuraloperator 1.0.2 documentation</title> 
+    <title>neuralop.layers.local_no_block.LocalNOBlocks &#8212; neuraloperator 1.0.2 documentation</title> 
 <link rel="stylesheet" href="../../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../_static/favicon/favicon-32x32.png">
@@ -160,15 +160,15 @@
 
       <div class="container content main-content">
         
-  <section id="neuralop-layers-local-fno-block-localfnoblocks">
-<h1><a class="reference internal" href="../api.html#module-neuralop.layers.local_fno_block" title="neuralop.layers.local_fno_block"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.local_fno_block</span></code></a>.LocalFNOBlocks<a class="headerlink" href="#neuralop-layers-local-fno-block-localfnoblocks" title="Link to this heading"></a></h1>
+  <section id="neuralop-layers-local-no-block-localnoblocks">
+<h1><a class="reference internal" href="../api.html#module-neuralop.layers.local_no_block" title="neuralop.layers.local_no_block"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.local_no_block</span></code></a>.LocalNOBlocks<a class="headerlink" href="#neuralop-layers-local-no-block-localnoblocks" title="Link to this heading"></a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="neuralop.layers.local_fno_block.LocalFNOBlocks">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.local_fno_block.</span></span><span class="sig-name descname"><span class="pre">LocalFNOBlocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">in_channels,</span> <span class="pre">out_channels,</span> <span class="pre">n_modes,</span> <span class="pre">default_in_shape,</span> <span class="pre">resolution_scaling_factor=None,</span> <span class="pre">n_layers=1,</span> <span class="pre">disco_layers=True,</span> <span class="pre">disco_kernel_shape=[2,</span> <span class="pre">4],</span> <span class="pre">radius_cutoff=None,</span> <span class="pre">domain_length=[2,</span> <span class="pre">2],</span> <span class="pre">disco_groups=1,</span> <span class="pre">disco_bias=True,</span> <span class="pre">diff_layers=True,</span> <span class="pre">conv_padding_mode='periodic',</span> <span class="pre">fin_diff_kernel_size=3,</span> <span class="pre">mix_derivatives=True,</span> <span class="pre">max_n_modes=None,</span> <span class="pre">fno_block_precision='full',</span> <span class="pre">use_channel_mlp=False,</span> <span class="pre">channel_mlp_dropout=0,</span> <span class="pre">channel_mlp_expansion=0.5,</span> <span class="pre">non_linearity=&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;,</span> <span class="pre">stabilizer=None,</span> <span class="pre">norm=None,</span> <span class="pre">ada_in_features=None,</span> <span class="pre">preactivation=False,</span> <span class="pre">fno_skip='linear',</span> <span class="pre">channel_mlp_skip='soft-gating',</span> <span class="pre">separable=False,</span> <span class="pre">factorization=None,</span> <span class="pre">rank=1.0,</span> <span class="pre">conv_module=&lt;class</span> <span class="pre">'neuralop.layers.spectral_convolution.SpectralConv'&gt;,</span> <span class="pre">fixed_rank_modes=False,</span> <span class="pre">implementation='factorized',</span> <span class="pre">decomposition_kwargs={},</span> <span class="pre">fft_norm='forward',</span> <span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/local_fno_block.html#LocalFNOBlocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.local_fno_block.LocalFNOBlocks" title="Link to this definition"></a></dt>
-<dd><p>LocalFNOBlocks implements a sequence of Fourier layers, the operations of which 
-are first described in <a class="reference internal" href="#r2682a61a8277-1" id="id1">[1]</a>. The exact implementation details of the Fourier 
-layer architecture are discussed in <a class="reference internal" href="#r2682a61a8277-2" id="id2">[2]</a>. The Fourier layers are placed in parallel 
-with differential kernel layers and local integral layers, as described in <a class="reference internal" href="#r2682a61a8277-3" id="id3">[3]</a>.</p>
+<dt class="sig sig-object py" id="neuralop.layers.local_no_block.LocalNOBlocks">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.local_no_block.</span></span><span class="sig-name descname"><span class="pre">LocalNOBlocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">in_channels,</span> <span class="pre">out_channels,</span> <span class="pre">n_modes,</span> <span class="pre">default_in_shape,</span> <span class="pre">resolution_scaling_factor=None,</span> <span class="pre">n_layers=1,</span> <span class="pre">disco_layers=True,</span> <span class="pre">disco_kernel_shape=[2,</span> <span class="pre">4],</span> <span class="pre">radius_cutoff=None,</span> <span class="pre">domain_length=[2,</span> <span class="pre">2],</span> <span class="pre">disco_groups=1,</span> <span class="pre">disco_bias=True,</span> <span class="pre">diff_layers=True,</span> <span class="pre">conv_padding_mode='periodic',</span> <span class="pre">fin_diff_kernel_size=3,</span> <span class="pre">mix_derivatives=True,</span> <span class="pre">max_n_modes=None,</span> <span class="pre">local_no_block_precision='full',</span> <span class="pre">use_channel_mlp=False,</span> <span class="pre">channel_mlp_dropout=0,</span> <span class="pre">channel_mlp_expansion=0.5,</span> <span class="pre">non_linearity=&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;,</span> <span class="pre">stabilizer=None,</span> <span class="pre">norm=None,</span> <span class="pre">ada_in_features=None,</span> <span class="pre">preactivation=False,</span> <span class="pre">local_no_skip='linear',</span> <span class="pre">channel_mlp_skip='soft-gating',</span> <span class="pre">separable=False,</span> <span class="pre">factorization=None,</span> <span class="pre">rank=1.0,</span> <span class="pre">conv_module=&lt;class</span> <span class="pre">'neuralop.layers.spectral_convolution.SpectralConv'&gt;,</span> <span class="pre">fixed_rank_modes=False,</span> <span class="pre">implementation='factorized',</span> <span class="pre">decomposition_kwargs={},</span> <span class="pre">fft_norm='forward',</span> <span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/local_no_block.html#LocalNOBlocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.local_no_block.LocalNOBlocks" title="Link to this definition"></a></dt>
+<dd><p>LocalNOBlocks implements a sequence of Fourier layers, the operations of which 
+are first described in <a class="reference internal" href="#r367398f5802a-1" id="id1">[1]</a>. The exact implementation details of the Fourier 
+layer architecture are discussed in <a class="reference internal" href="#r367398f5802a-2" id="id2">[2]</a>. The Fourier layers are placed in parallel 
+with differential kernel layers and local integral layers, as described in <a class="reference internal" href="#r367398f5802a-3" id="id3">[3]</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -213,7 +213,7 @@ bool, shared for all layers.</p>
 </dd>
 <dt><strong>max_n_modes</strong><span class="classifier">int, List[int], optional</span></dt><dd><p>maximum number of modes to keep along each dimension, by default None</p>
 </dd>
-<dt><strong>fno_block_precision</strong><span class="classifier">str, optional</span></dt><dd><p>floating point precision to use for computations, by default “full”</p>
+<dt><strong>local_no_block_precision</strong><span class="classifier">str, optional</span></dt><dd><p>floating point precision to use for computations, by default “full”</p>
 </dd>
 <dt><strong>channel_mlp_dropout</strong><span class="classifier">int, optional</span></dt><dd><p>dropout parameter for self.channel_mlp, by default 0</p>
 </dd>
@@ -232,7 +232,7 @@ if “tanh”, use tanh</p>
 if True, call nonlinear activation and norm before Fourier convolution
 if False, call activation and norms after Fourier convolutions</p>
 </dd>
-<dt><strong>fno_skip</strong><span class="classifier">str, optional</span></dt><dd><p>module to use for FNO skip connections, by default “linear”
+<dt><strong>local_no_skip</strong><span class="classifier">str, optional</span></dt><dd><p>module to use for Local NO skip connections, by default “linear”
 see layers.skip_connections for more details</p>
 </dd>
 <dt><strong>channel_mlp_skip</strong><span class="classifier">str, optional</span></dt><dd><p>module to use for ChannelMLP skip connections, by default “soft-gating”
@@ -249,13 +249,13 @@ see layers.skip_connections for more details</p>
 <p class="rubric">Methods</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.layers.local_fno_block.LocalFNOBlocks.forward" title="neuralop.layers.local_fno_block.LocalFNOBlocks.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>(x[, index, output_shape])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.layers.local_no_block.LocalNOBlocks.forward" title="neuralop.layers.local_no_block.LocalNOBlocks.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>(x[, index, output_shape])</p></td>
 <td><p>Define the computation performed at every call.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#neuralop.layers.local_fno_block.LocalFNOBlocks.get_block" title="neuralop.layers.local_fno_block.LocalFNOBlocks.get_block"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_block</span></code></a>(indices)</p></td>
-<td><p>Returns a sub-FNO Block layer from the jointly parametrized main block</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#neuralop.layers.local_no_block.LocalNOBlocks.get_block" title="neuralop.layers.local_no_block.LocalNOBlocks.get_block"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_block</span></code></a>(indices)</p></td>
+<td><p>Returns a sub-NO Block layer from the jointly parametrized main block</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.layers.local_fno_block.LocalFNOBlocks.set_ada_in_embeddings" title="neuralop.layers.local_fno_block.LocalFNOBlocks.set_ada_in_embeddings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_ada_in_embeddings</span></code></a>(*embeddings)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.layers.local_no_block.LocalNOBlocks.set_ada_in_embeddings" title="neuralop.layers.local_no_block.LocalNOBlocks.set_ada_in_embeddings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_ada_in_embeddings</span></code></a>(*embeddings)</p></td>
 <td><p>Sets the embeddings of each Ada-IN norm layers</p></td>
 </tr>
 </tbody>
@@ -273,7 +273,7 @@ see layers.skip_connections for more details</p>
 <dl class="field-list simple">
 <dt class="field-odd">Other Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>complex_data</strong><span class="classifier">bool, optional</span></dt><dd><p>whether the FNO’s data takes on complex values in space, by default False</p>
+<dt><strong>complex_data</strong><span class="classifier">bool, optional</span></dt><dd><p>whether the Local NO’s data takes on complex values in space, by default False</p>
 </dd>
 <dt><strong>separable</strong><span class="classifier">bool, optional</span></dt><dd><p>separable parameter for SpectralConv, by default False</p>
 </dd>
@@ -281,7 +281,7 @@ see layers.skip_connections for more details</p>
 </dd>
 <dt><strong>rank</strong><span class="classifier">float, optional</span></dt><dd><p>rank parameter for SpectralConv, by default 1.0</p>
 </dd>
-<dt><strong>conv_module</strong><span class="classifier">BaseConv, optional</span></dt><dd><p>module to use for convolutions in FNO block, by default SpectralConv</p>
+<dt><strong>conv_module</strong><span class="classifier">BaseConv, optional</span></dt><dd><p>module to use for convolutions in Local NO block, by default SpectralConv</p>
 </dd>
 <dt><strong>joint_factorization</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to factorize all spectralConv weights as one tensor, by default False</p>
 </dd>
@@ -296,18 +296,18 @@ see layers.skip_connections for more details</p>
 </dl>
 <p class="rubric">References</p>
 <div role="list" class="citation-list">
-<div class="citation" id="r2682a61a8277-1" role="doc-biblioentry">
+<div class="citation" id="r367398f5802a-1" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
 <p>Li, Z. et al. “Fourier Neural Operator for Parametric Partial Differential 
 Equations” (2021). ICLR 2021, <a class="reference external" href="https://arxiv.org/pdf/2010.08895">https://arxiv.org/pdf/2010.08895</a>.</p>
 </div>
-<div class="citation" id="r2682a61a8277-2" role="doc-biblioentry">
+<div class="citation" id="r367398f5802a-2" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
 <p>Kossaifi, J., Kovachki, N., Azizzadenesheli, K., Anandkumar, A. “Multi-Grid
 Tensorized Fourier Neural Operator for High-Resolution PDEs” (2024). 
 TMLR 2024, <a class="reference external" href="https://openreview.net/pdf?id=AWiDlO63bH">https://openreview.net/pdf?id=AWiDlO63bH</a>.</p>
 </div>
-<div class="citation" id="r2682a61a8277-3" role="doc-biblioentry">
+<div class="citation" id="r367398f5802a-3" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>
 <p>Liu-Schiaffini M., Berner J., Bonev B., Kurth T., Azizzadenesheli K., Anandkumar A.;
 “Neural Operators with Localized Integral and Differential Kernels” (2024).  
@@ -315,8 +315,8 @@ ICML 2024, <a class="reference external" href="https://arxiv.org/pdf/2402.16845"
 </div>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="neuralop.layers.local_fno_block.LocalFNOBlocks.set_ada_in_embeddings">
-<span class="sig-name descname"><span class="pre">set_ada_in_embeddings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">embeddings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/local_fno_block.html#LocalFNOBlocks.set_ada_in_embeddings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.local_fno_block.LocalFNOBlocks.set_ada_in_embeddings" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="neuralop.layers.local_no_block.LocalNOBlocks.set_ada_in_embeddings">
+<span class="sig-name descname"><span class="pre">set_ada_in_embeddings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">embeddings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/local_no_block.html#LocalNOBlocks.set_ada_in_embeddings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.local_no_block.LocalNOBlocks.set_ada_in_embeddings" title="Link to this definition"></a></dt>
 <dd><p>Sets the embeddings of each Ada-IN norm layers</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -330,8 +330,8 @@ otherwise, each embedding will be used for the corresponding norm layer</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="neuralop.layers.local_fno_block.LocalFNOBlocks.forward">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/local_fno_block.html#LocalFNOBlocks.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.local_fno_block.LocalFNOBlocks.forward" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="neuralop.layers.local_no_block.LocalNOBlocks.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/local_no_block.html#LocalNOBlocks.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.local_no_block.LocalNOBlocks.forward" title="Link to this definition"></a></dt>
 <dd><p>Define the computation performed at every call.</p>
 <p>Should be overridden by all subclasses.</p>
 <div class="admonition note">
@@ -344,10 +344,10 @@ registered hooks while the latter silently ignores them.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="neuralop.layers.local_fno_block.LocalFNOBlocks.get_block">
-<span class="sig-name descname"><span class="pre">get_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indices</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/local_fno_block.html#LocalFNOBlocks.get_block"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.local_fno_block.LocalFNOBlocks.get_block" title="Link to this definition"></a></dt>
-<dd><p>Returns a sub-FNO Block layer from the jointly parametrized main block</p>
-<p>The parametrization of an FNOBlock layer is shared with the main one.</p>
+<dt class="sig sig-object py" id="neuralop.layers.local_no_block.LocalNOBlocks.get_block">
+<span class="sig-name descname"><span class="pre">get_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indices</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/local_no_block.html#LocalNOBlocks.get_block"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.local_no_block.LocalNOBlocks.get_block" title="Link to this definition"></a></dt>
+<dd><p>Returns a sub-NO Block layer from the jointly parametrized main block</p>
+<p>The parametrization of an LocalNOBlock layer is shared with the main one.</p>
 </dd></dl>
 
 </dd></dl>
@@ -405,11 +405,11 @@ registered hooks while the latter silently ignores them.</p>
 
         <div class="menu menu-list localtoc-list">
         <ul>
-<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.local_fno_block</span></code>.LocalFNOBlocks</a><ul>
-<li><a class="reference internal" href="#neuralop.layers.local_fno_block.LocalFNOBlocks"><code class="docutils literal notranslate"><span class="pre">LocalFNOBlocks</span></code></a><ul>
-<li><a class="reference internal" href="#neuralop.layers.local_fno_block.LocalFNOBlocks.set_ada_in_embeddings"><code class="docutils literal notranslate"><span class="pre">LocalFNOBlocks.set_ada_in_embeddings()</span></code></a></li>
-<li><a class="reference internal" href="#neuralop.layers.local_fno_block.LocalFNOBlocks.forward"><code class="docutils literal notranslate"><span class="pre">LocalFNOBlocks.forward()</span></code></a></li>
-<li><a class="reference internal" href="#neuralop.layers.local_fno_block.LocalFNOBlocks.get_block"><code class="docutils literal notranslate"><span class="pre">LocalFNOBlocks.get_block()</span></code></a></li>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.local_no_block</span></code>.LocalNOBlocks</a><ul>
+<li><a class="reference internal" href="#neuralop.layers.local_no_block.LocalNOBlocks"><code class="docutils literal notranslate"><span class="pre">LocalNOBlocks</span></code></a><ul>
+<li><a class="reference internal" href="#neuralop.layers.local_no_block.LocalNOBlocks.set_ada_in_embeddings"><code class="docutils literal notranslate"><span class="pre">LocalNOBlocks.set_ada_in_embeddings()</span></code></a></li>
+<li><a class="reference internal" href="#neuralop.layers.local_no_block.LocalNOBlocks.forward"><code class="docutils literal notranslate"><span class="pre">LocalNOBlocks.forward()</span></code></a></li>
+<li><a class="reference internal" href="#neuralop.layers.local_no_block.LocalNOBlocks.get_block"><code class="docutils literal notranslate"><span class="pre">LocalNOBlocks.get_block()</span></code></a></li>
 </ul>
 </li>
 </ul>

@@ -242,6 +242,17 @@
 </table>
 </section>
 <hr class="docutils" />
+<section id="local-neural-operators-localno">
+<h3>Local Neural Operators (LocalNO)<a class="headerlink" href="#local-neural-operators-localno" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.models.LocalNO.html#neuralop.models.LocalNO" title="neuralop.models.LocalNO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LocalNO</span></code></a>(*args, **kwargs)</p></td>
+<td><p>N-Dimensional Local Fourier Neural Operator.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<hr class="docutils" />
 <section id="u-shaped-neural-operators-u-no">
 <h3>U-shaped Neural Operators (U-NO)<a class="headerlink" href="#u-shaped-neural-operators-u-no" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
@@ -329,11 +340,11 @@ in the form of PyTorch layers, that you can use to build your own models:</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Local FNO Blocks</strong></p>
-<span class="target" id="module-neuralop.layers.local_fno_block"></span><table class="autosummary longtable docutils align-default">
+<p><strong>Local NO Blocks</strong></p>
+<span class="target" id="module-neuralop.layers.local_no_block"></span><table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.layers.local_fno_block.LocalFNOBlocks.html#neuralop.layers.local_fno_block.LocalFNOBlocks" title="neuralop.layers.local_fno_block.LocalFNOBlocks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LocalFNOBlocks</span></code></a>(in_channels, out_channels, ...)</p></td>
-<td><p>LocalFNOBlocks implements a sequence of Fourier layers, the operations of which  are first described in <a class="reference internal" href="generated/neuralop.layers.local_fno_block.LocalFNOBlocks.html#r2682a61a8277-1" id="id11"><span>[R2682a61a8277-1]</span></a>.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.layers.local_no_block.LocalNOBlocks.html#neuralop.layers.local_no_block.LocalNOBlocks" title="neuralop.layers.local_no_block.LocalNOBlocks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LocalNOBlocks</span></code></a>(in_channels, out_channels, ...)</p></td>
+<td><p>LocalNOBlocks implements a sequence of Fourier layers, the operations of which  are first described in <a class="reference internal" href="generated/neuralop.layers.local_no_block.LocalNOBlocks.html#r367398f5802a-1" id="id11"><span>[R367398f5802a-1]</span></a>.</p></td>
 </tr>
 </tbody>
 </table>
@@ -577,6 +588,7 @@ loss functions:</p>
 </li>
 <li><a class="reference internal" href="#spherical-fourier-neural-operators-sfno">Spherical Fourier Neural Operators (SFNO)</a></li>
 <li><a class="reference internal" href="#geometry-informed-neural-operators-gino">Geometry-Informed Neural Operators (GINO)</a></li>
+<li><a class="reference internal" href="#local-neural-operators-localno">Local Neural Operators (LocalNO)</a></li>
 <li><a class="reference internal" href="#u-shaped-neural-operators-u-no">U-shaped Neural Operators (U-NO)</a></li>
 </ul>
 </li>
