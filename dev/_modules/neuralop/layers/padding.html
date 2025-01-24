@@ -113,13 +113,12 @@
       <div class="container content main-content">
         
   <h1>Source code for neuralop.layers.padding</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Literal</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">F</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">validate_scaling_factor</span>
-
 
 <div class="viewcode-block" id="DomainPadding">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.padding.DomainPadding.html#neuralop.layers.padding.DomainPadding">[docs]</a>
@@ -128,24 +127,24 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    domain_padding : float or list</span>
+<span class="sd">    domain_padding : ``float`` or ``list``</span>
 <span class="sd">        typically, between zero and one, percentage of padding to use</span>
 <span class="sd">        if a list, make sure if matches the dim of (d1, ..., dN)</span>
-<span class="sd">    padding_mode : {&#39;symmetric&#39;, &#39;one-sided&#39;}, optional</span>
-<span class="sd">        whether to pad on both sides, by default &#39;one-sided&#39;</span>
-<span class="sd">    resolution_scaling_factor : int ; default is 1</span>
+<span class="sd">    padding_mode : ``Literal [&#39;symmetric&#39;, &#39;one-sided&#39;]``, optional</span>
+<span class="sd">        whether to pad on both sides, by default ``&#39;symmetric&#39;``</span>
+<span class="sd">    resolution_scaling_factor : ``int`` ; default is 1</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    This class works for any input resolution, as long as it is in the form</span>
-<span class="sd">    `(batch-size, channels, d1, ...., dN)`</span>
+<span class="sd">    This class works for any input resolution. Expects inputs of shape</span>
+<span class="sd">   ` `(batch-size, channels, d1, ...., dN)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">domain_padding</span><span class="p">,</span>
-        <span class="n">padding_mode</span><span class="o">=</span><span class="s2">&quot;one-sided&quot;</span><span class="p">,</span>
-        <span class="n">resolution_scaling_factor</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">domain_padding</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">list</span><span class="p">],</span>
+        <span class="n">padding_mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;symmetric&#39;</span><span class="p">,</span> <span class="s1">&#39;one-sided&#39;</span><span class="p">]</span><span class="o">=</span><span class="s2">&quot;symmetric&quot;</span><span class="p">,</span>
+        <span class="n">resolution_scaling_factor</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">domain_padding</span> <span class="o">=</span> <span class="n">domain_padding</span>
@@ -163,7 +162,9 @@
 <div class="viewcode-block" id="DomainPadding.forward">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.padding.DomainPadding.html#neuralop.layers.padding.DomainPadding.forward">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;forward pass: pad the input&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        forward pass: pad the input</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
 
 

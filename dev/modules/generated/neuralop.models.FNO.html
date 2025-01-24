@@ -231,7 +231,7 @@ over a grid with entry [0,0,…] at the origin and side lengths of 1.</p>
 </dd>
 <dt><strong>non_linearity</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>Non-Linear activation function module to use, by default F.gelu</p>
 </dd>
-<dt><strong>norm</strong><span class="classifier">str {“ada_in”, “group_norm”, “instance_norm”}, optional</span></dt><dd><p>Normalization layer to use, by default None</p>
+<dt><strong>norm</strong><span class="classifier">Literal [“ada_in”, “group_norm”, “instance_norm”], optional</span></dt><dd><p>Normalization layer to use, by default None</p>
 </dd>
 <dt><strong>complex_data</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether data is complex-valued (default False)
 if True, initializes complex-valued modules.</p>
@@ -240,9 +240,9 @@ if True, initializes complex-valued modules.</p>
 </dd>
 <dt><strong>channel_mlp_expansion</strong><span class="classifier">float, optional</span></dt><dd><p>expansion parameter for ChannelMLP in FNO Block, by default 0.5</p>
 </dd>
-<dt><strong>channel_mlp_skip</strong><span class="classifier">str {‘linear’, ‘identity’, ‘soft-gating’}, optional</span></dt><dd><p>Type of skip connection to use in channel-mixing mlp, by default ‘soft-gating’</p>
+<dt><strong>channel_mlp_skip</strong><span class="classifier">Literal[‘linear’, ‘identity’, ‘soft-gating’], optional</span></dt><dd><p>Type of skip connection to use in channel-mixing mlp, by default ‘soft-gating’</p>
 </dd>
-<dt><strong>fno_skip</strong><span class="classifier">str {‘linear’, ‘identity’, ‘soft-gating’}, optional</span></dt><dd><p>Type of skip connection to use in FNO layers, by default ‘linear’</p>
+<dt><strong>fno_skip</strong><span class="classifier">Literal[‘linear’, ‘identity’, ‘soft-gating’], optional</span></dt><dd><p>Type of skip connection to use in FNO layers, by default ‘linear’</p>
 </dd>
 <dt><strong>resolution_scaling_factor</strong><span class="classifier">Union[Number, List[Number]], optional</span></dt><dd><p>layer-wise factor by which to scale the domain resolution of function, by default None</p>
 <ul class="simple">
@@ -255,7 +255,7 @@ To vary the percentage of padding used along each input dimension,
 pass in a list of percentages e.g. [p1, p2, …, pN] such that
 p1 corresponds to the percentage of padding along dim 1, etc.</p>
 </dd>
-<dt><strong>domain_padding_mode</strong><span class="classifier">str {‘symmetric’, ‘one-sided’}, optional</span></dt><dd><p>How to perform domain padding, by default ‘one-sided’</p>
+<dt><strong>domain_padding_mode</strong><span class="classifier">Literal [‘symmetric’, ‘one-sided’], optional</span></dt><dd><p>How to perform domain padding, by default ‘symmetric’</p>
 </dd>
 <dt><strong>fno_block_precision</strong><span class="classifier">str {‘full’, ‘half’, ‘mixed’}, optional</span></dt><dd><p>precision mode in which to perform spectral convolution, by default “full”</p>
 </dd>

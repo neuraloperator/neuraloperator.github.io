@@ -240,15 +240,15 @@ Set up the losses
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f48b5fffce0>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f21507f7ce0>
 
     ### LOSSES ###
 
     ### INCREMENTAL RESOLUTION + GRADIENT EXPLAINED ###
 
-     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7f48b4f26490>
+     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7f214bccead0>
 
-     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7f48b4f26490>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f48b5fffbb0>}
+     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7f214bccead0>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f21507f7bb0>}
 
 
 
@@ -345,14 +345,14 @@ Train the model
     Eval: 16_h1=0.7430, 16_l2=0.4140, 32_h1=0.9845, 32_l2=0.4517
     [7] time=0.21, avg_loss=0.5171, train_err=7.3874
     Eval: 16_h1=0.6458, 16_l2=0.3811, 32_h1=0.7995, 32_l2=0.3958
-    [8] time=0.22, avg_loss=0.4453, train_err=6.3618
+    [8] time=0.21, avg_loss=0.4453, train_err=6.3618
     Eval: 16_h1=0.7074, 16_l2=0.3922, 32_h1=0.9458, 32_l2=0.4307
     [9] time=0.21, avg_loss=0.4727, train_err=6.7523
     Eval: 16_h1=0.6108, 16_l2=0.3271, 32_h1=0.8645, 32_l2=0.3611
     Incre Res Update: change index to 1
     Incre Res Update: change sub to 1
     Incre Res Update: change res to 16
-    [10] time=0.29, avg_loss=0.5328, train_err=7.6117
+    [10] time=0.27, avg_loss=0.5328, train_err=7.6117
     Eval: 16_h1=0.5383, 16_l2=0.3552, 32_h1=0.6338, 32_l2=0.3517
     [11] time=0.26, avg_loss=0.4813, train_err=6.8758
     Eval: 16_h1=0.5501, 16_l2=0.3013, 32_h1=0.7214, 32_l2=0.3196
@@ -362,18 +362,18 @@ Train the model
     Eval: 16_h1=0.4169, 16_l2=0.2562, 32_h1=0.5457, 32_l2=0.2703
     [14] time=0.26, avg_loss=0.3848, train_err=5.4966
     Eval: 16_h1=0.5394, 16_l2=0.3147, 32_h1=0.6730, 32_l2=0.3132
-    [15] time=0.26, avg_loss=0.4625, train_err=6.6065
+    [15] time=0.27, avg_loss=0.4625, train_err=6.6065
     Eval: 16_h1=0.3956, 16_l2=0.2427, 32_h1=0.5360, 32_l2=0.2566
     [16] time=0.27, avg_loss=0.3790, train_err=5.4139
     Eval: 16_h1=0.3825, 16_l2=0.2482, 32_h1=0.4952, 32_l2=0.2552
     [17] time=0.27, avg_loss=0.3500, train_err=5.0003
     Eval: 16_h1=0.4102, 16_l2=0.2505, 32_h1=0.5471, 32_l2=0.2576
-    [18] time=0.26, avg_loss=0.3740, train_err=5.3433
+    [18] time=0.27, avg_loss=0.3740, train_err=5.3433
     Eval: 16_h1=0.3601, 16_l2=0.2253, 32_h1=0.5067, 32_l2=0.2368
     [19] time=0.27, avg_loss=0.3296, train_err=4.7090
     Eval: 16_h1=0.3409, 16_l2=0.2215, 32_h1=0.4660, 32_l2=0.2311
 
-    {'train_err': 4.709011384419033, 'avg_loss': 0.3296307969093323, 'avg_lasso_loss': None, 'epoch_train_time': 0.26501873400002296, '16_h1': tensor(0.3409), '16_l2': tensor(0.2215), '32_h1': tensor(0.4660), '32_l2': tensor(0.2311)}
+    {'train_err': 4.709011384419033, 'avg_loss': 0.3296307969093323, 'avg_lasso_loss': None, 'epoch_train_time': 0.2659958880000204, '16_h1': tensor(0.3409), '16_l2': tensor(0.2215), '32_h1': tensor(0.4660), '32_l2': tensor(0.2311)}
 
 
 
@@ -447,7 +447,7 @@ In practice we would train a Neural Operator on one or multiple GPUs
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 6.674 seconds)
+   **Total running time of the script:** (0 minutes 6.684 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_incremental_FNO_darcy.py:

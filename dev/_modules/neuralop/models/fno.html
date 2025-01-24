@@ -114,7 +114,7 @@
         
   <h1>Source code for neuralop.models.fno</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partialmethod</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Literal</span>
 
 <span class="n">Number</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
 
@@ -184,7 +184,7 @@
 
 <span class="sd">    non_linearity : nn.Module, optional</span>
 <span class="sd">        Non-Linear activation function module to use, by default F.gelu</span>
-<span class="sd">    norm : str {&quot;ada_in&quot;, &quot;group_norm&quot;, &quot;instance_norm&quot;}, optional</span>
+<span class="sd">    norm : Literal [&quot;ada_in&quot;, &quot;group_norm&quot;, &quot;instance_norm&quot;], optional</span>
 <span class="sd">        Normalization layer to use, by default None</span>
 <span class="sd">    complex_data : bool, optional</span>
 <span class="sd">        Whether data is complex-valued (default False)</span>
@@ -193,9 +193,9 @@
 <span class="sd">        dropout parameter for ChannelMLP in FNO Block, by default 0</span>
 <span class="sd">    channel_mlp_expansion : float, optional</span>
 <span class="sd">        expansion parameter for ChannelMLP in FNO Block, by default 0.5</span>
-<span class="sd">    channel_mlp_skip : str {&#39;linear&#39;, &#39;identity&#39;, &#39;soft-gating&#39;}, optional</span>
+<span class="sd">    channel_mlp_skip : Literal[&#39;linear&#39;, &#39;identity&#39;, &#39;soft-gating&#39;], optional</span>
 <span class="sd">        Type of skip connection to use in channel-mixing mlp, by default &#39;soft-gating&#39;</span>
-<span class="sd">    fno_skip : str {&#39;linear&#39;, &#39;identity&#39;, &#39;soft-gating&#39;}, optional</span>
+<span class="sd">    fno_skip : Literal[&#39;linear&#39;, &#39;identity&#39;, &#39;soft-gating&#39;], optional</span>
 <span class="sd">        Type of skip connection to use in FNO layers, by default &#39;linear&#39;</span>
 <span class="sd">    resolution_scaling_factor : Union[Number, List[Number]], optional</span>
 <span class="sd">        layer-wise factor by which to scale the domain resolution of function, by default None</span>
@@ -208,8 +208,8 @@
 <span class="sd">        To vary the percentage of padding used along each input dimension,</span>
 <span class="sd">        pass in a list of percentages e.g. [p1, p2, ..., pN] such that</span>
 <span class="sd">        p1 corresponds to the percentage of padding along dim 1, etc.</span>
-<span class="sd">    domain_padding_mode : str {&#39;symmetric&#39;, &#39;one-sided&#39;}, optional</span>
-<span class="sd">        How to perform domain padding, by default &#39;one-sided&#39;</span>
+<span class="sd">    domain_padding_mode : Literal [&#39;symmetric&#39;, &#39;one-sided&#39;], optional</span>
+<span class="sd">        How to perform domain padding, by default &#39;symmetric&#39;</span>
 <span class="sd">    fno_block_precision : str {&#39;full&#39;, &#39;half&#39;, &#39;mixed&#39;}, optional</span>
 <span class="sd">        precision mode in which to perform spectral convolution, by default &quot;full&quot;</span>
 <span class="sd">    stabilizer : str {&#39;tanh&#39;} | None, optional</span>
@@ -287,15 +287,15 @@
         <span class="n">projection_channel_ratio</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="n">positional_embedding</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">]</span><span class="o">=</span><span class="s2">&quot;grid&quot;</span><span class="p">,</span>
         <span class="n">non_linearity</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">gelu</span><span class="p">,</span>
-        <span class="n">norm</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">norm</span><span class="p">:</span> <span class="n">Literal</span> <span class="p">[</span><span class="s2">&quot;ada_in&quot;</span><span class="p">,</span> <span class="s2">&quot;group_norm&quot;</span><span class="p">,</span> <span class="s2">&quot;instance_norm&quot;</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">complex_data</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">channel_mlp_dropout</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="n">channel_mlp_expansion</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-        <span class="n">channel_mlp_skip</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;soft-gating&quot;</span><span class="p">,</span>
-        <span class="n">fno_skip</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
+        <span class="n">channel_mlp_skip</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="s1">&#39;identity&#39;</span><span class="p">,</span> <span class="s1">&#39;soft-gating&#39;</span><span class="p">]</span><span class="o">=</span><span class="s2">&quot;soft-gating&quot;</span><span class="p">,</span>
+        <span class="n">fno_skip</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="s1">&#39;identity&#39;</span><span class="p">,</span> <span class="s1">&#39;soft-gating&#39;</span><span class="p">]</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
         <span class="n">resolution_scaling_factor</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Number</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Number</span><span class="p">]]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">domain_padding</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Number</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Number</span><span class="p">]]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">domain_padding_mode</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;one-sided&quot;</span><span class="p">,</span>
+        <span class="n">domain_padding_mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;symmetric&#39;</span><span class="p">,</span> <span class="s1">&#39;one-sided&#39;</span><span class="p">]</span><span class="o">=</span><span class="s2">&quot;symmetric&quot;</span><span class="p">,</span>
         <span class="n">fno_block_precision</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">,</span>
         <span class="n">stabilizer</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">max_n_modes</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -555,7 +555,7 @@
         <span class="n">implementation</span><span class="o">=</span><span class="s2">&quot;factorized&quot;</span><span class="p">,</span>
         <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span>
         <span class="n">domain_padding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">domain_padding_mode</span><span class="o">=</span><span class="s2">&quot;one-sided&quot;</span><span class="p">,</span>
+        <span class="n">domain_padding_mode</span><span class="o">=</span><span class="s2">&quot;symmetric&quot;</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
@@ -633,7 +633,7 @@
         <span class="n">implementation</span><span class="o">=</span><span class="s2">&quot;factorized&quot;</span><span class="p">,</span>
         <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span>
         <span class="n">domain_padding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">domain_padding_mode</span><span class="o">=</span><span class="s2">&quot;one-sided&quot;</span><span class="p">,</span>
+        <span class="n">domain_padding_mode</span><span class="o">=</span><span class="s2">&quot;symmetric&quot;</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
@@ -715,7 +715,7 @@
         <span class="n">implementation</span><span class="o">=</span><span class="s2">&quot;factorized&quot;</span><span class="p">,</span>
         <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span>
         <span class="n">domain_padding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">domain_padding_mode</span><span class="o">=</span><span class="s2">&quot;one-sided&quot;</span><span class="p">,</span>
+        <span class="n">domain_padding_mode</span><span class="o">=</span><span class="s2">&quot;symmetric&quot;</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
