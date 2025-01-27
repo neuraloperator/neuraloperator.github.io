@@ -2,10 +2,31 @@
 
 .. _gallery_examples:
 
-Gallery of examples
-===================
+Examples
+========
 
-A gallery of interactive examples, demonstrating use cases of the library.
+A gallery of interactive examples that showcase how the tools we provide in ``neuraloperator`` can be applied to a variety of problems. 
+Check out the :ref:`user_guide` for more detailed information on the theory behind neural operators. 
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+Data
+----
+
+Examples of NO layers in action.
 
 .. contents:: **Contents**
     :local:
@@ -22,31 +43,14 @@ A gallery of interactive examples, demonstrating use cases of the library.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="In this example, we demonstrate how to use torchtnt to estimate the number of floating-point operations per second (FLOPS) required for a model&#x27;s forward and backward pass. ">
-
-.. only:: html
-
-  .. image:: /auto_examples/images/thumb/sphx_glr_plot_count_flops_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_auto_examples_plot_count_flops.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Using torchtnt to count FLOPS</div>
-    </div>
-
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="A simple Darcy-Flow dataset">
 
 .. only:: html
 
-  .. image:: /auto_examples/images/thumb/sphx_glr_plot_darcy_flow_thumb.png
+  .. image:: /auto_examples/data/images/thumb/sphx_glr_plot_darcy_flow_thumb.png
     :alt:
 
-  :ref:`sphx_glr_auto_examples_plot_darcy_flow.py`
+  :ref:`sphx_glr_auto_examples_data_plot_darcy_flow.py`
 
 .. raw:: html
 
@@ -56,65 +60,14 @@ A gallery of interactive examples, demonstrating use cases of the library.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="In this example, we demonstrate the Trainer&#x27;s saving and loading functionality, which makes it easy to checkpoint and resume training states. ">
+    <div class="sphx-glr-thumbcontainer" tooltip="Short summary -------------- Spectral analysis is useful because it allows researchers to study the distribution of energy across different scales in a fluid flow. By examining the energy spectrum, one can gain insights into the behavior of turbulence or any other dataset and the underlying physical processes. The energy spectrum is analysed through the Fourier transform which is a mathematical tool that decomposes a function or signal into its constituent frequencies. In a fluid flow, it is used to analyze the distribution of energy across different scales in a flow. Specifically, the Fourier transform is applied to the velocity field of the flow, converting it into a frequency domain representation. Higher the wavenumber corresponds to higher frequency and higher energy and is a much harder task to solve as we need higher modes to capture the high-frequency behavior of the flow. Overall this allows researchers to study the energy spectrum, which provides insights into the behavior of turbulence and the underlying physical processes.">
 
 .. only:: html
 
-  .. image:: /auto_examples/images/thumb/sphx_glr_checkpoint_FNO_darcy_thumb.png
+  .. image:: /auto_examples/data/images/thumb/sphx_glr_plot_darcy_flow_spectrum_thumb.png
     :alt:
 
-  :ref:`sphx_glr_auto_examples_checkpoint_FNO_darcy.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Checkpointing and loading training states</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="In this example, we demonstrate how to use the small Spherical Shallow Water Equations example we ship with the package to train a Spherical Fourier-Neural Operator">
-
-.. only:: html
-
-  .. image:: /auto_examples/images/thumb/sphx_glr_plot_SFNO_swe_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_auto_examples_plot_SFNO_swe.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Training a SFNO on the spherical Shallow Water equations</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="In this example, we demonstrate how to train a U-shaped Neural Operator on  the small Darcy-Flow example we ship with the package">
-
-.. only:: html
-
-  .. image:: /auto_examples/images/thumb/sphx_glr_plot_UNO_darcy_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_auto_examples_plot_UNO_darcy.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">U-NO on Darcy-Flow</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Short summary -------------">
-
-.. only:: html
-
-  .. image:: /auto_examples/images/thumb/sphx_glr_plot_darcy_flow_spectrum_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_auto_examples_plot_darcy_flow_spectrum.py`
+  :ref:`sphx_glr_auto_examples_data_plot_darcy_flow_spectrum.py`
 
 .. raw:: html
 
@@ -122,37 +75,57 @@ A gallery of interactive examples, demonstrating use cases of the library.
     </div>
 
 
+.. thumbnail-parent-div-close
+
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="In this example, we demonstrate how to use the small Darcy-Flow example we ship with the package to train a Fourier Neural Operator. ">
+    </div>
+
+
+Layers
+------
+
+Examples of individual layers which comprise operators or parts of operators for composition into end-to-end models. 
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="In this example, we walk through the logic of a graph neural operator.">
 
 .. only:: html
 
-  .. image:: /auto_examples/images/thumb/sphx_glr_plot_FNO_darcy_thumb.png
+  .. image:: /auto_examples/layers/images/thumb/sphx_glr_plot_neighbor_search_thumb.png
     :alt:
 
-  :ref:`sphx_glr_auto_examples_plot_FNO_darcy.py`
+  :ref:`sphx_glr_auto_examples_layers_plot_neighbor_search.py`
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Training an FNO on Darcy-Flow</div>
+      <div class="sphx-glr-thumbnail-title">Neighbor search</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Training an FNO with incremental meta-learning">
+    <div class="sphx-glr-thumbcontainer" tooltip="Grid embeddings">
 
 .. only:: html
 
-  .. image:: /auto_examples/images/thumb/sphx_glr_plot_incremental_FNO_darcy_thumb.png
+  .. image:: /auto_examples/layers/images/thumb/sphx_glr_plot_embeddings_thumb.png
     :alt:
 
-  :ref:`sphx_glr_auto_examples_plot_incremental_FNO_darcy.py`
+  :ref:`sphx_glr_auto_examples_layers_plot_embeddings.py`
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Training an FNO with incremental meta-learning</div>
+      <div class="sphx-glr-thumbnail-title">Grid embeddings</div>
     </div>
 
 
@@ -162,10 +135,10 @@ A gallery of interactive examples, demonstrating use cases of the library.
 
 .. only:: html
 
-  .. image:: /auto_examples/images/thumb/sphx_glr_plot_DISCO_convolutions_thumb.png
+  .. image:: /auto_examples/layers/images/thumb/sphx_glr_plot_DISCO_convolutions_thumb.png
     :alt:
 
-  :ref:`sphx_glr_auto_examples_plot_DISCO_convolutions.py`
+  :ref:`sphx_glr_auto_examples_layers_plot_DISCO_convolutions.py`
 
 .. raw:: html
 
@@ -180,18 +153,156 @@ A gallery of interactive examples, demonstrating use cases of the library.
     </div>
 
 
+Models
+------
+
+Examples showcasing our end-to-end NO architectures.
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="In this example, we demonstrate how to use the small Spherical Shallow Water Equations example we ship with the package to train a Spherical Fourier-Neural Operator">
+
+.. only:: html
+
+  .. image:: /auto_examples/models/images/thumb/sphx_glr_plot_SFNO_swe_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_models_plot_SFNO_swe.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Training a SFNO on the spherical Shallow Water equations</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="In this example, we demonstrate how to train a U-shaped Neural Operator on  the small Darcy-Flow example we ship with the package">
+
+.. only:: html
+
+  .. image:: /auto_examples/models/images/thumb/sphx_glr_plot_UNO_darcy_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_models_plot_UNO_darcy.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">U-NO on Darcy-Flow</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="In this example, we demonstrate how to use the small Darcy-Flow example we ship with the package to train a Fourier Neural Operator. ">
+
+.. only:: html
+
+  .. image:: /auto_examples/models/images/thumb/sphx_glr_plot_FNO_darcy_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_models_plot_FNO_darcy.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Training an FNO on Darcy-Flow</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+Training and Meta-Algorithms
+----------------------------
+
+Examples to highlight our flexible ``Trainer`` module and the meta-algorithms built on top of it. 
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="In this example, we demonstrate how to use torchtnt to estimate the number of floating-point operations per second (FLOPS) required for a model&#x27;s forward and backward pass. ">
+
+.. only:: html
+
+  .. image:: /auto_examples/training/images/thumb/sphx_glr_plot_count_flops_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_training_plot_count_flops.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Using torchtnt to count FLOPS</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="In this example, we demonstrate the Trainer&#x27;s saving and loading functionality, which makes it easy to checkpoint and resume training states.">
+
+.. only:: html
+
+  .. image:: /auto_examples/training/images/thumb/sphx_glr_checkpoint_FNO_darcy_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_training_checkpoint_FNO_darcy.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Checkpointing and loading training states</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Training an FNO with incremental meta-learning">
+
+.. only:: html
+
+  .. image:: /auto_examples/training/images/thumb/sphx_glr_plot_incremental_FNO_darcy_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_training_plot_incremental_FNO_darcy.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Training an FNO with incremental meta-learning</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
 .. toctree::
    :hidden:
+   :includehidden:
 
-   /auto_examples/plot_count_flops
-   /auto_examples/plot_darcy_flow
-   /auto_examples/checkpoint_FNO_darcy
-   /auto_examples/plot_SFNO_swe
-   /auto_examples/plot_UNO_darcy
-   /auto_examples/plot_darcy_flow_spectrum
-   /auto_examples/plot_FNO_darcy
-   /auto_examples/plot_incremental_FNO_darcy
-   /auto_examples/plot_DISCO_convolutions
+
+   /auto_examples/data/index.rst
+   /auto_examples/layers/index.rst
+   /auto_examples/models/index.rst
+   /auto_examples/training/index.rst
 
 
 .. only:: html
