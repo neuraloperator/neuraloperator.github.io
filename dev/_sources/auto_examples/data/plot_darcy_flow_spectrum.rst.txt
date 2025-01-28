@@ -20,14 +20,22 @@
 
 A simple Darcy-Flow spectrum analysis
 =====================================
-In this example, we demonstrate how to use the spectrum analysis function on the small Darcy-Flow example.
+Using ``neuralop.utils.spectrum_2d`` to perform spectrum analysis function on our small Darcy-Flow example.
+
 For more details on spectrum analysis, users can take a look at this reference: https://www.astronomy.ohio-state.edu/ryden.1/ast825/ch7.pdf
 
 Short summary
 --------------
-Spectral analysis is useful because it allows researchers to study the distribution of energy across different scales in a fluid flow. By examining the energy spectrum, one can gain insights into the behavior of turbulence or any other dataset and the underlying physical processes. The energy spectrum is analysed through the Fourier transform which is a mathematical tool that decomposes a function or signal into its constituent frequencies. In a fluid flow, it is used to analyze the distribution of energy across different scales in a flow. Specifically, the Fourier transform is applied to the velocity field of the flow, converting it into a frequency domain representation. Higher the wavenumber corresponds to higher frequency and higher energy and is a much harder task to solve as we need higher modes to capture the high-frequency behavior of the flow. Overall this allows researchers to study the energy spectrum, which provides insights into the behavior of turbulence and the underlying physical processes.
+Spectral analysis is useful because it allows researchers to study the distribution of energy across different scales in a fluid flow. 
+The energy spectrum is analysed through the Fourier transform, a mathematical tool that decomposes a function or signal into its 
+constituent frequencies. In a fluid flow, it is used to analyze the distribution of energy across different scales in a flow. 
 
-.. GENERATED FROM PYTHON SOURCE LINES 12-15
+Specifically, the Fourier transform is applied to the velocity field of the flow, converting it into a frequency domain representation. 
+Higher the wavenumber corresponds to higher frequency and higher energy and is a much harder task to solve as we need higher modes to capture 
+the high-frequency behavior of the flow. Overall this allows researchers to study the energy spectrum, which provides insights into the behavior 
+of turbulence and the underlying physical processes.
+
+.. GENERATED FROM PYTHON SOURCE LINES 20-23
 
 .. code-block:: Python
 
@@ -41,13 +49,13 @@ Spectral analysis is useful because it allows researchers to study the distribut
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 16-19
+.. GENERATED FROM PYTHON SOURCE LINES 24-27
 
-Import the library
-------------------
+Import dependencies
+--------------------
 We first import our `neuralop` library and required dependencies.
 
-.. GENERATED FROM PYTHON SOURCE LINES 19-32
+.. GENERATED FROM PYTHON SOURCE LINES 27-40
 
 .. code-block:: Python
 
@@ -71,11 +79,11 @@ We first import our `neuralop` library and required dependencies.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 33-34
+.. GENERATED FROM PYTHON SOURCE LINES 41-42
 
 Define some variables
 
-.. GENERATED FROM PYTHON SOURCE LINES 34-44
+.. GENERATED FROM PYTHON SOURCE LINES 42-52
 
 .. code-block:: Python
 
@@ -96,11 +104,11 @@ Define some variables
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 45-46
+.. GENERATED FROM PYTHON SOURCE LINES 53-54
 
 Loading the Navier-Stokes dataset in 128x128 resolution
 
-.. GENERATED FROM PYTHON SOURCE LINES 46-82
+.. GENERATED FROM PYTHON SOURCE LINES 54-90
 
 .. code-block:: Python
 
@@ -116,7 +124,7 @@ Loading the Navier-Stokes dataset in 128x128 resolution
 
     # It is important to note that we want the last two dimensions to represent the spatial dimensions
     # So in some cases one might have to permute the dataset after squeezing the initial dimensions as well
-    dataset_pred = train_loader.dataset[:samples]['x'].squeeze() # squeeze the dataset to remove the batch dimension or other dimensions
+    dataset_pred = train_loader.dataset[:samples]['x'].squeeze() # squeeze the dataset to remove the empty channel dimension
 
     # Shape of the dataset
     shape = dataset_pred.shape
@@ -148,45 +156,41 @@ Loading the Navier-Stokes dataset in 128x128 resolution
 
  .. code-block:: none
 
-    /home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:99: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
-      data = torch.load(
     Loading test db for resolution 16 with 50 samples 
-    /home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:189: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
-      data = torch.load(Path(root_dir).joinpath(f"{dataset_name}_test_{res}.pt").as_posix())
     Loading test db for resolution 32 with 50 samples 
     Original dataset shape torch.Size([50, 1, 16, 16])
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 83-86
+.. GENERATED FROM PYTHON SOURCE LINES 91-94
 
 ##############################################################
 ## FFT plot
 #############################################################
 
-.. GENERATED FROM PYTHON SOURCE LINES 86-114
+.. GENERATED FROM PYTHON SOURCE LINES 94-122
 
 .. code-block:: Python
 
 
     # Generate the spectrum of the dataset
-    # Again only the last two dimensions have to be resolution and the first dimension is the reshaped product of all the other dimensions
+    # We reshape our samples into the form expected by ``spectrum_2d``: ``(n_samples, h, w)``
     truth_sp = spectrum_2d(dataset_pred.reshape(samples * batchsize, s, s), s)
 
-    # Generate the spectrum plot and set all the settings
+    # Configure pyplot and generate the plot
     fig, ax = plt.subplots(figsize=(10,10))
 
     linewidth = 3
     ax.set_yscale('log')
 
-    length = 16 # typically till the resolution length of the dataset
+    length = dataset_pred.shape[-1] # the resolution length of the dataset
     buffer = 10 # just add a buffer to the plot
     k = np.arange(length + buffer) * 1.0
     ax.plot(truth_sp, 'k', linestyle=":", label="NS", linewidth=4)
 
     ax.set_xlim(1,length+buffer)
-    ax.set_ylim(10, 10^10)
+    ax.set_ylim(0.1, 100)
     plt.legend(prop={'size': 20})
     plt.title('Spectrum of {} Datset'.format(dataset_name))
 
@@ -206,20 +210,13 @@ Loading the Navier-Stokes dataset in 128x128 resolution
    :class: sphx-glr-single-img
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    /home/runner/work/neuraloperator/neuraloperator/examples/data/plot_darcy_flow_spectrum.py:103: UserWarning: Attempt to set non-positive ylim on a log-scaled axis will be ignored.
-      ax.set_ylim(10, 10^10)
-
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.169 seconds)
+   **Total running time of the script:** (0 minutes 0.188 seconds)
 
 
 .. _sphx_glr_download_auto_examples_data_plot_darcy_flow_spectrum.py:

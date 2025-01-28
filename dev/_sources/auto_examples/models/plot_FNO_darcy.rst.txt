@@ -21,13 +21,12 @@
 Training an FNO on Darcy-Flow
 =============================
 
-In this example, we demonstrate how to use the small `Darcy-Flow example <../auto_examples/plot_darcy_flow.html>`_ we ship with the package
-to train a Fourier Neural Operator. 
+We train a Fourier Neural Operator on our small `Darcy-Flow example <../auto_examples/plot_darcy_flow.html>`_ .
 
 Note that this dataset is much smaller than one we would use in practice. The small Darcy-flow is an example built to
 be trained on a CPU in a few seconds, whereas normally we would train on one or multiple GPUs. 
 
-.. GENERATED FROM PYTHON SOURCE LINES 15-29
+.. GENERATED FROM PYTHON SOURCE LINES 14-28
 
 .. code-block:: Python
 
@@ -52,11 +51,11 @@ be trained on a CPU in a few seconds, whereas normally we would train on one or 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 30-31
+.. GENERATED FROM PYTHON SOURCE LINES 29-30
 
 Let's load the small Darcy-flow dataset. 
 
-.. GENERATED FROM PYTHON SOURCE LINES 31-39
+.. GENERATED FROM PYTHON SOURCE LINES 30-38
 
 .. code-block:: Python
 
@@ -76,21 +75,17 @@ Let's load the small Darcy-flow dataset.
 
  .. code-block:: none
 
-    /home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:99: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
-      data = torch.load(
     Loading test db for resolution 16 with 100 samples 
-    /home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:189: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
-      data = torch.load(Path(root_dir).joinpath(f"{dataset_name}_test_{res}.pt").as_posix())
     Loading test db for resolution 32 with 50 samples 
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 40-41
+.. GENERATED FROM PYTHON SOURCE LINES 39-40
 
 We create a simple FNO model
 
-.. GENERATED FROM PYTHON SOURCE LINES 41-53
+.. GENERATED FROM PYTHON SOURCE LINES 40-52
 
 .. code-block:: Python
 
@@ -120,16 +115,16 @@ We create a simple FNO model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 54-56
+.. GENERATED FROM PYTHON SOURCE LINES 53-55
 
 Training setup
 ----------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 58-59
+.. GENERATED FROM PYTHON SOURCE LINES 57-58
 
 Create the optimizer
 
-.. GENERATED FROM PYTHON SOURCE LINES 59-65
+.. GENERATED FROM PYTHON SOURCE LINES 58-64
 
 .. code-block:: Python
 
@@ -146,11 +141,11 @@ Create the optimizer
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 66-67
+.. GENERATED FROM PYTHON SOURCE LINES 65-66
 
 Then create the losses
 
-.. GENERATED FROM PYTHON SOURCE LINES 67-74
+.. GENERATED FROM PYTHON SOURCE LINES 66-73
 
 .. code-block:: Python
 
@@ -168,12 +163,12 @@ Then create the losses
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 75-77
+.. GENERATED FROM PYTHON SOURCE LINES 74-76
 
 Training the model
 ---------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 77-87
+.. GENERATED FROM PYTHON SOURCE LINES 76-86
 
 .. code-block:: Python
 
@@ -248,22 +243,22 @@ Training the model
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7ff0054b4190>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fc248dab610>
 
     ### LOSSES ###
 
-     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7ff0054b47d0>
+     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7fc248dabc50>
 
-     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7ff0054b47d0>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7ff0054b5450>}
-
-
+     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7fc248dabc50>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7fc2657d87d0>}
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 88-89
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 87-88
 
 Create the trainer:
 
-.. GENERATED FROM PYTHON SOURCE LINES 89-98
+.. GENERATED FROM PYTHON SOURCE LINES 88-97
 
 .. code-block:: Python
 
@@ -283,11 +278,11 @@ Create the trainer:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 99-100
+.. GENERATED FROM PYTHON SOURCE LINES 98-99
 
 Then train the model on our small Darcy-Flow dataset:
 
-.. GENERATED FROM PYTHON SOURCE LINES 100-109
+.. GENERATED FROM PYTHON SOURCE LINES 99-108
 
 .. code-block:: Python
 
@@ -313,24 +308,24 @@ Then train the model on our small Darcy-Flow dataset:
     Raw outputs of shape torch.Size([32, 1, 16, 16])
     [0] time=2.48, avg_loss=0.5903, train_err=18.4462
     Eval: 16_h1=0.3639, 16_l2=0.2512, 32_h1=0.5425, 32_l2=0.2628
-    [3] time=2.50, avg_loss=0.2077, train_err=6.4899
+    [3] time=2.49, avg_loss=0.2077, train_err=6.4899
     Eval: 16_h1=0.2191, 16_l2=0.1505, 32_h1=0.4976, 32_l2=0.1840
-    [6] time=2.45, avg_loss=0.1768, train_err=5.5240
+    [6] time=2.46, avg_loss=0.1768, train_err=5.5240
     Eval: 16_h1=0.2902, 16_l2=0.2180, 32_h1=0.5098, 32_l2=0.2476
     [9] time=2.46, avg_loss=0.1399, train_err=4.3722
     Eval: 16_h1=0.2089, 16_l2=0.1298, 32_h1=0.5057, 32_l2=0.1746
-    [12] time=2.46, avg_loss=0.1350, train_err=4.2196
+    [12] time=2.48, avg_loss=0.1350, train_err=4.2196
     Eval: 16_h1=0.2000, 16_l2=0.1225, 32_h1=0.4881, 32_l2=0.1636
-    [15] time=2.46, avg_loss=0.1203, train_err=3.7584
+    [15] time=2.49, avg_loss=0.1203, train_err=3.7584
     Eval: 16_h1=0.2045, 16_l2=0.1263, 32_h1=0.5199, 32_l2=0.1752
     [18] time=2.46, avg_loss=0.0929, train_err=2.9023
     Eval: 16_h1=0.1954, 16_l2=0.1193, 32_h1=0.5096, 32_l2=0.1704
 
-    {'train_err': 2.8530129194259644, 'avg_loss': 0.09129641342163086, 'avg_lasso_loss': None, 'epoch_train_time': 2.4713477859999102}
+    {'train_err': 2.8530129194259644, 'avg_loss': 0.09129641342163086, 'avg_lasso_loss': None, 'epoch_train_time': 2.4509472109999706}
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 110-117
+.. GENERATED FROM PYTHON SOURCE LINES 109-116
 
 .. _plot_preds :
 Visualizing predictions
@@ -340,7 +335,7 @@ Again note that in this example, we train on a very small resolution for
 a very small number of epochs.
 In practice, we would train at a larger resolution, on many more samples.
 
-.. GENERATED FROM PYTHON SOURCE LINES 117-157
+.. GENERATED FROM PYTHON SOURCE LINES 116-156
 
 .. code-block:: Python
 
@@ -396,7 +391,7 @@ In practice, we would train at a larger resolution, on many more samples.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 158-164
+.. GENERATED FROM PYTHON SOURCE LINES 157-163
 
 .. zero_shot :
 Zero-shot super-evaluation
@@ -405,7 +400,7 @@ In addition to training and making predictions on the same input size,
 the FNO's invariance to the discretization of input data means we 
 can natively make predictions on higher-resolution inputs and get higher-resolution outputs.
 
-.. GENERATED FROM PYTHON SOURCE LINES 164-203
+.. GENERATED FROM PYTHON SOURCE LINES 163-202
 
 .. code-block:: Python
 
@@ -460,7 +455,7 @@ can natively make predictions on higher-resolution inputs and get higher-resolut
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 204-213
+.. GENERATED FROM PYTHON SOURCE LINES 203-212
 
 We only trained the model on data at a resolution of 16x16, and with no modifications 
 or special prompting, we were able to perform inference on higher-resolution input data 
@@ -476,7 +471,7 @@ are other ways to scale the outputs of the FNO to train a true super-resolution 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 50.476 seconds)
+   **Total running time of the script:** (0 minutes 50.570 seconds)
 
 
 .. _sphx_glr_download_auto_examples_models_plot_FNO_darcy.py:

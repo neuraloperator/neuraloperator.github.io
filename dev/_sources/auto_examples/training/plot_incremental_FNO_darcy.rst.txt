@@ -20,11 +20,9 @@
 
 Training an FNO with incremental meta-learning
 ===============================================
-In this example, we demonstrate how to use the small Darcy-Flow 
-example we ship with the package to demonstrate the Incremental FNO
-meta-learning algorithm
+A demo of the Incremental FNO meta-learning algorithm on our small Darcy-Flow dataset.
 
-.. GENERATED FROM PYTHON SOURCE LINES 12-25
+.. GENERATED FROM PYTHON SOURCE LINES 10-23
 
 .. code-block:: Python
 
@@ -48,11 +46,11 @@ meta-learning algorithm
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 26-27
+.. GENERATED FROM PYTHON SOURCE LINES 24-25
 
 Loading the Darcy flow dataset
 
-.. GENERATED FROM PYTHON SOURCE LINES 27-35
+.. GENERATED FROM PYTHON SOURCE LINES 25-33
 
 .. code-block:: Python
 
@@ -72,21 +70,17 @@ Loading the Darcy flow dataset
 
  .. code-block:: none
 
-    /home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:99: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
-      data = torch.load(
     Loading test db for resolution 16 with 100 samples 
-    /home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:189: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
-      data = torch.load(Path(root_dir).joinpath(f"{dataset_name}_test_{res}.pt").as_posix())
     Loading test db for resolution 32 with 50 samples 
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 36-37
+.. GENERATED FROM PYTHON SOURCE LINES 34-35
 
 Choose device
 
-.. GENERATED FROM PYTHON SOURCE LINES 37-39
+.. GENERATED FROM PYTHON SOURCE LINES 35-37
 
 .. code-block:: Python
 
@@ -99,13 +93,13 @@ Choose device
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 40-43
+.. GENERATED FROM PYTHON SOURCE LINES 38-41
 
 Set up the incremental FNO model
 We start with 2 modes in each dimension
 We choose to update the modes by the incremental gradient explained algorithm
 
-.. GENERATED FROM PYTHON SOURCE LINES 43-49
+.. GENERATED FROM PYTHON SOURCE LINES 41-47
 
 .. code-block:: Python
 
@@ -122,11 +116,11 @@ We choose to update the modes by the incremental gradient explained algorithm
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 50-51
+.. GENERATED FROM PYTHON SOURCE LINES 48-49
 
 set up model
 
-.. GENERATED FROM PYTHON SOURCE LINES 51-61
+.. GENERATED FROM PYTHON SOURCE LINES 49-59
 
 .. code-block:: Python
 
@@ -147,11 +141,11 @@ set up model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 62-63
+.. GENERATED FROM PYTHON SOURCE LINES 60-61
 
 Set up the optimizer and scheduler
 
-.. GENERATED FROM PYTHON SOURCE LINES 63-88
+.. GENERATED FROM PYTHON SOURCE LINES 61-86
 
 .. code-block:: Python
 
@@ -195,11 +189,11 @@ Set up the optimizer and scheduler
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 89-90
+.. GENERATED FROM PYTHON SOURCE LINES 87-88
 
 Set up the losses
 
-.. GENERATED FROM PYTHON SOURCE LINES 90-103
+.. GENERATED FROM PYTHON SOURCE LINES 88-101
 
 .. code-block:: Python
 
@@ -240,20 +234,20 @@ Set up the losses
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7ff00720c2b0>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fc24d1150f0>
 
     ### LOSSES ###
 
     ### INCREMENTAL RESOLUTION + GRADIENT EXPLAINED ###
 
-     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7feff4f7ccd0>
+     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7fc248b1e5d0>
 
-     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7feff4f7ccd0>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7ff00720c9d0>}
-
-
+     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7fc248b1e5d0>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7fc24d114fc0>}
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 104-119
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 102-117
 
 Set up the IncrementalTrainer
 other options include setting incremental_loss_gap = True
@@ -271,7 +265,7 @@ incremental_loss_gap : bool, default is False
    if True, use the incremental algorithm based on loss gap
    uses the incremental_loss_eps parameter
 
-.. GENERATED FROM PYTHON SOURCE LINES 119-137
+.. GENERATED FROM PYTHON SOURCE LINES 117-135
 
 .. code-block:: Python
 
@@ -300,11 +294,11 @@ incremental_loss_gap : bool, default is False
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 138-139
+.. GENERATED FROM PYTHON SOURCE LINES 136-137
 
 Train the model
 
-.. GENERATED FROM PYTHON SOURCE LINES 139-149
+.. GENERATED FROM PYTHON SOURCE LINES 137-147
 
 .. code-block:: Python
 
@@ -329,19 +323,19 @@ Train the model
     Training on 100 samples
     Testing on [50, 50] samples         on resolutions [16, 32].
     Raw outputs of shape torch.Size([16, 1, 8, 8])
-    [0] time=0.23, avg_loss=0.9248, train_err=13.2110
+    [0] time=0.22, avg_loss=0.9248, train_err=13.2110
     Eval: 16_h1=0.8715, 16_l2=0.5382, 32_h1=0.9804, 32_l2=0.5430
-    [1] time=0.21, avg_loss=0.7686, train_err=10.9799
+    [1] time=0.20, avg_loss=0.7686, train_err=10.9799
     Eval: 16_h1=0.7955, 16_l2=0.4911, 32_h1=0.9059, 32_l2=0.4990
-    [2] time=0.21, avg_loss=0.6952, train_err=9.9317
+    [2] time=0.20, avg_loss=0.6952, train_err=9.9317
     Eval: 16_h1=0.8524, 16_l2=0.4997, 32_h1=1.0478, 32_l2=0.5265
-    [3] time=0.21, avg_loss=0.6403, train_err=9.1471
+    [3] time=0.20, avg_loss=0.6403, train_err=9.1471
     Eval: 16_h1=0.7306, 16_l2=0.4116, 32_h1=0.9265, 32_l2=0.4323
-    [4] time=0.21, avg_loss=0.5816, train_err=8.3079
+    [4] time=0.20, avg_loss=0.5816, train_err=8.3079
     Eval: 16_h1=0.7433, 16_l2=0.4063, 32_h1=0.9747, 32_l2=0.4335
-    [5] time=0.21, avg_loss=0.5372, train_err=7.6741
+    [5] time=0.20, avg_loss=0.5372, train_err=7.6741
     Eval: 16_h1=0.7209, 16_l2=0.4594, 32_h1=0.9587, 32_l2=0.4831
-    [6] time=0.23, avg_loss=0.5298, train_err=7.5692
+    [6] time=0.21, avg_loss=0.5298, train_err=7.5692
     Eval: 16_h1=0.8101, 16_l2=0.4118, 32_h1=1.1886, 32_l2=0.4485
     [7] time=0.21, avg_loss=0.4908, train_err=7.0114
     Eval: 16_h1=0.8033, 16_l2=0.4142, 32_h1=1.1472, 32_l2=0.4418
@@ -352,9 +346,9 @@ Train the model
     Incre Res Update: change index to 1
     Incre Res Update: change sub to 1
     Incre Res Update: change res to 16
-    [10] time=0.27, avg_loss=0.5538, train_err=7.9114
+    [10] time=0.26, avg_loss=0.5538, train_err=7.9114
     Eval: 16_h1=0.5183, 16_l2=0.3240, 32_h1=0.5924, 32_l2=0.3180
-    [11] time=0.26, avg_loss=0.4614, train_err=6.5915
+    [11] time=0.25, avg_loss=0.4614, train_err=6.5915
     Eval: 16_h1=0.6746, 16_l2=0.4599, 32_h1=0.7945, 32_l2=0.4457
     [12] time=0.26, avg_loss=0.5361, train_err=7.6586
     Eval: 16_h1=0.4720, 16_l2=0.2841, 32_h1=0.6427, 32_l2=0.3077
@@ -373,11 +367,11 @@ Train the model
     [19] time=0.26, avg_loss=0.3822, train_err=5.4596
     Eval: 16_h1=0.4097, 16_l2=0.2562, 32_h1=0.5603, 32_l2=0.2669
 
-    {'train_err': 5.459584202085223, 'avg_loss': 0.38217089414596556, 'avg_lasso_loss': None, 'epoch_train_time': 0.26397532999999385, '16_h1': tensor(0.4097), '16_l2': tensor(0.2562), '32_h1': tensor(0.5603), '32_l2': tensor(0.2669)}
+    {'train_err': 5.459584202085223, 'avg_loss': 0.38217089414596556, 'avg_lasso_loss': None, 'epoch_train_time': 0.26177709999990384, '16_h1': tensor(0.4097), '16_l2': tensor(0.2562), '32_h1': tensor(0.5603), '32_l2': tensor(0.2669)}
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 150-160
+.. GENERATED FROM PYTHON SOURCE LINES 148-158
 
 Plot the prediction, and compare with the ground-truth
 Note that we trained on a very small resolution for
@@ -390,7 +384,7 @@ ii) can be trained quickly on CPU
 
 In practice we would train a Neural Operator on one or multiple GPUs
 
-.. GENERATED FROM PYTHON SOURCE LINES 160-198
+.. GENERATED FROM PYTHON SOURCE LINES 158-196
 
 .. code-block:: Python
 
@@ -447,7 +441,7 @@ In practice we would train a Neural Operator on one or multiple GPUs
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 6.665 seconds)
+   **Total running time of the script:** (0 minutes 6.527 seconds)
 
 
 .. _sphx_glr_download_auto_examples_training_plot_incremental_FNO_darcy.py:

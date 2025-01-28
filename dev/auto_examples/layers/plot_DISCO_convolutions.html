@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Visualization of discrete-continuous convolutions &#8212; neuraloperator 1.0.2 documentation</title> 
+    <title>Visualizing discrete-continuous convolutions &#8212; neuraloperator 1.0.2 documentation</title> 
 <link rel="stylesheet" href="../../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../_static/favicon/favicon-32x32.png">
@@ -164,11 +164,10 @@
 <p><a class="reference internal" href="#sphx-glr-download-auto-examples-layers-plot-disco-convolutions-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code.</p>
 </div>
-<section class="sphx-glr-example-title" id="visualization-of-discrete-continuous-convolutions">
-<span id="sphx-glr-auto-examples-layers-plot-disco-convolutions-py"></span><h1>Visualization of discrete-continuous convolutions<a class="headerlink" href="#visualization-of-discrete-continuous-convolutions" title="Link to this heading"></a></h1>
-<p>In this example, we demonstrate the usage of the discrete-continuous (DISCO) convolutions
-used in the localized neural operator framework. These modules can be used on both equidistant
-and unstructured grids.</p>
+<section class="sphx-glr-example-title" id="visualizing-discrete-continuous-convolutions">
+<span id="sphx-glr-auto-examples-layers-plot-disco-convolutions-py"></span><h1>Visualizing discrete-continuous convolutions<a class="headerlink" href="#visualizing-discrete-continuous-convolutions" title="Link to this heading"></a></h1>
+<p>Visualizing the behavior of DISCO convolutions, the building block of the localized neural operator framework.</p>
+<p>These modules can be used on both equidistant and unstructured grids.</p>
 <p>Preparation</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
@@ -201,7 +200,7 @@ and unstructured grids.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_DISCO_convolutions_001.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_001.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/neuraloperator/neuraloperator/examples/layers/plot_DISCO_convolutions.py:41: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:206.)
+<img src="../../_images/sphx_glr_plot_DISCO_convolutions_001.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_001.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/neuraloperator/neuraloperator/examples/layers/plot_DISCO_convolutions.py:39: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:203.)
   data = nn.functional.interpolate(torch.from_numpy(img).unsqueeze(0).unsqueeze(0), size=(ny,nx)).squeeze()
 </pre></div>
 </div>
@@ -219,7 +218,7 @@ and unstructured grids.</p>
 <span class="n">q_in</span> <span class="o">=</span> <span class="p">(</span><span class="n">w_x</span> <span class="o">*</span> <span class="n">w_y</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.13.1/x64/lib/python3.13/site-packages/torch/functional.py:534: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at ../aten/src/ATen/native/TensorShape.cpp:3595.)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.13.1/x64/lib/python3.13/site-packages/torch/functional.py:539: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at /pytorch/aten/src/ATen/native/TensorShape.cpp:3637.)
   return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
 </pre></div>
 </div>
@@ -326,7 +325,7 @@ torch.Size([119, 89])
 <span class="c1"># plt.show()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_DISCO_convolutions_006.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_006.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7ff004e0d810&gt;
+<img src="../../_images/sphx_glr_plot_DISCO_convolutions_006.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_006.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7fc2492b8e10&gt;
 </pre></div>
 </div>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">convt</span> <span class="o">=</span> <span class="n">DiscreteContinuousConvTranspose2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">grid_in</span><span class="o">=</span><span class="n">grid_out</span><span class="p">,</span> <span class="n">grid_out</span><span class="o">=</span><span class="n">grid_in</span><span class="p">,</span> <span class="n">quadrature_weights</span><span class="o">=</span><span class="n">q_out</span><span class="p">,</span> <span class="n">kernel_shape</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">radius_cutoff</span><span class="o">=</span><span class="mi">3</span><span class="o">/</span><span class="n">nyo</span><span class="p">,</span> <span class="n">periodic</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
@@ -377,7 +376,7 @@ torch.Size([119, 89])
 <img src="../../_images/sphx_glr_plot_DISCO_convolutions_008.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_008.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>torch.Size([1, 1, 120, 90])
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 29.901 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 30.556 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-layers-plot-disco-convolutions-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/3f74a91662afa758e3d845617240e471/plot_DISCO_convolutions.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_DISCO_convolutions.ipynb</span></code></a></p>

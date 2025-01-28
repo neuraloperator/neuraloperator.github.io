@@ -31,8 +31,8 @@
  
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Visualization of discrete-continuous convolutions" href="plot_DISCO_convolutions.html" />
-    <link rel="prev" title="Neighbor search" href="plot_neighbor_search.html" />
+    <link rel="next" title="Visualizing discrete-continuous convolutions" href="plot_DISCO_convolutions.html" />
+    <link rel="prev" title="Visualizing neighbor search" href="plot_neighbor_search.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   </head>
@@ -188,7 +188,7 @@ Let’s walk through its use. We start with a function that gives the coordinate
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_embeddings_001.png" srcset="../../_images/sphx_glr_plot_embeddings_001.png" alt="plot embeddings" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7ff00514ed50&gt;
+<img src="../../_images/sphx_glr_plot_embeddings_001.png" srcset="../../_images/sphx_glr_plot_embeddings_001.png" alt="plot embeddings" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fc24bae8b90&gt;
 </pre></div>
 </div>
 </section>
@@ -234,11 +234,7 @@ after the channels which encode physical variables in our PDE problems:</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_embeddings_002.png" srcset="../../_images/sphx_glr_plot_embeddings_002.png" alt="Visualizing one 16x16 input sample, input x, x: 1st pos embedding, x: 2nd pos embedding" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:99: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don&#39;t have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
-  data = torch.load(
-Loading test db for resolution 16 with 16 samples
-/home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:189: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don&#39;t have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
-  data = torch.load(Path(root_dir).joinpath(f&quot;{dataset_name}_test_{res}.pt&quot;).as_posix())
+<img src="../../_images/sphx_glr_plot_embeddings_002.png" srcset="../../_images/sphx_glr_plot_embeddings_002.png" alt="Visualizing one 16x16 input sample, input x, x: 1st pos embedding, x: 2nd pos embedding" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Loading test db for resolution 16 with 16 samples
 Loading test db for resolution 32 with 16 samples
 One batch of x is of shape: torch.Size([2, 1, 16, 16])
 After embedding, x is of shape: torch.Size([2, 3, 16, 16])
@@ -298,7 +294,7 @@ Assuming we have one channel of data discretized on a 5x5x5 cube:</p>
 <img src="../../_images/sphx_glr_plot_embeddings_004.png" srcset="../../_images/sphx_glr_plot_embeddings_004.png" alt="3d positional encoding, color=Z value" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.10787434422876359, 0.014452421710066976, &#39;Z&#39;)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.596 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.595 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-layers-plot-embeddings-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/1c2e74cc4f68386faa92c3986ff5e279/plot_embeddings.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_embeddings.ipynb</span></code></a></p>
@@ -324,12 +320,12 @@ Assuming we have one channel of data discretized on a 5x5x5 cube:</p>
         <span class="icon">
             <i class="fa fa-arrow-circle-left"></i>
         </span>
-        <span>Neighbor search</span>
+        <span>Visualizing neighbor search</span>
     </a>
     
     
     <a class="button pagination-next" href="plot_DISCO_convolutions.html" title="next page" accesskey="n">
-        <span>Visualization of discrete-continuous convolutions </span>
+        <span>Visualizing discrete-continuous convolutions </span>
         <span class="icon">
             <i class="fa fa-arrow-circle-right"></i>
         </span>

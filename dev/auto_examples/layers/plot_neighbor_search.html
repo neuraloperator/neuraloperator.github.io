@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Neighbor search &#8212; neuraloperator 1.0.2 documentation</title> 
+    <title>Visualizing neighbor search &#8212; neuraloperator 1.0.2 documentation</title> 
 <link rel="stylesheet" href="../../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../_static/favicon/favicon-32x32.png">
@@ -164,9 +164,9 @@
 <p><a class="reference internal" href="#sphx-glr-download-auto-examples-layers-plot-neighbor-search-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code.</p>
 </div>
-<section class="sphx-glr-example-title" id="neighbor-search">
-<span id="sphx-glr-auto-examples-layers-plot-neighbor-search-py"></span><h1>Neighbor search<a class="headerlink" href="#neighbor-search" title="Link to this heading"></a></h1>
-<p>In this example, we walk through the logic of a graph neural operator.</p>
+<section class="sphx-glr-example-title" id="visualizing-neighbor-search">
+<span id="sphx-glr-auto-examples-layers-plot-neighbor-search-py"></span><h1>Visualizing neighbor search<a class="headerlink" href="#visualizing-neighbor-search" title="Link to this heading"></a></h1>
+<p>Understanding the spatial search used to compute neighborhoods for the Graph Neural Operator.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
@@ -198,7 +198,7 @@ int_{N_r(x)} f(y) k(x,y) dy</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_neighbor_search_001.png" srcset="../../_images/sphx_glr_plot_neighbor_search_001.png" alt="plot neighbor search" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7ff0055a82d0&gt;
+<img src="../../_images/sphx_glr_plot_neighbor_search_001.png" srcset="../../_images/sphx_glr_plot_neighbor_search_001.png" alt="plot neighbor search" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fc24b810690&gt;
 </pre></div>
 </div>
 </section>
@@ -225,7 +225,7 @@ int_{N_r(x)} f(y) k(x,y) dy</p>
 <img src="../../_images/sphx_glr_plot_neighbor_search_002.png" srcset="../../_images/sphx_glr_plot_neighbor_search_002.png" alt="plot neighbor search" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(0.0, 1.0)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.129 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.128 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-layers-plot-neighbor-search-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/8493117ba5e00de248ebbdc605ca910c/plot_neighbor_search.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_neighbor_search.ipynb</span></code></a></p>
@@ -292,7 +292,7 @@ int_{N_r(x)} f(y) k(x,y) dy</p>
 
         <div class="menu menu-list localtoc-list">
         <ul>
-<li><a class="reference internal" href="#">Neighbor search</a><ul>
+<li><a class="reference internal" href="#">Visualizing neighbor search</a><ul>
 <li><a class="reference internal" href="#basic-logic">Basic logic</a></li>
 <li><a class="reference internal" href="#visualizing-neighborhoods">Visualizing neighborhoods</a></li>
 </ul>

@@ -166,7 +166,7 @@ to download the full example code.</p>
 </div>
 <section class="sphx-glr-example-title" id="a-simple-darcy-flow-dataset">
 <span id="small-darcy-vis"></span><span id="sphx-glr-auto-examples-data-plot-darcy-flow-py"></span><h1>A simple Darcy-Flow dataset<a class="headerlink" href="#a-simple-darcy-flow-dataset" title="Link to this heading"></a></h1>
-<p>In this example, we demonstrate how to use the small Darcy-Flow example we ship with the package</p>
+<p>An intro to the small Darcy-Flow example dataset we ship with the package.</p>
 <section id="import-the-library">
 <h2>Import the library<a class="headerlink" href="#import-the-library" title="Link to this heading"></a></h2>
 <p>We first import our <cite>neuralop</cite> library and required dependencies.</p>
@@ -188,11 +188,7 @@ to download the full example code.</p>
 <span class="n">train_dataset</span> <span class="o">=</span> <span class="n">train_loader</span><span class="o">.</span><span class="n">dataset</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:99: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don&#39;t have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
-  data = torch.load(
-Loading test db for resolution 16 with 50 samples
-/home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:189: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don&#39;t have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
-  data = torch.load(Path(root_dir).joinpath(f&quot;{dataset_name}_test_{res}.pt&quot;).as_posix())
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Loading test db for resolution 16 with 50 samples
 Loading test db for resolution 32 with 50 samples
 </pre></div>
 </div>
@@ -255,7 +251,7 @@ Testing samples for res 32 have shape torch.Size([1, 32, 32])
 Training samples have shape torch.Size([16, 16])
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.313 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.351 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-data-plot-darcy-flow-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/a2f67305358a432373c1e15f6e11780b/plot_darcy_flow.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_darcy_flow.ipynb</span></code></a></p>
