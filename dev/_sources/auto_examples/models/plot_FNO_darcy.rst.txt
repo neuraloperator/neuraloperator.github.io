@@ -243,13 +243,13 @@ Training the model
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f89c5ef47d0>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f123db047d0>
 
     ### LOSSES ###
 
-     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7f89c5ef4050>
+     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7f123db04050>
 
-     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7f89c5ef4050>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f89c5ef4550>}
+     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7f123db04050>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f123db04550>}
 
 
 
@@ -306,22 +306,22 @@ Then train the model on our small Darcy-Flow dataset:
     Training on 1000 samples
     Testing on [50, 50] samples         on resolutions [16, 32].
     Raw outputs of shape torch.Size([32, 1, 16, 16])
-    [0] time=2.51, avg_loss=0.5903, train_err=18.4462
+    [0] time=2.48, avg_loss=0.5903, train_err=18.4462
     Eval: 16_h1=0.3639, 16_l2=0.2512, 32_h1=0.5425, 32_l2=0.2628
-    [3] time=2.52, avg_loss=0.2077, train_err=6.4899
+    [3] time=2.46, avg_loss=0.2077, train_err=6.4899
     Eval: 16_h1=0.2191, 16_l2=0.1505, 32_h1=0.4976, 32_l2=0.1840
-    [6] time=2.52, avg_loss=0.1768, train_err=5.5240
+    [6] time=2.47, avg_loss=0.1768, train_err=5.5240
     Eval: 16_h1=0.2902, 16_l2=0.2180, 32_h1=0.5098, 32_l2=0.2476
-    [9] time=2.52, avg_loss=0.1399, train_err=4.3722
+    [9] time=2.46, avg_loss=0.1399, train_err=4.3722
     Eval: 16_h1=0.2089, 16_l2=0.1298, 32_h1=0.5057, 32_l2=0.1746
-    [12] time=2.51, avg_loss=0.1350, train_err=4.2196
+    [12] time=2.54, avg_loss=0.1350, train_err=4.2196
     Eval: 16_h1=0.2000, 16_l2=0.1225, 32_h1=0.4881, 32_l2=0.1636
-    [15] time=2.49, avg_loss=0.1203, train_err=3.7584
+    [15] time=2.50, avg_loss=0.1203, train_err=3.7584
     Eval: 16_h1=0.2045, 16_l2=0.1263, 32_h1=0.5199, 32_l2=0.1752
-    [18] time=2.49, avg_loss=0.0929, train_err=2.9023
+    [18] time=2.46, avg_loss=0.0929, train_err=2.9023
     Eval: 16_h1=0.1954, 16_l2=0.1193, 32_h1=0.5096, 32_l2=0.1704
 
-    {'train_err': 2.8530129194259644, 'avg_loss': 0.09129641342163086, 'avg_lasso_loss': None, 'epoch_train_time': 2.4997118}
+    {'train_err': 2.8530129194259644, 'avg_loss': 0.09129641342163086, 'avg_lasso_loss': None, 'epoch_train_time': 2.4674222869999767}
 
 
 
@@ -471,7 +471,7 @@ are other ways to scale the outputs of the FNO to train a true super-resolution 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 51.316 seconds)
+   **Total running time of the script:** (0 minutes 50.546 seconds)
 
 
 .. _sphx_glr_download_auto_examples_models_plot_FNO_darcy.py:
