@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>neuralop.layers.coda_blocks.CODABlocks &#8212; neuraloperator 1.0.2 documentation</title> 
+    <title>neuralop.layers.coda_layer.CODALayer &#8212; neuraloperator 1.0.2 documentation</title> 
 <link rel="stylesheet" href="../../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../_static/favicon/favicon-32x32.png">
@@ -160,13 +160,13 @@
 
       <div class="container content main-content">
         
-  <section id="neuralop-layers-coda-blocks-codablocks">
-<h1><a class="reference internal" href="../api.html#module-neuralop.layers.coda_blocks" title="neuralop.layers.coda_blocks"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.coda_blocks</span></code></a>.CODABlocks<a class="headerlink" href="#neuralop-layers-coda-blocks-codablocks" title="Link to this heading"></a></h1>
+  <section id="neuralop-layers-coda-layer-codalayer">
+<h1><a class="reference internal" href="../api.html#module-neuralop.layers.coda_layer" title="neuralop.layers.coda_layer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.coda_layer</span></code></a>.CODALayer<a class="headerlink" href="#neuralop-layers-coda-layer-codalayer" title="Link to this heading"></a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="neuralop.layers.coda_blocks.CODABlocks">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.coda_blocks.</span></span><span class="sig-name descname"><span class="pre">CODABlocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_heads=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_codimension=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">head_codimension=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">codimension_size=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">per_channel_attention=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">permutation_eq=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm='instance_norm'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature=1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonlinear_attention=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_scaling_factor=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incremental_n_modes=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">non_linearity=&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_channel_mlp=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_mlp_expansion=1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fno_skip='linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_mlp_skip='linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preactivation=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separable=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factorization='tucker'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rank=1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joint_factorization=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conv_module=&lt;class</span> <span class="pre">'neuralop.layers.spectral_convolution.SpectralConv'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_rank_modes=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implementation='factorized'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decomposition_kwargs=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/coda_blocks.html#CODABlocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.coda_blocks.CODABlocks" title="Link to this definition"></a></dt>
-<dd><p>Co-domain Attention Blocks (CODABlocks) implement the transformer
-architecture in the operator learning framework, as described in <span id="id1">[R5bec054e9579-1]</span>.</p>
+<dt class="sig sig-object py" id="neuralop.layers.coda_layer.CODALayer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.coda_layer.</span></span><span class="sig-name descname"><span class="pre">CODALayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_heads=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_codimension=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">head_codimension=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">codimension_size=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">per_channel_attention=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">permutation_eq=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm='instance_norm'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature=1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonlinear_attention=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution_scaling_factor=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incremental_n_modes=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">non_linearity=&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_channel_mlp=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_mlp_expansion=1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fno_skip='linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_mlp_skip='linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preactivation=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separable=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factorization='tucker'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rank=1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joint_factorization=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conv_module=&lt;class</span> <span class="pre">'neuralop.layers.spectral_convolution.SpectralConv'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_rank_modes=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implementation='factorized'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decomposition_kwargs=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/coda_layer.html#CODALayer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.coda_layer.CODALayer" title="Link to this definition"></a></dt>
+<dd><p>Co-domain Attention Blocks (CODALayer) implement the transformer
+architecture in the operator learning framework, as described in <span id="id1">[Re703e87ec801-1]</span>.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
@@ -196,7 +196,7 @@ Defaults to <cite>‘instance_norm’</cite></p>
 <dt><strong>scale</strong><span class="classifier">int</span></dt><dd><p>Scale for downsampling Q, K functions before calculating the attention matrix.
 Higher scale will downsample more.</p>
 </dd>
-<dt><strong>output_scaling_factor</strong><span class="classifier">float</span></dt><dd><p>Scaling factor for the output.</p>
+<dt><strong>resolution_scaling_factor</strong><span class="classifier">float</span></dt><dd><p>Scaling factor for the output.</p>
 </dd>
 </dl>
 </dd>
@@ -204,10 +204,10 @@ Higher scale will downsample more.</p>
 <p class="rubric">Methods</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.layers.coda_blocks.CODABlocks.compute_attention" title="neuralop.layers.coda_blocks.CODABlocks.compute_attention"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_attention</span></code></a>(tokens, batch_size)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.layers.coda_layer.CODALayer.compute_attention" title="neuralop.layers.coda_layer.CODALayer.compute_attention"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_attention</span></code></a>(tokens, batch_size)</p></td>
 <td><p>Compute the key-query-value variant of the attention matrix for input token functions.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#neuralop.layers.coda_blocks.CODABlocks.forward" title="neuralop.layers.coda_blocks.CODABlocks.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>(x)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#neuralop.layers.coda_layer.CODALayer.forward" title="neuralop.layers.coda_layer.CODALayer.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>(x[, output_shape])</p></td>
 <td><p>CoDANO's forward pass.</p></td>
 </tr>
 </tbody>
@@ -244,8 +244,8 @@ Higher scale will downsample more.</p>
 </dl>
 <p class="rubric">References</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="neuralop.layers.coda_blocks.CODABlocks.compute_attention">
-<span class="sig-name descname"><span class="pre">compute_attention</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tokens</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/coda_blocks.html#CODABlocks.compute_attention"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.coda_blocks.CODABlocks.compute_attention" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="neuralop.layers.coda_layer.CODALayer.compute_attention">
+<span class="sig-name descname"><span class="pre">compute_attention</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tokens</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/coda_layer.html#CODALayer.compute_attention"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.coda_layer.CODALayer.compute_attention" title="Link to this definition"></a></dt>
 <dd><p>Compute the key-query-value variant of the attention matrix for input token functions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -265,8 +265,8 @@ Assumes input tokens have been normalized.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="neuralop.layers.coda_blocks.CODABlocks.forward">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/coda_blocks.html#CODABlocks.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.coda_blocks.CODABlocks.forward" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="neuralop.layers.coda_layer.CODALayer.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/coda_layer.html#CODALayer.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.coda_layer.CODALayer.forward" title="Link to this definition"></a></dt>
 <dd><p>CoDANO’s forward pass.</p>
 <ul class="simple">
 <li><p>If <code class="docutils literal notranslate"><span class="pre">self.permutation_eq</span> <span class="pre">==</span> <span class="pre">True</span></code>, computes the permutation-equivariant forward pass,            where the mixer FNO block is applied to each token separately, making            the final result equivariant to any permutation of tokens.</p></li>
@@ -338,10 +338,10 @@ b is the batch size, t is the number of tokens, and d is the token codimension.<
 
         <div class="menu menu-list localtoc-list">
         <ul>
-<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.coda_blocks</span></code>.CODABlocks</a><ul>
-<li><a class="reference internal" href="#neuralop.layers.coda_blocks.CODABlocks"><code class="docutils literal notranslate"><span class="pre">CODABlocks</span></code></a><ul>
-<li><a class="reference internal" href="#neuralop.layers.coda_blocks.CODABlocks.compute_attention"><code class="docutils literal notranslate"><span class="pre">CODABlocks.compute_attention()</span></code></a></li>
-<li><a class="reference internal" href="#neuralop.layers.coda_blocks.CODABlocks.forward"><code class="docutils literal notranslate"><span class="pre">CODABlocks.forward()</span></code></a></li>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.coda_layer</span></code>.CODALayer</a><ul>
+<li><a class="reference internal" href="#neuralop.layers.coda_layer.CODALayer"><code class="docutils literal notranslate"><span class="pre">CODALayer</span></code></a><ul>
+<li><a class="reference internal" href="#neuralop.layers.coda_layer.CODALayer.compute_attention"><code class="docutils literal notranslate"><span class="pre">CODALayer.compute_attention()</span></code></a></li>
+<li><a class="reference internal" href="#neuralop.layers.coda_layer.CODALayer.forward"><code class="docutils literal notranslate"><span class="pre">CODALayer.forward()</span></code></a></li>
 </ul>
 </li>
 </ul>

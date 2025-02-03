@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>neuralop.layers.coda_blocks &#8212; neuraloperator 1.0.2 documentation</title> 
+    <title>neuralop.layers.coda_layer &#8212; neuraloperator 1.0.2 documentation</title> 
 <link rel="stylesheet" href="../../../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../../../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../../_static/favicon/favicon-32x32.png">
@@ -112,7 +112,7 @@
 
       <div class="container content main-content">
         
-  <h1>Source code for neuralop.layers.coda_blocks</h1><div class="highlight"><pre>
+  <h1>Source code for neuralop.layers.coda_layer</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
@@ -121,15 +121,16 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn.functional</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">F</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.resample</span><span class="w"> </span><span class="kn">import</span> <span class="n">resample</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.fno_block</span><span class="w"> </span><span class="kn">import</span> <span class="n">FNOBlocks</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.spectral_convolution</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpectralConv</span>
 
 <span class="n">einsum_symbols</span> <span class="o">=</span> <span class="s2">&quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;</span>
 
-<div class="viewcode-block" id="CODABlocks">
-<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.coda_blocks.CODABlocks.html#neuralop.layers.coda_blocks.CODABlocks">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">CODABlocks</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Co-domain Attention Blocks (CODABlocks) implement the transformer</span>
+<div class="viewcode-block" id="CODALayer">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.coda_layer.CODALayer.html#neuralop.layers.coda_layer.CODALayer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CODALayer</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Co-domain Attention Blocks (CODALayer) implement the transformer</span>
 <span class="sd">    architecture in the operator learning framework, as described in [1]_.</span>
 
 <span class="sd">    Parameters</span>
@@ -160,7 +161,7 @@
 <span class="sd">    scale : int</span>
 <span class="sd">        Scale for downsampling Q, K functions before calculating the attention matrix.</span>
 <span class="sd">        Higher scale will downsample more.</span>
-<span class="sd">    output_scaling_factor : float</span>
+<span class="sd">    resolution_scaling_factor : float</span>
 <span class="sd">        Scaling factor for the output.</span>
 <span class="sd">    </span>
 <span class="sd">    Other Parameters</span>
@@ -210,7 +211,7 @@
         <span class="n">temperature</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
         <span class="n">nonlinear_attention</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">output_scaling_factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">resolution_scaling_factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">incremental_n_modes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">non_linearity</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">gelu</span><span class="p">,</span>
         <span class="n">use_channel_mlp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -232,14 +233,20 @@
 
         <span class="c1"># Co-dimension of each variable/token. The token embedding space is</span>
         <span class="c1"># identical to the variable space, so their dimensionalities are equal.</span>
+        <span class="k">if</span> <span class="n">per_channel_attention</span><span class="p">:</span>
+            <span class="c1"># for per channel attention, forcing the values of token dims</span>
+            <span class="n">token_codimension</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">head_codimension</span> <span class="o">=</span> <span class="mi">1</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span> <span class="o">=</span> <span class="n">token_codimension</span>
 
         <span class="c1"># codim of attention from each head</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">head_codimension</span> <span class="o">=</span> <span class="p">(</span><span class="n">head_codimension</span>
                                  <span class="k">if</span> <span class="n">head_codimension</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
                                  <span class="k">else</span> <span class="n">token_codimension</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">n_heads</span> <span class="o">=</span> <span class="n">n_heads</span>  <span class="c1"># number of heads</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">output_scaling_factor</span> <span class="o">=</span> <span class="n">output_scaling_factor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resolution_scaling_factor</span> <span class="o">=</span> <span class="n">resolution_scaling_factor</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="n">temperature</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_modes</span><span class="p">)</span>
 
@@ -265,21 +272,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">codimension_size</span> <span class="o">=</span> <span class="n">codimension_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mixer_token_codimension</span> <span class="o">=</span> <span class="n">token_codimension</span>
 
-        <span class="k">if</span> <span class="n">per_channel_attention</span><span class="p">:</span>
-            <span class="c1"># for per channel attention, forcing the values of token dims</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span> <span class="o">=</span> <span class="mi">1</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">head_codimension</span> <span class="o">=</span> <span class="mi">1</span>
-
         <span class="c1"># this scale used for downsampling Q,K functions</span>
         <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">scale</span> <span class="o">=</span> <span class="mi">2</span> <span class="k">if</span> <span class="n">per_channel_attention</span> <span class="k">else</span> <span class="mi">1</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="k">if</span> <span class="n">per_channel_attention</span> <span class="k">else</span> <span class="mi">1</span>
             <span class="n">scale</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_heads</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
 
-        <span class="n">mixer_modes</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">//</span> <span class="n">scale</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">n_modes</span><span class="p">]</span>
+        <span class="n">mixer_modes</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">scale</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">n_modes</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">decomposition_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">decomposition_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">common_args</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+
+        <span class="n">shared_fno_configs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
             <span class="n">use_channel_mlp</span><span class="o">=</span><span class="n">use_channel_mlp</span><span class="p">,</span>
             <span class="n">preactivation</span><span class="o">=</span><span class="n">preactivation</span><span class="p">,</span>
             <span class="n">channel_mlp_skip</span><span class="o">=</span><span class="n">channel_mlp_skip</span><span class="p">,</span>
@@ -303,26 +306,25 @@
             <span class="n">non_linearity</span><span class="o">=</span><span class="n">kqv_activation</span><span class="p">,</span>
             <span class="n">fno_skip</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
             <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">apply_skip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">n_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Key</span> <span class="o">=</span> <span class="n">FNOBlocks</span><span class="p">(</span>
-            <span class="n">output_scaling_factor</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="n">scale</span><span class="p">,</span>
+            <span class="n">resolution_scaling_factor</span><span class="o">=</span><span class="mi">1</span> <span class="o">*</span> <span class="n">scale</span><span class="p">,</span>
             <span class="n">conv_module</span><span class="o">=</span><span class="n">conv_module</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kqv_args</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">common_args</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">shared_fno_configs</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Query</span> <span class="o">=</span> <span class="n">FNOBlocks</span><span class="p">(</span>
-            <span class="n">output_scaling_factor</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="n">scale</span><span class="p">,</span>
+            <span class="n">resolution_scaling_factor</span><span class="o">=</span><span class="mi">1</span> <span class="o">*</span> <span class="n">scale</span><span class="p">,</span>
             <span class="n">conv_module</span><span class="o">=</span><span class="n">conv_module</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kqv_args</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">common_args</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">shared_fno_configs</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Value</span> <span class="o">=</span> <span class="n">FNOBlocks</span><span class="p">(</span>
-            <span class="n">output_scaling_factor</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">resolution_scaling_factor</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">conv_module</span><span class="o">=</span><span class="n">conv_module</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kqv_args</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">common_args</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">shared_fno_configs</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_heads</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">head_codimension</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span><span class="p">:</span>
@@ -330,15 +332,14 @@
                 <span class="n">in_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_heads</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">head_codimension</span><span class="p">,</span>
                 <span class="n">out_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span><span class="p">,</span>
                 <span class="n">n_modes</span><span class="o">=</span><span class="n">n_modes</span><span class="p">,</span>
-                <span class="n">output_scaling_factor</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">resolution_scaling_factor</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                 <span class="c1"># args below are shared with KQV blocks</span>
-                <span class="n">apply_skip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">non_linearity</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Identity</span><span class="p">(),</span>
                 <span class="n">fno_skip</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
                 <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">conv_module</span><span class="o">=</span><span class="n">conv_module</span><span class="p">,</span>
                 <span class="n">n_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                <span class="o">**</span><span class="n">common_args</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">shared_fno_configs</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">multi_head_proj</span> <span class="o">=</span> <span class="kc">None</span>
@@ -347,7 +348,7 @@
 
         <span class="n">mixer_args</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
             <span class="n">n_modes</span><span class="o">=</span><span class="n">n_modes</span><span class="p">,</span>
-            <span class="n">output_scaling_factor</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">resolution_scaling_factor</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">non_linearity</span><span class="o">=</span><span class="n">non_linearity</span><span class="p">,</span>
             <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;instance_norm&#39;</span><span class="p">,</span>
             <span class="n">fno_skip</span><span class="o">=</span><span class="n">fno_skip</span><span class="p">,</span>
@@ -361,15 +362,15 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">mixer</span> <span class="o">=</span> <span class="n">FNOBlocks</span><span class="p">(</span>
                 <span class="n">in_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mixer_token_codimension</span><span class="p">,</span>
                 <span class="n">out_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mixer_token_codimension</span><span class="p">,</span>
-                <span class="n">apply_skip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">n_layers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                 <span class="o">**</span><span class="n">mixer_args</span><span class="p">,</span>
-                <span class="o">**</span><span class="n">common_args</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">shared_fno_configs</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">norm1</span> <span class="o">=</span> <span class="n">norm_module</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">norm2</span> <span class="o">=</span> <span class="n">norm_module</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mixer_token_codimension</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mixer_in_normalizer</span> <span class="o">=</span> <span class="n">norm_module</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mixer_token_codimension</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mixer_out_normalizer</span> <span class="o">=</span> <span class="n">norm_module</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">mixer_token_codimension</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;print token code dimension&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mixer_token_codimension</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mixer</span> <span class="o">=</span> <span class="n">FNOBlocks</span><span class="p">(</span>
@@ -377,14 +378,14 @@
                 <span class="n">out_channels</span><span class="o">=</span><span class="n">codimension_size</span><span class="p">,</span>
                 <span class="n">n_layers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                 <span class="o">**</span><span class="n">mixer_args</span><span class="p">,</span>
-                <span class="o">**</span><span class="n">common_args</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">shared_fno_configs</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">norm1</span> <span class="o">=</span> <span class="n">norm_module</span><span class="p">(</span><span class="n">codimension_size</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">norm2</span> <span class="o">=</span> <span class="n">norm_module</span><span class="p">(</span><span class="n">codimension_size</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mixer_in_normalizer</span> <span class="o">=</span> <span class="n">norm_module</span><span class="p">(</span><span class="n">codimension_size</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mixer_out_normalizer</span> <span class="o">=</span> <span class="n">norm_module</span><span class="p">(</span><span class="n">codimension_size</span><span class="p">)</span>
 
-<div class="viewcode-block" id="CODABlocks.compute_attention">
-<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.coda_blocks.CODABlocks.html#neuralop.layers.coda_blocks.CODABlocks.compute_attention">[docs]</a>
+<div class="viewcode-block" id="CODALayer.compute_attention">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.coda_layer.CODALayer.html#neuralop.layers.coda_layer.CODALayer.compute_attention">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_attention</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokens</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute the key-query-value variant of the attention matrix for input token functions.</span>
@@ -449,9 +450,9 @@
         <span class="k">return</span> <span class="n">attention</span></div>
 
 
-<div class="viewcode-block" id="CODABlocks.forward">
-<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.coda_blocks.CODABlocks.html#neuralop.layers.coda_blocks.CODABlocks.forward">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="CODALayer.forward">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.coda_layer.CODALayer.html#neuralop.layers.coda_layer.CODALayer.forward">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        CoDANO&#39;s forward pass. </span>
 
@@ -469,13 +470,16 @@
 <span class="sd">            b is the batch size, t is the number of tokens, and d is the token codimension.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution_scaling_factor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">output_shape</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">output_shape</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">:],</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution_scaling_factor</span><span class="p">)]</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">permutation_eq</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_equivariant</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_equivariant</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_non_equivariant</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_non_equivariant</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_forward_equivariant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_forward_equivariant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Forward pass with a permutation equivariant mixer layer after the</span>
 <span class="sd">        attention mechanism. Shares the same mixer layer for all tokens, meaning</span>
@@ -488,7 +492,7 @@
 <span class="sd">            b is the batch size, t is the number of tokens, and d is the token codimension.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">batch_size</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">output_shape</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">:]</span>
+        <span class="n">input_shape</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">:]</span>
 
         <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Number of channels in x should be divisible by token_codimension&quot;</span>
 
@@ -505,8 +509,8 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">multi_head_proj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">attention</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">multi_head_proj</span><span class="p">(</span><span class="n">attention</span><span class="p">)</span>
         <span class="n">attention</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attention_normalizer</span><span class="p">(</span><span class="n">attention</span> <span class="o">+</span> <span class="n">tokens</span><span class="p">)</span>
-        <span class="n">attention_normalized</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm2</span><span class="p">(</span><span class="n">attention</span><span class="p">)</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mixer</span><span class="p">(</span><span class="n">attention_normalized</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
+        <span class="n">attention_normalized</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mixer_in_normalizer</span><span class="p">(</span><span class="n">attention</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mixer</span><span class="p">(</span><span class="n">attention_normalized</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">input_shape</span><span class="p">)</span>
         <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mixer_out_normalizer</span><span class="p">(</span><span class="n">output</span><span class="p">)</span> <span class="o">+</span> <span class="n">attention</span>
 
         <span class="c1"># reshape from shape (b*t) d h w... to b (t d) h w ...</span>
@@ -515,10 +519,16 @@
             <span class="n">batch_size</span><span class="p">,</span>
             <span class="n">t</span> <span class="o">*</span> <span class="n">output</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
             <span class="o">*</span><span class="n">output</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">:])</span>
+        
+        <span class="k">if</span> <span class="n">output_shape</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">resample</span><span class="p">(</span><span class="n">output</span><span class="p">,</span>
+                              <span class="n">res_scale</span><span class="o">=</span><span class="p">[</span><span class="n">j</span><span class="o">/</span><span class="n">i</span> <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">:],</span> <span class="n">output_shape</span><span class="p">)],</span>
+                              <span class="n">axis</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
+                              <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">output</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_forward_non_equivariant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_forward_non_equivariant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Forward pass with a non-permuatation equivariant mixer layer and normalizations.</span>
 <span class="sd">        After attention, the tokens are stacked along the channel dimension before mixing,</span>
@@ -532,7 +542,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">batch_size</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">output_shape</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">:]</span>
+        <span class="n">input_shape</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">:]</span>
 
         <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Number of channels in x should be divisible by token_codimension&quot;</span>
 
@@ -559,10 +569,16 @@
             <span class="n">t</span> <span class="o">*</span> <span class="n">attention</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
             <span class="o">*</span><span class="n">attention</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">:])</span>
 
-        <span class="n">attention_normalized</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm2</span><span class="p">(</span><span class="n">attention</span><span class="p">)</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mixer</span><span class="p">(</span><span class="n">attention_normalized</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
+        <span class="n">attention_normalized</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mixer_in_normalizer</span><span class="p">(</span><span class="n">attention</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mixer</span><span class="p">(</span><span class="n">attention_normalized</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">input_shape</span><span class="p">)</span>
 
         <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mixer_out_normalizer</span><span class="p">(</span><span class="n">output</span><span class="p">)</span> <span class="o">+</span> <span class="n">attention</span>
+
+        <span class="k">if</span> <span class="n">output_shape</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">resample</span><span class="p">(</span><span class="n">output</span><span class="p">,</span>
+                              <span class="n">res_scale</span><span class="o">=</span><span class="p">[</span><span class="n">j</span><span class="o">/</span><span class="n">i</span> <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">:],</span> <span class="n">output_shape</span><span class="p">)],</span>
+                              <span class="n">axis</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
+                              <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">output</span></div>
 
