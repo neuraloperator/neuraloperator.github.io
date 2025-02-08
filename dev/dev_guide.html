@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>NeuralOperator Developer’s Guide &#8212; neuraloperator 1.0.2 documentation</title> 
+<link rel="stylesheet" href="_static/tensorly_style.css">
+<link rel="apple-touch-icon" sizes="180x180" href="_static/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="_static/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="_static/favicon/favicon-16x16.png">
+<link rel="manifest" href="_static/favicon/site.webmanifest">
+<link rel="mask-icon" href="_static/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="_static/favicon/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/tensorly_style.css?v=a02e9698" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+    <script src="_static/documentation_options.js?v=1ed6394b"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+ <script src="_static/navbar_burger.js"></script>
+ <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+ 
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Training an FNO with incremental meta-learning" href="auto_examples/training/plot_incremental_FNO_darcy.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  </head>
+<body  class="has-navbar-fixed-top">
+
+  <header>
+    <navbar>
+      <nav class="navbar top-navbar is-fixed-top has-shadow is-flex-wrap-wrap" role="navigation" aria-label="main top navigation">
+        <div class="navbar-brand">
+        
+
+          <a class="navbar-item" href="index.html">
+            <img src="_static/neuraloperator_logo.png" height="28">
+          </a>
+          <a class="navbar-item is-hidden-desktop" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon"><i class="fab fa-github"></i></span>
+          </a>
+
+          <a role="button" class="navbar-burger" data-target="top-nav-menu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+
+        </div>
+        
+        <div class="navbar-menu" id="top-nav-menu">
+        
+
+          <div class="navbar-start">
+            
+              <a class="navbar-item" href="install.html">
+              Install
+            </a>
+              <a class="navbar-item" href="user_guide/index.html">
+              User Guide
+            </a>
+              <a class="navbar-item" href="modules/api.html">
+              API
+            </a>
+              <a class="navbar-item" href="auto_examples/index.html">
+              Examples
+            </a>
+              <a class="navbar-item" href="#">
+              Developer's Guide
+            </a>
+          </div>
+        
+          <div class="navbar-end">
+            <div class="navbar-item">
+            
+            <a class="button is-hidden-touch is-dark" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon-text">
+                <span class="icon is-large">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Github</span>
+              </span>
+            </a>
+
+            </div> 
+          </div> 
+        </div> 
+
+      </nav>
+      
+    </navbar>
+  </header>
+
+
+  <div id="column-container">
+  <div class="columns is-mobile is-centered">
+	
+  
+      <div class="column is-10-mobile is-one-third-tablet is-3-desktop is-hidden-mobile" id="sidebar">
+    
+    <aside class="sticky-nav sidebar-menu">
+<div class="sidebar-search">
+  <form class="field" id="searchbox" role="search" action="search.html" method="get">
+    <!-- <label class="label" id="searchlabel">Quick search</label> -->
+    <div class="field has-addons">
+      <div class="control is-expanded">
+        <input class="input" type="text" placeholder="Search the doc" name="q" aria-labelledby="searchlabel autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      </div>
+      <div class="control">
+        <input class="button is-info" type="submit" value="Go" />
+      </div>
+    </div>
+  </form>
+  <script>document.getElementById('searchbox').style.display = "block"</script>
+
+</div>
+      
+      <div class="sidebar-menu-toc">
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing NeuralOperator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide/index.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">NeuralOperator Developer’s Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation-and-setup">Installation and Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#code-style-and-standards">Code Style and Standards</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#debugging-and-troubleshooting">Debugging and Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contact">Contact</a></li>
+</ul>
+</li>
+</ul>
+ 
+      </div>
+    </aside>
+  </div>
+  
+
+  <div class="column main-column">
+
+    
+    <div class="main-section">
+
+      
+      
+      <div class="side-menu-toggle">
+        <button class="button" id="toggle-sidebar" onclick="toggle_sidebar()">
+          <span class="icon"><i class="fa fa-bars" aria-hidden="true"></i></span>
+          <span>menu</span> 
+        </button>
+      </div>
+      
+
+      <div class="container content main-content">
+        
+  <section id="neuraloperator-developer-s-guide">
+<span id="dev-guide"></span><h1>NeuralOperator Developer’s Guide<a class="headerlink" href="#neuraloperator-developer-s-guide" title="Link to this heading"></a></h1>
+<p>This guide provides essential information for developers contributing to NeuralOperator.</p>
+<hr class="docutils" />
+<section id="installation-and-setup">
+<h2>Installation and Setup<a class="headerlink" href="#installation-and-setup" title="Link to this heading"></a></h2>
+<p>To get started with development, fork the repository on GitHub, then download your fork:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/YOURNAME/neuraloperator.git
+<span class="nb">cd</span><span class="w"> </span>neuraloperator
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="o">[</span>dev<span class="o">]</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="code-style-and-standards">
+<h2>Code Style and Standards<a class="headerlink" href="#code-style-and-standards" title="Link to this heading"></a></h2>
+<p>To ensure code clarity and future maintainability, NeuralOperator adheres to a few style principles:</p>
+<section id="commenting-and-docstrings">
+<h3>Commenting and docstrings<a class="headerlink" href="#commenting-and-docstrings" title="Link to this heading"></a></h3>
+<p>In general, docstrings use the NumPy format:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">arg1</span><span class="p">:</span> <span class="n">type1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">:</span> <span class="n">type2</span><span class="o">=</span><span class="n">default</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    arg1 : type1</span>
+<span class="sd">        description of what arg1 &#39;means&#39;</span>
+<span class="sd">        for the function&#39;s behavior</span>
+<span class="sd">    arg2 : type2, optional</span>
+<span class="sd">        description arg2</span>
+<span class="sd">        by default default</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>For <em>classes</em>, this docstring should go directly below the class declaration:</p>
+<p>We also adhere to good in-line commenting practices. When a block’s function is not
+obvious on its own, add in-line comments with a brief description. For tensor operations,
+shape annotations are especially helpful where applicable.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Link to this heading"></a></h2>
+<p>Follow these steps when making contributions:</p>
+<ol class="arabic">
+<li><p>Create a new branch for your feature or bug fix:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>feature-branch
+</pre></div>
+</div>
+</li>
+<li><p>Write clean, well-documented code.</p></li>
+</ol>
+<p>3. Add or update tests in appropriate directory. For instance, if your feature adds a model
+in <code class="docutils literal notranslate"><span class="pre">neuralop/models/mymodel.py</span></code>, you would add tests to <cite>neuralop/models/tests/test_mymodel.py</cite></p>
+<p>4. Run the test suite:
+.. code-block:: bash</p>
+<blockquote>
+<div><p>pytest neuralop</p>
+</div></blockquote>
+<p>5. Submit a pull request (PR) on GitHub from your branch to the upstream origin/main.
+Ensure your PR clearly communicates what you’ve changed or added.</p>
+<section id="extending-the-library">
+<h3>Extending the Library<a class="headerlink" href="#extending-the-library" title="Link to this heading"></a></h3>
+<p>To add a new neural operator model:</p>
+<ol class="arabic simple">
+<li><p>Create a new file in <code class="docutils literal notranslate"><span class="pre">neuralop/models/</span></code>.</p></li>
+<li><p>Implement the model as a subclass of <code class="docutils literal notranslate"><span class="pre">BaseModel</span></code>.</p></li>
+</ol>
+<p>To add a layer:</p>
+<ol class="arabic simple">
+<li><p>Create a new file in <code class="docutils literal notranslate"><span class="pre">neuralop/layers</span></code></p></li>
+<li><p>Ensure the layer is a subclass of <code class="docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For optional bonus points, add an interactive example featuring your new method to <code class="docutils literal notranslate"><span class="pre">./examples</span></code>.
+This helps both us and you: the simpler it is for new users to understand and adapt your method,
+the more visibility it will get!</p>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="debugging-and-troubleshooting">
+<h2>Debugging and Troubleshooting<a class="headerlink" href="#debugging-and-troubleshooting" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Use <cite>torch.set_detect_anomaly(True)</cite> for debugging NaN gradients.</p></li>
+<li><p>Check GPU memory usage with <cite>nvidia-smi</cite>.</p></li>
+<li><p>Ensure dependencies are up to date with <cite>pip list –outdated</cite>.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="contact">
+<h2>Contact<a class="headerlink" href="#contact" title="Link to this heading"></a></h2>
+<p>For questions or issues, create a GitHub issue or reach out on the discussion forum.</p>
+</section>
+</section>
+
+
+      </div>
+
+      
+        <nav class="pagination" role="navigation" aria-label="pagination">
+    
+    <a class="button pagination-previous" href="auto_examples/training/plot_incremental_FNO_darcy.html" title="previous page" accesskey="p">
+        <span class="icon">
+            <i class="fa fa-arrow-circle-left"></i>
+        </span>
+        <span>Training an FNO with incremental meta-learning</span>
+    </a>
+    
+    
+</nav>
+
+      
+
+        <footer class="footer">
+    <div class="content has-text-centered">
+        <div class="block">
+          &copy; Copyright 2025, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+        </div>
+    </div>
+  </footer>
+
+    </div>
+
+  </div>  
+
+	
+    
+    <div class="column is-hidden-touch is-2-desktop is-one-fifth-widescreen" id="localtoc-column">
+
+    <aside class="sticky-nav localtoc"> 
+        <p class="menu-label"> 
+            <span class="icon-text">
+                <span class="icon"><i class="fas fa-duotone fa-list"></i></span>
+                <span> On this page </span>
+            </span>
+        </p>
+
+        <div class="menu menu-list localtoc-list">
+        <ul>
+<li><a class="reference internal" href="#">NeuralOperator Developer’s Guide</a><ul>
+<li><a class="reference internal" href="#installation-and-setup">Installation and Setup</a></li>
+<li><a class="reference internal" href="#code-style-and-standards">Code Style and Standards</a><ul>
+<li><a class="reference internal" href="#commenting-and-docstrings">Commenting and docstrings</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#contributing">Contributing</a><ul>
+<li><a class="reference internal" href="#extending-the-library">Extending the Library</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#debugging-and-troubleshooting">Debugging and Troubleshooting</a></li>
+<li><a class="reference internal" href="#contact">Contact</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+    </aside>
+    </div>
+
+  
+
+  </div>  
+  </div> 
+
+  
+  <script>
+    function toggle_sidebar() {
+        var element = document.getElementById("sidebar");
+        var container = document.getElementById("column-container");
+        var localtoccolumn = document.getElementById("localtoc-column");
+        element.classList.toggle("hide-tablet");
+        element.classList.toggle("is-hidden-mobile");
+        container.classList.toggle("sidemenu-hidden");
+        localtoccolumn.classList.toggle("is-one-fifth-widescreen");
+        localtoccolumn.classList.toggle("is-2-desktop");
+        localtoccolumn.classList.toggle("is-3-desktop");
+    }
+  </script> 
+
+
+
+  </body>
+</html>
