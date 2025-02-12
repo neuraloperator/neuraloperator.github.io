@@ -234,15 +234,15 @@ Set up the losses
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f320ea29350>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f5a33a2d5b0>
 
     ### LOSSES ###
 
     ### INCREMENTAL RESOLUTION + GRADIENT EXPLAINED ###
 
-     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7f31ff8e2990>
+     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7f5a248fd1d0>
 
-     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7f31ff8e2990>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f320ea2b360>}
+     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7f5a248fd1d0>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f5a33a2fce0>}
 
 
 
@@ -327,7 +327,7 @@ Train the model
     Eval: 16_h1=0.8715, 16_l2=0.5382, 32_h1=0.9804, 32_l2=0.5430
     [1] time=0.21, avg_loss=0.7686, train_err=10.9799
     Eval: 16_h1=0.7955, 16_l2=0.4911, 32_h1=0.9059, 32_l2=0.4990
-    [2] time=0.20, avg_loss=0.6952, train_err=9.9317
+    [2] time=0.21, avg_loss=0.6952, train_err=9.9317
     Eval: 16_h1=0.8524, 16_l2=0.4997, 32_h1=1.0478, 32_l2=0.5265
     [3] time=0.21, avg_loss=0.6403, train_err=9.1471
     Eval: 16_h1=0.7306, 16_l2=0.4116, 32_h1=0.9265, 32_l2=0.4323
@@ -341,33 +341,33 @@ Train the model
     Eval: 16_h1=0.8033, 16_l2=0.4142, 32_h1=1.1472, 32_l2=0.4418
     [8] time=0.21, avg_loss=0.4923, train_err=7.0334
     Eval: 16_h1=0.6959, 16_l2=0.4219, 32_h1=0.8557, 32_l2=0.4439
-    [9] time=0.21, avg_loss=0.5041, train_err=7.2018
+    [9] time=0.22, avg_loss=0.5041, train_err=7.2018
     Eval: 16_h1=0.6499, 16_l2=0.3609, 32_h1=0.8811, 32_l2=0.3959
     Incre Res Update: change index to 1
     Incre Res Update: change sub to 1
     Incre Res Update: change res to 16
-    [10] time=0.26, avg_loss=0.5538, train_err=7.9114
+    [10] time=0.27, avg_loss=0.5538, train_err=7.9114
     Eval: 16_h1=0.5183, 16_l2=0.3240, 32_h1=0.5924, 32_l2=0.3180
-    [11] time=0.25, avg_loss=0.4614, train_err=6.5915
+    [11] time=0.26, avg_loss=0.4614, train_err=6.5915
     Eval: 16_h1=0.6746, 16_l2=0.4599, 32_h1=0.7945, 32_l2=0.4457
     [12] time=0.26, avg_loss=0.5361, train_err=7.6586
     Eval: 16_h1=0.4720, 16_l2=0.2841, 32_h1=0.6427, 32_l2=0.3077
-    [13] time=0.26, avg_loss=0.4414, train_err=6.3060
+    [13] time=0.27, avg_loss=0.4414, train_err=6.3060
     Eval: 16_h1=0.4261, 16_l2=0.2796, 32_h1=0.5137, 32_l2=0.2771
     [14] time=0.26, avg_loss=0.3862, train_err=5.5171
     Eval: 16_h1=0.4715, 16_l2=0.2802, 32_h1=0.5789, 32_l2=0.2892
-    [15] time=0.26, avg_loss=0.4161, train_err=5.9443
+    [15] time=0.27, avg_loss=0.4161, train_err=5.9443
     Eval: 16_h1=0.3858, 16_l2=0.2389, 32_h1=0.4873, 32_l2=0.2492
-    [16] time=0.26, avg_loss=0.3566, train_err=5.0950
+    [16] time=0.27, avg_loss=0.3566, train_err=5.0950
     Eval: 16_h1=0.3797, 16_l2=0.2440, 32_h1=0.5018, 32_l2=0.2500
-    [17] time=0.26, avg_loss=0.3412, train_err=4.8742
+    [17] time=0.27, avg_loss=0.3412, train_err=4.8742
     Eval: 16_h1=0.5346, 16_l2=0.3388, 32_h1=0.6856, 32_l2=0.3489
-    [18] time=0.26, avg_loss=0.4428, train_err=6.3258
+    [18] time=0.27, avg_loss=0.4428, train_err=6.3258
     Eval: 16_h1=0.4426, 16_l2=0.2905, 32_h1=0.5216, 32_l2=0.2955
-    [19] time=0.26, avg_loss=0.3822, train_err=5.4596
+    [19] time=0.27, avg_loss=0.3822, train_err=5.4596
     Eval: 16_h1=0.4097, 16_l2=0.2562, 32_h1=0.5603, 32_l2=0.2669
 
-    {'train_err': 5.459584202085223, 'avg_loss': 0.38217089414596556, 'avg_lasso_loss': None, 'epoch_train_time': 0.26271403500004453, '16_h1': tensor(0.4097), '16_l2': tensor(0.2562), '32_h1': tensor(0.5603), '32_l2': tensor(0.2669)}
+    {'train_err': 5.459584202085223, 'avg_loss': 0.38217089414596556, 'avg_lasso_loss': None, 'epoch_train_time': 0.2669516380000232, '16_h1': tensor(0.4097), '16_l2': tensor(0.2562), '32_h1': tensor(0.5603), '32_l2': tensor(0.2669)}
 
 
 
@@ -441,7 +441,7 @@ In practice we would train a Neural Operator on one or multiple GPUs
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 6.577 seconds)
+   **Total running time of the script:** (0 minutes 6.697 seconds)
 
 
 .. _sphx_glr_download_auto_examples_training_plot_incremental_FNO_darcy.py:
