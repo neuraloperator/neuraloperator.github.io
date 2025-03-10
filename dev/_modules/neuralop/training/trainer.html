@@ -144,7 +144,32 @@
 <a class="viewcode-back" href="../../../modules/generated/neuralop.training.Trainer.html#neuralop.training.Trainer">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Trainer</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A general Trainer class to train neural-operators on given datasets</span>
+<span class="sd">    A general Trainer class to train neural-operators on given datasets. </span>
+
+<span class="sd">    .. note ::</span>
+<span class="sd">        Our Trainer expects datasets to provide batches as key-value dictionaries, ex.: </span>
+<span class="sd">        ``{&#39;x&#39;: x, &#39;y&#39;: y}``, that are keyed to the arguments expected by models and losses. </span>
+<span class="sd">        For specifics and an example, check ``neuralop.data.datasets.DarcyDataset``. </span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : nn.Module</span>
+<span class="sd">    n_epochs : int</span>
+<span class="sd">    wandb_log : bool, default is False</span>
+<span class="sd">        whether to log results to wandb</span>
+<span class="sd">    device : torch.device, or str &#39;cpu&#39; or &#39;cuda&#39;</span>
+<span class="sd">    mixed_precision : bool, default is False</span>
+<span class="sd">        whether to use torch.autocast to compute mixed precision</span>
+<span class="sd">    data_processor : DataProcessor class to transform data, default is None</span>
+<span class="sd">        if not None, data from the loaders is transform first with data_processor.preprocess,</span>
+<span class="sd">        then after getting an output from the model, that is transformed with data_processor.postprocess.</span>
+<span class="sd">    eval_interval : int, default is 1</span>
+<span class="sd">        how frequently to evaluate model and log training stats</span>
+<span class="sd">    log_output : bool, default is False</span>
+<span class="sd">        if True, and if wandb_log is also True, log output images to wandb</span>
+<span class="sd">    use_distributed : bool, default is False</span>
+<span class="sd">        whether to use DDP</span>
+<span class="sd">    verbose : bool, default is False</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -161,25 +186,6 @@
         <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        model : nn.Module</span>
-<span class="sd">        n_epochs : int</span>
-<span class="sd">        wandb_log : bool, default is False</span>
-<span class="sd">            whether to log results to wandb</span>
-<span class="sd">        device : torch.device, or str &#39;cpu&#39; or &#39;cuda&#39;</span>
-<span class="sd">        mixed_precision : bool, default is False</span>
-<span class="sd">            whether to use torch.autocast to compute mixed precision</span>
-<span class="sd">        data_processor : DataProcessor class to transform data, default is None</span>
-<span class="sd">            if not None, data from the loaders is transform first with data_processor.preprocess,</span>
-<span class="sd">            then after getting an output from the model, that is transformed with data_processor.postprocess.</span>
-<span class="sd">        eval_interval : int, default is 1</span>
-<span class="sd">            how frequently to evaluate model and log training stats</span>
-<span class="sd">        log_output : bool, default is False</span>
-<span class="sd">            if True, and if wandb_log is also True, log output images to wandb</span>
-<span class="sd">        use_distributed : bool, default is False</span>
-<span class="sd">            whether to use DDP</span>
-<span class="sd">        verbose : bool, default is False</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>

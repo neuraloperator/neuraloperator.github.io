@@ -169,7 +169,36 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.training.Trainer">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.training.</span></span><span class="sig-name descname"><span class="pre">Trainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wandb_log</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cpu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mixed_precision</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_processor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_interval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_distributed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/training/trainer.html#Trainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.training.Trainer" title="Link to this definition"></a></dt>
-<dd><p>A general Trainer class to train neural-operators on given datasets</p>
+<dd><p>A general Trainer class to train neural-operators on given datasets.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Our Trainer expects datasets to provide batches as key-value dictionaries, ex.: 
+<code class="docutils literal notranslate"><span class="pre">{'x':</span> <span class="pre">x,</span> <span class="pre">'y':</span> <span class="pre">y}</span></code>, that are keyed to the arguments expected by models and losses. 
+For specifics and an example, check <code class="docutils literal notranslate"><span class="pre">neuralop.data.datasets.DarcyDataset</span></code>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>model</strong><span class="classifier">nn.Module</span></dt><dd></dd>
+<dt><strong>n_epochs</strong><span class="classifier">int</span></dt><dd></dd>
+<dt><strong>wandb_log</strong><span class="classifier">bool, default is False</span></dt><dd><p>whether to log results to wandb</p>
+</dd>
+<dt><strong>device</strong><span class="classifier">torch.device, or str ‘cpu’ or ‘cuda’</span></dt><dd></dd>
+<dt><strong>mixed_precision</strong><span class="classifier">bool, default is False</span></dt><dd><p>whether to use torch.autocast to compute mixed precision</p>
+</dd>
+<dt><strong>data_processor</strong><span class="classifier">DataProcessor class to transform data, default is None</span></dt><dd><p>if not None, data from the loaders is transform first with data_processor.preprocess,
+then after getting an output from the model, that is transformed with data_processor.postprocess.</p>
+</dd>
+<dt><strong>eval_interval</strong><span class="classifier">int, default is 1</span></dt><dd><p>how frequently to evaluate model and log training stats</p>
+</dd>
+<dt><strong>log_output</strong><span class="classifier">bool, default is False</span></dt><dd><p>if True, and if wandb_log is also True, log output images to wandb</p>
+</dd>
+<dt><strong>use_distributed</strong><span class="classifier">bool, default is False</span></dt><dd><p>whether to use DDP</p>
+</dd>
+<dt><strong>verbose</strong><span class="classifier">bool, default is False</span></dt><dd></dd>
+</dl>
+</dd>
+</dl>
 <p class="rubric">Methods</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
