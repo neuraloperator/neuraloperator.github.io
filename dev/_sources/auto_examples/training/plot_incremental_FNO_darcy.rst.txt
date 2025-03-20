@@ -234,15 +234,15 @@ Set up the losses
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fc0886642b0>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f35c02742b0>
 
     ### LOSSES ###
 
     ### INCREMENTAL RESOLUTION + GRADIENT EXPLAINED ###
 
-     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7fc079b4dd10>
+     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7f35b188dd10>
 
-     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7fc079b4dd10>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7fc088664180>}
+     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7f35b188dd10>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f35c0274180>}
 
 
 
@@ -364,10 +364,10 @@ Train the model
     Eval: 16_h1=0.5346, 16_l2=0.3388, 32_h1=0.6856, 32_l2=0.3489
     [18] time=0.26, avg_loss=0.4428, train_err=6.3258
     Eval: 16_h1=0.4426, 16_l2=0.2905, 32_h1=0.5216, 32_l2=0.2955
-    [19] time=0.26, avg_loss=0.3822, train_err=5.4596
+    [19] time=0.27, avg_loss=0.3822, train_err=5.4596
     Eval: 16_h1=0.4097, 16_l2=0.2562, 32_h1=0.5603, 32_l2=0.2669
 
-    {'train_err': 5.459584202085223, 'avg_loss': 0.38217089414596556, 'avg_lasso_loss': None, 'epoch_train_time': 0.2636644750000414, '16_h1': tensor(0.4097), '16_l2': tensor(0.2562), '32_h1': tensor(0.5603), '32_l2': tensor(0.2669)}
+    {'train_err': 5.459584202085223, 'avg_loss': 0.38217089414596556, 'avg_lasso_loss': None, 'epoch_train_time': 0.26631627300002947, '16_h1': tensor(0.4097), '16_l2': tensor(0.2562), '32_h1': tensor(0.5603), '32_l2': tensor(0.2669)}
 
 
 
@@ -441,7 +441,7 @@ In practice we would train a Neural Operator on one or multiple GPUs
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 6.606 seconds)
+   **Total running time of the script:** (0 minutes 6.585 seconds)
 
 
 .. _sphx_glr_download_auto_examples_training_plot_incremental_FNO_darcy.py:
