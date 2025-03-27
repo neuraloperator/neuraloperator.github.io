@@ -186,7 +186,7 @@ The dimensionality of the SFNO is inferred from <code class="docutils literal no
 </dd>
 <dt><strong>out_channels</strong><span class="classifier">int</span></dt><dd><p>Number of channels in output function</p>
 </dd>
-<dt><strong>hidden_channels</strong><span class="classifier">int</span></dt><dd><p>width of the SFNO (i.e. number of channels), by default 256</p>
+<dt><strong>hidden_channels</strong><span class="classifier">int</span></dt><dd><p>width of the SFNO (i.e. number of channels)</p>
 </dd>
 <dt><strong>n_layers</strong><span class="classifier">int, optional</span></dt><dd><p>Number of Fourier Layers, by default 4</p>
 </dd>
@@ -207,11 +207,11 @@ The dimensionality of the SFNO is inferred from <code class="docutils literal no
 <dd class="field-odd"><dl>
 <dt><strong>lifting_channel_ratio</strong><span class="classifier">int, optional</span></dt><dd><p>ratio of lifting channels to hidden_channels, by default 2
 The number of liting channels in the lifting block of the SFNO is
-lifting_channel_ratio * hidden_channels (e.g. default 512)</p>
+lifting_channel_ratio * hidden_channels (e.g. default 2 * hidden_channels)</p>
 </dd>
 <dt><strong>projection_channel_ratio</strong><span class="classifier">int, optional</span></dt><dd><p>ratio of projection channels to hidden_channels, by default 2
 The number of projection channels in the projection block of the SFNO is
-projection_channel_ratio * hidden_channels (e.g. default 512)</p>
+projection_channel_ratio * hidden_channels (e.g. default 2 * hidden_channels)</p>
 </dd>
 <dt><strong>positional_embedding</strong><span class="classifier">Union[str, nn.Module], optional</span></dt><dd><p>Positional embedding to apply to last channels of raw input
 before being passed through the SFNO. Defaults to “grid”</p>
@@ -234,6 +234,8 @@ over a grid with entry [0,0,…] at the origin and side lengths of 1.</p>
 </dd>
 <dt><strong>complex_data</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether data is complex-valued (default False)
 if True, initializes complex-valued modules.</p>
+</dd>
+<dt><strong>use_channel_mlp</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use an MLP layer after each SFNO block, by default True</p>
 </dd>
 <dt><strong>channel_mlp_dropout</strong><span class="classifier">float, optional</span></dt><dd><p>dropout parameter for ChannelMLP in SFNO Block, by default 0</p>
 </dd>

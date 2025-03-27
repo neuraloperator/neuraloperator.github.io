@@ -151,7 +151,7 @@
 <span class="sd">    out_channels : int</span>
 <span class="sd">        Number of channels in output function</span>
 <span class="sd">    hidden_channels : int</span>
-<span class="sd">        width of the Local NO (i.e. number of channels), by default 256</span>
+<span class="sd">        width of the Local NO (i.e. number of channels)</span>
 <span class="sd">    default_in_shape : Tuple[int]</span>
 <span class="sd">        Default input shape on spatiotemporal dimensions for structured DISCO convolutions</span>
 <span class="sd">    n_layers : int, optional</span>
@@ -186,11 +186,11 @@
 <span class="sd">    lifting_channel_ratio : int, optional</span>
 <span class="sd">        ratio of lifting channels to hidden_channels, by default 2</span>
 <span class="sd">        The number of liting channels in the lifting block of the Local FNO is</span>
-<span class="sd">        lifting_channel_ratio * hidden_channels (e.g. default 512)</span>
+<span class="sd">        lifting_channel_ratio * hidden_channels (e.g. default 2 * hidden_channels )</span>
 <span class="sd">    projection_channel_ratio : int, optional</span>
 <span class="sd">        ratio of projection channels to hidden_channels, by default 2</span>
 <span class="sd">        The number of projection channels in the projection block of the Local FNO is</span>
-<span class="sd">        projection_channel_ratio * hidden_channels (e.g. default 512)</span>
+<span class="sd">        projection_channel_ratio * hidden_channels (e.g. default 2 * hidden_channels )</span>
 <span class="sd">    positional_embedding : Union[str, nn.Module], optional</span>
 <span class="sd">        Positional embedding to apply to last channels of raw input</span>
 <span class="sd">        before being passed through the Local FNO. Defaults to &quot;grid&quot;</span>
@@ -211,14 +211,16 @@
 <span class="sd">    complex_data : bool, optional</span>
 <span class="sd">        Whether data is complex-valued (default False)</span>
 <span class="sd">        if True, initializes complex-valued modules.</span>
+<span class="sd">    use_channel_mlp : bool, optional</span>
+<span class="sd">        Whether to use an MLP layer after each LocalNO block, by default False</span>
 <span class="sd">    channel_mlp_dropout : float, optional</span>
-<span class="sd">        dropout parameter for ChannelMLP in FNO Block, by default 0</span>
+<span class="sd">        dropout parameter for ChannelMLP in LocalNO Block, by default 0</span>
 <span class="sd">    channel_mlp_expansion : float, optional</span>
-<span class="sd">        expansion parameter for ChannelMLP in FNO Block, by default 0.5</span>
+<span class="sd">        expansion parameter for ChannelMLP in LocalNO Block, by default 0.5</span>
 <span class="sd">    channel_mlp_skip : str {&#39;linear&#39;, &#39;identity&#39;, &#39;soft-gating&#39;}, optional</span>
 <span class="sd">        Type of skip connection to use in channel-mixing mlp, by default &#39;soft-gating&#39;</span>
 <span class="sd">    local_no_skip : str {&#39;linear&#39;, &#39;identity&#39;, &#39;soft-gating&#39;}, optional</span>
-<span class="sd">        Type of skip connection to use in FNO layers, by default &#39;linear&#39;</span>
+<span class="sd">        Type of skip connection to use in LocalNO layers, by default &#39;linear&#39;</span>
 <span class="sd">    resolution_scaling_factor : Union[Number, List[Number]], optional</span>
 <span class="sd">        layer-wise factor by which to scale the domain resolution of function, by default None</span>
 <span class="sd">        </span>
@@ -317,6 +319,7 @@
         <span class="n">non_linearity</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">gelu</span><span class="p">,</span>
         <span class="n">norm</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">complex_data</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">use_channel_mlp</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">channel_mlp_dropout</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="n">channel_mlp_expansion</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
         <span class="n">channel_mlp_skip</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;soft-gating&quot;</span><span class="p">,</span>
@@ -424,6 +427,7 @@
             <span class="n">conv_padding_mode</span><span class="o">=</span><span class="n">conv_padding_mode</span><span class="p">,</span>
             <span class="n">fin_diff_kernel_size</span><span class="o">=</span><span class="n">fin_diff_kernel_size</span><span class="p">,</span>
             <span class="n">mix_derivatives</span><span class="o">=</span><span class="n">mix_derivatives</span><span class="p">,</span>
+            <span class="n">use_channel_mlp</span><span class="o">=</span><span class="n">use_channel_mlp</span><span class="p">,</span>
             <span class="n">channel_mlp_dropout</span><span class="o">=</span><span class="n">channel_mlp_dropout</span><span class="p">,</span>
             <span class="n">channel_mlp_expansion</span><span class="o">=</span><span class="n">channel_mlp_expansion</span><span class="p">,</span>
             <span class="n">non_linearity</span><span class="o">=</span><span class="n">non_linearity</span><span class="p">,</span>
