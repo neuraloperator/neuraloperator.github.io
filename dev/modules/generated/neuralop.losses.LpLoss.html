@@ -168,7 +168,7 @@
 <h1><a class="reference internal" href="../api.html#module-neuralop.losses" title="neuralop.losses"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.losses</span></code></a>.LpLoss<a class="headerlink" href="#neuralop-losses-lploss" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.losses.LpLoss">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.losses.</span></span><span class="sig-name descname"><span class="pre">LpLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sum'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/losses/data_losses.html#LpLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.losses.LpLoss" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.losses.</span></span><span class="sig-name descname"><span class="pre">LpLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sum'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/losses/data_losses.html#LpLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.losses.LpLoss" title="Link to this definition"></a></dt>
 <dd><p>LpLoss provides the L-p norm between two 
 discretized d-dimensional functions. Note that 
 LpLoss always averages over the spatial dimensions.</p>
@@ -203,6 +203,8 @@ by summing (‘sum’) or averaging (‘mean’)</p>
 <cite>reduction</cite> only applies to the batch and channel dimensions.</p>
 </div>
 </dd>
+<dt><strong>eps</strong><span class="classifier">float, optional</span></dt><dd><p>small number added to the denominator for numerical stability when using the relative loss</p>
+</dd>
 </dl>
 </dd>
 <dt class="field-even">Attributes<span class="colon">:</span></dt>
@@ -224,7 +226,7 @@ by summing (‘sum’) or averaging (‘mean’)</p>
 <td><p>reduce x across the batch according to <cite>self.reduction</cite></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#neuralop.losses.LpLoss.rel" title="neuralop.losses.LpLoss.rel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rel</span></code></a>(x, y)</p></td>
-<td><p>rel: relative LpLoss computes ||x-y||/||y||</p></td>
+<td><p>rel: relative LpLoss computes ||x-y||/(||y|| + eps)</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.losses.LpLoss.uniform_quadrature" title="neuralop.losses.LpLoss.uniform_quadrature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uniform_quadrature</span></code></a>(x)</p></td>
 <td><p>uniform_quadrature creates quadrature weights scaled by the spatial size of <code class="docutils literal notranslate"><span class="pre">x</span></code> to ensure that  <code class="docutils literal notranslate"><span class="pre">LpLoss</span></code> computes the average over spatial dims.</p></td>
@@ -284,7 +286,7 @@ either single scalar or one per dimension</p>
 <dt class="sig sig-object py" id="neuralop.losses.LpLoss.rel">
 <span class="sig-name descname"><span class="pre">rel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/losses/data_losses.html#LpLoss.rel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.losses.LpLoss.rel" title="Link to this definition"></a></dt>
 <dd><p>rel: relative LpLoss
-computes ||x-y||/||y||</p>
+computes ||x-y||/(||y|| + eps)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
