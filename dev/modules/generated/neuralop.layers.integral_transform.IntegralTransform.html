@@ -168,7 +168,7 @@
 <h1><a class="reference internal" href="../api.html#module-neuralop.layers.integral_transform" title="neuralop.layers.integral_transform"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.integral_transform</span></code></a>.IntegralTransform<a class="headerlink" href="#neuralop-layers-integral-transform-integraltransform" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.layers.integral_transform.IntegralTransform">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.integral_transform.</span></span><span class="sig-name descname"><span class="pre">IntegralTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_mlp=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_mlp_layers=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_mlp_non_linearity=&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform_type='linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_torch_scatter=True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/integral_transform.html#IntegralTransform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.integral_transform.IntegralTransform" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.integral_transform.</span></span><span class="sig-name descname"><span class="pre">IntegralTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_mlp=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_mlp_layers=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_mlp_non_linearity=&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform_type='linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weighting_fn=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction='sum'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_torch_scatter=True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/integral_transform.html#IntegralTransform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.integral_transform.IntegralTransform" title="Link to this definition"></a></dt>
 <dd><p>Integral Kernel Transform (GNO)
 Computes one of the following:</p>
 <blockquote>
@@ -188,9 +188,9 @@ A(x) : A subset of all points y (depending on        each x) over which to integ
 is computed. Otherwise transforms (b), (c),
 or (d) are computed. The sets A(x) are specified
 as a graph in CRS format.</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
+<dd class="field-odd"><dl>
 <dt><strong>channel_mlp</strong><span class="classifier">torch.nn.Module, default None</span></dt><dd><p>MLP parametrizing the kernel k. Input dimension
 should be dim x + dim y or dim x + dim y + dim f.
 MLP should not be pointwise and should only operate across
@@ -213,11 +213,14 @@ given and channel_mlp is None</p>
 If the input f is not given then (a) is computed
 by default independently of this parameter.</p>
 </dd>
-<dt><strong>use_torch_scatter</strong><span class="classifier">bool, default ‘True’</span></dt><dd><p>Whether to use torch_scatter’s implementation of 
-segment_csr or our native PyTorch version. torch_scatter 
-should be installed by default, but there are known versioning
-issues on some linux builds of CPU-only PyTorch. Try setting
-to False if you experience an error from torch_scatter.</p>
+<dt><strong>use_torch_scatter</strong><span class="classifier">bool, default ‘True’</span></dt><dd><p>whether to use <code class="docutils literal notranslate"><span class="pre">torch-scatter</span></code> to perform grouped reductions in the <code class="docutils literal notranslate"><span class="pre">IntegralTransform</span></code>. 
+If False, uses native Python reduction in <code class="docutils literal notranslate"><span class="pre">neuralop.layers.segment_csr</span></code>, by default True</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">torch-scatter</span></code> is an optional dependency that conflicts with the newest versions of PyTorch,
+so you must handle the conflict explicitly in your environment. See <a class="reference internal" href="../../install.html#torch-scatter-dependency"><span class="std std-ref">Sparse computations with PyTorch-Scatter</span></a> 
+for more information.</p>
+</div>
 </dd>
 </dl>
 </dd>
@@ -226,14 +229,21 @@ to False if you experience an error from torch_scatter.</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.layers.integral_transform.IntegralTransform.forward" title="neuralop.layers.integral_transform.IntegralTransform.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>(y, neighbors[, x, f_y, weights])</p></td>
-<td><p>Compute a kernel integral transform</p></td>
+<td><p>Compute a kernel integral transform.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py method">
 <dt class="sig sig-object py" id="neuralop.layers.integral_transform.IntegralTransform.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neighbors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/integral_transform.html#IntegralTransform.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.integral_transform.IntegralTransform.forward" title="Link to this definition"></a></dt>
-<dd><p>Compute a kernel integral transform</p>
+<dd><p>Compute a kernel integral transform. Assumes x=y if not specified.</p>
+<p>Integral is taken w.r.t. the neighbors.</p>
+<p>If no weights are given, a Monte-Carlo approximation is made.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For transforms of type 0 or 2, out channels must be
+the same as the channels of f</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">

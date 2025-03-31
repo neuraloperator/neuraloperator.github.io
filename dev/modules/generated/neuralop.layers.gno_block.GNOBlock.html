@@ -168,7 +168,7 @@
 <h1><a class="reference internal" href="../api.html#module-neuralop.layers.gno_block" title="neuralop.layers.gno_block"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.gno_block</span></code></a>.GNOBlock<a class="headerlink" href="#neuralop-layers-gno-block-gnoblock" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.layers.gno_block.GNOBlock">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.gno_block.</span></span><span class="sig-name descname"><span class="pre">GNOBlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">in_channels:</span> <span class="pre">int,</span> <span class="pre">out_channels:</span> <span class="pre">int,</span> <span class="pre">coord_dim:</span> <span class="pre">int,</span> <span class="pre">radius:</span> <span class="pre">float,</span> <span class="pre">transform_type='linear',</span> <span class="pre">pos_embedding_type:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'transformer',</span> <span class="pre">pos_embedding_channels:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">32,</span> <span class="pre">pos_embedding_max_positions:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">10000,</span> <span class="pre">channel_mlp_layers:</span> <span class="pre">~typing.List[int]</span> <span class="pre">=</span> <span class="pre">[128,</span> <span class="pre">256,</span> <span class="pre">128],</span> <span class="pre">channel_mlp_non_linearity=&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;,</span> <span class="pre">channel_mlp:</span> <span class="pre">~torch.nn.modules.module.Module</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">use_open3d_neighbor_search:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">use_torch_scatter_reduce:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/gno_block.html#GNOBlock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.gno_block.GNOBlock" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.gno_block.</span></span><span class="sig-name descname"><span class="pre">GNOBlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">in_channels:</span> <span class="pre">int,</span> <span class="pre">out_channels:</span> <span class="pre">int,</span> <span class="pre">coord_dim:</span> <span class="pre">int,</span> <span class="pre">radius:</span> <span class="pre">float,</span> <span class="pre">transform_type='linear',</span> <span class="pre">weighting_fn:</span> <span class="pre">~typing.Callable</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">reduction:</span> <span class="pre">~typing.Literal['sum',</span> <span class="pre">'mean']</span> <span class="pre">=</span> <span class="pre">'sum',</span> <span class="pre">pos_embedding_type:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'transformer',</span> <span class="pre">pos_embedding_channels:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">32,</span> <span class="pre">pos_embedding_max_positions:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">10000,</span> <span class="pre">channel_mlp_layers:</span> <span class="pre">~typing.List[int]</span> <span class="pre">=</span> <span class="pre">[128,</span> <span class="pre">256,</span> <span class="pre">128],</span> <span class="pre">channel_mlp_non_linearity=&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;,</span> <span class="pre">channel_mlp:</span> <span class="pre">~torch.nn.modules.module.Module</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">use_torch_scatter_reduce:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">use_open3d_neighbor_search:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/gno_block.html#GNOBlock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.gno_block.GNOBlock" title="Link to this definition"></a></dt>
 <dd><p>GNOBlock implements a Graph Neural Operator layer as described in <a class="reference internal" href="#r61402ca715ea-1" id="id1">[1]</a>.</p>
 <p>A GNO layer is a resolution-invariant operator that maps a function defined
 over one coordinate mesh to another defined over another coordinate mesh using 
@@ -198,20 +198,26 @@ is (c) “nonlinear” or (d) “nonlinear_kernelonly”</p>
 </dd>
 <dt><strong>radius</strong><span class="classifier">float</span></dt><dd><p>radius in which to search for neighbors</p>
 </dd>
+<dt><strong>weighting_fn</strong><span class="classifier">Callable, optional</span></dt><dd><p>optional squared-norm weighting function to use for Mollified GNO layer
+by default None. See <a href="#id2"><span class="problematic" id="id3">``</span></a>neuralop.layers.gno_weighting_functions` for more details.</p>
+</dd>
+<dt><strong>reduction</strong><span class="classifier">Literal[‘sum’, ‘mean’]</span></dt><dd><p>whether to aggregate information from each neighborhood in the
+integral transform by summing (<code class="docutils literal notranslate"><span class="pre">'sum'</span></code>) or averaging (<code class="docutils literal notranslate"><span class="pre">'mean'</span></code>), by default <code class="docutils literal notranslate"><span class="pre">'sum'</span></code></p>
+</dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Methods</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.layers.gno_block.GNOBlock.forward" title="neuralop.layers.gno_block.GNOBlock.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>(y, x[, f_y, reduction])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.layers.gno_block.GNOBlock.forward" title="neuralop.layers.gno_block.GNOBlock.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>(y, x[, f_y])</p></td>
 <td><p>Compute a GNO neighbor search and kernel integral transform.</p></td>
 </tr>
 </tbody>
 </table>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Other Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
+<dd class="field-odd"><dl>
 <dt><strong>transform_type</strong><span class="classifier">str, optional</span></dt><dd><p>Which integral transform to compute. The mapping is:
 ‘linear_kernelonly’ -&gt; (a)
 ‘linear’ -&gt; (b) [DEFAULT]
@@ -242,11 +248,21 @@ kernel integral. If you have more specific needs than the LinearChannelMLP,
 this argument allows you to pass your own Module to parameterize the kernel k. 
 Default None.</p>
 </dd>
-<dt><strong>use_open3d_neighbor_search: bool, optional</strong></dt><dd><p>whether to use open3d or native-PyTorch search</p>
+<dt><strong>use_torch_scatter_reduce</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to use <code class="docutils literal notranslate"><span class="pre">torch-scatter</span></code> to perform grouped reductions in the <code class="docutils literal notranslate"><span class="pre">IntegralTransform</span></code>. 
+If False, uses native Python reduction in <code class="docutils literal notranslate"><span class="pre">neuralop.layers.segment_csr</span></code>, by default True</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">torch-scatter</span></code> is an optional dependency that conflicts with the newest versions of PyTorch,
+so you must handle the conflict explicitly in your environment. See <a class="reference internal" href="../../install.html#torch-scatter-dependency"><span class="std std-ref">Sparse computations with PyTorch-Scatter</span></a> 
+for more information.</p>
+</div>
 </dd>
-<dt><strong>use_torch_scatter_reduce</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to reduce in integral computation using a function
-provided by the extra dependency torch_scatter or the slower
-native PyTorch implementation, by default True</p>
+<dt><strong>use_open3d_neighbor_search</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to use open3d for fast 3d neighbor search, by default True.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the coordinates provided are not 3D, the <code class="docutils literal notranslate"><span class="pre">GNOBlock</span></code> automatically
+uses PyTorch native fallback neighbor search.</p>
+</div>
 </dd>
 </dl>
 </dd>
@@ -255,29 +271,18 @@ native PyTorch implementation, by default True</p>
 <div role="list" class="citation-list">
 <div class="citation" id="r61402ca715ea-1" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
-<p>:</p>
-</div>
-</div>
-<dl class="simple">
-<dt>Zongyi Li, Kamyar Azizzadenesheli, Burigede Liu, Kaushik Bhattacharya, </dt><dd><p>Anima Anandkumar (2020). “Neural Operator: Graph Kernel Network for 
+<p>: Zongyi Li, Kamyar Azizzadenesheli, Burigede Liu, Kaushik Bhattacharya, 
+Anima Anandkumar (2020). “Neural Operator: Graph Kernel Network for 
 Partial Differential Equations.” ArXiV, <a class="reference external" href="https://arxiv.org/pdf/2003.03485">https://arxiv.org/pdf/2003.03485</a>.</p>
-</dd>
-</dl>
+</div>
+</div>
 <p class="rubric">Examples</p>
-<p><a href="#id3"><span class="problematic" id="id4">``</span></a>`
+<p><a href="#id5"><span class="problematic" id="id6">``</span></a>`
 &gt;&gt;&gt; gno = GNOBlock(in_channels=2, out_channels=12, coord_dim=3, radius=0.035)</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gno</span>
 <span class="go">GNOBlock(</span>
 <span class="go">    (pos_embedding): SinusoidalEmbedding()</span>
 <span class="go">    (neighbor_search): NeighborSearch()</span>
-<span class="go">    (channel_mlp): LinearChannelMLP(</span>
-<span class="go">        (fcs): ModuleList(</span>
-<span class="go">        (0): Linear(in_features=384, out_features=128, bias=True)</span>
-<span class="go">        (1): Linear(in_features=128, out_features=256, bias=True)</span>
-<span class="go">        (2): Linear(in_features=256, out_features=128, bias=True)</span>
-<span class="go">        (3): Linear(in_features=128, out_features=12, bias=True)</span>
-<span class="go">        )</span>
-<span class="go">    )</span>
 <span class="go">    (integral_transform): IntegralTransform(</span>
 <span class="go">        (channel_mlp): LinearChannelMLP(</span>
 <span class="go">        (fcs): ModuleList(</span>
@@ -294,7 +299,7 @@ Partial Differential Equations.” ArXiV, <a class="reference external" href="ht
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="neuralop.layers.gno_block.GNOBlock.forward">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sum'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/gno_block.html#GNOBlock.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.gno_block.GNOBlock.forward" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/gno_block.html#GNOBlock.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.gno_block.GNOBlock.forward" title="Link to this definition"></a></dt>
 <dd><p>Compute a GNO neighbor search and kernel integral transform.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

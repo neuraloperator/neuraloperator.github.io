@@ -129,12 +129,9 @@
       <div class="sidebar-menu-toc">
       <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installing NeuralOperator</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#pre-requisites">Pre-requisites</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installing-with-pip">Installing with pip</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#building-neuraloperator-from-source">Building <code class="docutils literal notranslate"><span class="pre">neuraloperator</span></code> from source</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#fast-3d-spatial-computing-with-open3d">Fast 3D spatial computing with Open3D</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#running-the-tests">Running the tests</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#building-the-documentation">Building the documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-install">Basic Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-dependencies">Advanced dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#developer-setup">Developer Setup</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="user_guide/index.html">User Guide</a></li>
@@ -173,14 +170,14 @@ Once installed, you can import it as <code class="docutils literal notranslate">
 </pre></div>
 </div>
 <hr class="docutils" />
-<section id="pre-requisites">
-<h2>Pre-requisites<a class="headerlink" href="#pre-requisites" title="Link to this heading"></a></h2>
+<section id="basic-install">
+<h2>Basic Install<a class="headerlink" href="#basic-install" title="Link to this heading"></a></h2>
 <p>You will need to have Python 3 installed, as well as NumPy, Scipy, PyTorch, TensorLy and TensorLy-Torch.
 If you are starting with Python or generally want a pain-free experience, we recommend that you
 install the <a class="reference external" href="https://www.anaconda.com/download/">Anaconda distribution</a>. It comes ready to use with all prerequisite packages.</p>
-</section>
+<hr class="docutils" />
 <section id="installing-with-pip">
-<h2>Installing with pip<a class="headerlink" href="#installing-with-pip" title="Link to this heading"></a></h2>
+<h3>Installing with pip<a class="headerlink" href="#installing-with-pip" title="Link to this heading"></a></h3>
 <p>We periodically package <cite>neuraloperator</cite> for release on PyPI. This version is not guaranteed to be up-to-date with
 the latest changes to our code.</p>
 <p>To install via pip, simply run, in your terminal:</p>
@@ -191,7 +188,7 @@ the latest changes to our code.</p>
 </section>
 <hr class="docutils" />
 <section id="building-neuraloperator-from-source">
-<h2>Building <code class="docutils literal notranslate"><span class="pre">neuraloperator</span></code> from source<a class="headerlink" href="#building-neuraloperator-from-source" title="Link to this heading"></a></h2>
+<h3>Building <code class="docutils literal notranslate"><span class="pre">neuraloperator</span></code> from source<a class="headerlink" href="#building-neuraloperator-from-source" title="Link to this heading"></a></h3>
 <p>First ensure that you are in an environment with Python 3, NumPy, SciPy, PyTorch, TensorLy and TensorLy-Torch.
 Then clone the repository and cd there:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">neuraloperator</span><span class="o">/</span><span class="n">neuraloperator</span>
@@ -206,10 +203,13 @@ Then clone the repository and cd there:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
 </pre></div>
 </div>
-<hr class="docutils" />
 </section>
+</section>
+<hr class="docutils" />
+<section id="advanced-dependencies">
+<h2>Advanced dependencies<a class="headerlink" href="#advanced-dependencies" title="Link to this heading"></a></h2>
 <section id="fast-3d-spatial-computing-with-open3d">
-<span id="open3d-dependency"></span><h2>Fast 3D spatial computing with Open3D<a class="headerlink" href="#fast-3d-spatial-computing-with-open3d" title="Link to this heading"></a></h2>
+<span id="open3d-dependency"></span><h3>Fast 3D spatial computing with Open3D<a class="headerlink" href="#fast-3d-spatial-computing-with-open3d" title="Link to this heading"></a></h3>
 <p>To accelerate spatial computing for 3D applications, we include
 <a class="reference external" href="https://github.com/isl-org/Open3D">Open3D</a> as an optional dependency. Open3D includes
 utilities for reading 3D mesh files and fast 3D neighbor search. To install:</p>
@@ -219,10 +219,32 @@ utilities for reading 3D mesh files and fast 3D neighbor search. To install:</p>
 <p>Note that Open3D is only
 compatible with specific builds of PyTorch and CUDA. Check the sub-package
 <a class="reference external" href="https://github.com/isl-org/Open3D-ML">Open3D-ML</a> documentation for more details.</p>
+<hr class="docutils" />
+</section>
+<section id="sparse-computations-with-pytorch-scatter">
+<span id="torch-scatter-dependency"></span><h3>Sparse computations with PyTorch-Scatter<a class="headerlink" href="#sparse-computations-with-pytorch-scatter" title="Link to this heading"></a></h3>
+<p>We use the package <code class="docutils literal notranslate"><span class="pre">torch_scatter</span></code> (available on PyPI) to speed up neighborhood reductions during
+the final stage of the <code class="docutils literal notranslate"><span class="pre">IntegralTransform</span></code> layer, linked here: <a class="reference internal" href="modules/api.html#gno-api"><span class="std std-ref">Graph convolutions and kernel integration</span></a>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">torch_scatter</span></code> uses compiled CUDA kernels
+to perform this reduction, providing both memory efficiency and speed advantages over a native PyTorch implementation.</p>
+<p>However, since these kernels are precompiled, it is crucial to install the version of <code class="docutils literal notranslate"><span class="pre">torch_scatter</span></code> that is built for
+your specific combination of OS, PyTorch and CUDA. All available wheels can be found <a class="reference external" href="https://data.pyg.org/whl/">here</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The latest PyTorch version for which <code class="docutils literal notranslate"><span class="pre">torch_scatter</span></code> is built is 2.5.1, so you should downgrade if you are using
+the latest (<code class="docutils literal notranslate"><span class="pre">torch&gt;=2.6.0</span></code>) release:</p>
+</div>
+<p>To force-downgrade PyTorch, run</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">U</span> <span class="n">torch</span><span class="o">==</span><span class="mf">2.5.1</span>
+</pre></div>
+</div>
+</section>
 </section>
 <hr class="docutils" />
+<section id="developer-setup">
+<h2>Developer Setup<a class="headerlink" href="#developer-setup" title="Link to this heading"></a></h2>
 <section id="running-the-tests">
-<h2>Running the tests<a class="headerlink" href="#running-the-tests" title="Link to this heading"></a></h2>
+<h3>Running the tests<a class="headerlink" href="#running-the-tests" title="Link to this heading"></a></h3>
 <p>Unit-testing is an important part of this package.
 You can run all the tests using <cite>pytest</cite>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements_dev</span><span class="o">.</span><span class="n">txt</span>
@@ -231,7 +253,7 @@ You can run all the tests using <cite>pytest</cite>:</p>
 </div>
 </section>
 <section id="building-the-documentation">
-<h2>Building the documentation<a class="headerlink" href="#building-the-documentation" title="Link to this heading"></a></h2>
+<h3>Building the documentation<a class="headerlink" href="#building-the-documentation" title="Link to this heading"></a></h3>
 <p>You will need to install the dependencies:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">doc</span>
 <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements_doc</span><span class="o">.</span><span class="n">txt</span>
@@ -242,6 +264,7 @@ You can run all the tests using <cite>pytest</cite>:</p>
 </pre></div>
 </div>
 <p>The results will be in <code class="docutils literal notranslate"><span class="pre">build/html</span></code> (the main page will be <code class="docutils literal notranslate"><span class="pre">build/html/index.html</span></code>)</p>
+</section>
 </section>
 </section>
 
@@ -297,12 +320,21 @@ You can run all the tests using <cite>pytest</cite>:</p>
         <div class="menu menu-list localtoc-list">
         <ul>
 <li><a class="reference internal" href="#">Installing NeuralOperator</a><ul>
-<li><a class="reference internal" href="#pre-requisites">Pre-requisites</a></li>
+<li><a class="reference internal" href="#basic-install">Basic Install</a><ul>
 <li><a class="reference internal" href="#installing-with-pip">Installing with pip</a></li>
 <li><a class="reference internal" href="#building-neuraloperator-from-source">Building <code class="docutils literal notranslate"><span class="pre">neuraloperator</span></code> from source</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#advanced-dependencies">Advanced dependencies</a><ul>
 <li><a class="reference internal" href="#fast-3d-spatial-computing-with-open3d">Fast 3D spatial computing with Open3D</a></li>
+<li><a class="reference internal" href="#sparse-computations-with-pytorch-scatter">Sparse computations with PyTorch-Scatter</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#developer-setup">Developer Setup</a><ul>
 <li><a class="reference internal" href="#running-the-tests">Running the tests</a></li>
 <li><a class="reference internal" href="#building-the-documentation">Building the documentation</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

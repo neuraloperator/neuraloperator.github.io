@@ -172,7 +172,8 @@
 <dd><p>GINO: Geometry-informed Neural Operator. Learns a mapping between
 functions presented over arbitrary coordinate meshes. The model carries
 global integration through spectral convolution layers in an intermediate
-latent space, as described in <a href="#id2"><span class="problematic" id="id1">[1]_</span></a>.</p>
+latent space, as described in <a href="#id5"><span class="problematic" id="id1">[1]_</span></a>. Optionally enables a weighted output
+GNO for use in a Mollified Graph Neural Operator scheme, as introduced in <a href="#id6"><span class="problematic" id="id2">[2]_</span></a>.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
@@ -184,11 +185,24 @@ latent space, as described in <a href="#id2"><span class="problematic" id="id1">
 to concatenate onto latent embeddings before 
 the FNO’s forward pass, default None</p>
 </dd>
-<dt><strong>projection_channels</strong><span class="classifier">int, optional</span></dt><dd><p>number of channels in FNO pointwise projection</p>
+<dt><strong>projection_channel_ratio</strong><span class="classifier">int, optional</span></dt><dd><p>ratio of pointwise projection channels in the final <code class="docutils literal notranslate"><span class="pre">ChannelMLP</span></code> 
+to <code class="docutils literal notranslate"><span class="pre">fno_hidden_channels</span></code>, by default 4. The number of projection channels 
+in the final <code class="docutils literal notranslate"><span class="pre">ChannelMLP</span></code> is computed by 
+<code class="docutils literal notranslate"><span class="pre">projection_channel_ratio</span> <span class="pre">*</span> <span class="pre">fno_hidden_channels</span></code> (i.e. default 256)</p>
 </dd>
 <dt><strong>gno_coord_dim</strong><span class="classifier">int, optional</span></dt><dd><p>geometric dimension of input/output queries, by default 3</p>
 </dd>
-<dt><strong>gno_radius</strong><span class="classifier">float, optional</span></dt><dd><p>radius in input/output space for GNO neighbor search, by default 0.033</p>
+<dt><strong>in_gno_radius</strong><span class="classifier">float, optional</span></dt><dd><p>radius in input space for GNO neighbor search, by default 0.033</p>
+</dd>
+<dt><strong>out_gno_radius</strong><span class="classifier">float, optional</span></dt><dd><p>radius in output space for GNO neighbor search, by default 0.033</p>
+</dd>
+<dt><strong>gno_weighting_function</strong><span class="classifier">Literal{‘half_cos’, ‘bump’, ‘quartic’, ‘quadr’, ‘octic’}, optional</span></dt><dd><p>Choice of weighting function to use in the output GNO for 
+Mollified Graph Neural Operator-based models.
+See <code class="docutils literal notranslate"><span class="pre">neuralop.layers.gno_weighting_functions</span></code> for more details.</p>
+</dd>
+<dt><strong>gno_weight_function_scale</strong><span class="classifier">float, optional</span></dt><dd><p>Factor by which to scale weights from GNO weighting function
+by default 1. 
+If <code class="docutils literal notranslate"><span class="pre">gno_weighting_function</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, this is not used.</p>
 </dd>
 <dt><strong>in_gno_transform_type</strong><span class="classifier">str, optional</span></dt><dd><p>transform type parameter for input GNO, by default ‘linear’
 see neuralop.layers.gno_block for more details</p>
@@ -196,19 +210,22 @@ see neuralop.layers.gno_block for more details</p>
 <dt><strong>out_gno_transform_type</strong><span class="classifier">str, optional</span></dt><dd><p>transform type parameter for output GNO, by default ‘linear’
 see neuralop.layers.gno_block for more details</p>
 </dd>
-<dt><strong>gno_pos_embed_type</strong><span class="classifier">literal <cite>{‘transformer’, ‘nerf’}</cite> | None</span></dt><dd><p>type of optional sinusoidal positional embedding to use in GNOBlock,
+<dt><strong>in_gno_pos_embed_type</strong><span class="classifier">literal <cite>{‘transformer’, ‘nerf’}</cite> | None</span></dt><dd><p>type of optional sinusoidal positional embedding to use in input GNOBlock,
 by default <cite>‘transformer’</cite></p>
 </dd>
-<dt><strong>fno_in_channels</strong><span class="classifier">int, optional</span></dt><dd><p>number of input channels for FNO, by default 26</p>
+<dt><strong>out_gno_pos_embed_type</strong><span class="classifier">literal <cite>{‘transformer’, ‘nerf’}</cite> | None</span></dt><dd><p>type of optional sinusoidal positional embedding to use in output GNOBlock,
+by default <cite>‘transformer’</cite></p>
+</dd>
+<dt><strong>fno_in_channels</strong><span class="classifier">int, optional</span></dt><dd><p>number of input channels for FNO, by default 3</p>
 </dd>
 <dt><strong>fno_n_modes</strong><span class="classifier">tuple, optional</span></dt><dd><p>number of modes along each dimension 
 to use in FNO, by default (16, 16, 16)</p>
 </dd>
 <dt><strong>fno_hidden_channels</strong><span class="classifier">int, optional</span></dt><dd><p>hidden channels for use in FNO, by default 64</p>
 </dd>
-<dt><strong>lifting_channel_ratio</strong><span class="classifier">int, optional</span></dt><dd><p>ratio of lifting channels to <cite>fno_hidden_channels</cite>, by default 2
+<dt><strong>fno_lifting_channel_ratio</strong><span class="classifier">int, optional</span></dt><dd><p>ratio of lifting channels to <code class="docutils literal notranslate"><span class="pre">fno_hidden_channels</span></code>, by default 2
 The number of liting channels in the lifting block of the FNO is
-lifting_channel_ratio * hidden_channels (e.g. default 512)</p>
+fno_lifting_channel_ratio * hidden_channels (i.e. default 128)</p>
 </dd>
 <dt><strong>fno_n_layers</strong><span class="classifier">int, optional</span></dt><dd><p>number of layers in FNO, by default 4</p>
 </dd>
@@ -226,9 +243,9 @@ lifting_channel_ratio * hidden_channels (e.g. default 512)</p>
 </tr>
 </tbody>
 </table>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Other Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
+<dd class="field-odd"><dl>
 <dt><strong>gno_embed_channels: int</strong></dt><dd><p>dimension of optional per-channel embedding to use in GNOBlock,
 by default 32</p>
 </dd>
@@ -244,9 +261,14 @@ by default 10000. If <cite>gno_pos_embed_type != ‘transformer’</cite>, value
 <dt><strong>gno_use_open3d</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to use open3d neighbor search, by default True
 if False, uses pure-PyTorch fallback neighbor search</p>
 </dd>
-<dt><strong>gno_use_torch_scatter</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to use torch_scatter’s neighborhood reduction function
-or the native PyTorch implementation in IntegralTransform layers.
-If False, uses the fallback PyTorch version.</p>
+<dt><strong>gno_use_torch_scatter</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to use <code class="docutils literal notranslate"><span class="pre">torch-scatter</span></code> to perform grouped reductions in the <code class="docutils literal notranslate"><span class="pre">IntegralTransform</span></code>. 
+If False, uses native Python reduction in <code class="docutils literal notranslate"><span class="pre">neuralop.layers.segment_csr</span></code>, by default True</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">torch-scatter</span></code> is an optional dependency that conflicts with the newest versions of PyTorch,
+so you must handle the conflict explicitly in your environment. See <a class="reference internal" href="../../install.html#torch-scatter-dependency"><span class="std std-ref">Sparse computations with PyTorch-Scatter</span></a> 
+for more information.</p>
+</div>
 </dd>
 <dt><strong>out_gno_tanh</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to use tanh to stabilize outputs of the output GNO, by default False</p>
 </dd>
@@ -303,6 +325,7 @@ If None, adaptive mesh embedding is not used.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">References</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="neuralop.models.GINO.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_geom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latent_queries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_queries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latent_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ada_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/models/gino.html#GINO.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.models.GINO.forward" title="Link to this definition"></a></dt>
@@ -314,9 +337,9 @@ Input GNO –&gt; FNOBlocks –&gt; output GNO + projection to output queries.</
 inputs and outputs is shared across the entire batch</strong>. Inputs can have a batch dim
 in <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">latent_features</span></code>, but it must be shared for both.</p>
 </div>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
+<dd class="field-odd"><dl>
 <dt><strong>input_geom</strong><span class="classifier">torch.Tensor</span></dt><dd><p>input domain coordinate mesh
 shape (1, n_in, gno_coord_dim)</p>
 </dd>
@@ -324,8 +347,14 @@ shape (1, n_in, gno_coord_dim)</p>
 a grid on [0,1] x [0,1] x ….
 shape (1, n_gridpts_1, …. n_gridpts_n, gno_coord_dim)</p>
 </dd>
-<dt><strong>output_queries</strong><span class="classifier">torch.Tensor</span></dt><dd><p>points at which to query the final GNO layer to get output
-shape (n_out, gno_coord_dim)</p>
+<dt><strong>output_queries</strong><span class="classifier">torch.Tensor | dict[torch.Tensor]</span></dt><dd><p>points at which to query the final GNO layer to get output.</p>
+<p>shape (1, n_out, gno_coord_dim) per tensor.</p>
+<ul class="simple">
+<li><p>if a tensor, the model will output a tensor.</p></li>
+<li><p>if a dict of tensors, the model will return a dict of outputs, so</p></li>
+</ul>
+<p>that <code class="docutils literal notranslate"><span class="pre">output[key]</span></code> corresponds to the model queried at 
+<code class="docutils literal notranslate"><span class="pre">output_queries[key]</span></code>.</p>
 </dd>
 <dt><strong>x</strong><span class="classifier">torch.Tensor, optional</span></dt><dd><p>input function a defined on the input domain <cite>input_geom</cite>
 shape (batch, n_in, in_channels). Default None</p>
@@ -335,6 +364,14 @@ before being passed into the latent FNO, default None
 if <cite>latent_feature_channels</cite> is set, must be passed</p>
 </dd>
 <dt><strong>ada_in</strong><span class="classifier">torch.Tensor, optional</span></dt><dd><p>adaptive scalar instance parameter, defaults to None</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">torch.Tensor | dict[torch.Tensor]</span></dt><dd><p>Function over the output query coordinates
+* tensor if if <code class="docutils literal notranslate"><span class="pre">output_queries</span></code> is a tensor
+* dict if if <code class="docutils literal notranslate"><span class="pre">output_queries</span></code> is a dict</p>
 </dd>
 </dl>
 </dd>
