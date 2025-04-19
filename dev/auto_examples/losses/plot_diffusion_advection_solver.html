@@ -26,6 +26,7 @@
     <script src="../../_static/documentation_options.js?v=1ed6394b"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
  <script src="../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
  
@@ -190,8 +191,9 @@ its use to create a simple numerical solver for the diffusion-advection equation
 <section id="defining-our-problem">
 <h2>Defining our problem<a class="headerlink" href="#defining-our-problem" title="Link to this heading"></a></h2>
 <p>We aim to solve the 2D diffusion advection equation:</p>
-<p>u_t + cx u_x + cy u_y = nu (u_xx + u_yy) + source(x,y,t).</p>
-<p>We set simulation parameters below:</p>
+<p><span class="math notranslate nohighlight">\(u_t + cx \cdot u_x + cy \cdot u_y = \nu (u_xx + u_yy) + f(x,y,t)\)</span>,</p>
+<p>Where <span class="math notranslate nohighlight">\(f(x,y,t)\)</span> is a source term and <span class="math notranslate nohighlight">\(cx\)</span> and <span class="math notranslate nohighlight">\(cy\)</span> are advection speeds in x and y.
+We set simulation parameters below:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1">## Simulation parameters</span>
 <span class="n">Lx</span><span class="p">,</span> <span class="n">Ly</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span>   <span class="c1"># Domain lengths</span>
 <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span> <span class="o">=</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span>   <span class="c1"># Grid resolution</span>
@@ -445,42 +447,42 @@ input[type=range].anim-slider {
 </style>
 
 <div class="animation">
-  <img id="_anim_imgd497ca416cdb49d3bde7c792132e26f7">
+  <img id="_anim_imga19532319844443680dab4dc5b2f9271">
   <div class="anim-controls">
-    <input id="_anim_sliderd497ca416cdb49d3bde7c792132e26f7" type="range" class="anim-slider"
+    <input id="_anim_slidera19532319844443680dab4dc5b2f9271" type="range" class="anim-slider"
            name="points" min="0" max="1" step="1" value="0"
-           oninput="animd497ca416cdb49d3bde7c792132e26f7.set_frame(parseInt(this.value));">
+           oninput="anima19532319844443680dab4dc5b2f9271.set_frame(parseInt(this.value));">
     <div class="anim-buttons">
-      <button title="Decrease speed" aria-label="Decrease speed" onclick="animd497ca416cdb49d3bde7c792132e26f7.slower()">
+      <button title="Decrease speed" aria-label="Decrease speed" onclick="anima19532319844443680dab4dc5b2f9271.slower()">
           <i class="fa fa-minus"></i></button>
-      <button title="First frame" aria-label="First frame" onclick="animd497ca416cdb49d3bde7c792132e26f7.first_frame()">
+      <button title="First frame" aria-label="First frame" onclick="anima19532319844443680dab4dc5b2f9271.first_frame()">
         <i class="fa fa-fast-backward"></i></button>
-      <button title="Previous frame" aria-label="Previous frame" onclick="animd497ca416cdb49d3bde7c792132e26f7.previous_frame()">
+      <button title="Previous frame" aria-label="Previous frame" onclick="anima19532319844443680dab4dc5b2f9271.previous_frame()">
           <i class="fa fa-step-backward"></i></button>
-      <button title="Play backwards" aria-label="Play backwards" onclick="animd497ca416cdb49d3bde7c792132e26f7.reverse_animation()">
+      <button title="Play backwards" aria-label="Play backwards" onclick="anima19532319844443680dab4dc5b2f9271.reverse_animation()">
           <i class="fa fa-play fa-flip-horizontal"></i></button>
-      <button title="Pause" aria-label="Pause" onclick="animd497ca416cdb49d3bde7c792132e26f7.pause_animation()">
+      <button title="Pause" aria-label="Pause" onclick="anima19532319844443680dab4dc5b2f9271.pause_animation()">
           <i class="fa fa-pause"></i></button>
-      <button title="Play" aria-label="Play" onclick="animd497ca416cdb49d3bde7c792132e26f7.play_animation()">
+      <button title="Play" aria-label="Play" onclick="anima19532319844443680dab4dc5b2f9271.play_animation()">
           <i class="fa fa-play"></i></button>
-      <button title="Next frame" aria-label="Next frame" onclick="animd497ca416cdb49d3bde7c792132e26f7.next_frame()">
+      <button title="Next frame" aria-label="Next frame" onclick="anima19532319844443680dab4dc5b2f9271.next_frame()">
           <i class="fa fa-step-forward"></i></button>
-      <button title="Last frame" aria-label="Last frame" onclick="animd497ca416cdb49d3bde7c792132e26f7.last_frame()">
+      <button title="Last frame" aria-label="Last frame" onclick="anima19532319844443680dab4dc5b2f9271.last_frame()">
           <i class="fa fa-fast-forward"></i></button>
-      <button title="Increase speed" aria-label="Increase speed" onclick="animd497ca416cdb49d3bde7c792132e26f7.faster()">
+      <button title="Increase speed" aria-label="Increase speed" onclick="anima19532319844443680dab4dc5b2f9271.faster()">
           <i class="fa fa-plus"></i></button>
     </div>
-    <form title="Repetition mode" aria-label="Repetition mode" action="#n" name="_anim_loop_selectd497ca416cdb49d3bde7c792132e26f7"
+    <form title="Repetition mode" aria-label="Repetition mode" action="#n" name="_anim_loop_selecta19532319844443680dab4dc5b2f9271"
           class="anim-state">
-      <input type="radio" name="state" value="once" id="_anim_radio1_d497ca416cdb49d3bde7c792132e26f7"
+      <input type="radio" name="state" value="once" id="_anim_radio1_a19532319844443680dab4dc5b2f9271"
              >
-      <label for="_anim_radio1_d497ca416cdb49d3bde7c792132e26f7">Once</label>
-      <input type="radio" name="state" value="loop" id="_anim_radio2_d497ca416cdb49d3bde7c792132e26f7"
+      <label for="_anim_radio1_a19532319844443680dab4dc5b2f9271">Once</label>
+      <input type="radio" name="state" value="loop" id="_anim_radio2_a19532319844443680dab4dc5b2f9271"
              checked>
-      <label for="_anim_radio2_d497ca416cdb49d3bde7c792132e26f7">Loop</label>
-      <input type="radio" name="state" value="reflect" id="_anim_radio3_d497ca416cdb49d3bde7c792132e26f7"
+      <label for="_anim_radio2_a19532319844443680dab4dc5b2f9271">Loop</label>
+      <input type="radio" name="state" value="reflect" id="_anim_radio3_a19532319844443680dab4dc5b2f9271"
              >
-      <label for="_anim_radio3_d497ca416cdb49d3bde7c792132e26f7">Reflect</label>
+      <label for="_anim_radio3_a19532319844443680dab4dc5b2f9271">Reflect</label>
     </form>
   </div>
 </div>
@@ -490,9 +492,9 @@ input[type=range].anim-slider {
   /* Instantiate the Animation class. */
   /* The IDs given should match those used in the template above. */
   (function() {
-    var img_id = "_anim_imgd497ca416cdb49d3bde7c792132e26f7";
-    var slider_id = "_anim_sliderd497ca416cdb49d3bde7c792132e26f7";
-    var loop_select_id = "_anim_loop_selectd497ca416cdb49d3bde7c792132e26f7";
+    var img_id = "_anim_imga19532319844443680dab4dc5b2f9271";
+    var slider_id = "_anim_slidera19532319844443680dab4dc5b2f9271";
+    var loop_select_id = "_anim_loop_selecta19532319844443680dab4dc5b2f9271";
     var frames = new Array(100);
 
   frames[0] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAJYCAYAAAC+ZpjcAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
@@ -38486,12 +38488,12 @@ AABjBFgAAADGCLAAAACM/X+pFATcV82mXwAAAABJRU5ErkJggg==\
     /* set a timeout to make sure all the above elements are created before
        the object is initialized. */
     setTimeout(function() {
-        animd497ca416cdb49d3bde7c792132e26f7 = new Animation(frames, img_id, slider_id, 50.0,
+        anima19532319844443680dab4dc5b2f9271 = new Animation(frames, img_id, slider_id, 50.0,
                                  loop_select_id);
     }, 0);
   })()
 </script></div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 9.232 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 9.088 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-losses-plot-diffusion-advection-solver-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/a00c53d3fa96a6f059cd8b524f2e7b26/plot_diffusion_advection_solver.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_diffusion_advection_solver.ipynb</span></code></a></p>
