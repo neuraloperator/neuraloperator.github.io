@@ -258,7 +258,8 @@
     <span class="n">encode_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;channel-wise&quot;</span><span class="p">,</span>
     <span class="n">channel_dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">subsampling_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,):</span>
+    <span class="n">subsampling_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">num_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 
     <span class="n">dataset</span> <span class="o">=</span> <span class="n">NavierStokesDataset</span><span class="p">(</span><span class="n">root_dir</span> <span class="o">=</span> <span class="n">data_root</span><span class="p">,</span>
                            <span class="n">n_train</span><span class="o">=</span><span class="n">n_train</span><span class="p">,</span>
@@ -276,7 +277,7 @@
     <span class="c1"># return dataloaders for backwards compat</span>
     <span class="n">train_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">train_db</span><span class="p">,</span>
                               <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
-                              <span class="n">num_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                              <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span>
                               <span class="n">pin_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                               <span class="n">persistent_workers</span><span class="o">=</span><span class="kc">False</span><span class="p">,)</span>
     
@@ -285,7 +286,7 @@
         <span class="n">test_loaders</span><span class="p">[</span><span class="n">res</span><span class="p">]</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">test_dbs</span><span class="p">[</span><span class="n">res</span><span class="p">],</span>
                                        <span class="n">batch_size</span><span class="o">=</span><span class="n">test_bsize</span><span class="p">,</span>
                                        <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                                       <span class="n">num_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                                       <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span>
                                        <span class="n">pin_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                        <span class="n">persistent_workers</span><span class="o">=</span><span class="kc">False</span><span class="p">,)</span>
     

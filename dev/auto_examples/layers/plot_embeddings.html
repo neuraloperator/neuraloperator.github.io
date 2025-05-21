@@ -193,7 +193,7 @@ Let’s walk through its use. We start with a function that gives the coordinate
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_embeddings_001.png" srcset="../../_images/sphx_glr_plot_embeddings_001.png" alt="plot embeddings" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f600156d090&gt;
+<img src="../../_images/sphx_glr_plot_embeddings_001.png" srcset="../../_images/sphx_glr_plot_embeddings_001.png" alt="plot embeddings" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fcfc991f9d0&gt;
 </pre></div>
 </div>
 </section>
@@ -241,6 +241,8 @@ after the channels which encode physical variables in our PDE problems:</p>
 </div>
 <img src="../../_images/sphx_glr_plot_embeddings_002.png" srcset="../../_images/sphx_glr_plot_embeddings_002.png" alt="Visualizing one 16x16 input sample, input x, x: 1st pos embedding, x: 2nd pos embedding" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Loading test db for resolution 16 with 16 samples
 Loading test db for resolution 32 with 16 samples
+/opt/hostedtoolcache/Python/3.13.3/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:665: UserWarning: &#39;pin_memory&#39; argument is set as true but no accelerator is found, then device pinned memory won&#39;t be used.
+  warnings.warn(warn_msg)
 One batch of x is of shape: torch.Size([2, 1, 16, 16])
 After embedding, x is of shape: torch.Size([2, 3, 16, 16])
 </pre></div>
@@ -299,7 +301,7 @@ Assuming we have one channel of data discretized on a 5x5x5 cube:</p>
 <img src="../../_images/sphx_glr_plot_embeddings_004.png" srcset="../../_images/sphx_glr_plot_embeddings_004.png" alt="3d positional encoding, color=Z value" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.10787434422876359, 0.014452421710066976, &#39;Z&#39;)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.135 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.244 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-layers-plot-embeddings-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/1c2e74cc4f68386faa92c3986ff5e279/plot_embeddings.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_embeddings.ipynb</span></code></a></p>
