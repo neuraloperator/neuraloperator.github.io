@@ -411,7 +411,8 @@
         <span class="n">q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Query</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
         <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Value</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
         <span class="k">assert</span> <span class="n">k</span><span class="o">.</span><span class="n">size</span><span class="p">(</span>
-            <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_heads</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Number of channels in k, q, and v should be divisible by number of heads&quot;</span>
+            <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_heads</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span>\
+                  <span class="s2">&quot;Number of channels in k, q, and v should be divisible by number of heads&quot;</span>
 
         <span class="c1"># reshape from (b*t) (n*d) h w -&gt; b n t (d*h*w ...)</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">//</span> <span class="n">batch_size</span>  <span class="c1"># Compute the number of tokens `t`</span>
@@ -497,7 +498,8 @@
         <span class="n">batch_size</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">input_shape</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">:]</span>
 
-        <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Number of channels in x should be divisible by token_codimension&quot;</span>
+        <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span>\
+              <span class="s2">&quot;Number of channels in x should be divisible by token_codimension&quot;</span>
 
         <span class="c1"># reshape from shape b (t*d) h w ... to (b*t) d h w ...</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span>
@@ -548,7 +550,8 @@
         <span class="n">batch_size</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">input_shape</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">:]</span>
 
-        <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Number of channels in x should be divisible by token_codimension&quot;</span>
+        <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span>\
+              <span class="s2">&quot;Number of channels in x should be divisible by token_codimension&quot;</span>
 
         <span class="c1"># reshape from shape b (t*d) h w ... to (b*t) d h w ...</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">token_codimension</span>
