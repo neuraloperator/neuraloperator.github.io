@@ -243,13 +243,13 @@ Training the model
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7ff969c89bd0>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f1ddd339bd0>
 
     ### LOSSES ###
 
-     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7ff969c88910>
+     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7f1ddd338910>
 
-     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7ff969c88910>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7ff969c8a850>}
+     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7f1ddd338910>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f1ddd33a850>}
 
 
 
@@ -308,22 +308,22 @@ Then train the model on our small Darcy-Flow dataset:
     /opt/hostedtoolcache/Python/3.13.3/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:665: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
       warnings.warn(warn_msg)
     Raw outputs of shape torch.Size([32, 1, 16, 16])
-    [0] time=2.67, avg_loss=0.5903, train_err=18.4462
+    [0] time=2.66, avg_loss=0.5903, train_err=18.4462
     Eval: 16_h1=0.3639, 16_l2=0.2512, 32_h1=0.5425, 32_l2=0.2628
-    [3] time=2.69, avg_loss=0.2077, train_err=6.4899
+    [3] time=2.62, avg_loss=0.2077, train_err=6.4899
     Eval: 16_h1=0.2191, 16_l2=0.1505, 32_h1=0.4976, 32_l2=0.1840
-    [6] time=2.67, avg_loss=0.1768, train_err=5.5248
+    [6] time=2.64, avg_loss=0.1768, train_err=5.5248
     Eval: 16_h1=0.2904, 16_l2=0.2182, 32_h1=0.5099, 32_l2=0.2477
-    [9] time=2.73, avg_loss=0.1396, train_err=4.3623
+    [9] time=2.67, avg_loss=0.1396, train_err=4.3623
     Eval: 16_h1=0.2089, 16_l2=0.1293, 32_h1=0.5062, 32_l2=0.1743
-    [12] time=2.69, avg_loss=0.1348, train_err=4.2120
+    [12] time=2.63, avg_loss=0.1348, train_err=4.2120
     Eval: 16_h1=0.1993, 16_l2=0.1216, 32_h1=0.4882, 32_l2=0.1628
-    [15] time=2.67, avg_loss=0.1218, train_err=3.8061
+    [15] time=2.63, avg_loss=0.1218, train_err=3.8061
     Eval: 16_h1=0.2082, 16_l2=0.1309, 32_h1=0.5280, 32_l2=0.1798
-    [18] time=2.68, avg_loss=0.0951, train_err=2.9718
+    [18] time=2.63, avg_loss=0.0951, train_err=2.9718
     Eval: 16_h1=0.1933, 16_l2=0.1158, 32_h1=0.5166, 32_l2=0.1688
 
-    {'train_err': 2.8304212726652622, 'avg_loss': 0.0905734807252884, 'avg_lasso_loss': None, 'epoch_train_time': 2.673156691000031}
+    {'train_err': 2.8304212726652622, 'avg_loss': 0.0905734807252884, 'avg_lasso_loss': None, 'epoch_train_time': 2.6468693060000987}
 
 
 
@@ -473,7 +473,7 @@ are other ways to scale the outputs of the FNO to train a true super-resolution 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 57.065 seconds)
+   **Total running time of the script:** (0 minutes 55.783 seconds)
 
 
 .. _sphx_glr_download_auto_examples_models_plot_FNO_darcy.py:
