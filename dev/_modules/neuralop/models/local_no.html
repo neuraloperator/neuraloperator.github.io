@@ -313,8 +313,8 @@
         <span class="n">conv_padding_mode</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;periodic&#39;</span><span class="p">,</span>
         <span class="n">fin_diff_kernel_size</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
         <span class="n">mix_derivatives</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">lifting_channel_ratio</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-        <span class="n">projection_channel_ratio</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">lifting_channel_ratio</span><span class="p">:</span> <span class="n">Number</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">projection_channel_ratio</span><span class="p">:</span> <span class="n">Number</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="n">positional_embedding</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">]</span><span class="o">=</span><span class="s2">&quot;grid&quot;</span><span class="p">,</span>
         <span class="n">non_linearity</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">gelu</span><span class="p">,</span>
         <span class="n">norm</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -355,10 +355,10 @@
 
         <span class="c1"># init lifting and projection channels using ratios w.r.t hidden channels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lifting_channel_ratio</span> <span class="o">=</span> <span class="n">lifting_channel_ratio</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lifting_channels</span> <span class="o">=</span> <span class="n">lifting_channel_ratio</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_channels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lifting_channels</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">lifting_channel_ratio</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_channels</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">projection_channel_ratio</span> <span class="o">=</span> <span class="n">projection_channel_ratio</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">projection_channels</span> <span class="o">=</span> <span class="n">projection_channel_ratio</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_channels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">projection_channels</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">projection_channel_ratio</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_channels</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">non_linearity</span> <span class="o">=</span> <span class="n">non_linearity</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">=</span> <span class="n">rank</span>
