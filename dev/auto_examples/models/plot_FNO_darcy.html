@@ -21,11 +21,13 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
 
   
     <script src="../../_static/documentation_options.js?v=1ed6394b"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
  
@@ -66,6 +68,9 @@
             
               <a class="navbar-item" href="../../install.html">
               Install
+            </a>
+              <a class="navbar-item" href="../../theory_guide/index.html">
+              Theory Guide
             </a>
               <a class="navbar-item" href="../../user_guide/index.html">
               User Guide
@@ -129,12 +134,13 @@
       <div class="sidebar-menu-toc">
       <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing NeuralOperator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory_guide/index.html">Theory Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../modules/api.html">API reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../index.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#data-generation">Data Generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#layers">Layers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../index.html#losses">Losses</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#models">Models</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#training-and-meta-algorithms">Training and Meta-Algorithms</a></li>
 </ul>
@@ -297,13 +303,13 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f53e59065d0&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fa8bb0274d0&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f53e5905f90&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fa8bb024690&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f53e5905f90&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f53e5907890&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fa8bb024690&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fa8bb027890&gt;}
 </pre></div>
 </div>
 <p>Create the trainer:</p>
@@ -331,22 +337,22 @@ Testing on [50, 50] samples         on resolutions [16, 32].
 /opt/hostedtoolcache/Python/3.13.3/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:665: UserWarning: &#39;pin_memory&#39; argument is set as true but no accelerator is found, then device pinned memory won&#39;t be used.
   warnings.warn(warn_msg)
 Raw outputs of shape torch.Size([32, 1, 16, 16])
-[0] time=2.68, avg_loss=0.5903, train_err=18.4462
+[0] time=2.63, avg_loss=0.5903, train_err=18.4462
 Eval: 16_h1=0.3639, 16_l2=0.2512, 32_h1=0.5425, 32_l2=0.2628
-[3] time=2.68, avg_loss=0.2077, train_err=6.4899
+[3] time=2.63, avg_loss=0.2077, train_err=6.4899
 Eval: 16_h1=0.2191, 16_l2=0.1505, 32_h1=0.4976, 32_l2=0.1840
-[6] time=2.74, avg_loss=0.1768, train_err=5.5248
+[6] time=2.62, avg_loss=0.1768, train_err=5.5248
 Eval: 16_h1=0.2904, 16_l2=0.2182, 32_h1=0.5099, 32_l2=0.2477
-[9] time=2.66, avg_loss=0.1396, train_err=4.3623
+[9] time=2.67, avg_loss=0.1396, train_err=4.3623
 Eval: 16_h1=0.2089, 16_l2=0.1293, 32_h1=0.5062, 32_l2=0.1743
-[12] time=2.66, avg_loss=0.1348, train_err=4.2120
+[12] time=2.64, avg_loss=0.1348, train_err=4.2120
 Eval: 16_h1=0.1993, 16_l2=0.1216, 32_h1=0.4882, 32_l2=0.1628
 [15] time=2.66, avg_loss=0.1218, train_err=3.8061
 Eval: 16_h1=0.2082, 16_l2=0.1309, 32_h1=0.5280, 32_l2=0.1798
-[18] time=2.65, avg_loss=0.0951, train_err=2.9718
+[18] time=2.63, avg_loss=0.0951, train_err=2.9718
 Eval: 16_h1=0.1933, 16_l2=0.1158, 32_h1=0.5166, 32_l2=0.1688
 
-{&#39;train_err&#39;: 2.8304212726652622, &#39;avg_loss&#39;: 0.0905734807252884, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 2.660446909999905}
+{&#39;train_err&#39;: 2.8304212726652622, &#39;avg_loss&#39;: 0.0905734807252884, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 2.637818736999975}
 </pre></div>
 </div>
 </section>
@@ -449,7 +455,7 @@ are parameterized with a list of <cite>test_resolutions</cite> to choose from.</
 <p>However, as you can see, these predictions are noisier than we would expect for a model evaluated
 at the same resolution at which it was trained. Leveraging the FNO’s discretization-invariance, there
 are other ways to scale the outputs of the FNO to train a true super-resolution capability.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 56.791 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 56.074 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-models-plot-fno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/b4fadb168a06acc8c292c808f47f0e7f/plot_FNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_FNO_darcy.ipynb</span></code></a></p>

@@ -21,11 +21,13 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
 
   
     <script src="../../_static/documentation_options.js?v=1ed6394b"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
  
@@ -66,6 +68,9 @@
             
               <a class="navbar-item" href="../../install.html">
               Install
+            </a>
+              <a class="navbar-item" href="../../theory_guide/index.html">
+              Theory Guide
             </a>
               <a class="navbar-item" href="../../user_guide/index.html">
               User Guide
@@ -129,12 +134,13 @@
       <div class="sidebar-menu-toc">
       <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing NeuralOperator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory_guide/index.html">Theory Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../modules/api.html">API reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../index.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#data-generation">Data Generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#layers">Layers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../index.html#losses">Losses</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#models">Models</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#training-and-meta-algorithms">Training and Meta-Algorithms</a></li>
 </ul>
@@ -292,13 +298,13 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f53d45fea50&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fa8c56f1940&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f53d45feba0&gt;
+ * Train: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fa8c56f1a90&gt;
 
- * Test: {&#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f53d45feba0&gt;}
+ * Test: {&#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fa8c56f1a90&gt;}
 </pre></div>
 </div>
 <p>Create the trainer</p>
@@ -323,22 +329,22 @@ Parameter Group 0
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Training on 200 samples
 Testing on [50, 50] samples         on resolutions [(32, 64), (64, 128)].
 Raw outputs of shape torch.Size([4, 3, 32, 64])
-[0] time=3.50, avg_loss=2.5862, train_err=10.3447
+[0] time=3.51, avg_loss=2.5862, train_err=10.3447
 Eval: (32, 64)_l2=1.9413, (64, 128)_l2=2.3896
-[3] time=3.50, avg_loss=0.3843, train_err=1.5371
+[3] time=3.46, avg_loss=0.3843, train_err=1.5371
 Eval: (32, 64)_l2=0.5457, (64, 128)_l2=2.4473
-[6] time=3.52, avg_loss=0.2661, train_err=1.0643
+[6] time=3.50, avg_loss=0.2661, train_err=1.0643
 Eval: (32, 64)_l2=0.4888, (64, 128)_l2=2.3835
-[9] time=3.51, avg_loss=0.2174, train_err=0.8696
+[9] time=3.47, avg_loss=0.2174, train_err=0.8696
 Eval: (32, 64)_l2=0.3596, (64, 128)_l2=2.3757
-[12] time=3.46, avg_loss=0.1884, train_err=0.7538
+[12] time=3.48, avg_loss=0.1884, train_err=0.7538
 Eval: (32, 64)_l2=0.3351, (64, 128)_l2=2.3888
 [15] time=3.48, avg_loss=0.1575, train_err=0.6301
 Eval: (32, 64)_l2=0.2902, (64, 128)_l2=2.3897
-[18] time=3.48, avg_loss=0.1381, train_err=0.5524
+[18] time=3.46, avg_loss=0.1381, train_err=0.5524
 Eval: (32, 64)_l2=0.2958, (64, 128)_l2=2.3930
 
-{&#39;train_err&#39;: 0.5088738471269607, &#39;avg_loss&#39;: 0.12721846178174018, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 3.4732693679999898}
+{&#39;train_err&#39;: 0.5088738471269607, &#39;avg_loss&#39;: 0.12721846178174018, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 3.454474833000006}
 </pre></div>
 </div>
 <p>Plot the prediction, and compare with the ground-truth
@@ -385,7 +391,7 @@ ii) can be trained quickly on CPU</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_SFNO_swe_001.png" srcset="../../_images/sphx_glr_plot_SFNO_swe_001.png" alt="Inputs, ground-truth output and prediction., Input x (32, 64), Ground-truth y, Model prediction, Input x (64, 128), Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 26.303 seconds)</p>
+<img src="../../_images/sphx_glr_plot_SFNO_swe_001.png" srcset="../../_images/sphx_glr_plot_SFNO_swe_001.png" alt="Inputs, ground-truth output and prediction., Input x (32, 64), Ground-truth y, Model prediction, Input x (64, 128), Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 25.915 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-models-plot-sfno-swe-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/513ad9091cd6d9b455b9ddd3c807b97f/plot_SFNO_swe.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_SFNO_swe.ipynb</span></code></a></p>

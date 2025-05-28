@@ -21,17 +21,19 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
 
   
     <script src="../../_static/documentation_options.js?v=1ed6394b"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
  
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Losses" href="../losses/index.html" />
+    <link rel="next" title="Models" href="../models/index.html" />
     <link rel="prev" title="Fourier Continuation" href="plot_fourier_continuation.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -66,6 +68,9 @@
             
               <a class="navbar-item" href="../../install.html">
               Install
+            </a>
+              <a class="navbar-item" href="../../theory_guide/index.html">
+              Theory Guide
             </a>
               <a class="navbar-item" href="../../user_guide/index.html">
               User Guide
@@ -129,12 +134,13 @@
       <div class="sidebar-menu-toc">
       <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing NeuralOperator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory_guide/index.html">Theory Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../modules/api.html">API reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../index.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#data-generation">Data Generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#layers">Layers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../index.html#losses">Losses</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#models">Models</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#training-and-meta-algorithms">Training and Meta-Algorithms</a></li>
 </ul>
@@ -330,7 +336,7 @@ torch.Size([119, 89])
 <span class="c1"># plt.show()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_DISCO_convolutions_006.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_006.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7f53e5211090&gt;
+<img src="../../_images/sphx_glr_plot_DISCO_convolutions_006.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_006.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7fa8d6319d10&gt;
 </pre></div>
 </div>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">convt</span> <span class="o">=</span> <span class="n">DiscreteContinuousConvTranspose2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">grid_in</span><span class="o">=</span><span class="n">grid_out</span><span class="p">,</span> <span class="n">grid_out</span><span class="o">=</span><span class="n">grid_in</span><span class="p">,</span> <span class="n">quadrature_weights</span><span class="o">=</span><span class="n">q_out</span><span class="p">,</span> <span class="n">kernel_shape</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">radius_cutoff</span><span class="o">=</span><span class="mi">3</span><span class="o">/</span><span class="n">nyo</span><span class="p">,</span> <span class="n">periodic</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
@@ -381,7 +387,7 @@ torch.Size([119, 89])
 <img src="../../_images/sphx_glr_plot_DISCO_convolutions_008.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_008.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>torch.Size([1, 1, 120, 90])
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 29.722 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 29.435 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-layers-plot-disco-convolutions-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/3f74a91662afa758e3d845617240e471/plot_DISCO_convolutions.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_DISCO_convolutions.ipynb</span></code></a></p>
@@ -410,8 +416,8 @@ torch.Size([119, 89])
     </a>
     
     
-    <a class="button pagination-next" href="../losses/index.html" title="next page" accesskey="n">
-        <span>Losses </span>
+    <a class="button pagination-next" href="../models/index.html" title="next page" accesskey="n">
+        <span>Models </span>
         <span class="icon">
             <i class="fa fa-arrow-circle-right"></i>
         </span>
