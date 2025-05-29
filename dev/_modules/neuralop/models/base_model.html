@@ -335,22 +335,22 @@
 <span class="sd">    model : nn.Module</span>
 <span class="sd">        the instanciated module</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">arch</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;arch&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="n">config_arch</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">arch</span><span class="p">)</span>
+    <span class="n">arch</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;model_arch&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">model</span>
 
     <span class="c1"># Set the number of input channels depending on channels in data + mg patching</span>
-    <span class="n">data_channels</span> <span class="o">=</span> <span class="n">config_arch</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;data_channels&quot;</span><span class="p">)</span>
+    <span class="n">data_channels</span> <span class="o">=</span> <span class="n">model_config</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;data_channels&quot;</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">patching_levels</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;patching&quot;</span><span class="p">][</span><span class="s2">&quot;levels&quot;</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
         <span class="n">patching_levels</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">if</span> <span class="n">patching_levels</span><span class="p">:</span>
         <span class="n">data_channels</span> <span class="o">*=</span> <span class="n">patching_levels</span> <span class="o">+</span> <span class="mi">1</span>
-    <span class="n">config_arch</span><span class="p">[</span><span class="s2">&quot;in_channels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_channels</span>
+    <span class="n">model_config</span><span class="p">[</span><span class="s2">&quot;in_channels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_channels</span>
 
     <span class="c1"># Dispatch model creation</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">BaseModel</span><span class="o">.</span><span class="n">_models</span><span class="p">[</span><span class="n">arch</span><span class="p">](</span><span class="o">**</span><span class="n">config_arch</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">BaseModel</span><span class="o">.</span><span class="n">_models</span><span class="p">[</span><span class="n">arch</span><span class="p">](</span><span class="o">**</span><span class="n">model_config</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Got config.arch=</span><span class="si">{</span><span class="n">arch</span><span class="si">}</span><span class="s2">, expected one of </span><span class="si">{</span><span class="n">available_models</span><span class="p">()</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></div>
 
