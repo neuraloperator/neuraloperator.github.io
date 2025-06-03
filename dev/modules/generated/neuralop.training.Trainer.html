@@ -214,8 +214,14 @@ then after getting an output from the model, that is transformed with data_proce
 <tr class="row-even"><td><p><a class="reference internal" href="#neuralop.training.Trainer.eval_one_batch" title="neuralop.training.Trainer.eval_one_batch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_one_batch</span></code></a>(sample, eval_losses[, ...])</p></td>
 <td><p>eval_one_batch runs inference on one batch and returns eval_losses for that batch.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.training.Trainer.evaluate" title="neuralop.training.Trainer.evaluate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">evaluate</span></code></a>(loss_dict, data_loader[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.training.Trainer.eval_one_batch_autoreg" title="neuralop.training.Trainer.eval_one_batch_autoreg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_one_batch_autoreg</span></code></a>(sample, eval_losses)</p></td>
+<td><p>eval_one_batch runs inference on one batch and returns eval_losses for that batch.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#neuralop.training.Trainer.evaluate" title="neuralop.training.Trainer.evaluate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">evaluate</span></code></a>(loss_dict, data_loader[, ...])</p></td>
 <td><p>Evaluates the model on a dictionary of losses</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.training.Trainer.evaluate_all" title="neuralop.training.Trainer.evaluate_all"><code class="xref py py-obj docutils literal notranslate"><span class="pre">evaluate_all</span></code></a>(epoch, eval_losses, ...[, ...])</p></td>
+<td><p>evaluate_all iterates through the entire dict of test_loaders to perform evaluation on the whole dataset stored in each one.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#neuralop.training.Trainer.log_eval" title="neuralop.training.Trainer.log_eval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">log_eval</span></code></a>(epoch, eval_metrics)</p></td>
 <td><p>log_eval logs outputs from evaluation on all test loaders to stdout and wandb</p></td>
@@ -240,21 +246,14 @@ then after getting an output from the model, that is transformed with data_proce
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><strong>evaluate_all</strong></p></td>
-<td></td>
-</tr>
-</tbody>
-</table>
 <dl class="py method">
 <dt class="sig sig-object py" id="neuralop.training.Trainer.train">
-<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_loader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_loaders</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheduler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regularizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">training_loss</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_losses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_every</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_best</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'./ckpt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resume_from_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/training/trainer.html#Trainer.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.training.Trainer.train" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_loader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_loaders</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheduler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regularizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">training_loss</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_losses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_every</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_best</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'./ckpt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resume_from_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_autoregressive_steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/training/trainer.html#Trainer.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.training.Trainer.train" title="Link to this definition"></a></dt>
 <dd><p>Trains the given model on the given dataset.</p>
 <p>If a device is provided, the model and data processor are loaded to device here.</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
+<dd class="field-odd"><dl>
 <dt><strong>train_loader: torch.utils.data.DataLoader</strong></dt><dd><p>training dataloader</p>
 </dd>
 <dt><strong>test_loaders: dict[torch.utils.data.DataLoader]</strong></dt><dd><p>testing dataloaders</p>
@@ -266,6 +265,15 @@ then after getting an output from the model, that is transformed with data_proce
 <dt><strong>training_loss: training.losses function</strong></dt><dd><p>cost function to minimize</p>
 </dd>
 <dt><strong>eval_losses: dict[Loss]</strong></dt><dd><p>dict of losses to use in self.eval()</p>
+</dd>
+<dt><strong>eval_modes: dict[str], optional</strong></dt><dd><p>optional mapping from the name of each loader to its evaluation mode.</p>
+<ul class="simple">
+<li><p>if ‘single_step’, predicts one input-output pair and evaluates loss.</p></li>
+<li><p>if ‘autoregressive’, autoregressively predicts output using last step’s</p></li>
+</ul>
+<p>output as input for a number of steps defined by the temporal dimension of the batch.
+This requires specially batched data with a data processor whose <code class="docutils literal notranslate"><span class="pre">.preprocess</span></code> and 
+<code class="docutils literal notranslate"><span class="pre">.postprocess</span></code> both take <code class="docutils literal notranslate"><span class="pre">idx</span></code> as an argument.</p>
 </dd>
 <dt><strong>save_every: int, optional, default is None</strong></dt><dd><p>if provided, interval at which to save checkpoints</p>
 </dd>
@@ -279,6 +287,9 @@ save_every and/or save_best is provided</p>
 <dt><strong>resume_from_dir: str | Path, default None</strong></dt><dd><p>if provided, resumes training state (model, 
 optimizer, regularizer, scheduler) from state saved in
 <cite>resume_from_dir</cite></p>
+</dd>
+<dt><strong>max_autoregressive_steps</strong><span class="classifier">int, default None</span></dt><dd><p>if provided, and a dataloader is to be evaluated in autoregressive mode,
+limits the number of autoregressive in each rollout to be performed.</p>
 </dd>
 </dl>
 </dd>
@@ -319,8 +330,41 @@ for one epoch and returns training metrics</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="neuralop.training.Trainer.evaluate_all">
+<span class="sig-name descname"><span class="pre">evaluate_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_losses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_loaders</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_autoregressive_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/training/trainer.html#Trainer.evaluate_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.training.Trainer.evaluate_all" title="Link to this definition"></a></dt>
+<dd><p>evaluate_all iterates through the entire dict of test_loaders
+to perform evaluation on the whole dataset stored in each one.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>epoch</strong><span class="classifier">int</span></dt><dd><p>current training epoch</p>
+</dd>
+<dt><strong>eval_losses</strong><span class="classifier">dict[Loss]</span></dt><dd><p>keyed <code class="docutils literal notranslate"><span class="pre">loss_name:</span> <span class="pre">loss_obj</span></code> for each pair. Full set of 
+losses to use in evaluation for each test loader.</p>
+</dd>
+<dt><strong>test_loaders</strong><span class="classifier">dict[DataLoader]</span></dt><dd><p>keyed <code class="docutils literal notranslate"><span class="pre">loader_name:</span> <span class="pre">loader</span></code> for each test loader.</p>
+</dd>
+<dt><strong>eval_modes</strong><span class="classifier">dict[str], optional</span></dt><dd><p>keyed <code class="docutils literal notranslate"><span class="pre">loader_name:</span> <span class="pre">eval_mode</span></code> for each test loader.
+* If <code class="docutils literal notranslate"><span class="pre">eval_modes.get(loader_name)</span></code> does not return a value, 
+the evaluation is automatically performed in <code class="docutils literal notranslate"><span class="pre">single_step</span></code> mode.</p>
+</dd>
+<dt><strong>max_autoregressive_steps</strong><span class="classifier"><code class="docutils literal notranslate"><span class="pre">int</span></code>, optional</span></dt><dd><p>if provided, and one of the test loaders has <code class="docutils literal notranslate"><span class="pre">eval_mode</span> <span class="pre">==</span> <span class="pre">&quot;autoregressive&quot;</span></code>,
+limits the number of autoregressive steps performed per rollout.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>all_metrics: dict</dt><dd><p>collected eval metrics for each loader.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="neuralop.training.Trainer.evaluate">
-<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loss_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_loader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/training/trainer.html#Trainer.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.training.Trainer.evaluate" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loss_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_loader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'single_step'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/training/trainer.html#Trainer.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.training.Trainer.evaluate" title="Link to this definition"></a></dt>
 <dd><p>Evaluates the model on a dictionary of losses</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -333,6 +377,12 @@ and returns the corresponding loss</p>
 </dd>
 <dt><strong>epoch</strong><span class="classifier">int | None</span></dt><dd><p>current epoch. Used when logging both train and eval
 default None</p>
+</dd>
+<dt><strong>mode</strong><span class="classifier">Literal {‘single_step’, ‘autoregression’}</span></dt><dd><p>if ‘single_step’, performs standard evaluation
+if ‘autoregression’ loops through <cite>max_steps</cite> steps</p>
+</dd>
+<dt><strong>max_steps</strong><span class="classifier">int, optional</span></dt><dd><p>max number of steps for autoregressive rollout. 
+If None, runs the full rollout.</p>
 </dd>
 <dt><strong>Returns</strong></dt><dd></dd>
 <dt><strong>——-</strong></dt><dd></dd>
@@ -403,6 +453,41 @@ and returns eval_losses for that batch.</p>
 </dd>
 <dt><strong>return_outputs</strong><span class="classifier">bool</span></dt><dd><p>whether to return model outputs for plotting
 by default False</p>
+</dd>
+<dt><strong>Returns</strong></dt><dd></dd>
+<dt><strong>——-</strong></dt><dd></dd>
+<dt><strong>eval_step_losses</strong><span class="classifier">dict</span></dt><dd><p>keyed “loss_name”: step_loss_value for each loss name</p>
+</dd>
+<dt><strong>outputs: torch.Tensor | None</strong></dt><dd><p>optionally returns batch outputs</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralop.training.Trainer.eval_one_batch_autoreg">
+<span class="sig-name descname"><span class="pre">eval_one_batch_autoreg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_losses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/training/trainer.html#Trainer.eval_one_batch_autoreg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.training.Trainer.eval_one_batch_autoreg" title="Link to this definition"></a></dt>
+<dd><p>eval_one_batch runs inference on one batch
+and returns eval_losses for that batch.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>sample</strong><span class="classifier">dict</span></dt><dd><p>data batch dictionary</p>
+</dd>
+<dt><strong>eval_losses</strong><span class="classifier">dict</span></dt><dd><p>dictionary of named eval metrics</p>
+</dd>
+<dt><strong>return_outputs</strong><span class="classifier">bool</span></dt><dd><p>whether to return model outputs for plotting
+by default False</p>
+</dd>
+<dt><strong>max_steps: int</strong></dt><dd><p>number of timesteps to roll out
+typically the full trajectory length
+If max_steps is none, runs until the full length</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If a value for <code class="docutils literal notranslate"><span class="pre">max_steps</span></code> is not provided, a data_processor
+must be provided to handle rollout logic.</p>
+</div>
 </dd>
 <dt><strong>Returns</strong></dt><dd></dd>
 <dt><strong>——-</strong></dt><dd></dd>
@@ -539,10 +624,12 @@ See neuralop.training.training_state</p>
 <li><a class="reference internal" href="#neuralop.training.Trainer"><code class="docutils literal notranslate"><span class="pre">Trainer</span></code></a><ul>
 <li><a class="reference internal" href="#neuralop.training.Trainer.train"><code class="docutils literal notranslate"><span class="pre">Trainer.train()</span></code></a></li>
 <li><a class="reference internal" href="#neuralop.training.Trainer.train_one_epoch"><code class="docutils literal notranslate"><span class="pre">Trainer.train_one_epoch()</span></code></a></li>
+<li><a class="reference internal" href="#neuralop.training.Trainer.evaluate_all"><code class="docutils literal notranslate"><span class="pre">Trainer.evaluate_all()</span></code></a></li>
 <li><a class="reference internal" href="#neuralop.training.Trainer.evaluate"><code class="docutils literal notranslate"><span class="pre">Trainer.evaluate()</span></code></a></li>
 <li><a class="reference internal" href="#neuralop.training.Trainer.on_epoch_start"><code class="docutils literal notranslate"><span class="pre">Trainer.on_epoch_start()</span></code></a></li>
 <li><a class="reference internal" href="#neuralop.training.Trainer.train_one_batch"><code class="docutils literal notranslate"><span class="pre">Trainer.train_one_batch()</span></code></a></li>
 <li><a class="reference internal" href="#neuralop.training.Trainer.eval_one_batch"><code class="docutils literal notranslate"><span class="pre">Trainer.eval_one_batch()</span></code></a></li>
+<li><a class="reference internal" href="#neuralop.training.Trainer.eval_one_batch_autoreg"><code class="docutils literal notranslate"><span class="pre">Trainer.eval_one_batch_autoreg()</span></code></a></li>
 <li><a class="reference internal" href="#neuralop.training.Trainer.log_training"><code class="docutils literal notranslate"><span class="pre">Trainer.log_training()</span></code></a></li>
 <li><a class="reference internal" href="#neuralop.training.Trainer.log_eval"><code class="docutils literal notranslate"><span class="pre">Trainer.log_eval()</span></code></a></li>
 <li><a class="reference internal" href="#neuralop.training.Trainer.resume_state_from_dir"><code class="docutils literal notranslate"><span class="pre">Trainer.resume_state_from_dir()</span></code></a></li>

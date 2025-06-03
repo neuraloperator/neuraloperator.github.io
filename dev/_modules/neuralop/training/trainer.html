@@ -229,10 +229,12 @@
         <span class="n">regularizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">training_loss</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">eval_losses</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">eval_modes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">save_every</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">save_best</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">save_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span><span class="o">=</span><span class="s2">&quot;./ckpt&quot;</span><span class="p">,</span>
         <span class="n">resume_from_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">max_autoregressive_steps</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Trains the given model on the given dataset.</span>
 
@@ -252,6 +254,15 @@
 <span class="sd">            cost function to minimize</span>
 <span class="sd">        eval_losses: dict[Loss]</span>
 <span class="sd">            dict of losses to use in self.eval()</span>
+<span class="sd">        eval_modes: dict[str], optional</span>
+<span class="sd">            optional mapping from the name of each loader to its evaluation mode.</span>
+
+<span class="sd">            * if &#39;single_step&#39;, predicts one input-output pair and evaluates loss.</span>
+<span class="sd">            </span>
+<span class="sd">            * if &#39;autoregressive&#39;, autoregressively predicts output using last step&#39;s </span>
+<span class="sd">            output as input for a number of steps defined by the temporal dimension of the batch.</span>
+<span class="sd">            This requires specially batched data with a data processor whose ``.preprocess`` and </span>
+<span class="sd">            ``.postprocess`` both take ``idx`` as an argument.</span>
 <span class="sd">        save_every: int, optional, default is None</span>
 <span class="sd">            if provided, interval at which to save checkpoints</span>
 <span class="sd">        save_best: str, optional, default is None</span>
@@ -265,6 +276,9 @@
 <span class="sd">            if provided, resumes training state (model, </span>
 <span class="sd">            optimizer, regularizer, scheduler) from state saved in</span>
 <span class="sd">            `resume_from_dir`</span>
+<span class="sd">        max_autoregressive_steps : int, default None</span>
+<span class="sd">            if provided, and a dataloader is to be evaluated in autoregressive mode,</span>
+<span class="sd">            limits the number of autoregressive in each rollout to be performed.</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -296,6 +310,10 @@
         
         <span class="c1"># accumulated wandb metrics</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wandb_epoch_metrics</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># create default eval modes</span>
+        <span class="k">if</span> <span class="n">eval_modes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">eval_modes</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="c1"># attributes for checkpointing</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save_every</span> <span class="o">=</span> <span class="n">save_every</span>
@@ -345,8 +363,9 @@
                 <span class="c1"># evaluate and gather metrics across each loader in test_loaders</span>
                 <span class="n">eval_metrics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_all</span><span class="p">(</span><span class="n">epoch</span><span class="o">=</span><span class="n">epoch</span><span class="p">,</span>
                                                 <span class="n">eval_losses</span><span class="o">=</span><span class="n">eval_losses</span><span class="p">,</span>
-                                                <span class="n">test_loaders</span><span class="o">=</span><span class="n">test_loaders</span><span class="p">)</span>
-
+                                                <span class="n">test_loaders</span><span class="o">=</span><span class="n">test_loaders</span><span class="p">,</span>
+                                                <span class="n">eval_modes</span><span class="o">=</span><span class="n">eval_modes</span><span class="p">,</span>
+                                                <span class="n">max_autoregressive_steps</span><span class="o">=</span><span class="n">max_autoregressive_steps</span><span class="p">)</span>
                 <span class="n">epoch_metrics</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">eval_metrics</span><span class="p">)</span>
                 <span class="c1"># save checkpoint if conditions are met</span>
                 <span class="k">if</span> <span class="n">save_best</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -436,21 +455,52 @@
         <span class="k">return</span> <span class="n">train_err</span><span class="p">,</span> <span class="n">avg_loss</span><span class="p">,</span> <span class="n">avg_lasso_loss</span><span class="p">,</span> <span class="n">epoch_train_time</span></div>
 
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">eval_losses</span><span class="p">,</span> <span class="n">test_loaders</span><span class="p">):</span>
+<div class="viewcode-block" id="Trainer.evaluate_all">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.training.Trainer.html#neuralop.training.Trainer.evaluate_all">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">eval_losses</span><span class="p">,</span> <span class="n">test_loaders</span><span class="p">,</span> <span class="n">eval_modes</span><span class="p">,</span> <span class="n">max_autoregressive_steps</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;evaluate_all iterates through the entire dict of test_loaders</span>
+<span class="sd">        to perform evaluation on the whole dataset stored in each one. </span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        epoch : int</span>
+<span class="sd">            current training epoch</span>
+<span class="sd">        eval_losses : dict[Loss]</span>
+<span class="sd">            keyed ``loss_name: loss_obj`` for each pair. Full set of </span>
+<span class="sd">            losses to use in evaluation for each test loader. </span>
+<span class="sd">        test_loaders : dict[DataLoader]</span>
+<span class="sd">            keyed ``loader_name: loader`` for each test loader. </span>
+<span class="sd">        eval_modes : dict[str], optional</span>
+<span class="sd">            keyed ``loader_name: eval_mode`` for each test loader.</span>
+<span class="sd">            * If ``eval_modes.get(loader_name)`` does not return a value, </span>
+<span class="sd">            the evaluation is automatically performed in ``single_step`` mode. </span>
+<span class="sd">        max_autoregressive_steps : ``int``, optional</span>
+<span class="sd">            if provided, and one of the test loaders has ``eval_mode == &quot;autoregressive&quot;``,</span>
+<span class="sd">            limits the number of autoregressive steps performed per rollout.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        all_metrics: dict</span>
+<span class="sd">            collected eval metrics for each loader. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># evaluate and gather metrics across each loader in test_loaders</span>
         <span class="n">all_metrics</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">loader_name</span><span class="p">,</span> <span class="n">loader</span> <span class="ow">in</span> <span class="n">test_loaders</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">loader_eval_mode</span> <span class="o">=</span> <span class="n">eval_modes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">loader_name</span><span class="p">,</span> <span class="s2">&quot;single_step&quot;</span><span class="p">)</span>
             <span class="n">loader_metrics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">eval_losses</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span>
-                                    <span class="n">log_prefix</span><span class="o">=</span><span class="n">loader_name</span><span class="p">)</span>   
+                                    <span class="n">log_prefix</span><span class="o">=</span><span class="n">loader_name</span><span class="p">,</span>
+                                    <span class="n">mode</span><span class="o">=</span><span class="n">loader_eval_mode</span><span class="p">,</span>
+                                    <span class="n">max_steps</span><span class="o">=</span><span class="n">max_autoregressive_steps</span><span class="p">)</span>   
             <span class="n">all_metrics</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">loader_metrics</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">log_eval</span><span class="p">(</span><span class="n">epoch</span><span class="o">=</span><span class="n">epoch</span><span class="p">,</span>
                       <span class="n">eval_metrics</span><span class="o">=</span><span class="n">all_metrics</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">all_metrics</span>
+        <span class="k">return</span> <span class="n">all_metrics</span></div>
+
     
 <div class="viewcode-block" id="Trainer.evaluate">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.training.Trainer.html#neuralop.training.Trainer.evaluate">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loss_dict</span><span class="p">,</span> <span class="n">data_loader</span><span class="p">,</span> <span class="n">log_prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">epoch</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loss_dict</span><span class="p">,</span> <span class="n">data_loader</span><span class="p">,</span> <span class="n">log_prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">epoch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;single_step&quot;</span><span class="p">,</span> <span class="n">max_steps</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Evaluates the model on a dictionary of losses</span>
 
 <span class="sd">        Parameters</span>
@@ -464,6 +514,12 @@
 <span class="sd">        epoch : int | None</span>
 <span class="sd">            current epoch. Used when logging both train and eval</span>
 <span class="sd">            default None</span>
+<span class="sd">        mode : Literal {&#39;single_step&#39;, &#39;autoregression&#39;}</span>
+<span class="sd">            if &#39;single_step&#39;, performs standard evaluation</span>
+<span class="sd">            if &#39;autoregression&#39; loops through `max_steps` steps</span>
+<span class="sd">        max_steps : int, optional</span>
+<span class="sd">            max number of steps for autoregressive rollout. </span>
+<span class="sd">            If None, runs the full rollout.</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        errors : dict</span>
@@ -495,16 +551,21 @@
                 <span class="n">return_output</span> <span class="o">=</span> <span class="kc">False</span>
                 <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_loader</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="n">return_output</span> <span class="o">=</span> <span class="kc">True</span>
-                <span class="n">eval_step_losses</span><span class="p">,</span> <span class="n">outs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_one_batch</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">loss_dict</span><span class="p">,</span> <span class="n">return_output</span><span class="o">=</span><span class="n">return_output</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;single_step&quot;</span><span class="p">:</span>
+                    <span class="n">eval_step_losses</span><span class="p">,</span> <span class="n">outs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_one_batch</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">loss_dict</span><span class="p">,</span> <span class="n">return_output</span><span class="o">=</span><span class="n">return_output</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;autoregression&quot;</span><span class="p">:</span>
+                    <span class="n">eval_step_losses</span><span class="p">,</span> <span class="n">outs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_one_batch_autoreg</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">loss_dict</span><span class="p">,</span>
+                                                                         <span class="n">return_output</span><span class="o">=</span><span class="n">return_output</span><span class="p">,</span>
+                                                                         <span class="n">max_steps</span><span class="o">=</span><span class="n">max_steps</span><span class="p">)</span>
 
                 <span class="k">for</span> <span class="n">loss_name</span><span class="p">,</span> <span class="n">val_loss</span> <span class="ow">in</span> <span class="n">eval_step_losses</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                     <span class="n">errors</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">log_prefix</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">loss_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">val_loss</span>
-            
+        
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">errors</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">errors</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span>
 
         <span class="c1"># on last batch, log model outputs</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_output</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_output</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">wandb_log</span><span class="p">:</span>
             <span class="n">errors</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">log_prefix</span><span class="si">}</span><span class="s2">_outputs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">wandb</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="n">outs</span><span class="p">)</span>
         
         <span class="k">return</span> <span class="n">errors</span></div>
@@ -641,6 +702,92 @@
             <span class="n">val_loss</span> <span class="o">=</span> <span class="n">loss</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="o">**</span><span class="n">sample</span><span class="p">)</span>
             <span class="n">eval_step_losses</span><span class="p">[</span><span class="n">loss_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">val_loss</span>
         
+        <span class="k">if</span> <span class="n">return_output</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">eval_step_losses</span><span class="p">,</span> <span class="n">out</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">eval_step_losses</span><span class="p">,</span> <span class="kc">None</span></div>
+
+        
+<div class="viewcode-block" id="Trainer.eval_one_batch_autoreg">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.training.Trainer.html#neuralop.training.Trainer.eval_one_batch_autoreg">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">eval_one_batch_autoreg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                       <span class="n">sample</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+                       <span class="n">eval_losses</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+                       <span class="n">return_output</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                       <span class="n">max_steps</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;eval_one_batch runs inference on one batch</span>
+<span class="sd">        and returns eval_losses for that batch.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sample : dict</span>
+<span class="sd">            data batch dictionary</span>
+<span class="sd">        eval_losses : dict</span>
+<span class="sd">            dictionary of named eval metrics</span>
+<span class="sd">        return_outputs : bool</span>
+<span class="sd">            whether to return model outputs for plotting</span>
+<span class="sd">            by default False</span>
+<span class="sd">        max_steps: int</span>
+<span class="sd">            number of timesteps to roll out</span>
+<span class="sd">            typically the full trajectory length</span>
+<span class="sd">            If max_steps is none, runs until the full length</span>
+
+<span class="sd">            .. note::</span>
+<span class="sd">                If a value for ``max_steps`` is not provided, a data_processor</span>
+<span class="sd">                must be provided to handle rollout logic. </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        eval_step_losses : dict</span>
+<span class="sd">            keyed &quot;loss_name&quot;: step_loss_value for each loss name</span>
+<span class="sd">        outputs: torch.Tensor | None</span>
+<span class="sd">            optionally returns batch outputs</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">eval_step_losses</span> <span class="o">=</span> <span class="p">{</span><span class="n">loss_name</span><span class="p">:</span> <span class="mf">0.</span> <span class="k">for</span> <span class="n">loss_name</span> <span class="ow">in</span> <span class="n">eval_losses</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+        <span class="c1"># eval_rollout_losses = {loss_name: 0. for loss_name in eval_losses.keys()}</span>
+
+        <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">max_steps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">max_steps</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
+
+        <span class="c1"># only increment the sample count once</span>
+        <span class="n">sample_count_incr</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">while</span> <span class="n">sample</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">max_steps</span><span class="p">:</span>
+            
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># load data to device if no preprocessor exists</span>
+                <span class="n">sample</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">sample</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">is_tensor</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+                <span class="p">}</span>
+
+            <span class="k">if</span> <span class="n">sample</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">break</span>
+            
+            <span class="c1"># only increment the sample count once</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">sample_count_incr</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">+=</span> <span class="n">sample</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">sample_count_incr</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">sample</span><span class="p">)</span>
+                
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">out</span><span class="p">,</span> <span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span><span class="o">.</span><span class="n">postprocess</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">sample</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+            
+            <span class="k">for</span> <span class="n">loss_name</span><span class="p">,</span> <span class="n">loss</span> <span class="ow">in</span> <span class="n">eval_losses</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">step_loss</span> <span class="o">=</span> <span class="n">loss</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="o">**</span><span class="n">sample</span><span class="p">)</span>
+                <span class="n">eval_step_losses</span><span class="p">[</span><span class="n">loss_name</span><span class="p">]</span> <span class="o">+=</span> <span class="n">step_loss</span>
+            
+            <span class="n">t</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># average over all steps of the final rollout</span>
+        <span class="k">for</span> <span class="n">loss_name</span> <span class="ow">in</span> <span class="n">eval_step_losses</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">eval_step_losses</span><span class="p">[</span><span class="n">loss_name</span><span class="p">]</span> <span class="o">/=</span> <span class="n">t</span> 
+
         <span class="k">if</span> <span class="n">return_output</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">eval_step_losses</span><span class="p">,</span> <span class="n">out</span>
         <span class="k">else</span><span class="p">:</span>
