@@ -108,7 +108,7 @@ Let's create a grid on which the data lives
     x_in = torch.linspace(0, 2, nx)
     y_in = torch.linspace(0, 3, ny)
 
-    x_in, y_in = torch.meshgrid(x_in, y_in)
+    x_in, y_in = torch.meshgrid(x_in, y_in, indexing='ij')
     grid_in = torch.stack([x_in.reshape(-1), y_in.reshape(-1)])
 
     # compute the correct quadrature weights
@@ -120,13 +120,6 @@ Let's create a grid on which the data lives
 
 
 
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    /opt/hostedtoolcache/Python/3.13.3/x64/lib/python3.13/site-packages/torch/functional.py:554: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at /pytorch/aten/src/ATen/native/TensorShape.cpp:4314.)
-      return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
 
 
 
@@ -203,7 +196,7 @@ For the convolution output we require an output mesh
     x_out = torch.linspace(0, 2, nxo)
     y_out = torch.linspace(0, 3, nyo)
 
-    x_out, y_out = torch.meshgrid(x_out, y_out)
+    x_out, y_out = torch.meshgrid(x_out, y_out, indexing='ij')
     grid_out = torch.stack([x_out.reshape(-1), y_out.reshape(-1)])
 
     # compute the correct quadrature weights
@@ -356,7 +349,7 @@ in order to compute the convolved image, we need to first bring it into the righ
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7f76ac091d10>
+    <matplotlib.colorbar.Colorbar object at 0x7fae97c347d0>
 
 
 
@@ -404,7 +397,7 @@ in order to compute the convolved image, we need to first bring it into the righ
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 182-200
+.. GENERATED FROM PYTHON SOURCE LINES 182-201
 
 .. code-block:: Python
 
@@ -429,6 +422,7 @@ in order to compute the convolved image, we need to first bring it into the righ
     plt.show()
 
 
+
 .. image-sg:: /auto_examples/layers/images/sphx_glr_plot_DISCO_convolutions_008.png
    :alt: plot DISCO convolutions
    :srcset: /auto_examples/layers/images/sphx_glr_plot_DISCO_convolutions_008.png
@@ -447,7 +441,7 @@ in order to compute the convolved image, we need to first bring it into the righ
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 29.172 seconds)
+   **Total running time of the script:** (0 minutes 29.618 seconds)
 
 
 .. _sphx_glr_download_auto_examples_layers_plot_DISCO_convolutions.py:
