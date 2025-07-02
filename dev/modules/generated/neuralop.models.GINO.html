@@ -178,8 +178,8 @@
 <dd><p>GINO: Geometry-informed Neural Operator. Learns a mapping between
 functions presented over arbitrary coordinate meshes. The model carries
 global integration through spectral convolution layers in an intermediate
-latent space, as described in <a href="#id5"><span class="problematic" id="id1">[1]_</span></a>. Optionally enables a weighted output
-GNO for use in a Mollified Graph Neural Operator scheme, as introduced in <a href="#id6"><span class="problematic" id="id2">[2]_</span></a>.</p>
+latent space, as described in <a class="reference internal" href="#rf1a08f23c851-1" id="id1">[1]</a>. Optionally enables a weighted output
+GNO for use in a Mollified Graph Neural Operator scheme, as introduced in <a class="reference internal" href="#rf1a08f23c851-2" id="id2">[2]</a>.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
@@ -332,6 +332,19 @@ If None, adaptive mesh embedding is not used.</p>
 </dd>
 </dl>
 <p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="rf1a08f23c851-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>: Li, Z., Kovachki, N., Choy, C., Li, B., Kossaifi, J., Otta, S., 
+Nabian, M., Stadler, M., Hundt, C., Azizzadenesheli, K., Anandkumar, A. (2023)
+Geometry-Informed Neural Operator for Large-Scale 3D PDEs. NeurIPS 2023,
+<a class="reference external" href="https://proceedings.neurips.cc/paper_files/paper/2023/hash/70518ea42831f02afc3a2828993935ad-Abstract-Conference.html">https://proceedings.neurips.cc/paper_files/paper/2023/hash/70518ea42831f02afc3a2828993935ad-Abstract-Conference.html</a></p>
+</div>
+<div class="citation" id="rf1a08f23c851-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>: Lin, R. et al. Placeholder reference for Mollified Graph Neural Operators.</p>
+</div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="neuralop.models.GINO.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_geom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latent_queries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_queries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latent_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ada_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/models/gino.html#GINO.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.models.GINO.forward" title="Link to this definition"></a></dt>
