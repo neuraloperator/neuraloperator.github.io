@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Visualizing computational fluid dynamics on a car &#8212; neuraloperator 1.0.2 documentation</title> 
+<link rel="stylesheet" href="../../_static/tensorly_style.css">
+<link rel="apple-touch-icon" sizes="180x180" href="../../_static/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../_static/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../_static/favicon/favicon-16x16.png">
+<link rel="manifest" href="../../_static/favicon/site.webmanifest">
+<link rel="mask-icon" href="../../_static/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="../../_static/favicon/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/tensorly_style.css?v=a02e9698" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <script src="../../_static/documentation_options.js?v=1ed6394b"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+ <script src="../../_static/navbar_burger.js"></script>
+ <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+ 
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Data Generation" href="../data_gen/index.html" />
+    <link rel="prev" title="A simple Darcy-Flow spectrum analysis" href="plot_darcy_flow_spectrum.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  </head>
+<body  class="has-navbar-fixed-top">
+
+  <header>
+    <navbar>
+      <nav class="navbar top-navbar is-fixed-top has-shadow is-flex-wrap-wrap" role="navigation" aria-label="main top navigation">
+        <div class="navbar-brand">
+        
+
+          <a class="navbar-item" href="../../index.html">
+            <img src="../../_static/neuraloperator_logo.png" height="28">
+          </a>
+          <a class="navbar-item is-hidden-desktop" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon"><i class="fab fa-github"></i></span>
+          </a>
+
+          <a role="button" class="navbar-burger" data-target="top-nav-menu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+
+        </div>
+        
+        <div class="navbar-menu" id="top-nav-menu">
+        
+
+          <div class="navbar-start">
+            
+              <a class="navbar-item" href="../../install.html">
+              Install
+            </a>
+              <a class="navbar-item" href="../../theory_guide/index.html">
+              Theory Guide
+            </a>
+              <a class="navbar-item" href="../../user_guide/index.html">
+              User Guide
+            </a>
+              <a class="navbar-item" href="../../modules/api.html">
+              API
+            </a>
+              <a class="navbar-item" href="../index.html">
+              Examples
+            </a>
+              <a class="navbar-item" href="../../dev_guide/index.html">
+              Developer's Guide
+            </a>
+          </div>
+        
+          <div class="navbar-end">
+            <div class="navbar-item">
+            
+            <a class="button is-hidden-touch is-dark" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon-text">
+                <span class="icon is-large">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Github</span>
+              </span>
+            </a>
+
+            </div> 
+          </div> 
+        </div> 
+
+      </nav>
+      
+    </navbar>
+  </header>
+
+
+  <div id="column-container">
+  <div class="columns is-mobile is-centered">
+	
+  
+      <div class="column is-10-mobile is-one-third-tablet is-3-desktop is-hidden-mobile" id="sidebar">
+    
+    <aside class="sticky-nav sidebar-menu">
+<div class="sidebar-search">
+  <form class="field" id="searchbox" role="search" action="../../search.html" method="get">
+    <!-- <label class="label" id="searchlabel">Quick search</label> -->
+    <div class="field has-addons">
+      <div class="control is-expanded">
+        <input class="input" type="text" placeholder="Search the doc" name="q" aria-labelledby="searchlabel autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      </div>
+      <div class="control">
+        <input class="button is-info" type="submit" value="Go" />
+      </div>
+    </div>
+  </form>
+  <script>document.getElementById('searchbox').style.display = "block"</script>
+
+</div>
+      
+      <div class="sidebar-menu-toc">
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing NeuralOperator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory_guide/index.html">Theory Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/api.html">API reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../index.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#data-generation">Data Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#layers">Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#models">Models</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#training-and-meta-algorithms">Training and Meta-Algorithms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Development guide</a></li>
+</ul>
+ 
+      </div>
+    </aside>
+  </div>
+  
+
+  <div class="column main-column">
+
+    
+    <div class="main-section">
+
+      
+      
+      <div class="side-menu-toggle">
+        <button class="button" id="toggle-sidebar" onclick="toggle_sidebar()">
+          <span class="icon"><i class="fa fa-bars" aria-hidden="true"></i></span>
+          <span>menu</span> 
+        </button>
+      </div>
+      
+
+      <div class="container content main-content">
+        
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-auto-examples-data-plot-mini-car-cfd-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="visualizing-computational-fluid-dynamics-on-a-car">
+<span id="sphx-glr-auto-examples-data-plot-mini-car-cfd-py"></span><h1>Visualizing computational fluid dynamics on a car<a class="headerlink" href="#visualizing-computational-fluid-dynamics-on-a-car" title="Link to this heading"></a></h1>
+<p>In this example we visualize a mesh drawn from the <a class="reference internal" href="../../modules/api.html#car-cfd-dataset-api"><span class="std std-ref">CarCFDDataset</span></a>.</p>
+<section id="import-dependencies">
+<h2>Import dependencies<a class="headerlink" href="#import-dependencies" title="Link to this heading"></a></h2>
+<p>We first import our <cite>neuralop</cite> library and required dependencies.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.data.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_mini_car</span>
+
+<span class="n">font</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;size&#39;</span> <span class="p">:</span> <span class="mi">12</span><span class="p">}</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;font&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">font</span><span class="p">)</span>
+
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="understanding-the-data">
+<h2>Understanding the data<a class="headerlink" href="#understanding-the-data" title="Link to this heading"></a></h2>
+<p>The data in a <code class="docutils literal notranslate"><span class="pre">MeshDataModule</span></code> is structured as a dictionary of tensors and important scalar values encoding
+a 3-d triangle mesh over the surface of a car.
+Each sample includes the coordinates of all triangle vertices and the centroids of each triangle face.</p>
+<p>In this case, the creators used OpenFOAM to simulate the surface air pressure on car geometries in a wind tunnel.
+The 3-d Navier-Stokes equations were simulated for a variety of inlet velocities over each surface using the
+<strong>OpenFOAM</strong> computational solver to predict pressure at every vertex on the mesh.
+Each sample here also has an inlet velocity scalar and a pressure field that maps 1-to-1 with the vertices on the mesh.
+The <a class="reference internal" href="../../modules/api.html#car-cfd-dataset-api"><span class="std std-ref">full CarCFDDataset</span></a> is stored in triangle mesh files for downstream processing.
+For the sake of simplicity, we’ve packaged a few examples of the data after processing in tensor form to visualize here:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_list</span> <span class="o">=</span> <span class="n">load_mini_car</span><span class="p">()</span>
+<span class="n">sample</span> <span class="o">=</span> <span class="n">data_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sample</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>sample.keys()=dict_keys([&#39;vertices&#39;, &#39;vertex_normals&#39;, &#39;triangle_normals&#39;, &#39;centroids&#39;, &#39;triangle_areas&#39;, &#39;distance&#39;, &#39;closest_points&#39;, &#39;normalized_triangle_areas&#39;, &#39;press&#39;, &#39;query_points&#39;])
+</pre></div>
+</div>
+</section>
+<section id="visualizing-the-car">
+<h2>Visualizing the car<a class="headerlink" href="#visualizing-the-car" title="Link to this heading"></a></h2>
+<p>Let’s take a look at the vertices and pressure values.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+<span class="c1"># By default the data is normalized into the unit cube. To get a</span>
+<span class="c1"># better look at it, we scale the z-direction up.</span>
+<span class="n">scatter</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="s1">&#39;vertices&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">],</span><span class="n">sample</span><span class="p">[</span><span class="s1">&#39;vertices&#39;</span><span class="p">][:,</span><span class="mi">1</span><span class="p">],</span>
+                     <span class="n">sample</span><span class="p">[</span><span class="s1">&#39;vertices&#39;</span><span class="p">][:,</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">sample</span><span class="p">[</span><span class="s1">&#39;press&#39;</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s2">&quot;z&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">azim</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">roll</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vertical_axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Pressure over car mesh vertices&quot;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">scatter</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;normalized pressure&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+</pre></div>
+</div>
+<img src="../../_images/sphx_glr_plot_mini_car_cfd_001.png" srcset="../../_images/sphx_glr_plot_mini_car_cfd_001.png" alt="Pressure over car mesh vertices" class = "sphx-glr-single-img"/></section>
+<section id="query-points">
+<h2>Query points<a class="headerlink" href="#query-points" title="Link to this heading"></a></h2>
+<p>Each sample in the <code class="docutils literal notranslate"><span class="pre">CarCFDDataset</span></code> also includes a set of latent query points on which we learn a function
+to enable learning with an FNO in the middle of our geometry-informed models. Let’s visualize the queries
+on top of the car from before:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+<span class="n">scatter</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="s1">&#39;vertices&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">],</span><span class="n">sample</span><span class="p">[</span><span class="s1">&#39;vertices&#39;</span><span class="p">][:,</span><span class="mi">1</span><span class="p">],</span>
+                     <span class="n">sample</span><span class="p">[</span><span class="s1">&#39;vertices&#39;</span><span class="p">][:,</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Car surface&#39;</span><span class="p">)</span>
+<span class="n">queries</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="s1">&#39;query_points&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># unroll our cube tensor into a point cloud</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">queries</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">queries</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="n">queries</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Latent queries&#39;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s2">&quot;z&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">azim</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">roll</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vertical_axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Query points and vertices&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img src="../../_images/sphx_glr_plot_mini_car_cfd_002.png" srcset="../../_images/sphx_glr_plot_mini_car_cfd_002.png" alt="Query points and vertices" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Query points and vertices&#39;)
+</pre></div>
+</div>
+<p>Neighbor search between 3D point clouds
+In <a class="reference internal" href="../layers/plot_neighbor_search.html"><span class="doc">Visualizing neighbor search</span></a> we demonstrate our neighbor search
+on a simple 2-d point cloud. Let’s try that again with our points here:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.layers.neighbor_search</span><span class="w"> </span><span class="kn">import</span> <span class="n">native_neighbor_search</span>
+<span class="n">verts</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="s1">&#39;vertices&#39;</span><span class="p">]</span>
+<span class="c1">#query_point = queries[1000]</span>
+<span class="n">query_point</span> <span class="o">=</span> <span class="n">queries</span><span class="p">[</span><span class="mi">3300</span><span class="p">]</span> <span class="c1"># 1550 and 0.4 is really good</span>
+<span class="c1">#nbr_data = native_neighbor_search(data=verts, queries=query_point.unsqueeze(0), radius=0.15)</span>
+<span class="n">nbr_data</span> <span class="o">=</span> <span class="n">native_neighbor_search</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">verts</span><span class="p">,</span> <span class="n">queries</span><span class="o">=</span><span class="n">query_point</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">radius</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Let’s plot the new neighbors we just found on top of the car surface point cloud.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+<span class="n">neighbors</span> <span class="o">=</span> <span class="n">verts</span><span class="p">[</span><span class="n">nbr_data</span><span class="p">[</span><span class="s1">&#39;neighbors_index&#39;</span><span class="p">]]</span>
+
+<span class="c1"># Plotting just one query point vs. the car</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">verts</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">verts</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">verts</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">query_point</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">query_point</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">query_point</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Single query&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">azim</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span> <span class="n">roll</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vertical_axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s2">&quot;z&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">azim</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span> <span class="n">roll</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vertical_axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;One query point&quot;</span><span class="p">)</span>
+
+<span class="c1"># Plotting all query points and neighbors</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">verts</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">verts</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">verts</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Car surface&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">queries</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">queries</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">queries</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Latent queries&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">neighbors</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">neighbors</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">neighbors</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Neighbors on</span><span class="se">\n</span><span class="s2">car surface&quot;</span><span class="p">,)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s2">&quot;z&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">azim</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span> <span class="n">roll</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vertical_axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Neighbor points from car for one query point&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">ax1</span><span class="p">,</span><span class="n">ax2</span><span class="p">:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_zticks</span><span class="p">([])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+</pre></div>
+</div>
+<img src="../../_images/sphx_glr_plot_mini_car_cfd_003.png" srcset="../../_images/sphx_glr_plot_mini_car_cfd_003.png" alt="One query point, Neighbor points from car for one query point" class = "sphx-glr-single-img"/><p><strong>Connecting neighbors to query</strong></p>
+<p>First, let’s make a simple utiltiy to add arrows to our 3D plot:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.patches</span><span class="w"> </span><span class="kn">import</span> <span class="n">FancyArrowPatch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.mplot3d</span><span class="w"> </span><span class="kn">import</span> <span class="n">proj3d</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Arrow3D</span><span class="p">(</span><span class="n">FancyArrowPatch</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">zs</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_verts3d</span> <span class="o">=</span> <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">zs</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">do_3d_projection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">xs3d</span><span class="p">,</span> <span class="n">ys3d</span><span class="p">,</span> <span class="n">zs3d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verts3d</span>
+        <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">zs</span> <span class="o">=</span> <span class="n">proj3d</span><span class="o">.</span><span class="n">proj_transform</span><span class="p">(</span><span class="n">xs3d</span><span class="p">,</span> <span class="n">ys3d</span><span class="p">,</span> <span class="n">zs3d</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">M</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_positions</span><span class="p">((</span><span class="n">xs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">ys</span><span class="p">[</span><span class="mi">0</span><span class="p">]),(</span><span class="n">xs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">ys</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">zs</span><span class="p">)</span>
+
+<span class="c1"># Creating plots</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+<span class="n">neighbors</span> <span class="o">=</span> <span class="n">verts</span><span class="p">[</span><span class="n">nbr_data</span><span class="p">[</span><span class="s1">&#39;neighbors_index&#39;</span><span class="p">]]</span>
+
+<span class="c1"># Plotting just one query point vs. the car</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">verts</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">verts</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">verts</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">query_point</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">query_point</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">query_point</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Single query&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">neighbors</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">neighbors</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">neighbors</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Neighbors on</span><span class="se">\n</span><span class="s2">car surface&quot;</span><span class="p">,)</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">azim</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span> <span class="n">roll</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vertical_axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s2">&quot;z&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">azim</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span> <span class="n">roll</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vertical_axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;One query point&quot;</span><span class="p">)</span>
+
+
+<span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ax1</span><span class="p">]:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_zticks</span><span class="p">([])</span>
+
+<span class="c1"># Add arrows between neighbors and query</span>
+<span class="n">arrow_prop_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">mutation_scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">arrowstyle</span><span class="o">=</span><span class="s1">&#39;-|&gt;&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">shrinkA</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">shrinkB</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">nbr</span> <span class="ow">in</span> <span class="n">neighbors</span><span class="p">:</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">Arrow3D</span><span class="p">([</span><span class="n">query_point</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nbr</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+                <span class="p">[</span><span class="n">query_point</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">nbr</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+                <span class="p">[</span><span class="n">query_point</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">nbr</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="p">],</span> <span class="o">**</span><span class="n">arrow_prop_dict</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+</pre></div>
+</div>
+<img src="../../_images/sphx_glr_plot_mini_car_cfd_004.png" srcset="../../_images/sphx_glr_plot_mini_car_cfd_004.png" alt="One query point" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 4.314 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-data-plot-mini-car-cfd-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/d1e3f0356958f7433510304c5cfe45ce/plot_mini_car_cfd.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_mini_car_cfd.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/331b47cad8695c4ebabd931375b43235/plot_mini_car_cfd.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_mini_car_cfd.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/a4b624c5963d0ec1a4b1c9335b20bbf9/plot_mini_car_cfd.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_mini_car_cfd.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+      </div>
+
+      
+        <nav class="pagination" role="navigation" aria-label="pagination">
+    
+    <a class="button pagination-previous" href="plot_darcy_flow_spectrum.html" title="previous page" accesskey="p">
+        <span class="icon">
+            <i class="fa fa-arrow-circle-left"></i>
+        </span>
+        <span>A simple Darcy-Flow spectrum analysis</span>
+    </a>
+    
+    
+    <a class="button pagination-next" href="../data_gen/index.html" title="next page" accesskey="n">
+        <span>Data Generation </span>
+        <span class="icon">
+            <i class="fa fa-arrow-circle-right"></i>
+        </span>
+    </a>
+    
+</nav>
+
+      
+
+        <footer class="footer">
+    <div class="content has-text-centered">
+        <div class="block">
+          &copy; Copyright 2025, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+        </div>
+    </div>
+  </footer>
+
+    </div>
+
+  </div>  
+
+	
+    
+    <div class="column is-hidden-touch is-2-desktop is-one-fifth-widescreen" id="localtoc-column">
+
+    <aside class="sticky-nav localtoc"> 
+        <p class="menu-label"> 
+            <span class="icon-text">
+                <span class="icon"><i class="fas fa-duotone fa-list"></i></span>
+                <span> On this page </span>
+            </span>
+        </p>
+
+        <div class="menu menu-list localtoc-list">
+        <ul>
+<li><a class="reference internal" href="#">Visualizing computational fluid dynamics on a car</a><ul>
+<li><a class="reference internal" href="#import-dependencies">Import dependencies</a></li>
+<li><a class="reference internal" href="#understanding-the-data">Understanding the data</a></li>
+<li><a class="reference internal" href="#visualizing-the-car">Visualizing the car</a></li>
+<li><a class="reference internal" href="#query-points">Query points</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+    </aside>
+    </div>
+
+  
+
+  </div>  
+  </div> 
+
+  
+  <script>
+    function toggle_sidebar() {
+        var element = document.getElementById("sidebar");
+        var container = document.getElementById("column-container");
+        var localtoccolumn = document.getElementById("localtoc-column");
+        element.classList.toggle("hide-tablet");
+        element.classList.toggle("is-hidden-mobile");
+        container.classList.toggle("sidemenu-hidden");
+        localtoccolumn.classList.toggle("is-one-fifth-widescreen");
+        localtoccolumn.classList.toggle("is-2-desktop");
+        localtoccolumn.classList.toggle("is-3-desktop");
+    }
+  </script> 
+
+
+
+  </body>
+</html>

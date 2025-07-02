@@ -177,7 +177,7 @@
 <span id="neuralop-models-ref"></span><h2>Models<a class="headerlink" href="#models" title="Link to this heading"></a></h2>
 <p>In <a class="reference internal" href="#module-neuralop.models" title="neuralop.models"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.models</span></code></a>, we provide neural operator models you can directly use on your applications.</p>
 <section id="fno">
-<h3>FNO<a class="headerlink" href="#fno" title="Link to this heading"></a></h3>
+<span id="fno-api"></span><h3>FNO<a class="headerlink" href="#fno" title="Link to this heading"></a></h3>
 <p>We provide a general Fourier Neural Operator (TFNO) that supports most usecases.</p>
 <p>We have a generic interface that works for any dimension, which is inferred based on <cite>n_modes</cite>
 (a tuple with the number of modes to keep in the Fourier domain for each dimension.)</p>
@@ -202,12 +202,11 @@
 </tr>
 </tbody>
 </table>
-</section>
 <hr class="docutils" />
+</section>
 <section id="tensorized-fno-tfno">
-<h3>Tensorized FNO (TFNO)<a class="headerlink" href="#tensorized-fno-tfno" title="Link to this heading"></a></h3>
-<p>N-D version:
-.. _tfno_api:</p>
+<span id="tfno-api"></span><h3>Tensorized FNO (TFNO)<a class="headerlink" href="#tensorized-fno-tfno" title="Link to this heading"></a></h3>
+<p>N-D version:</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.models.TFNO.html#neuralop.models.TFNO" title="neuralop.models.TFNO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TFNO</span></code></a>(*args, **kwargs)</p></td>
@@ -229,10 +228,10 @@
 </tr>
 </tbody>
 </table>
-</section>
 <hr class="docutils" />
+</section>
 <section id="spherical-fourier-neural-operators-sfno">
-<h3>Spherical Fourier Neural Operators (SFNO)<a class="headerlink" href="#spherical-fourier-neural-operators-sfno" title="Link to this heading"></a></h3>
+<span id="sfno-api"></span><h3>Spherical Fourier Neural Operators (SFNO)<a class="headerlink" href="#spherical-fourier-neural-operators-sfno" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.models.SFNO.html#neuralop.models.SFNO" title="neuralop.models.SFNO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SFNO</span></code></a>(*args, **kwargs)</p></td>
@@ -240,10 +239,10 @@
 </tr>
 </tbody>
 </table>
-</section>
 <hr class="docutils" />
+</section>
 <section id="geometry-informed-neural-operators-gino">
-<h3>Geometry-Informed Neural Operators (GINO)<a class="headerlink" href="#geometry-informed-neural-operators-gino" title="Link to this heading"></a></h3>
+<span id="gino-api"></span><h3>Geometry-Informed Neural Operators (GINO)<a class="headerlink" href="#geometry-informed-neural-operators-gino" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.models.GINO.html#neuralop.models.GINO" title="neuralop.models.GINO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GINO</span></code></a>(*args, **kwargs)</p></td>
@@ -251,10 +250,10 @@
 </tr>
 </tbody>
 </table>
-</section>
 <hr class="docutils" />
+</section>
 <section id="local-neural-operators-localno">
-<h3>Local Neural Operators (LocalNO)<a class="headerlink" href="#local-neural-operators-localno" title="Link to this heading"></a></h3>
+<span id="local-no-api"></span><h3>Local Neural Operators (LocalNO)<a class="headerlink" href="#local-neural-operators-localno" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.models.LocalNO.html#neuralop.models.LocalNO" title="neuralop.models.LocalNO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LocalNO</span></code></a>(*args, **kwargs)</p></td>
@@ -262,10 +261,10 @@
 </tr>
 </tbody>
 </table>
-</section>
 <hr class="docutils" />
+</section>
 <section id="u-shaped-neural-operators-u-no">
-<h3>U-shaped Neural Operators (U-NO)<a class="headerlink" href="#u-shaped-neural-operators-u-no" title="Link to this heading"></a></h3>
+<span id="uno-api"></span><h3>U-shaped Neural Operators (U-NO)<a class="headerlink" href="#u-shaped-neural-operators-u-no" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.models.UNO.html#neuralop.models.UNO" title="neuralop.models.UNO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UNO</span></code></a>(in_channels, out_channels, hidden_channels)</p></td>
@@ -273,12 +272,12 @@
 </tr>
 </tbody>
 </table>
-</section>
-</section>
 <hr class="docutils" />
+</section>
+</section>
 <section id="module-neuralop.layers">
-<span id="layers"></span><h2>Layers<a class="headerlink" href="#module-neuralop.layers" title="Link to this heading"></a></h2>
-<p id="neuralop-layers-ref">In addition to the full architectures, we also provide
+<span id="layers"></span><span id="neuralop-layers-ref"></span><h2>Layers<a class="headerlink" href="#module-neuralop.layers" title="Link to this heading"></a></h2>
+<p>In addition to the full architectures, we also provide
 in <a class="reference internal" href="#module-neuralop.layers" title="neuralop.layers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers</span></code></a> building blocks,
 in the form of PyTorch layers, that you can use to build your own models:</p>
 <section id="module-neuralop.layers.spectral_convolution">
@@ -327,16 +326,20 @@ in the form of PyTorch layers, that you can use to build your own models:</p>
 </table>
 <hr class="docutils" />
 <p>We also provide additional layers that implement standard deep learning architectures as neural operators.</p>
-<p><strong>Local Integral/Differential Convolutions</strong></p>
-<span class="target" id="module-neuralop.layers.differential_conv"><span id="diff-conv-api"></span></span><table class="autosummary longtable docutils align-default">
+</section>
+<section id="module-neuralop.layers.differential_conv">
+<span id="local-integral-differential-convolutions"></span><span id="diff-conv-api"></span><h3>Local Integral/Differential Convolutions<a class="headerlink" href="#module-neuralop.layers.differential_conv" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.layers.differential_conv.FiniteDifferenceConvolution.html#neuralop.layers.differential_conv.FiniteDifferenceConvolution" title="neuralop.layers.differential_conv.FiniteDifferenceConvolution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FiniteDifferenceConvolution</span></code></a>(in_channels, ...)</p></td>
 <td><p>Finite Difference Convolution Layer introduced in <a class="reference internal" href="generated/neuralop.layers.differential_conv.FiniteDifferenceConvolution.html#r2ffab17b35f8-1" id="id7"><span>[R2ffab17b35f8-1]</span></a>. &quot;Neural Operators with Localized Integral and Differential Kernels&quot; (ICML 2024)     <a class="reference external" href="https://arxiv.org/abs/2402.16845">https://arxiv.org/abs/2402.16845</a> .</p></td>
 </tr>
 </tbody>
 </table>
-<p><strong>Discrete-Continuous (DISCO) Convolutions</strong></p>
-<span class="target" id="module-neuralop.layers.discrete_continuous_convolution"><span id="disco-conv-api"></span></span><table class="autosummary longtable docutils align-default">
+</section>
+<section id="module-neuralop.layers.discrete_continuous_convolution">
+<span id="discrete-continuous-disco-convolutions"></span><span id="disco-conv-api"></span><h3>Discrete-Continuous (DISCO) Convolutions<a class="headerlink" href="#module-neuralop.layers.discrete_continuous_convolution" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.layers.discrete_continuous_convolution.DiscreteContinuousConv2d.html#neuralop.layers.discrete_continuous_convolution.DiscreteContinuousConv2d" title="neuralop.layers.discrete_continuous_convolution.DiscreteContinuousConv2d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DiscreteContinuousConv2d</span></code></a>(in_channels, ...[, ...])</p></td>
 <td><p>Discrete-continuous convolutions (DISCO) on arbitrary 2d grids  as implemented in <a class="reference internal" href="generated/neuralop.layers.discrete_continuous_convolution.DiscreteContinuousConv2d.html#r263f5710516c-1" id="id8"><span>[R263f5710516c-1]</span></a>.</p></td>
@@ -352,16 +355,20 @@ in the form of PyTorch layers, that you can use to build your own models:</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Local NO Blocks</strong></p>
-<span class="target" id="module-neuralop.layers.local_no_block"></span><table class="autosummary longtable docutils align-default">
+</section>
+<section id="module-neuralop.layers.local_no_block">
+<span id="local-no-blocks"></span><h3>Local NO Blocks<a class="headerlink" href="#module-neuralop.layers.local_no_block" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.layers.local_no_block.LocalNOBlocks.html#neuralop.layers.local_no_block.LocalNOBlocks" title="neuralop.layers.local_no_block.LocalNOBlocks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LocalNOBlocks</span></code></a>(in_channels, out_channels, ...)</p></td>
 <td><p>LocalNOBlocks implements a sequence of Fourier layers, the operations of which  are first described in <a class="reference internal" href="generated/neuralop.layers.local_no_block.LocalNOBlocks.html#r367398f5802a-1" id="id12"><span>[R367398f5802a-1]</span></a>.</p></td>
 </tr>
 </tbody>
 </table>
-<p><strong>Codomain Attention (Transformer) Blocks</strong></p>
-<span class="target" id="module-neuralop.layers.coda_layer"></span><table class="autosummary longtable docutils align-default">
+</section>
+<section id="module-neuralop.layers.coda_layer">
+<span id="codomain-attention-transformer-blocks"></span><h3>Codomain Attention (Transformer) Blocks<a class="headerlink" href="#module-neuralop.layers.coda_layer" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.layers.coda_layer.CODALayer.html#neuralop.layers.coda_layer.CODALayer" title="neuralop.layers.coda_layer.CODALayer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CODALayer</span></code></a>(n_modes[, n_heads, ...])</p></td>
 <td><p>Co-domain Attention Blocks (CODALayer) implement the transformer architecture in the operator learning framework, as described in <span id="id13">[Re703e87ec801-1]</span>.</p></td>
@@ -384,8 +391,10 @@ in the form of PyTorch layers, that you can use to build your own models:</p>
 </tr>
 </tbody>
 </table>
+</section>
 <hr class="docutils" />
-<p><strong>Neighbor search</strong></p>
+<section id="neighbor-search">
+<h3>Neighbor search<a class="headerlink" href="#neighbor-search" title="Link to this heading"></a></h3>
 <p>Find neighborhoods on arbitrary coordinate meshes:</p>
 <span class="target" id="module-neuralop.layers.neighbor_search"></span><table class="autosummary longtable docutils align-default">
 <tbody>
@@ -488,6 +497,8 @@ training a machine learning model to minimize a loss function on a dataset:</p>
 <section id="data">
 <h2>Data<a class="headerlink" href="#data" title="Link to this heading"></a></h2>
 <p>In <cite>neuralop.data</cite>, we provide APIs for standardizing PDE datasets (<cite>.datasets</cite>) and transforming raw data into model inputs (<cite>.transforms</cite>).</p>
+<section id="darcy-flow">
+<span id="darcy-flow-api"></span><h3>Darcy-Flow<a class="headerlink" href="#darcy-flow" title="Link to this heading"></a></h3>
 <p>We also ship a small dataset for testing:</p>
 <span class="target" id="module-neuralop.data.datasets"></span><table class="autosummary longtable docutils align-default">
 <tbody>
@@ -504,27 +515,37 @@ training a machine learning model to minimize a loss function on a dataset:</p>
 </tr>
 </tbody>
 </table>
-<span class="target" id="module-neuralop.data.datasets.navier_stokes"></span><table class="autosummary longtable docutils align-default">
+</section>
+<section id="module-neuralop.data.datasets.navier_stokes">
+<span id="navier-stokes"></span><span id="navier-stokes-api"></span><h3>Navier-Stokes<a class="headerlink" href="#module-neuralop.data.datasets.navier_stokes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.data.datasets.navier_stokes.NavierStokesDataset.html#neuralop.data.datasets.navier_stokes.NavierStokesDataset" title="neuralop.data.datasets.navier_stokes.NavierStokesDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NavierStokesDataset</span></code></a>(root_dir, n_train, ...)</p></td>
 <td><p>NavierStokesDataset stores data generated according to the 2d incompressible Navier-Stokes equations.</p></td>
 </tr>
 </tbody>
 </table>
-<span class="target" id="module-neuralop.data.datasets.car_cfd_dataset"></span><table class="autosummary longtable docutils align-default">
+</section>
+<section id="module-neuralop.data.datasets.car_cfd_dataset">
+<span id="airflow-over-car-surfaces"></span><span id="car-cfd-dataset-api"></span><h3>Airflow over Car Surfaces<a class="headerlink" href="#module-neuralop.data.datasets.car_cfd_dataset" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.data.datasets.car_cfd_dataset.CarCFDDataset.html#neuralop.data.datasets.car_cfd_dataset.CarCFDDataset" title="neuralop.data.datasets.car_cfd_dataset.CarCFDDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CarCFDDataset</span></code></a>(root_dir[, n_train, n_test, ...])</p></td>
 <td><p>CarCFDDataset is a processed version of the dataset introduced in <a class="reference internal" href="generated/neuralop.data.datasets.car_cfd_dataset.CarCFDDataset.html#rfaac2f8b9be8-1" id="id19"><span>[Rfaac2f8b9be8-1]</span></a>, which encodes a triangular mesh over the surface of a 3D model car and provides the air pressure at each centroid and vertex of the mesh when the car is placed in a simulated wind tunnel with a recorded inlet velocity.</p></td>
 </tr>
 </tbody>
 </table>
-<span class="target" id="module-neuralop.data.datasets.tensor_dataset"></span><table class="autosummary longtable docutils align-default">
+</section>
+<section id="module-neuralop.data.datasets.tensor_dataset">
+<span id="general-tensor-dataset"></span><h3>General Tensor Dataset<a class="headerlink" href="#module-neuralop.data.datasets.tensor_dataset" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.data.datasets.tensor_dataset.TensorDataset.html#neuralop.data.datasets.tensor_dataset.TensorDataset" title="neuralop.data.datasets.tensor_dataset.TensorDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TensorDataset</span></code></a>(x, y[, transform_x, transform_y])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
 </table>
+</section>
 <hr class="docutils" />
 <section id="dataprocessors">
 <h3>DataProcessors<a class="headerlink" href="#dataprocessors" title="Link to this heading"></a></h3>
@@ -617,6 +638,15 @@ loss functions:</p>
 <li><a class="reference internal" href="#module-neuralop.layers.gno_block">Graph convolutions and kernel integration</a><ul>
 </ul>
 </li>
+<li><a class="reference internal" href="#module-neuralop.layers.differential_conv">Local Integral/Differential Convolutions</a></li>
+<li><a class="reference internal" href="#module-neuralop.layers.discrete_continuous_convolution">Discrete-Continuous (DISCO) Convolutions</a></li>
+<li><a class="reference internal" href="#module-neuralop.layers.local_no_block">Local NO Blocks</a></li>
+<li><a class="reference internal" href="#module-neuralop.layers.coda_layer">Codomain Attention (Transformer) Blocks</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#neighbor-search">Neighbor search</a><ul>
+</ul>
+</li>
 <li><a class="reference internal" href="#other-resolution-invariant-operations">Other resolution-invariant operations</a><ul>
 </ul>
 </li>
@@ -627,6 +657,12 @@ loss functions:</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#data">Data</a><ul>
+<li><a class="reference internal" href="#darcy-flow">Darcy-Flow</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-neuralop.data.datasets.navier_stokes">Navier-Stokes</a></li>
+<li><a class="reference internal" href="#module-neuralop.data.datasets.car_cfd_dataset">Airflow over Car Surfaces</a></li>
+<li><a class="reference internal" href="#module-neuralop.data.datasets.tensor_dataset">General Tensor Dataset</a></li>
 <li><a class="reference internal" href="#dataprocessors">DataProcessors</a></li>
 </ul>
 </li>
