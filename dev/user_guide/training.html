@@ -186,6 +186,12 @@ so all you need to do on a multi-GPU system is the following:</p>
 <p>You may need to adjust the batch size, model parallel size and world size in
 accordance with your specific use case. See the <a class="reference external" href="https://pytorch.org/docs/stable/elastic/run.html">torchrun documentation</a> for more details.</p>
 </section>
+<section id="cpu-offloading">
+<h2>CPU Offloading<a class="headerlink" href="#cpu-offloading" title="Link to this heading"></a></h2>
+<p>For training with high-resolution inputs that exceed GPU memory limits, NeuralOperator supports CPU offloading of activations. This technique allows training larger models or higher-resolution problems by temporarily storing intermediate computations on CPU memory.</p>
+<div class="toctree-wrapper compound">
+</div>
+</section>
 </section>
 
 
@@ -228,6 +234,7 @@ accordance with your specific use case. See the <a class="reference external" hr
 <li><a class="reference internal" href="#">Training neural operator models</a><ul>
 <li><a class="reference internal" href="#the-trainer-class">The Trainer class</a></li>
 <li><a class="reference internal" href="#distributed-training">Distributed Training</a></li>
+<li><a class="reference internal" href="#cpu-offloading">CPU Offloading</a></li>
 </ul>
 </li>
 </ul>
