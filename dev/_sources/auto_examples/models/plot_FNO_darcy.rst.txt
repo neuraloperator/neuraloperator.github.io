@@ -251,13 +251,13 @@ Training the model
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f96a2c53390>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f687742b390>
 
     ### LOSSES ###
 
-     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7f96a2c534d0>
+     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7f687742b4d0>
 
-     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7f96a2c534d0>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f96a2c539d0>}
+     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7f687742b4d0>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f687742b9d0>}
 
 
 
@@ -320,22 +320,22 @@ Then train the model on our small Darcy-Flow dataset:
     /home/runner/work/neuraloperator/neuraloperator/neuralop/layers/spectral_convolution.py:486: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
       out_fft[slices_x] = self._contract(x[slices_x], weight, separable=self.separable)
     Raw outputs of shape torch.Size([32, 1, 16, 16])
-    [0] time=2.61, avg_loss=0.5903, train_err=18.4462
+    [0] time=2.91, avg_loss=0.5903, train_err=18.4462
     Eval: 16_h1=0.3639, 16_l2=0.2512, 32_h1=0.5425, 32_l2=0.2628
-    [3] time=2.63, avg_loss=0.2077, train_err=6.4899
+    [3] time=2.92, avg_loss=0.2077, train_err=6.4899
     Eval: 16_h1=0.2191, 16_l2=0.1505, 32_h1=0.4976, 32_l2=0.1840
-    [6] time=2.60, avg_loss=0.1768, train_err=5.5239
+    [6] time=2.91, avg_loss=0.1768, train_err=5.5239
     Eval: 16_h1=0.2902, 16_l2=0.2180, 32_h1=0.5098, 32_l2=0.2476
-    [9] time=2.67, avg_loss=0.1400, train_err=4.3743
+    [9] time=2.92, avg_loss=0.1400, train_err=4.3743
     Eval: 16_h1=0.2089, 16_l2=0.1299, 32_h1=0.5055, 32_l2=0.1746
-    [12] time=2.61, avg_loss=0.1351, train_err=4.2216
+    [12] time=2.93, avg_loss=0.1351, train_err=4.2216
     Eval: 16_h1=0.2002, 16_l2=0.1227, 32_h1=0.4881, 32_l2=0.1637
-    [15] time=2.58, avg_loss=0.1198, train_err=3.7440
+    [15] time=2.92, avg_loss=0.1198, train_err=3.7440
     Eval: 16_h1=0.2038, 16_l2=0.1253, 32_h1=0.5171, 32_l2=0.1739
-    [18] time=2.58, avg_loss=0.0928, train_err=2.8996
+    [18] time=2.96, avg_loss=0.0928, train_err=2.8996
     Eval: 16_h1=0.1966, 16_l2=0.1208, 32_h1=0.5073, 32_l2=0.1709
 
-    {'train_err': 2.8836447950452566, 'avg_loss': 0.09227663344144821, 'avg_lasso_loss': None, 'epoch_train_time': 2.584190018999948}
+    {'train_err': 2.8836447950452566, 'avg_loss': 0.09227663344144821, 'avg_lasso_loss': None, 'epoch_train_time': 2.9597897329999796}
 
 
 
@@ -515,7 +515,7 @@ are other ways to scale the outputs of the FNO to train a true super-resolution 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 55.100 seconds)
+   **Total running time of the script:** (1 minutes 1.759 seconds)
 
 
 .. _sphx_glr_download_auto_examples_models_plot_FNO_darcy.py:
