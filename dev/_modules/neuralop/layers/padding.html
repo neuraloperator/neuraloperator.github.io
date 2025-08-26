@@ -121,7 +121,7 @@
       <div class="container content main-content">
         
   <h1>Source code for neuralop.layers.padding</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Literal</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">F</span>
@@ -138,8 +138,6 @@
 <span class="sd">    domain_padding : ``float`` or ``list``</span>
 <span class="sd">        typically, between zero and one, percentage of padding to use</span>
 <span class="sd">        if a list, make sure if matches the dim of (d1, ..., dN)</span>
-<span class="sd">    padding_mode : ``Literal [&#39;symmetric&#39;, &#39;one-sided&#39;]``, optional</span>
-<span class="sd">        whether to pad on both sides, by default ``&#39;symmetric&#39;``</span>
 <span class="sd">    resolution_scaling_factor : ``int`` ; default is 1</span>
 
 <span class="sd">    Notes</span>
@@ -151,12 +149,10 @@
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">domain_padding</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">list</span><span class="p">],</span>
-        <span class="n">padding_mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;symmetric&#39;</span><span class="p">,</span> <span class="s1">&#39;one-sided&#39;</span><span class="p">]</span><span class="o">=</span><span class="s2">&quot;symmetric&quot;</span><span class="p">,</span>
         <span class="n">resolution_scaling_factor</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">domain_padding</span> <span class="o">=</span> <span class="n">domain_padding</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">padding_mode</span> <span class="o">=</span> <span class="n">padding_mode</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">resolution_scaling_factor</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">resolution_scaling_factor</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">resolution_scaling_factor</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="n">resolution_scaling_factor</span>
@@ -212,7 +208,7 @@
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;Padding inputs of resolution=</span><span class="si">{</span><span class="n">resolution</span><span class="si">}</span><span class="s2"> with &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;padding=</span><span class="si">{</span><span class="n">padding</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">padding_mode</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;padding=</span><span class="si">{</span><span class="n">padding</span><span class="si">}</span><span class="s2">, symmetric&quot;</span>
                 <span class="p">)</span>
 
             <span class="n">output_pad</span> <span class="o">=</span> <span class="n">padding</span>
@@ -225,42 +221,25 @@
             <span class="c1"># (so we must reverse the padding list)</span>
             <span class="n">padding</span> <span class="o">=</span> <span class="n">padding</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-            
-
             <span class="c1"># the F.pad(x, padding) funtion pads the tensor &#39;x&#39; in reverse order</span>
             <span class="c1"># of the &quot;padding&quot; list i.e. the last axis of tensor &#39;x&#39; will be</span>
             <span class="c1"># padded by the amount mention at the first position of the</span>
             <span class="c1"># &#39;padding&#39; vector. The details about F.pad can be found here:</span>
             <span class="c1"># https://pytorch.org/docs/stable/generated/torch.nn.functional.pad.html</span>
 
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">padding_mode</span> <span class="o">==</span> <span class="s2">&quot;symmetric&quot;</span><span class="p">:</span>
-                <span class="c1"># Pad both sides</span>
-                <span class="n">unpad_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">output_pad</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                        <span class="n">padding_end</span> <span class="o">=</span> <span class="kc">None</span>
-                        <span class="n">padding_start</span> <span class="o">=</span> <span class="kc">None</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">padding_end</span> <span class="o">=</span> <span class="n">p</span>
-                        <span class="n">padding_start</span> <span class="o">=</span> <span class="o">-</span><span class="n">p</span>
-                    <span class="n">unpad_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="n">padding_end</span><span class="p">,</span> <span class="n">padding_start</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
-                <span class="n">unpad_indices</span> <span class="o">=</span> <span class="p">(</span><span class="bp">Ellipsis</span><span class="p">,)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">unpad_list</span><span class="p">)</span>
+            <span class="c1"># Pad both sides (symmetric mode)</span>
+            <span class="n">unpad_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">output_pad</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">padding_end</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="n">padding_start</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">padding_end</span> <span class="o">=</span> <span class="n">p</span>
+                    <span class="n">padding_start</span> <span class="o">=</span> <span class="o">-</span><span class="n">p</span>
+                <span class="n">unpad_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="n">padding_end</span><span class="p">,</span> <span class="n">padding_start</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+            <span class="n">unpad_indices</span> <span class="o">=</span> <span class="p">(</span><span class="bp">Ellipsis</span><span class="p">,)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">unpad_list</span><span class="p">)</span>
 
-                <span class="n">padding</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">padding</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">p</span><span class="p">)]</span>
-
-            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">padding_mode</span> <span class="o">==</span> <span class="s2">&quot;one-sided&quot;</span><span class="p">:</span>
-                <span class="c1"># One-side padding</span>
-                <span class="n">unpad_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">output_pad</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                        <span class="n">padding_start</span> <span class="o">=</span> <span class="kc">None</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">padding_start</span> <span class="o">=</span> <span class="o">-</span><span class="n">p</span>
-                    <span class="n">unpad_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">padding_start</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
-                <span class="n">unpad_indices</span> <span class="o">=</span> <span class="p">(</span><span class="bp">Ellipsis</span><span class="p">,)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">unpad_list</span><span class="p">)</span>
-                <span class="n">padding</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">padding</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">p</span><span class="p">)]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Got padding_mode=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">padding_mode</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">padding</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">padding</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">p</span><span class="p">)]</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">_padding</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">resolution</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">padding</span>
 

@@ -213,8 +213,7 @@
 <span class="sd">        Optionaly additional parameters to pass to the tensor decomposition</span>
 <span class="sd">    domain_padding : None or float, optional</span>
 <span class="sd">        If not None, percentage of padding to use, by default None</span>
-<span class="sd">    domain_padding_mode : {&#39;symmetric&#39;, &#39;one-sided&#39;}, optional</span>
-<span class="sd">        How to perform domain padding, by default &#39;one-sided&#39;</span>
+
 <span class="sd">    fft_norm : str, optional</span>
 <span class="sd">        by default &#39;forward&#39;</span>
 
@@ -257,7 +256,6 @@
         <span class="n">implementation</span><span class="o">=</span><span class="s2">&quot;factorized&quot;</span><span class="p">,</span>
         <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span>
         <span class="n">domain_padding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">domain_padding_mode</span><span class="o">=</span><span class="s2">&quot;one-sided&quot;</span><span class="p">,</span>
         <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
@@ -361,12 +359,11 @@
         <span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">domain_padding</span> <span class="o">=</span> <span class="n">DomainPadding</span><span class="p">(</span>
                 <span class="n">domain_padding</span><span class="o">=</span><span class="n">domain_padding</span><span class="p">,</span>
-                <span class="n">padding_mode</span><span class="o">=</span><span class="n">domain_padding_mode</span><span class="p">,</span>
                 <span class="n">resolution_scaling_factor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">end_to_end_scaling_factor</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">domain_padding</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">domain_padding_mode</span> <span class="o">=</span> <span class="n">domain_padding_mode</span>
+
 
         <span class="bp">self</span><span class="o">.</span><span class="n">lifting</span> <span class="o">=</span> <span class="n">ChannelMLP</span><span class="p">(</span>
             <span class="n">in_channels</span><span class="o">=</span><span class="n">in_channels</span><span class="p">,</span>

@@ -218,8 +218,7 @@
 <span class="sd">        To vary the percentage of padding used along each input dimension,</span>
 <span class="sd">        pass in a list of percentages e.g. [p1, p2, ..., pN] such that</span>
 <span class="sd">        p1 corresponds to the percentage of padding along dim 1, etc.</span>
-<span class="sd">    domain_padding_mode : Literal [&#39;symmetric&#39;, &#39;one-sided&#39;], optional</span>
-<span class="sd">        How to perform domain padding, by default &#39;symmetric&#39;</span>
+
 <span class="sd">    fno_block_precision : str {&#39;full&#39;, &#39;half&#39;, &#39;mixed&#39;}, optional</span>
 <span class="sd">        precision mode in which to perform spectral convolution, by default &quot;full&quot;</span>
 <span class="sd">    stabilizer : str {&#39;tanh&#39;} | None, optional</span>
@@ -306,7 +305,6 @@
         <span class="n">fno_skip</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="s1">&#39;identity&#39;</span><span class="p">,</span> <span class="s1">&#39;soft-gating&#39;</span><span class="p">]</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
         <span class="n">resolution_scaling_factor</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Number</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Number</span><span class="p">]]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">domain_padding</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Number</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Number</span><span class="p">]]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">domain_padding_mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;symmetric&#39;</span><span class="p">,</span> <span class="s1">&#39;one-sided&#39;</span><span class="p">]</span><span class="o">=</span><span class="s2">&quot;symmetric&quot;</span><span class="p">,</span>
         <span class="n">fno_block_precision</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">,</span>
         <span class="n">stabilizer</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">max_n_modes</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -379,13 +377,12 @@
         <span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">domain_padding</span> <span class="o">=</span> <span class="n">DomainPadding</span><span class="p">(</span>
                 <span class="n">domain_padding</span><span class="o">=</span><span class="n">domain_padding</span><span class="p">,</span>
-                <span class="n">padding_mode</span><span class="o">=</span><span class="n">domain_padding_mode</span><span class="p">,</span>
                 <span class="n">resolution_scaling_factor</span><span class="o">=</span><span class="n">resolution_scaling_factor</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">domain_padding</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">domain_padding_mode</span> <span class="o">=</span> <span class="n">domain_padding_mode</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">complex_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">complex_data</span>
 
         <span class="k">if</span> <span class="n">resolution_scaling_factor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -569,7 +566,6 @@
         <span class="n">implementation</span><span class="o">=</span><span class="s2">&quot;factorized&quot;</span><span class="p">,</span>
         <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">domain_padding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">domain_padding_mode</span><span class="o">=</span><span class="s2">&quot;symmetric&quot;</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
@@ -598,7 +594,6 @@
             <span class="n">implementation</span><span class="o">=</span><span class="n">implementation</span><span class="p">,</span>
             <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="n">decomposition_kwargs</span><span class="p">,</span>
             <span class="n">domain_padding</span><span class="o">=</span><span class="n">domain_padding</span><span class="p">,</span>
-            <span class="n">domain_padding_mode</span><span class="o">=</span><span class="n">domain_padding_mode</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_modes_height</span> <span class="o">=</span> <span class="n">n_modes_height</span></div>
 
@@ -647,7 +642,6 @@
         <span class="n">implementation</span><span class="o">=</span><span class="s2">&quot;factorized&quot;</span><span class="p">,</span>
         <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">domain_padding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">domain_padding_mode</span><span class="o">=</span><span class="s2">&quot;symmetric&quot;</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
 
@@ -677,7 +671,6 @@
             <span class="n">implementation</span><span class="o">=</span><span class="n">implementation</span><span class="p">,</span>
             <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="n">decomposition_kwargs</span><span class="p">,</span>
             <span class="n">domain_padding</span><span class="o">=</span><span class="n">domain_padding</span><span class="p">,</span>
-            <span class="n">domain_padding_mode</span><span class="o">=</span><span class="n">domain_padding_mode</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_modes_height</span> <span class="o">=</span> <span class="n">n_modes_height</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_modes_width</span> <span class="o">=</span> <span class="n">n_modes_width</span></div>
@@ -730,7 +723,6 @@
         <span class="n">implementation</span><span class="o">=</span><span class="s2">&quot;factorized&quot;</span><span class="p">,</span>
         <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">domain_padding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">domain_padding_mode</span><span class="o">=</span><span class="s2">&quot;symmetric&quot;</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
@@ -759,7 +751,6 @@
             <span class="n">implementation</span><span class="o">=</span><span class="n">implementation</span><span class="p">,</span>
             <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="n">decomposition_kwargs</span><span class="p">,</span>
             <span class="n">domain_padding</span><span class="o">=</span><span class="n">domain_padding</span><span class="p">,</span>
-            <span class="n">domain_padding_mode</span><span class="o">=</span><span class="n">domain_padding_mode</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_modes_height</span> <span class="o">=</span> <span class="n">n_modes_height</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_modes_width</span> <span class="o">=</span> <span class="n">n_modes_width</span>

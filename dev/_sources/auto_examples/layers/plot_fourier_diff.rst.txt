@@ -95,7 +95,7 @@ We use the Fourier differentiation function to differentiate the signal
 
  .. code-block:: none
 
-    /home/runner/work/neuraloperator/neuraloperator/neuralop/losses/fourier_diff.py:76: UserWarning: Consider using Fourier continuation if the input is not periodic (use_FC=True).
+    /home/runner/work/neuraloperator/neuraloperator/neuralop/losses/fourier_diff.py:73: UserWarning: Consider using Fourier continuation if the input is not periodic (use_FC=True).
       warnings.warn("Consider using Fourier continuation if the input is not periodic (use_FC=True).", category=UserWarning)
 
 
@@ -199,8 +199,8 @@ We use the Fourier differentiation function with Fourier continuation to differe
 
 .. code-block:: Python
 
-    dfdx = fourier_derivative_1d(f, order=1, L=L, use_FC='Legendre', FC_d=4, FC_n_additional_pts=30, FC_one_sided=False)
-    df2dx2 = fourier_derivative_1d(f, order=2, L=L, use_FC='Legendre', FC_d=4, FC_n_additional_pts=30, FC_one_sided=False)
+    dfdx = fourier_derivative_1d(f, order=1, L=L, use_FC='Legendre', FC_d=4, FC_n_additional_pts=30)
+    df2dx2 = fourier_derivative_1d(f, order=2, L=L, use_FC='Legendre', FC_d=4, FC_n_additional_pts=30)
 
      
 
@@ -271,7 +271,7 @@ Plot the results for exp(-0.8x)+sin(x)
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.303 seconds)
+   **Total running time of the script:** (0 minutes 0.293 seconds)
 
 
 .. _sphx_glr_download_auto_examples_layers_plot_fourier_diff.py:
