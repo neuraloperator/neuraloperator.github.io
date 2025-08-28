@@ -430,13 +430,13 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f64ddd15a90&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f7405c9da90&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f64ddc42e40&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f7405cb6e40&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f64ddc42e40&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f64e528ad50&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f7405cb6e40&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f740d2a2d50&gt;}
 </pre></div>
 </div>
 <p>Create the trainer</p>
@@ -469,22 +469,22 @@ Testing on [50, 50] samples         on resolutions [16, 32].
 /home/runner/work/neuraloperator/neuraloperator/neuralop/layers/spectral_convolution.py:486: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
   out_fft[slices_x] = self._contract(x[slices_x], weight, separable=self.separable)
 Raw outputs of shape torch.Size([32, 1, 16, 16])
-[0] time=8.87, avg_loss=0.6509, train_err=20.3412
+[0] time=8.53, avg_loss=0.6509, train_err=20.3412
 Eval: 16_h1=0.5331, 16_l2=0.3534, 32_h1=0.8102, 32_l2=0.4909
-[3] time=8.69, avg_loss=0.2498, train_err=7.8064
+[3] time=8.56, avg_loss=0.2498, train_err=7.8064
 Eval: 16_h1=0.3147, 16_l2=0.2192, 32_h1=0.6162, 32_l2=0.3679
-[6] time=8.82, avg_loss=0.1855, train_err=5.7981
+[6] time=8.49, avg_loss=0.1855, train_err=5.7981
 Eval: 16_h1=0.2242, 16_l2=0.1422, 32_h1=0.5519, 32_l2=0.3392
-[9] time=8.71, avg_loss=0.1840, train_err=5.7497
+[9] time=8.48, avg_loss=0.1840, train_err=5.7497
 Eval: 16_h1=0.2167, 16_l2=0.1312, 32_h1=0.5370, 32_l2=0.3218
-[12] time=8.77, avg_loss=0.1793, train_err=5.6036
+[12] time=8.43, avg_loss=0.1793, train_err=5.6036
 Eval: 16_h1=0.3067, 16_l2=0.2158, 32_h1=0.5863, 32_l2=0.3804
-[15] time=8.77, avg_loss=0.1551, train_err=4.8478
+[15] time=8.46, avg_loss=0.1551, train_err=4.8478
 Eval: 16_h1=0.2483, 16_l2=0.1500, 32_h1=0.4809, 32_l2=0.2610
-[18] time=8.75, avg_loss=0.1423, train_err=4.4474
+[18] time=8.46, avg_loss=0.1423, train_err=4.4474
 Eval: 16_h1=0.2399, 16_l2=0.1432, 32_h1=0.4991, 32_l2=0.2832
 
-{&#39;train_err&#39;: 4.694147303700447, &#39;avg_loss&#39;: 0.1502127137184143, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 8.719119610000007}
+{&#39;train_err&#39;: 4.694147303700447, &#39;avg_loss&#39;: 0.1502127137184143, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 8.439063274999853}
 </pre></div>
 </div>
 <p>Plot the prediction, and compare with the ground-truth
@@ -544,7 +544,7 @@ ii) can be trained quickly on CPU</p>
   out_fft[slices_x] = self._contract(x[slices_x], weight, separable=self.separable)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (3 minutes 2.675 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 55.930 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-models-plot-uno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/fee630be9801a5d2d76c0b9e3091063c/plot_UNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_UNO_darcy.ipynb</span></code></a></p>
