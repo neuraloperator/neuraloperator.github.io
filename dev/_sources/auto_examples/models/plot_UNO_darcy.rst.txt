@@ -348,13 +348,13 @@ Creating the losses
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f7405c9da90>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7ff0afec0910>
 
     ### LOSSES ###
 
-     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7f7405cb6e40>
+     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7ff0affee900>
 
-     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7f7405cb6e40>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f740d2a2d50>}
+     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7ff0affee900>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7ff0b403aad0>}
 
 
 
@@ -419,22 +419,22 @@ Actually train the model on our small Darcy-Flow dataset
     /home/runner/work/neuraloperator/neuraloperator/neuralop/layers/spectral_convolution.py:486: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
       out_fft[slices_x] = self._contract(x[slices_x], weight, separable=self.separable)
     Raw outputs of shape torch.Size([32, 1, 16, 16])
-    [0] time=8.53, avg_loss=0.6509, train_err=20.3412
+    [0] time=9.13, avg_loss=0.6509, train_err=20.3412
     Eval: 16_h1=0.5331, 16_l2=0.3534, 32_h1=0.8102, 32_l2=0.4909
-    [3] time=8.56, avg_loss=0.2498, train_err=7.8064
+    [3] time=8.85, avg_loss=0.2498, train_err=7.8064
     Eval: 16_h1=0.3147, 16_l2=0.2192, 32_h1=0.6162, 32_l2=0.3679
-    [6] time=8.49, avg_loss=0.1855, train_err=5.7981
+    [6] time=8.85, avg_loss=0.1855, train_err=5.7981
     Eval: 16_h1=0.2242, 16_l2=0.1422, 32_h1=0.5519, 32_l2=0.3392
-    [9] time=8.48, avg_loss=0.1840, train_err=5.7497
+    [9] time=8.79, avg_loss=0.1840, train_err=5.7497
     Eval: 16_h1=0.2167, 16_l2=0.1312, 32_h1=0.5370, 32_l2=0.3218
-    [12] time=8.43, avg_loss=0.1793, train_err=5.6036
+    [12] time=8.79, avg_loss=0.1793, train_err=5.6036
     Eval: 16_h1=0.3067, 16_l2=0.2158, 32_h1=0.5863, 32_l2=0.3804
-    [15] time=8.46, avg_loss=0.1551, train_err=4.8478
+    [15] time=8.92, avg_loss=0.1551, train_err=4.8478
     Eval: 16_h1=0.2483, 16_l2=0.1500, 32_h1=0.4809, 32_l2=0.2610
-    [18] time=8.46, avg_loss=0.1423, train_err=4.4474
+    [18] time=8.70, avg_loss=0.1423, train_err=4.4474
     Eval: 16_h1=0.2399, 16_l2=0.1432, 32_h1=0.4991, 32_l2=0.2832
 
-    {'train_err': 4.694147303700447, 'avg_loss': 0.1502127137184143, 'avg_lasso_loss': None, 'epoch_train_time': 8.439063274999853}
+    {'train_err': 4.694147303700447, 'avg_loss': 0.1502127137184143, 'avg_lasso_loss': None, 'epoch_train_time': 8.83278278499995}
 
 
 
@@ -521,7 +521,7 @@ In practice we would train a Neural Operator on one or multiple GPUs
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (2 minutes 55.930 seconds)
+   **Total running time of the script:** (3 minutes 3.742 seconds)
 
 
 .. _sphx_glr_download_auto_examples_models_plot_UNO_darcy.py:
