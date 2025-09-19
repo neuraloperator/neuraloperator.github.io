@@ -202,15 +202,7 @@ be trained on a CPU in a few seconds, whereas normally we would train on one or 
 <span class="n">data_processor</span> <span class="o">=</span> <span class="n">data_processor</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:125: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
-  x_train = x_train[train_input_indices]
-/home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:148: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
-  y_train = y_train[train_output_indices]
-Loading test db for resolution 16 with 100 samples
-/home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:204: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
-  x_test = x_test[test_input_indices]
-/home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:211: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
-  y_test = y_test[test_output_indices]
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Loading test db for resolution 16 with 100 samples
 Loading test db for resolution 32 with 50 samples
 </pre></div>
 </div>
@@ -311,13 +303,13 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f2ec94b7890&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f4c10fc7610&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f2ec94b79d0&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f4c10fc7110&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f2ec94b79d0&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f2ec94b6d50&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f4c10fc7110&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f4c10fc7390&gt;}
 </pre></div>
 </div>
 <p>Create the trainer:</p>
@@ -344,27 +336,23 @@ Parameter Group 0
 Testing on [50, 50] samples         on resolutions [16, 32].
 /opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:666: UserWarning: &#39;pin_memory&#39; argument is set as true but no accelerator is found, then device pinned memory won&#39;t be used.
   warnings.warn(warn_msg)
-/opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/tltorch/factorized_tensors/factorized_tensors.py:66: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
-  return self.__class__(self.tensor[indices])
-/home/runner/work/neuraloperator/neuraloperator/neuralop/layers/spectral_convolution.py:486: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
-  out_fft[slices_x] = self._contract(x[slices_x], weight, separable=self.separable)
 Raw outputs of shape torch.Size([32, 1, 16, 16])
-[0] time=2.76, avg_loss=0.5866, train_err=18.3312
+[0] time=2.63, avg_loss=0.5866, train_err=18.3312
 Eval: 16_h1=0.3817, 16_l2=0.2548, 32_h1=0.5671, 32_l2=0.2662
-[3] time=2.78, avg_loss=0.2091, train_err=6.5359
+[3] time=2.60, avg_loss=0.2091, train_err=6.5359
 Eval: 16_h1=0.2353, 16_l2=0.1684, 32_h1=0.4619, 32_l2=0.1874
-[6] time=2.68, avg_loss=0.1795, train_err=5.6079
+[6] time=2.59, avg_loss=0.1795, train_err=5.6079
 Eval: 16_h1=0.2373, 16_l2=0.1672, 32_h1=0.4948, 32_l2=0.1981
-[9] time=2.69, avg_loss=0.1457, train_err=4.5529
+[9] time=2.56, avg_loss=0.1457, train_err=4.5529
 Eval: 16_h1=0.2461, 16_l2=0.1695, 32_h1=0.5103, 32_l2=0.1918
-[12] time=2.71, avg_loss=0.1281, train_err=4.0022
+[12] time=2.61, avg_loss=0.1281, train_err=4.0022
 Eval: 16_h1=0.1986, 16_l2=0.1191, 32_h1=0.5192, 32_l2=0.1669
-[15] time=2.75, avg_loss=0.1220, train_err=3.8139
+[15] time=2.56, avg_loss=0.1220, train_err=3.8139
 Eval: 16_h1=0.2043, 16_l2=0.1201, 32_h1=0.4911, 32_l2=0.1617
-[18] time=2.65, avg_loss=0.1042, train_err=3.2558
+[18] time=2.59, avg_loss=0.1042, train_err=3.2558
 Eval: 16_h1=0.1980, 16_l2=0.1199, 32_h1=0.5175, 32_l2=0.1685
 
-{&#39;train_err&#39;: 2.8318787328898907, &#39;avg_loss&#39;: 0.0906201194524765, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 2.6987430469999936}
+{&#39;train_err&#39;: 2.8318787328898907, &#39;avg_loss&#39;: 0.0906201194524765, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 2.600615269000002}
 </pre></div>
 </div>
 </section>
@@ -413,17 +401,7 @@ In practice, we would train at a larger resolution, on many more samples.</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_FNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_FNO_darcy_001.png" alt="Inputs, ground-truth output and prediction (16x16)., Input x, Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/tltorch/factorized_tensors/factorized_tensors.py:66: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
-  return self.__class__(self.tensor[indices])
-/home/runner/work/neuraloperator/neuraloperator/neuralop/layers/spectral_convolution.py:486: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
-  out_fft[slices_x] = self._contract(x[slices_x], weight, separable=self.separable)
-/opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/tltorch/factorized_tensors/factorized_tensors.py:66: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
-  return self.__class__(self.tensor[indices])
-/home/runner/work/neuraloperator/neuraloperator/neuralop/layers/spectral_convolution.py:486: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
-  out_fft[slices_x] = self._contract(x[slices_x], weight, separable=self.separable)
-</pre></div>
-</div>
-</section>
+<img src="../../_images/sphx_glr_plot_FNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_FNO_darcy_001.png" alt="Inputs, ground-truth output and prediction (16x16)., Input x, Ground-truth y, Model prediction" class = "sphx-glr-single-img"/></section>
 <section id="zero-shot-super-evaluation">
 <h2>Zero-shot super-evaluation<a class="headerlink" href="#zero-shot-super-evaluation" title="Link to this heading"></a></h2>
 <p>In addition to training and making predictions on the same input size,
@@ -468,21 +446,7 @@ can natively make predictions on higher-resolution inputs and get higher-resolut
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_FNO_darcy_002.png" srcset="../../_images/sphx_glr_plot_FNO_darcy_002.png" alt="Inputs, ground-truth output and prediction (32x32)., Input x, Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/tltorch/factorized_tensors/factorized_tensors.py:66: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
-  return self.__class__(self.tensor[indices])
-/home/runner/work/neuraloperator/neuraloperator/neuralop/layers/spectral_convolution.py:486: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
-  out_fft[slices_x] = self._contract(x[slices_x], weight, separable=self.separable)
-/opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/tltorch/factorized_tensors/factorized_tensors.py:66: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
-  return self.__class__(self.tensor[indices])
-/home/runner/work/neuraloperator/neuraloperator/neuralop/layers/spectral_convolution.py:486: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
-  out_fft[slices_x] = self._contract(x[slices_x], weight, separable=self.separable)
-/opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/tltorch/factorized_tensors/factorized_tensors.py:66: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
-  return self.__class__(self.tensor[indices])
-/home/runner/work/neuraloperator/neuraloperator/neuralop/layers/spectral_convolution.py:486: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
-  out_fft[slices_x] = self._contract(x[slices_x], weight, separable=self.separable)
-</pre></div>
-</div>
-<p>We only trained the model on data at a resolution of 16x16, and with no modifications
+<img src="../../_images/sphx_glr_plot_FNO_darcy_002.png" srcset="../../_images/sphx_glr_plot_FNO_darcy_002.png" alt="Inputs, ground-truth output and prediction (32x32)., Input x, Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p>We only trained the model on data at a resolution of 16x16, and with no modifications
 or special prompting, we were able to perform inference on higher-resolution input data
 and get higher-resolution predictions! In practice, we often want to evaluate neural operators
 at multiple resolutions to track a model’s zero-shot super-evaluation performance throughout
@@ -491,7 +455,7 @@ are parameterized with a list of <cite>test_resolutions</cite> to choose from.</
 <p>However, as you can see, these predictions are noisier than we would expect for a model evaluated
 at the same resolution at which it was trained. Leveraging the FNO’s discretization-invariance, there
 are other ways to scale the outputs of the FNO to train a true super-resolution capability.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 57.330 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 54.911 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-models-plot-fno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/b4fadb168a06acc8c292c808f47f0e7f/plot_FNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_FNO_darcy.ipynb</span></code></a></p>

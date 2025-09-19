@@ -200,15 +200,7 @@ to download the full example code.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:125: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
-  x_train = x_train[train_input_indices]
-/home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:148: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
-  y_train = y_train[train_output_indices]
-Loading test db for resolution 16 with 100 samples
-/home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:204: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
-  x_test = x_test[test_input_indices]
-/home/runner/work/neuraloperator/neuraloperator/neuralop/data/datasets/pt_dataset.py:211: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
-  y_test = y_test[test_output_indices]
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Loading test db for resolution 16 with 100 samples
 Loading test db for resolution 32 with 50 samples
 </pre></div>
 </div>
@@ -301,15 +293,15 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f2eb5bb6060&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f4bfd749cd0&gt;
 
 ### LOSSES ###
 
 ### INCREMENTAL RESOLUTION + GRADIENT EXPLAINED ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f2ea60507d0&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f4bede3ca50&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f2ea60507d0&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f2eb5bb5a70&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f4bede3ca50&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f4bfd749f30&gt;}
 </pre></div>
 </div>
 <p>Set up the IncrementalTrainer
@@ -364,16 +356,12 @@ uses the incremental_loss_eps parameter</p>
 Testing on [50, 50] samples         on resolutions [16, 32].
 /opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:666: UserWarning: &#39;pin_memory&#39; argument is set as true but no accelerator is found, then device pinned memory won&#39;t be used.
   warnings.warn(warn_msg)
-/opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/tltorch/factorized_tensors/factorized_tensors.py:66: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
-  return self.__class__(self.tensor[indices])
-/home/runner/work/neuraloperator/neuraloperator/neuralop/layers/spectral_convolution.py:486: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
-  out_fft[slices_x] = self._contract(x[slices_x], weight, separable=self.separable)
 Raw outputs of shape torch.Size([16, 1, 8, 8])
-[0] time=0.35, avg_loss=0.9432, train_err=13.4739
+[0] time=0.34, avg_loss=0.9432, train_err=13.4739
 Eval: 16_h1=0.8717, 16_l2=0.5380, 32_h1=0.9636, 32_l2=0.5413
-[1] time=0.33, avg_loss=0.7785, train_err=11.1218
+[1] time=0.32, avg_loss=0.7785, train_err=11.1218
 Eval: 16_h1=0.8580, 16_l2=0.4768, 32_h1=1.1173, 32_l2=0.5121
-[2] time=0.33, avg_loss=0.6601, train_err=9.4297
+[2] time=0.32, avg_loss=0.6601, train_err=9.4297
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/incremental.py:160: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
 Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
   incremental_modes - self.incremental_buffer, torch.Tensor(strength_vector))
@@ -382,20 +370,20 @@ Eval: 16_h1=0.9000, 16_l2=0.5269, 32_h1=1.1461, 32_l2=0.5655
 Eval: 16_h1=0.7324, 16_l2=0.4729, 32_h1=0.9681, 32_l2=0.5052
 [4] time=0.33, avg_loss=0.5649, train_err=8.0695
 Eval: 16_h1=0.7229, 16_l2=0.3793, 32_h1=0.9721, 32_l2=0.4084
-[5] time=0.33, avg_loss=0.5101, train_err=7.2876
+[5] time=0.34, avg_loss=0.5101, train_err=7.2876
 Eval: 16_h1=0.8754, 16_l2=0.5291, 32_h1=1.1873, 32_l2=0.5494
-[6] time=0.34, avg_loss=0.5798, train_err=8.2835
+[6] time=0.33, avg_loss=0.5798, train_err=8.2835
 Eval: 16_h1=0.7739, 16_l2=0.4145, 32_h1=1.0751, 32_l2=0.4617
 [7] time=0.33, avg_loss=0.4887, train_err=6.9819
 Eval: 16_h1=0.5996, 16_l2=0.3235, 32_h1=0.8235, 32_l2=0.3571
-[8] time=0.32, avg_loss=0.4119, train_err=5.8841
+[8] time=0.33, avg_loss=0.4119, train_err=5.8841
 Eval: 16_h1=0.7030, 16_l2=0.4130, 32_h1=0.9176, 32_l2=0.4456
 [9] time=0.33, avg_loss=0.4432, train_err=6.3319
 Eval: 16_h1=0.5558, 16_l2=0.2954, 32_h1=0.7911, 32_l2=0.3309
 Incre Res Update: change index to 1
 Incre Res Update: change sub to 1
 Incre Res Update: change res to 16
-[10] time=0.41, avg_loss=0.4941, train_err=7.0581
+[10] time=0.42, avg_loss=0.4941, train_err=7.0581
 Eval: 16_h1=0.4947, 16_l2=0.3020, 32_h1=0.5710, 32_l2=0.2921
 [11] time=0.40, avg_loss=0.4345, train_err=6.2077
 Eval: 16_h1=0.5442, 16_l2=0.3081, 32_h1=0.7192, 32_l2=0.3294
@@ -405,7 +393,7 @@ Eval: 16_h1=0.4608, 16_l2=0.2750, 32_h1=0.6316, 32_l2=0.2800
 Eval: 16_h1=0.4160, 16_l2=0.2626, 32_h1=0.5483, 32_l2=0.2762
 [14] time=0.40, avg_loss=0.3763, train_err=5.3752
 Eval: 16_h1=0.4227, 16_l2=0.2506, 32_h1=0.5875, 32_l2=0.2658
-[15] time=0.41, avg_loss=0.3943, train_err=5.6327
+[15] time=0.40, avg_loss=0.3943, train_err=5.6327
 Eval: 16_h1=0.3713, 16_l2=0.2273, 32_h1=0.4793, 32_l2=0.2346
 [16] time=0.40, avg_loss=0.3406, train_err=4.8658
 Eval: 16_h1=0.3478, 16_l2=0.2251, 32_h1=0.4923, 32_l2=0.2391
@@ -416,7 +404,7 @@ Eval: 16_h1=0.3903, 16_l2=0.2610, 32_h1=0.4977, 32_l2=0.2730
 [19] time=0.41, avg_loss=0.3531, train_err=5.0438
 Eval: 16_h1=0.3585, 16_l2=0.2373, 32_h1=0.5079, 32_l2=0.2544
 
-{&#39;train_err&#39;: 5.0438491106033325, &#39;avg_loss&#39;: 0.35306943774223326, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 0.40666548499996225, &#39;16_h1&#39;: tensor(0.3585), &#39;16_l2&#39;: tensor(0.2373), &#39;32_h1&#39;: tensor(0.5079), &#39;32_l2&#39;: tensor(0.2544)}
+{&#39;train_err&#39;: 5.0438491106033325, &#39;avg_loss&#39;: 0.35306943774223326, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 0.40706069899999875, &#39;16_h1&#39;: tensor(0.3585), &#39;16_l2&#39;: tensor(0.2373), &#39;32_h1&#39;: tensor(0.5079), &#39;32_l2&#39;: tensor(0.2544)}
 </pre></div>
 </div>
 <p>Plot the prediction, and compare with the ground-truth
@@ -466,17 +454,7 @@ ii) can be trained quickly on CPU</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" alt="Inputs, ground-truth output and prediction., Input x, Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/tltorch/factorized_tensors/factorized_tensors.py:66: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
-  return self.__class__(self.tensor[indices])
-/home/runner/work/neuraloperator/neuraloperator/neuralop/layers/spectral_convolution.py:486: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
-  out_fft[slices_x] = self._contract(x[slices_x], weight, separable=self.separable)
-/opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/tltorch/factorized_tensors/factorized_tensors.py:66: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
-  return self.__class__(self.tensor[indices])
-/home/runner/work/neuraloperator/neuraloperator/neuralop/layers/spectral_convolution.py:486: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /pytorch/torch/csrc/autograd/python_variable_indexing.cpp:306.)
-  out_fft[slices_x] = self._contract(x[slices_x], weight, separable=self.separable)
-</pre></div>
-</div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 13.716 seconds)</p>
+<img src="../../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" alt="Inputs, ground-truth output and prediction., Input x, Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 13.454 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-training-plot-incremental-fno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/cfa67f99f9c5464f9ef46d85700f3993/plot_incremental_FNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_incremental_FNO_darcy.ipynb</span></code></a></p>
