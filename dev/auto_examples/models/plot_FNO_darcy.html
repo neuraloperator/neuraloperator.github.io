@@ -303,13 +303,13 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f4c10fc7610&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f7c5a1c5950&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f4c10fc7110&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f7c5a1c6d50&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f4c10fc7110&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f4c10fc7390&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f7c5a1c6d50&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f7c5a1c6e90&gt;}
 </pre></div>
 </div>
 <p>Create the trainer:</p>
@@ -337,22 +337,22 @@ Testing on [50, 50] samples         on resolutions [16, 32].
 /opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:666: UserWarning: &#39;pin_memory&#39; argument is set as true but no accelerator is found, then device pinned memory won&#39;t be used.
   warnings.warn(warn_msg)
 Raw outputs of shape torch.Size([32, 1, 16, 16])
-[0] time=2.63, avg_loss=0.5866, train_err=18.3312
+[0] time=2.61, avg_loss=0.5866, train_err=18.3312
 Eval: 16_h1=0.3817, 16_l2=0.2548, 32_h1=0.5671, 32_l2=0.2662
-[3] time=2.60, avg_loss=0.2091, train_err=6.5359
+[3] time=2.56, avg_loss=0.2091, train_err=6.5359
 Eval: 16_h1=0.2353, 16_l2=0.1684, 32_h1=0.4619, 32_l2=0.1874
-[6] time=2.59, avg_loss=0.1795, train_err=5.6079
+[6] time=2.56, avg_loss=0.1795, train_err=5.6079
 Eval: 16_h1=0.2373, 16_l2=0.1672, 32_h1=0.4948, 32_l2=0.1981
 [9] time=2.56, avg_loss=0.1457, train_err=4.5529
 Eval: 16_h1=0.2461, 16_l2=0.1695, 32_h1=0.5103, 32_l2=0.1918
-[12] time=2.61, avg_loss=0.1281, train_err=4.0022
+[12] time=2.57, avg_loss=0.1281, train_err=4.0022
 Eval: 16_h1=0.1986, 16_l2=0.1191, 32_h1=0.5192, 32_l2=0.1669
-[15] time=2.56, avg_loss=0.1220, train_err=3.8139
+[15] time=2.60, avg_loss=0.1220, train_err=3.8139
 Eval: 16_h1=0.2043, 16_l2=0.1201, 32_h1=0.4911, 32_l2=0.1617
-[18] time=2.59, avg_loss=0.1042, train_err=3.2558
+[18] time=2.60, avg_loss=0.1042, train_err=3.2558
 Eval: 16_h1=0.1980, 16_l2=0.1199, 32_h1=0.5175, 32_l2=0.1685
 
-{&#39;train_err&#39;: 2.8318787328898907, &#39;avg_loss&#39;: 0.0906201194524765, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 2.600615269000002}
+{&#39;train_err&#39;: 2.8318787328898907, &#39;avg_loss&#39;: 0.0906201194524765, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 2.585731154999962}
 </pre></div>
 </div>
 </section>
@@ -455,7 +455,7 @@ are parameterized with a list of <cite>test_resolutions</cite> to choose from.</
 <p>However, as you can see, these predictions are noisier than we would expect for a model evaluated
 at the same resolution at which it was trained. Leveraging the FNO’s discretization-invariance, there
 are other ways to scale the outputs of the FNO to train a true super-resolution capability.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 54.911 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 54.714 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-models-plot-fno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/b4fadb168a06acc8c292c808f47f0e7f/plot_FNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_FNO_darcy.ipynb</span></code></a></p>
