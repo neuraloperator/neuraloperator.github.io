@@ -422,13 +422,13 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f85e8859590&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fb77872f4d0&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f85e82d3770&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fb7780de660&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f85e82d3770&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f85e885b110&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fb7780de660&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fb77836b110&gt;}
 </pre></div>
 </div>
 <p>Create the trainer</p>
@@ -457,22 +457,22 @@ Testing on [50, 50] samples         on resolutions [16, 32].
 /opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:666: UserWarning: &#39;pin_memory&#39; argument is set as true but no accelerator is found, then device pinned memory won&#39;t be used.
   warnings.warn(warn_msg)
 Raw outputs of shape torch.Size([32, 1, 16, 16])
-[0] time=8.97, avg_loss=0.6674, train_err=20.8575
+[0] time=8.67, avg_loss=0.6674, train_err=20.8575
 Eval: 16_h1=0.4282, 16_l2=0.2592, 32_h1=0.8389, 32_l2=0.4061
-[3] time=8.79, avg_loss=0.2407, train_err=7.5210
+[3] time=8.61, avg_loss=0.2407, train_err=7.5210
 Eval: 16_h1=0.2271, 16_l2=0.1486, 32_h1=0.5589, 32_l2=0.3187
-[6] time=8.85, avg_loss=0.2033, train_err=6.3525
+[6] time=8.48, avg_loss=0.2033, train_err=6.3525
 Eval: 16_h1=0.2451, 16_l2=0.1579, 32_h1=0.5141, 32_l2=0.2719
-[9] time=8.61, avg_loss=0.1775, train_err=5.5458
+[9] time=8.47, avg_loss=0.1775, train_err=5.5458
 Eval: 16_h1=0.2719, 16_l2=0.1930, 32_h1=0.5460, 32_l2=0.3395
-[12] time=8.64, avg_loss=0.1878, train_err=5.8674
+[12] time=8.46, avg_loss=0.1878, train_err=5.8674
 Eval: 16_h1=0.2472, 16_l2=0.1522, 32_h1=0.5442, 32_l2=0.3111
-[15] time=8.68, avg_loss=0.1612, train_err=5.0375
+[15] time=8.47, avg_loss=0.1612, train_err=5.0375
 Eval: 16_h1=0.2528, 16_l2=0.1543, 32_h1=0.4823, 32_l2=0.2373
-[18] time=8.60, avg_loss=0.1379, train_err=4.3093
+[18] time=8.46, avg_loss=0.1379, train_err=4.3093
 Eval: 16_h1=0.2232, 16_l2=0.1293, 32_h1=0.4878, 32_l2=0.2673
 
-{&#39;train_err&#39;: 4.486526936292648, &#39;avg_loss&#39;: 0.14356886196136476, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 8.633634936999897}
+{&#39;train_err&#39;: 4.486526936292648, &#39;avg_loss&#39;: 0.14356886196136476, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 8.499635280000007}
 </pre></div>
 </div>
 <p>Plot the prediction, and compare with the ground-truth
@@ -522,7 +522,7 @@ ii) can be trained quickly on CPU</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_UNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_UNO_darcy_001.png" alt="Inputs, ground-truth output and prediction., Input x, Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (3 minutes 0.817 seconds)</p>
+<img src="../../_images/sphx_glr_plot_UNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_UNO_darcy_001.png" alt="Inputs, ground-truth output and prediction., Input x, Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 56.994 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-models-plot-uno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/fee630be9801a5d2d76c0b9e3091063c/plot_UNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_UNO_darcy.ipynb</span></code></a></p>
