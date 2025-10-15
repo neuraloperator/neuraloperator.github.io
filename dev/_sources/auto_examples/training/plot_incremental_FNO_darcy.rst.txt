@@ -234,15 +234,15 @@ Set up the losses
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fb7788bf950>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f38a6890c30>
 
     ### LOSSES ###
 
     ### INCREMENTAL RESOLUTION + GRADIENT EXPLAINED ###
 
-     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7fb768f411d0>
+     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7f3880c38a50>
 
-     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7fb768f411d0>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7fb7788bfce0>}
+     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7f3880c38a50>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f38a6890b00>}
 
 
 
@@ -322,57 +322,57 @@ Train the model
 
     Training on 100 samples
     Testing on [50, 50] samples         on resolutions [16, 32].
-    /opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:666: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+    /opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:668: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
       warnings.warn(warn_msg)
     Raw outputs of shape torch.Size([16, 1, 8, 8])
-    [0] time=0.35, avg_loss=0.9432, train_err=13.4739
-    Eval: 16_h1=0.8717, 16_l2=0.5380, 32_h1=0.9636, 32_l2=0.5413
-    [1] time=0.32, avg_loss=0.7785, train_err=11.1218
-    Eval: 16_h1=0.8580, 16_l2=0.4768, 32_h1=1.1173, 32_l2=0.5121
-    [2] time=0.33, avg_loss=0.6601, train_err=9.4297
+    [0] time=0.33, avg_loss=0.9234, train_err=13.1917
+    Eval: 16_h1=0.8813, 16_l2=0.5729, 32_h1=0.9161, 32_l2=0.5737
+    [1] time=0.32, avg_loss=0.8366, train_err=11.9507
+    Eval: 16_h1=0.8966, 16_l2=0.6193, 32_h1=1.0586, 32_l2=0.6402
+    [2] time=0.32, avg_loss=0.7270, train_err=10.3852
     /home/runner/work/neuraloperator/neuraloperator/neuralop/training/incremental.py:160: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
-    Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+    Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
       incremental_modes - self.incremental_buffer, torch.Tensor(strength_vector))
-    Eval: 16_h1=0.9000, 16_l2=0.5269, 32_h1=1.1461, 32_l2=0.5655
-    [3] time=0.33, avg_loss=0.6338, train_err=9.0537
-    Eval: 16_h1=0.7324, 16_l2=0.4729, 32_h1=0.9681, 32_l2=0.5052
-    [4] time=0.33, avg_loss=0.5649, train_err=8.0695
-    Eval: 16_h1=0.7229, 16_l2=0.3793, 32_h1=0.9721, 32_l2=0.4084
-    [5] time=0.33, avg_loss=0.5101, train_err=7.2876
-    Eval: 16_h1=0.8754, 16_l2=0.5291, 32_h1=1.1873, 32_l2=0.5494
-    [6] time=0.34, avg_loss=0.5798, train_err=8.2835
-    Eval: 16_h1=0.7739, 16_l2=0.4145, 32_h1=1.0751, 32_l2=0.4617
-    [7] time=0.33, avg_loss=0.4887, train_err=6.9819
-    Eval: 16_h1=0.5996, 16_l2=0.3235, 32_h1=0.8235, 32_l2=0.3571
-    [8] time=0.33, avg_loss=0.4119, train_err=5.8841
-    Eval: 16_h1=0.7030, 16_l2=0.4130, 32_h1=0.9176, 32_l2=0.4456
-    [9] time=0.33, avg_loss=0.4432, train_err=6.3319
-    Eval: 16_h1=0.5558, 16_l2=0.2954, 32_h1=0.7911, 32_l2=0.3309
+    Eval: 16_h1=0.9372, 16_l2=0.5477, 32_h1=1.1899, 32_l2=0.5718
+    [3] time=0.32, avg_loss=0.7050, train_err=10.0713
+    Eval: 16_h1=0.8758, 16_l2=0.6209, 32_h1=1.0415, 32_l2=0.6467
+    [4] time=0.32, avg_loss=0.6401, train_err=9.1443
+    Eval: 16_h1=0.9029, 16_l2=0.5518, 32_h1=1.2216, 32_l2=0.5923
+    [5] time=0.32, avg_loss=0.6365, train_err=9.0928
+    Eval: 16_h1=0.7803, 16_l2=0.4305, 32_h1=0.9446, 32_l2=0.4500
+    [6] time=0.32, avg_loss=0.5896, train_err=8.4234
+    Eval: 16_h1=0.7403, 16_l2=0.4018, 32_h1=0.9982, 32_l2=0.4357
+    [7] time=0.32, avg_loss=0.5007, train_err=7.1533
+    Eval: 16_h1=0.6647, 16_l2=0.3449, 32_h1=0.8849, 32_l2=0.3728
+    [8] time=0.32, avg_loss=0.4450, train_err=6.3577
+    Eval: 16_h1=0.8081, 16_l2=0.4564, 32_h1=1.0240, 32_l2=0.4881
+    [9] time=0.32, avg_loss=0.5604, train_err=8.0056
+    Eval: 16_h1=0.6531, 16_l2=0.3916, 32_h1=0.8906, 32_l2=0.4229
     Incre Res Update: change index to 1
     Incre Res Update: change sub to 1
     Incre Res Update: change res to 16
-    [10] time=0.42, avg_loss=0.4941, train_err=7.0581
-    Eval: 16_h1=0.4947, 16_l2=0.3020, 32_h1=0.5710, 32_l2=0.2921
-    [11] time=0.40, avg_loss=0.4345, train_err=6.2077
-    Eval: 16_h1=0.5442, 16_l2=0.3081, 32_h1=0.7192, 32_l2=0.3294
-    [12] time=0.40, avg_loss=0.4888, train_err=6.9828
-    Eval: 16_h1=0.4608, 16_l2=0.2750, 32_h1=0.6316, 32_l2=0.2800
-    [13] time=0.39, avg_loss=0.4055, train_err=5.7935
-    Eval: 16_h1=0.4160, 16_l2=0.2626, 32_h1=0.5483, 32_l2=0.2762
-    [14] time=0.40, avg_loss=0.3763, train_err=5.3752
-    Eval: 16_h1=0.4227, 16_l2=0.2506, 32_h1=0.5875, 32_l2=0.2658
-    [15] time=0.41, avg_loss=0.3943, train_err=5.6327
-    Eval: 16_h1=0.3713, 16_l2=0.2273, 32_h1=0.4793, 32_l2=0.2346
-    [16] time=0.40, avg_loss=0.3406, train_err=4.8658
-    Eval: 16_h1=0.3478, 16_l2=0.2251, 32_h1=0.4923, 32_l2=0.2391
-    [17] time=0.41, avg_loss=0.3178, train_err=4.5400
-    Eval: 16_h1=0.5044, 16_l2=0.3214, 32_h1=0.6369, 32_l2=0.3213
-    [18] time=0.40, avg_loss=0.4075, train_err=5.8215
-    Eval: 16_h1=0.3903, 16_l2=0.2610, 32_h1=0.4977, 32_l2=0.2730
-    [19] time=0.41, avg_loss=0.3531, train_err=5.0438
-    Eval: 16_h1=0.3585, 16_l2=0.2373, 32_h1=0.5079, 32_l2=0.2544
+    [10] time=0.40, avg_loss=0.5972, train_err=8.5313
+    Eval: 16_h1=0.5544, 16_l2=0.3252, 32_h1=0.6496, 32_l2=0.3138
+    [11] time=0.39, avg_loss=0.5098, train_err=7.2831
+    Eval: 16_h1=0.5599, 16_l2=0.3369, 32_h1=0.7287, 32_l2=0.3620
+    [12] time=0.39, avg_loss=0.4914, train_err=7.0202
+    Eval: 16_h1=0.4652, 16_l2=0.2948, 32_h1=0.5667, 32_l2=0.2865
+    [13] time=0.40, avg_loss=0.4206, train_err=6.0087
+    Eval: 16_h1=0.4645, 16_l2=0.2917, 32_h1=0.6157, 32_l2=0.3038
+    [14] time=0.39, avg_loss=0.4098, train_err=5.8542
+    Eval: 16_h1=0.5003, 16_l2=0.2950, 32_h1=0.5982, 32_l2=0.2963
+    [15] time=0.39, avg_loss=0.4451, train_err=6.3590
+    Eval: 16_h1=0.4005, 16_l2=0.2444, 32_h1=0.5473, 32_l2=0.2561
+    [16] time=0.39, avg_loss=0.3825, train_err=5.4637
+    Eval: 16_h1=0.3871, 16_l2=0.2595, 32_h1=0.4978, 32_l2=0.2672
+    [17] time=0.39, avg_loss=0.3542, train_err=5.0597
+    Eval: 16_h1=0.4311, 16_l2=0.2653, 32_h1=0.5492, 32_l2=0.2667
+    [18] time=0.39, avg_loss=0.3847, train_err=5.4962
+    Eval: 16_h1=0.3746, 16_l2=0.2383, 32_h1=0.5059, 32_l2=0.2493
+    [19] time=0.40, avg_loss=0.3433, train_err=4.9047
+    Eval: 16_h1=0.3557, 16_l2=0.2294, 32_h1=0.4823, 32_l2=0.2414
 
-    {'train_err': 5.0438491106033325, 'avg_loss': 0.35306943774223326, 'avg_lasso_loss': None, 'epoch_train_time': 0.40682521700000507, '16_h1': tensor(0.3585), '16_l2': tensor(0.2373), '32_h1': tensor(0.5079), '32_l2': tensor(0.2544)}
+    {'train_err': 4.904727799551828, 'avg_loss': 0.34333094596862795, 'avg_lasso_loss': None, 'epoch_train_time': 0.39524900699996124, '16_h1': tensor(0.3557), '16_l2': tensor(0.2294), '32_h1': tensor(0.4823), '32_l2': tensor(0.2414)}
 
 
 
@@ -446,7 +446,7 @@ In practice we would train a Neural Operator on one or multiple GPUs
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 13.373 seconds)
+   **Total running time of the script:** (0 minutes 13.059 seconds)
 
 
 .. _sphx_glr_download_auto_examples_training_plot_incremental_FNO_darcy.py:

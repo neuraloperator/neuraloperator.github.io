@@ -33,8 +33,8 @@
  
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Fourier Differentiation" href="plot_fourier_diff.html" />
-    <link rel="prev" title="Grid embeddings" href="plot_embeddings.html" />
+    <link rel="next" title="Normalization Layers" href="plot_normalization_layers.html" />
+    <link rel="prev" title="Resampling layers" href="plot_resample.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   </head>
@@ -211,7 +211,7 @@ to download the full example code.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_DISCO_convolutions_001.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_001.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/neuraloperator/neuraloperator/examples/layers/plot_DISCO_convolutions.py:39: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:203.)
+<img src="../../_images/sphx_glr_plot_DISCO_convolutions_001.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_001.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/neuraloperator/neuraloperator/examples/layers/plot_DISCO_convolutions.py:39: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:206.)
   data = nn.functional.interpolate(torch.from_numpy(img).unsqueeze(0).unsqueeze(0), size=(ny,nx)).squeeze()
 </pre></div>
 </div>
@@ -332,7 +332,7 @@ torch.Size([119, 89])
 <span class="c1"># plt.show()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_DISCO_convolutions_006.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_006.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7fb791d8da90&gt;
+<img src="../../_images/sphx_glr_plot_DISCO_convolutions_006.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_006.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7f38a9b64b90&gt;
 </pre></div>
 </div>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">convt</span> <span class="o">=</span> <span class="n">DiscreteContinuousConvTranspose2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">grid_in</span><span class="o">=</span><span class="n">grid_out</span><span class="p">,</span> <span class="n">grid_out</span><span class="o">=</span><span class="n">grid_in</span><span class="p">,</span> <span class="n">quadrature_weights</span><span class="o">=</span><span class="n">q_out</span><span class="p">,</span> <span class="n">kernel_shape</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">radius_cutoff</span><span class="o">=</span><span class="mi">3</span><span class="o">/</span><span class="n">nyo</span><span class="p">,</span> <span class="n">periodic</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
@@ -383,7 +383,7 @@ torch.Size([119, 89])
 <img src="../../_images/sphx_glr_plot_DISCO_convolutions_008.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_008.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>torch.Size([1, 1, 120, 90])
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 28.632 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 28.433 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-layers-plot-disco-convolutions-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/3f74a91662afa758e3d845617240e471/plot_DISCO_convolutions.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_DISCO_convolutions.ipynb</span></code></a></p>
@@ -404,16 +404,16 @@ torch.Size([119, 89])
       
         <nav class="pagination" role="navigation" aria-label="pagination">
     
-    <a class="button pagination-previous" href="plot_embeddings.html" title="previous page" accesskey="p">
+    <a class="button pagination-previous" href="plot_resample.html" title="previous page" accesskey="p">
         <span class="icon">
             <i class="fa fa-arrow-circle-left"></i>
         </span>
-        <span>Grid embeddings</span>
+        <span>Resampling layers</span>
     </a>
     
     
-    <a class="button pagination-next" href="plot_fourier_diff.html" title="next page" accesskey="n">
-        <span>Fourier Differentiation </span>
+    <a class="button pagination-next" href="plot_normalization_layers.html" title="next page" accesskey="n">
+        <span>Normalization Layers </span>
         <span class="icon">
             <i class="fa fa-arrow-circle-right"></i>
         </span>
