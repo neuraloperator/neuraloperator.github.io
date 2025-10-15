@@ -340,13 +340,13 @@ Creating the losses
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fb45e3bc690>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f95aca68690>
 
     ### LOSSES ###
 
-     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7fb45e6cc1a0>
+     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7f95ac92d400>
 
-     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7fb45e6cc1a0>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7fb45e3bdbd0>}
+     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7f95ac92d400>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f95aca69bd0>}
 
 
 
@@ -407,22 +407,22 @@ Actually train the model on our small Darcy-Flow dataset
     /opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:668: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
       warnings.warn(warn_msg)
     Raw outputs of shape torch.Size([32, 1, 16, 16])
-    [0] time=8.76, avg_loss=0.7192, train_err=22.4742
+    [0] time=8.62, avg_loss=0.7192, train_err=22.4742
     Eval: 16_h1=0.4670, 16_l2=0.3055, 32_h1=0.7125, 32_l2=0.3924
-    [3] time=8.38, avg_loss=0.2413, train_err=7.5420
+    [3] time=8.47, avg_loss=0.2413, train_err=7.5420
     Eval: 16_h1=0.2711, 16_l2=0.1796, 32_h1=0.5284, 32_l2=0.3361
-    [6] time=8.34, avg_loss=0.2083, train_err=6.5092
+    [6] time=8.39, avg_loss=0.2083, train_err=6.5092
     Eval: 16_h1=0.3397, 16_l2=0.2732, 32_h1=0.5667, 32_l2=0.4138
-    [9] time=8.39, avg_loss=0.1860, train_err=5.8128
+    [9] time=8.42, avg_loss=0.1860, train_err=5.8128
     Eval: 16_h1=0.2224, 16_l2=0.1386, 32_h1=0.5346, 32_l2=0.3237
-    [12] time=8.37, avg_loss=0.2075, train_err=6.4833
+    [12] time=8.32, avg_loss=0.2075, train_err=6.4833
     Eval: 16_h1=0.2227, 16_l2=0.1353, 32_h1=0.4988, 32_l2=0.2996
-    [15] time=8.44, avg_loss=0.1757, train_err=5.4895
+    [15] time=8.40, avg_loss=0.1757, train_err=5.4895
     Eval: 16_h1=0.2521, 16_l2=0.1504, 32_h1=0.4995, 32_l2=0.3142
-    [18] time=8.45, avg_loss=0.1341, train_err=4.1897
+    [18] time=8.31, avg_loss=0.1341, train_err=4.1897
     Eval: 16_h1=0.2161, 16_l2=0.1299, 32_h1=0.5307, 32_l2=0.3298
 
-    {'train_err': 4.030218005180359, 'avg_loss': 0.1289669761657715, 'avg_lasso_loss': None, 'epoch_train_time': 8.398199918999978}
+    {'train_err': 4.030218005180359, 'avg_loss': 0.1289669761657715, 'avg_lasso_loss': None, 'epoch_train_time': 8.341144799000062}
 
 
 
@@ -496,7 +496,7 @@ In practice we would train a Neural Operator on one or multiple GPUs
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (2 minutes 55.311 seconds)
+   **Total running time of the script:** (2 minutes 55.032 seconds)
 
 
 .. _sphx_glr_download_auto_examples_models_plot_UNO_darcy.py:

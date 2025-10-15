@@ -293,15 +293,15 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fb474a90c30&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f95c338cc30&gt;
 
 ### LOSSES ###
 
 ### INCREMENTAL RESOLUTION + GRADIENT EXPLAINED ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fb44eeb8a50&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f959d778a50&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fb44eeb8a50&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fb474a90b00&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f959d778a50&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f95c338cb00&gt;}
 </pre></div>
 </div>
 <p>Set up the IncrementalTrainer
@@ -357,11 +357,11 @@ Testing on [50, 50] samples         on resolutions [16, 32].
 /opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:668: UserWarning: &#39;pin_memory&#39; argument is set as true but no accelerator is found, then device pinned memory won&#39;t be used.
   warnings.warn(warn_msg)
 Raw outputs of shape torch.Size([16, 1, 8, 8])
-[0] time=0.33, avg_loss=0.9234, train_err=13.1917
+[0] time=0.34, avg_loss=0.9234, train_err=13.1917
 Eval: 16_h1=0.8813, 16_l2=0.5729, 32_h1=0.9161, 32_l2=0.5737
-[1] time=0.32, avg_loss=0.8366, train_err=11.9507
+[1] time=0.33, avg_loss=0.8366, train_err=11.9507
 Eval: 16_h1=0.8966, 16_l2=0.6193, 32_h1=1.0586, 32_l2=0.6402
-[2] time=0.31, avg_loss=0.7270, train_err=10.3852
+[2] time=0.32, avg_loss=0.7270, train_err=10.3852
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/incremental.py:160: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
 Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
   incremental_modes - self.incremental_buffer, torch.Tensor(strength_vector))
@@ -372,7 +372,7 @@ Eval: 16_h1=0.8758, 16_l2=0.6209, 32_h1=1.0415, 32_l2=0.6467
 Eval: 16_h1=0.9029, 16_l2=0.5518, 32_h1=1.2216, 32_l2=0.5923
 [5] time=0.32, avg_loss=0.6365, train_err=9.0928
 Eval: 16_h1=0.7803, 16_l2=0.4305, 32_h1=0.9446, 32_l2=0.4500
-[6] time=0.32, avg_loss=0.5896, train_err=8.4234
+[6] time=0.33, avg_loss=0.5896, train_err=8.4234
 Eval: 16_h1=0.7403, 16_l2=0.4018, 32_h1=0.9982, 32_l2=0.4357
 [7] time=0.32, avg_loss=0.5007, train_err=7.1533
 Eval: 16_h1=0.6647, 16_l2=0.3449, 32_h1=0.8849, 32_l2=0.3728
@@ -385,7 +385,7 @@ Incre Res Update: change sub to 1
 Incre Res Update: change res to 16
 [10] time=0.40, avg_loss=0.5972, train_err=8.5313
 Eval: 16_h1=0.5544, 16_l2=0.3252, 32_h1=0.6496, 32_l2=0.3138
-[11] time=0.38, avg_loss=0.5098, train_err=7.2831
+[11] time=0.39, avg_loss=0.5098, train_err=7.2831
 Eval: 16_h1=0.5599, 16_l2=0.3369, 32_h1=0.7287, 32_l2=0.3620
 [12] time=0.40, avg_loss=0.4914, train_err=7.0202
 Eval: 16_h1=0.4652, 16_l2=0.2948, 32_h1=0.5667, 32_l2=0.2865
@@ -393,18 +393,18 @@ Eval: 16_h1=0.4652, 16_l2=0.2948, 32_h1=0.5667, 32_l2=0.2865
 Eval: 16_h1=0.4645, 16_l2=0.2917, 32_h1=0.6157, 32_l2=0.3038
 [14] time=0.39, avg_loss=0.4098, train_err=5.8542
 Eval: 16_h1=0.5003, 16_l2=0.2950, 32_h1=0.5982, 32_l2=0.2963
-[15] time=0.40, avg_loss=0.4451, train_err=6.3590
+[15] time=0.39, avg_loss=0.4451, train_err=6.3590
 Eval: 16_h1=0.4005, 16_l2=0.2444, 32_h1=0.5473, 32_l2=0.2561
 [16] time=0.40, avg_loss=0.3825, train_err=5.4637
 Eval: 16_h1=0.3871, 16_l2=0.2595, 32_h1=0.4978, 32_l2=0.2672
-[17] time=0.39, avg_loss=0.3542, train_err=5.0597
+[17] time=0.40, avg_loss=0.3542, train_err=5.0597
 Eval: 16_h1=0.4311, 16_l2=0.2653, 32_h1=0.5492, 32_l2=0.2667
-[18] time=0.39, avg_loss=0.3847, train_err=5.4962
+[18] time=0.40, avg_loss=0.3847, train_err=5.4962
 Eval: 16_h1=0.3746, 16_l2=0.2383, 32_h1=0.5059, 32_l2=0.2493
-[19] time=0.39, avg_loss=0.3433, train_err=4.9047
+[19] time=0.41, avg_loss=0.3433, train_err=4.9047
 Eval: 16_h1=0.3557, 16_l2=0.2294, 32_h1=0.4823, 32_l2=0.2414
 
-{&#39;train_err&#39;: 4.904727799551828, &#39;avg_loss&#39;: 0.34333094596862795, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 0.39188773500006846, &#39;16_h1&#39;: tensor(0.3557), &#39;16_l2&#39;: tensor(0.2294), &#39;32_h1&#39;: tensor(0.4823), &#39;32_l2&#39;: tensor(0.2414)}
+{&#39;train_err&#39;: 4.904727799551828, &#39;avg_loss&#39;: 0.34333094596862795, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 0.4053142189998198, &#39;16_h1&#39;: tensor(0.3557), &#39;16_l2&#39;: tensor(0.2294), &#39;32_h1&#39;: tensor(0.4823), &#39;32_l2&#39;: tensor(0.2414)}
 </pre></div>
 </div>
 <p>Plot the prediction, and compare with the ground-truth
@@ -454,7 +454,7 @@ ii) can be trained quickly on CPU</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" alt="Inputs, ground-truth output and prediction., Input x, Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 13.604 seconds)</p>
+<img src="../../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" alt="Inputs, ground-truth output and prediction., Input x, Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 13.288 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-training-plot-incremental-fno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/cfa67f99f9c5464f9ef46d85700f3993/plot_incremental_FNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_incremental_FNO_darcy.ipynb</span></code></a></p>
