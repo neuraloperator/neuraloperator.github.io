@@ -28,6 +28,7 @@
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
  <script src="../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
  
@@ -137,6 +138,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../theory_guide/index.html">Theory Guide</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">User Guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#neuraloperator-library-structure">NeuralOperator library structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#available-neural-operator-models">Available Neural Operator Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-loading-and-preprocessing">Data Loading and Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#training-neural-operator-models">Training Neural Operator Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cpu-offloading-for-high-resolution-training">CPU Offloading for High-Resolution Training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#interactive-examples-with-code">Interactive examples with code</a></li>
 </ul>
 </li>
@@ -172,7 +177,6 @@
 <p>NeuralOperator provides all the tools you need
 to easily use, build and train neural operators for your own applications
 and learn mapping between function spaces, in PyTorch.</p>
-<hr class="docutils" />
 <section id="neuraloperator-library-structure">
 <h2>NeuralOperator library structure<a class="headerlink" href="#neuraloperator-library-structure" title="Link to this heading"></a></h2>
 <p>Here are the main components of the library:</p>
@@ -184,47 +188,299 @@ and learn mapping between function spaces, in PyTorch.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop</span></code></p></td>
-<td><p>Main library</p></td>
+<td><p>Main library with core imports</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../modules/api.html#module-neuralop.models" title="neuralop.models"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.models</span></code></a></p></td>
-<td><p>Full ready-to-use neural operators</p></td>
+<td><p>Full ready-to-use neural operators (FNO, SFNO, UNO, UQNO, FNOGNO, GINO, etc.)</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../modules/api.html#module-neuralop.layers" title="neuralop.layers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers</span></code></a></p></td>
 <td><p>Individual layers to build neural operators</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data</span></code></p></td>
-<td><p>Convenience PyTorch data loaders for PDE datasets</p></td>
+<td><p>Convenience PyTorch data loaders for PDE datasets and transforms</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../modules/api.html#module-neuralop.training" title="neuralop.training"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.training</span></code></a></p></td>
-<td><p>Utilities to train neural operators end-to-end</p></td>
+<td><p>Utilities to train neural operators end-to-end (Trainer, AdamW, etc.)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/api.html#module-neuralop.losses" title="neuralop.losses"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.losses</span></code></a></p></td>
+<td><p>Loss functions for neural operator training (LpLoss, H1Loss, etc.)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.mpu</span></code></p></td>
+<td><p>Multi-processing utilities for distributed training</p></td>
 </tr>
 </tbody>
 </table>
-<p>The full API documentation is provided in the <a class="reference internal" href="../modules/api.html#api-ref"><span class="std std-ref">API reference</span></a>.</p>
-<p>Finally, if you’re building the library from source, your repository will also include the following directories:</p>
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Directory</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">scripts</span></code></p></td>
-<td><p>Training recipe scripts for our models on sample problems</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">examples</span></code></p></td>
-<td><p>More documented interactive examples, seen in <a class="reference internal" href="../auto_examples/index.html#gallery-examples"><span class="std std-ref">Examples</span></a></p></td>
-</tr>
-</tbody>
-</table>
+<p>The main <code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop</span></code> module provides convenient imports for the most commonly used components:
+- <strong>Models</strong>: FNO, SFNO, UNO, UQNO, FNOGNO, GINO, LocalNO, CODANO, get_model, etc…
+- <strong>Training</strong>: Trainer
+- <strong>Losses</strong>: LpLoss, H1Loss, WeightedSumLoss, Relobralo, SoftAdapt, FourierDiff, non_uniform_fd, FiniteDiff
+- <strong>Data</strong>: datasets, transforms
+- <strong>Utilities</strong>: mpu</p>
+<div style="margin-top: 4em;"></div></section>
+<section id="available-neural-operator-models">
+<h2>Available Neural Operator Models<a class="headerlink" href="#available-neural-operator-models" title="Link to this heading"></a></h2>
+<p>The <a class="reference internal" href="../modules/api.html#module-neuralop.models" title="neuralop.models"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.models</span></code></a> module includes several state-of-the-art neural operator architectures:</p>
+<ul class="simple">
+<li><p><strong>FNO (Fourier Neural Operator)</strong>: The original Fourier-based neural operator (1D, 2D, 3D variants)</p></li>
+<li><p><strong>TFNO (Tensorized FNO)</strong>: Tensorized version with Tucker factorization (1D, 2D, 3D variants)</p></li>
+<li><p><strong>SFNO (Spherical FNO)</strong>: Spherical harmonics-based FNO for spherical domains (requires torch_harmonics)</p></li>
+<li><p><strong>UNO (U-shaped Neural Operator)</strong>: U-Net inspired architecture for neural operators</p></li>
+<li><p><strong>UQNO (Uncertainty Quantification NO)</strong>: Neural operator with uncertainty quantification</p></li>
+<li><p><strong>FNOGNO (FNO + Graph Neural Operator)</strong>: Hybrid FNO-GNO architecture</p></li>
+<li><p><strong>GINO (Graph Neural Operator)</strong>: Graph-based neural operator for irregular domains</p></li>
+<li><p><strong>LocalNO</strong>: Local neural operator for efficient computation (requires torch_harmonics)</p></li>
+<li><p><strong>CODANO</strong>: Continuous-discrete neural operator</p></li>
+</ul>
 </section>
-<hr class="docutils" />
+<section id="data-loading-and-preprocessing">
+<h2>Data Loading and Preprocessing<a class="headerlink" href="#data-loading-and-preprocessing" title="Link to this heading"></a></h2>
+<p>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data</span></code> module provides comprehensive data handling capabilities:</p>
+<p><strong>Datasets</strong> (<a class="reference internal" href="../modules/api.html#module-neuralop.data.datasets" title="neuralop.data.datasets"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.datasets</span></code></a>):
+- <strong>Darcy Flow</strong>: Standard benchmark for elliptic PDEs (load_darcy_flow_small, load_darcy_pt)
+- <strong>Burgers Equation</strong>: Nonlinear PDE benchmark (load_mini_burgers_1dtime)
+- <strong>Navier-Stokes</strong>: Fluid dynamics equations (load_navier_stokes_pt)
+- <strong>Spherical SWE</strong>: Shallow water equations on spherical domains (load_spherical_swe, requires torch_harmonics)
+- <strong>Car CFD</strong>: Computational fluid dynamics data (load_mini_car)
+- <strong>Nonlinear Poisson</strong>: Poisson equation with nonlinear terms (load_nonlinear_poisson_pt)
+- <strong>The Well</strong>: Active matter and MHD datasets (requires the_well package)</p>
+<p><strong>Transforms</strong> (<code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.transforms</span></code>):
+- <strong>Normalizers</strong>: UnitGaussianNormalizer, DictUnitGaussianNormalizer
+- <strong>Data Processors</strong>: DefaultDataProcessor, IncrementalDataProcessor, MGPatchingDataProcessor
+- <strong>Patching Transforms</strong>: For handling large-scale problems
+- <strong>Base Transforms</strong>: Extensible Transform and DictTransform framework</p>
+<div style="margin-top: 4em;"></div></section>
+<section id="training-neural-operator-models">
+<h2>Training Neural Operator Models<a class="headerlink" href="#training-neural-operator-models" title="Link to this heading"></a></h2>
+<p>Our library makes it easy for anyone with data drawn from a system governed by a
+PDE to train and test Neural Operator models.
+The library provides comprehensive training utilities and loss functions to
+get you started quickly.</p>
+<div style="margin-top: 2em;"></div><section id="the-trainer-class">
+<h3>The Trainer Class<a class="headerlink" href="#the-trainer-class" title="Link to this heading"></a></h3>
+<p>Most users will train neural operator models on their own data in very similar
+ways, using a very standard machine learning training loop.
+To speed up this process, we provide a <code class="code docutils literal notranslate"><span class="pre">Trainer</span></code> class that automates
+much of this boilerplate logic.
+Things like loading a model to device, zeroing gradients and computing most
+loss functions are taken care of.</p>
+<p>The <code class="code docutils literal notranslate"><span class="pre">Trainer</span></code> implements training in a modular fashion, meaning that
+more domain-specific logic can easily be implemented. For more specific
+documentation, check the <a class="reference internal" href="../modules/api.html#api-ref"><span class="std std-ref">API reference</span></a>.</p>
+<div style="margin-top: 2em;"></div></section>
+<section id="available-training-components">
+<h3>Available Training Components<a class="headerlink" href="#available-training-components" title="Link to this heading"></a></h3>
+<p>The <a class="reference internal" href="../modules/api.html#module-neuralop.training" title="neuralop.training"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.training</span></code></a> module provides several key components:</p>
+<ul class="simple">
+<li><p><strong>Trainer</strong>: Main training class for neural operator models</p></li>
+<li><p><strong>AdamW</strong>: Optimized Adam optimizer with weight decay</p></li>
+<li><p><strong>IncrementalFNOTrainer</strong>: Specialized trainer for incremental FNO training</p></li>
+<li><p><strong>setup</strong>: PyTorch setup utilities for distributed training</p></li>
+<li><p><strong>load_training_state/save_training_state</strong>: Utilities for checkpointing</p></li>
+</ul>
+<p>Note: The main <code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop</span></code> module directly imports <cite>Trainer</cite> for convenience.</p>
+<div style="margin-top: 2em;"></div></section>
+<section id="loss-functions">
+<h3>Loss Functions<a class="headerlink" href="#loss-functions" title="Link to this heading"></a></h3>
+<p>The <a class="reference internal" href="../modules/api.html#module-neuralop.losses" title="neuralop.losses"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.losses</span></code></a> module provides various loss functions:</p>
+<ul class="simple">
+<li><p><strong>Data Losses</strong>: LpLoss, H1Loss for standard regression tasks</p></li>
+<li><p><strong>Equation Losses</strong>: Various equation-specific loss functions for physics-informed training</p></li>
+<li><p><strong>Meta Losses</strong>: WeightedSumLoss, Aggregator, Relobralo, SoftAdapt for advanced training strategies</p></li>
+<li><p><strong>Differentiation</strong>: FourierDiff, non_uniform_fd, FiniteDiff for computing derivatives</p></li>
+</ul>
+<div style="margin-top: 2em;"></div></section>
+<section id="distributed-training">
+<h3>Distributed Training<a class="headerlink" href="#distributed-training" title="Link to this heading"></a></h3>
+<p>We also provide a simple way to use PyTorch’s <code class="code docutils literal notranslate"><span class="pre">DistributedDataParallel</span></code> functionality
+to hold data across multiple GPUs.
+We use PyTorch’s <code class="code docutils literal notranslate"><span class="pre">torchrun</span></code> elastic launcher, so all you need to do on a
+multi-GPU system is the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">torchrun</span> <span class="o">--</span><span class="n">standalone</span> <span class="o">--</span><span class="n">nproc_per_node</span> <span class="o">&lt;</span><span class="n">NUM_GPUS</span><span class="o">&gt;</span> <span class="n">script</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>You may need to adjust the batch size, model parallel size and world size
+in accordance with your specific use case.
+See the <a class="reference external" href="https://pytorch.org/docs/stable/elastic/run.html">torchrun documentation</a>
+for more details.</p>
+<div style="margin-top: 4em;"></div></section>
+</section>
+<section id="cpu-offloading-for-high-resolution-training">
+<h2>CPU Offloading for High-Resolution Training<a class="headerlink" href="#cpu-offloading-for-high-resolution-training" title="Link to this heading"></a></h2>
+<p>For training with high-resolution inputs that exceed GPU memory limits,
+NeuralOperator supports CPU offloading of activations.
+This technique allows training larger models or higher-resolution problems
+by temporarily storing intermediate computations on CPU memory.</p>
+<div style="margin-top: 2em;"></div><section id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h3>
+<p>When training neural operators with high-resolution inputs, GPU memory
+usage can become a bottleneck.
+The peak memory consumption often exceeds CUDA limits because all
+intermediate activations in the computation graph are stored on the GPU by default.</p>
+<p>Each activation tensor typically has a shape of:</p>
+<div class="math notranslate nohighlight">
+\[\text{batch\_size} \times \text{hidden\_dim} \times N_x \times N_y \times \dots\]</div>
+<p>where <span class="math notranslate nohighlight">\(N_x, N_y, \dots\)</span> are the spatial or temporal resolutions of the input.
+As the computation graph grows deeper during forward and backward passes,
+a large number of such intermediate tensors accumulate, leading
+to high GPU memory consumption.</p>
+<p><strong>CPU offloading</strong> addresses this by moving activations to CPU memory
+during training, allowing:</p>
+<ul class="simple">
+<li><p>Training with higher-resolution inputs under limited GPU memory</p></li>
+<li><p>Training larger models without reducing batch size</p></li>
+<li><p>Better memory utilization across CPU and GPU</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>CPU offloading trades memory for compute time, as data transfer between
+CPU and GPU adds overhead.</p>
+</div>
+<div style="margin-top: 2em;"></div></section>
+<section id="example-usage">
+<h3>Example Usage<a class="headerlink" href="#example-usage" title="Link to this heading"></a></h3>
+<p>Below is a complete example demonstrating CPU offloading integration
+with NeuralOperator training:</p>
+<section id="setup-and-data-loading">
+<h4>1. Setup and Data Loading<a class="headerlink" href="#setup-and-data-loading" title="Link to this heading"></a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">wraps</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">FNO</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neuralop</span><span class="w"> </span><span class="kn">import</span> <span class="n">Trainer</span><span class="p">,</span> <span class="n">LpLoss</span><span class="p">,</span> <span class="n">H1Loss</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.training</span><span class="w"> </span><span class="kn">import</span> <span class="n">AdamW</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.data.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_darcy_flow_small</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">count_model_params</span>
+
+<span class="n">device</span> <span class="o">=</span> <span class="s1">&#39;cuda&#39;</span>
+</pre></div>
+</div>
+<p>Load the dataset:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load Darcy flow dataset with specified resolutions</span>
+<span class="n">train_loader</span><span class="p">,</span> <span class="n">test_loaders</span><span class="p">,</span> <span class="n">data_processor</span> <span class="o">=</span> <span class="n">load_darcy_flow_small</span><span class="p">(</span>
+    <span class="n">n_train</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+    <span class="n">test_resolutions</span><span class="o">=</span><span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span>
+    <span class="n">n_tests</span><span class="o">=</span><span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span>
+    <span class="n">test_batch_sizes</span><span class="o">=</span><span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="n">data_processor</span> <span class="o">=</span> <span class="n">data_processor</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="model-creation">
+<h4>2. Model Creation<a class="headerlink" href="#model-creation" title="Link to this heading"></a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create FNO model with specified parameters</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">FNO</span><span class="p">(</span>
+    <span class="n">n_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span>           <span class="c1"># Fourier modes for each dimension</span>
+    <span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>              <span class="c1"># Input channels</span>
+    <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>             <span class="c1"># Output channels</span>
+    <span class="n">hidden_channels</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>         <span class="c1"># Hidden layer width</span>
+    <span class="n">projection_channel_ratio</span><span class="o">=</span><span class="mi">2</span>  <span class="c1"># Channel expansion ratio</span>
+<span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Model parameters: </span><span class="si">{</span><span class="n">count_model_params</span><span class="p">(</span><span class="n">model</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="enable-cpu-offloading">
+<h4>3. Enable CPU Offloading<a class="headerlink" href="#enable-cpu-offloading" title="Link to this heading"></a></h4>
+<p>Wrap the model’s forward function to enable automatic CPU offloading:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">wrap_forward_with_offload</span><span class="p">(</span><span class="n">forward_fn</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrap a forward function to enable CPU offloading of activations.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    forward_fn : callable</span>
+<span class="sd">        The original forward function to wrap</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    callable</span>
+<span class="sd">        Wrapped forward function with CPU offloading enabled</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">forward_fn</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wrapped_forward</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># Enable CPU offloading context for this forward pass</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">autograd</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">save_on_cpu</span><span class="p">(</span><span class="n">pin_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">forward_fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapped_forward</span>
+
+<span class="c1"># Apply CPU offloading to the model</span>
+<span class="n">model</span><span class="o">.</span><span class="n">forward</span> <span class="o">=</span> <span class="n">wrap_forward_with_offload</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">forward</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="training-loop">
+<h4>4. Training Loop<a class="headerlink" href="#training-loop" title="Link to this heading"></a></h4>
+<p>No changes are needed in your existing training code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Setup optimizer and loss function</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">AdamW</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">8e-3</span><span class="p">,</span> <span class="n">weight_decay</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">)</span>
+<span class="n">l2loss</span> <span class="o">=</span> <span class="n">LpLoss</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">h1loss</span> <span class="o">=</span> <span class="n">H1Loss</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Training step - works exactly as before</span>
+<span class="k">for</span> <span class="n">batch_idx</span><span class="p">,</span> <span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">target_data</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_loader</span><span class="p">):</span>
+    <span class="c1"># Move data to device</span>
+    <span class="n">input_data</span> <span class="o">=</span> <span class="n">input_data</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>    <span class="c1"># Shape: (batch, channels, height, width)</span>
+    <span class="n">target_data</span> <span class="o">=</span> <span class="n">target_data</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>  <span class="c1"># Shape: (batch, channels, height, width)</span>
+
+    <span class="c1"># Forward pass - activations automatically offloaded to CPU</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
+
+    <span class="c1"># Compute loss</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">l2loss</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">target_data</span><span class="p">)</span>
+
+    <span class="c1"># Backward pass - gradients computed with CPU-stored activations</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+</pre></div>
+</div>
+<div style="margin-top: 2em;"></div></section>
+</section>
+<section id="performance-considerations">
+<h3>Performance Considerations<a class="headerlink" href="#performance-considerations" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt><strong>Memory vs Speed Trade-off</strong></dt><dd><p>CPU offloading reduces GPU memory usage at the cost of increased
+training time due to data transfer overhead between CPU and GPU memory.</p>
+</dd>
+<dt><strong>When to Use</strong></dt><dd><ul class="simple">
+<li><p>Training fails with CUDA out-of-memory errors</p></li>
+<li><p>You want to increase batch size or model resolution</p></li>
+<li><p>GPU memory is the primary bottleneck</p></li>
+</ul>
+</dd>
+<dt><strong>When Not to Use</strong></dt><dd><ul class="simple">
+<li><p>GPU memory is sufficient for your current setup</p></li>
+<li><p>Training speed is more critical than memory usage</p></li>
+<li><p>CPU memory is also limited</p></li>
+</ul>
+</dd>
+<dt><strong>Optimization Tips</strong></dt><dd><ul class="simple">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">pin_memory=True</span></code> for faster CPU-GPU transfers</p></li>
+<li><p>Consider gradient checkpointing as an alternative memory-saving technique</p></li>
+<li><p>Monitor both GPU and CPU memory usage during training</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>CPU offloading requires PyTorch version 1.12.0 or higher. Ensure your environment meets this requirement before using this feature.</p>
+</div>
+<div style="margin-top: 4em;"></div></section>
+</section>
 <section id="interactive-examples-with-code">
 <h2>Interactive examples with code<a class="headerlink" href="#interactive-examples-with-code" title="Link to this heading"></a></h2>
-<p>We also provide interactive examples that show our library and neural operator models in action.
-To get up to speed on the code, and look through some interactive examples to help you hit the ground running,
-check out our <a class="reference internal" href="../auto_examples/index.html#gallery-examples"><span class="std std-ref">Examples</span></a>.</p>
-<hr class="docutils" />
+<p>We also provide interactive examples that show our library and neural operator
+models in action.
+To get up to speed on the code, and look through some interactive examples
+to help you hit the ground running, check out our <a class="reference internal" href="../auto_examples/index.html#gallery-examples"><span class="std std-ref">Examples</span></a>.</p>
+<p>We also provide training recipe scripts for our models on sample problems
+in the <cite>scripts</cite> directory.</p>
 </section>
 </section>
 
@@ -281,6 +537,27 @@ check out our <a class="reference internal" href="../auto_examples/index.html#ga
         <ul>
 <li><a class="reference internal" href="#">User Guide</a><ul>
 <li><a class="reference internal" href="#neuraloperator-library-structure">NeuralOperator library structure</a></li>
+<li><a class="reference internal" href="#available-neural-operator-models">Available Neural Operator Models</a></li>
+<li><a class="reference internal" href="#data-loading-and-preprocessing">Data Loading and Preprocessing</a></li>
+<li><a class="reference internal" href="#training-neural-operator-models">Training Neural Operator Models</a><ul>
+<li><a class="reference internal" href="#the-trainer-class">The Trainer Class</a></li>
+<li><a class="reference internal" href="#available-training-components">Available Training Components</a></li>
+<li><a class="reference internal" href="#loss-functions">Loss Functions</a></li>
+<li><a class="reference internal" href="#distributed-training">Distributed Training</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cpu-offloading-for-high-resolution-training">CPU Offloading for High-Resolution Training</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#example-usage">Example Usage</a><ul>
+<li><a class="reference internal" href="#setup-and-data-loading">1. Setup and Data Loading</a></li>
+<li><a class="reference internal" href="#model-creation">2. Model Creation</a></li>
+<li><a class="reference internal" href="#enable-cpu-offloading">3. Enable CPU Offloading</a></li>
+<li><a class="reference internal" href="#training-loop">4. Training Loop</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#performance-considerations">Performance Considerations</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#interactive-examples-with-code">Interactive examples with code</a></li>
 </ul>
 </li>
