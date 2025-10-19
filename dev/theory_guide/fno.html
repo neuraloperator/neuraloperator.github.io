@@ -34,7 +34,7 @@
  
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="User Guide" href="../user_guide/index.html" />
+    <link rel="next" title="Advantages of Neural Operators" href="advantages.html" />
     <link rel="prev" title="Neural Operators: an Introduction" href="neural_operators.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -138,6 +138,8 @@
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Theory Guide</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="neural_operators.html">Neural Operators: an Introduction</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Fourier Neural Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advantages.html">Advantages of Neural Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="applications.html">Examples of Neural Operator Applications</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
@@ -170,32 +172,33 @@
         
   <section id="fourier-neural-operators">
 <span id="fno-intro"></span><h1>Fourier Neural Operators<a class="headerlink" href="#fourier-neural-operators" title="Link to this heading"></a></h1>
-<p>This page (which takes about 10 minutes to read), introduces the Fourier neural operator that solves a family of PDEs from scratch.
-It is the first work that can learn resolution-invariant solution operators on the Navier-Stokes equation,
+<p>This guide introduces the Fourier neural operator which can be used to solve a family of PDEs from scratch.
+It is the first work that can learn resolution-invariant solution operators for the Navier-Stokes equation,
 achieving state-of-the-art accuracy among all existing deep learning methods and
 up to 1000x faster than traditional solvers.
 Also, check out the paper <a class="footnote-reference brackets" href="#id4" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> and article <a class="footnote-reference brackets" href="#id5" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
-<section id="operator-learning">
+<div style="margin-top: 3em;"></div><section id="operator-learning">
 <h2>Operator learning<a class="headerlink" href="#operator-learning" title="Link to this heading"></a></h2>
-<p>Thinking in continuum gives us an advantage when dealing with PDEs.
-We want to design mesh-independent, resolution-invariant operators.</p>
 <p>Problems in science and engineering involve solving
 partial differential equations (PDE) systems.
 Unfortunately, these PDEs can be very hard.
 Traditional PDE solvers such as finite element methods (FEM) and finite difference methods (FDM)
 rely on discretizing the space into a very fine mesh.
 This can be slow and inefficient.</p>
-<p>In the previous doc,
+<p>Thinking in continuous space gives us an advantage when dealing with PDEs since these typically
+involve solving for functions on a continuous domain.
+We want to design mesh-independent, resolution-invariant operators.</p>
+<p>In the previous <a class="reference internal" href="neural_operators.html#neuralop-intro"><span class="std std-ref">Neural Operators: an Introduction</span></a> guide,
 we introduced the neural operators that use neural networks
 to learn the solution operators for PDEs.
 That is, given the initial conditions or the boundary conditions,
-the neural network directly outputs the solution,
+the neural network directly outputs the solution of the PDE on a fixed discretization or mesh,
 kind of like an image-to-image mapping.</p>
 <p>The neural operator is mesh-independent,
 different from the standard deep learning methods such as CNN.
 It can be trained on one mesh and evaluated on another.
 By parameterizing the model in function space,
-it learns the continuous function instead of discretized vectors.</p>
+it learns the continuous solution function instead of discretized vectors.</p>
 <blockquote>
 <div><table class="docutils align-default">
 <thead>
@@ -219,9 +222,10 @@ it learns the continuous function instead of discretized vectors.</p>
 </tbody>
 </table>
 </div></blockquote>
-<p>Operator learning can be taken as an image-to-image problem.
-The Fourier layer can be viewed as a substitute for the convolution layer.</p>
-</section>
+<p>Operator learning can be viewed as an image-to-image problem.
+In the Fourier Neural Operator,
+the Fourier layer can be viewed as a substitute for the convolution layer.</p>
+<div style="margin-top: 3em;"></div></section>
 <section id="framework-of-neural-operators">
 <h2>Framework of Neural Operators<a class="headerlink" href="#framework-of-neural-operators" title="Link to this heading"></a></h2>
 <p>Just like how neural networks consist of linear transformations and non-linear activation functions,
@@ -229,11 +233,11 @@ neural operators consist of linear operators and non-linear activation operators
 <p>Let <span class="math notranslate nohighlight">\(v\)</span> be the input vector, <span class="math notranslate nohighlight">\(u\)</span> be the output vector.
 A standard deep neural network can be written in the form:</p>
 <div class="math notranslate nohighlight">
-\[u = \left(K_l \circ \sigma_l \circ \cdots \circ \sigma_1 \circ K_0 \right) v\]</div>
+\[u = (K_l \circ \sigma_l \circ \ldots \circ \sigma_1 \circ K_0)(v)\]</div>
 <p>where <span class="math notranslate nohighlight">\(K\)</span> are the linear layer or convolution layer,
 and <span class="math notranslate nohighlight">\(\sigma\)</span> are the activation function such as ReLU.</p>
 <p>The neural operator shares a similar framework.
-It’s just now <span class="math notranslate nohighlight">\(v\)</span> and <span class="math notranslate nohighlight">\(u\)</span> are functions with different discretizations
+The only difference is that now <span class="math notranslate nohighlight">\(v\)</span> and <span class="math notranslate nohighlight">\(u\)</span> are functions with can be given on different discretizations
 (say, some inputs are <span class="math notranslate nohighlight">\(28 \times 28\)</span>, some are <span class="math notranslate nohighlight">\(256 \times 256\)</span>,
 and some are in triangular mesh).
 To deal with functions input, the linear transformation <span class="math notranslate nohighlight">\(K\)</span> is formulated as an integral operator.
@@ -241,10 +245,10 @@ Let <span class="math notranslate nohighlight">\(x, y\)</span> be the points in 
 <p>The map <span class="math notranslate nohighlight">\(K: v_{t} \mapsto v_{t+1}\)</span> is parameterized as</p>
 <div class="math notranslate nohighlight">
 \[v'(x) = \int \kappa(x,y) v(y) dy + W v(x)\]</div>
-<p>Where <span class="math notranslate nohighlight">\(\kappa\)</span> is a kernel function and <span class="math notranslate nohighlight">\(W\)</span> is the bias term.</p>
+<p>where <span class="math notranslate nohighlight">\(\kappa\)</span> is a kernel function and <span class="math notranslate nohighlight">\(W\)</span> is the bias term.</p>
 <p>For the Fourier neural operator, we formulate <span class="math notranslate nohighlight">\(K\)</span> as a convolution
-and implement it by Fourier transformation.</p>
-</section>
+and implement it using the Fourier transform.</p>
+<div style="margin-top: 3em;"></div></section>
 <section id="fourier-layer">
 <h2>Fourier Layer<a class="headerlink" href="#fourier-layer" title="Link to this heading"></a></h2>
 <p>Real-world images have lots of edges and shapes,
@@ -252,12 +256,12 @@ so CNNs can capture them well with a local convolution kernel.
 On the other hand, the inputs and outputs of PDEs are continuous functions.
 It is more efficient to represent them in Fourier space and do a global convolution.</p>
 <p>There are two main motivations for using the Fourier transform.
-First, it’s fast. A full standard integration of <span class="math notranslate nohighlight">\(n\)</span> points has complexity <span class="math notranslate nohighlight">\(O(n^2)\)</span>,
-while convolution via Fourier transform is quasilinear.
-Second, it’s efficient. The inputs and outputs of PDEs are continuous functions.
-So it’s usually more efficient to represent them in Fourier space.</p>
+First, it is fast. A full standard integration of <span class="math notranslate nohighlight">\(n\)</span> points has complexity <span class="math notranslate nohighlight">\(O(n^2)\)</span>,
+while convolution via Fourier transform on a regular grid is quasilinear.
+Second, it is efficient. The inputs and outputs of PDEs are continuous functions.
+So it is usually more efficient to represent them in Fourier space.</p>
 <p>Convolution in the spatial domain is equivalent to a pointwise multiplication in the Fourier domain. To implement the (global) convolution operator,
-we first do a Fourier transform, then a linear transform, and an inverse Fourier transform,
+we first do a Fourier transform, then a linear transform, and an inverse Fourier transform.
 As shown in the top part of the figure:</p>
 <a class="reference internal image-reference" href="../_images/fourier_layer.jpg"><img alt="../_images/fourier_layer.jpg" src="../_images/fourier_layer.jpg" style="width: 800px;" />
 </a>
@@ -273,18 +277,18 @@ As shown in the top part of the figure:</p>
 with the bias term <span class="math notranslate nohighlight">\(W v\)</span> (a linear transformation)
 and apply the activation function <span class="math notranslate nohighlight">\(\sigma\)</span>.
 Simple as it is.</p>
-<p>In practice, it’s usually sufficient to only take the lower-frequency modes
+<p>In practice, it is usually sufficient to only take the lower-frequency modes
 and truncate out these higher-frequency modes.
 Therefore, we apply the linear transformation on the lower-frequency modes
 and set the higher modes to zeros.</p>
-<p>Notice the activation functions shall be applied on the spatial domain.
+<p>Notice that the activation functions shall be applied on the spatial domain.
 They help to recover the higher-frequency modes and non-periodic boundary
 which are left out in the Fourier layers.
-Therefore, it’s necessary to the Fourier transform and its inverse at each layer.</p>
-</section>
+Therefore, it is necessary to add them after the inverse Fourier transform at each layer.</p>
+<div style="margin-top: 3em;"></div></section>
 <section id="implementation">
-<span id="fourier-layer-impl"></span><h2>Implementation<a class="headerlink" href="#implementation" title="Link to this heading"></a></h2>
-<p>We can easily create a 2d Fourier layer using <cite>neuralop</cite> as follows:</p>
+<h2>Implementation<a class="headerlink" href="#implementation" title="Link to this heading"></a></h2>
+<p>We can easily create a 2D Fourier layer using <cite>neuralop</cite> as follows:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.models.spectral_convolution</span><span class="w"> </span><span class="kn">import</span> <span class="n">FactorizedSpectralConv</span>
 <span class="n">fourier_layer</span> <span class="o">=</span> <span class="n">FactorizedSpectralConv</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="n">out_channels</span><span class="p">,</span> <span class="n">n_modes</span><span class="o">=</span><span class="p">(</span><span class="n">modes1</span><span class="p">,</span> <span class="n">modes2</span><span class="p">))</span>
 </pre></div>
@@ -294,6 +298,10 @@ Therefore, it’s necessary to the Fourier transform and its inverse at each lay
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">SpectralConv2d</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    2D spectral convolution layer for Fourier Neural Operators.</span>
+<span class="sd">    Performs convolution in Fourier space by truncating high-frequency modes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">in_channels</span><span class="p">,</span>   <span class="c1"># Number of input channels</span>
                  <span class="n">out_channels</span><span class="p">,</span>  <span class="c1"># Number of output channels</span>
@@ -311,8 +319,21 @@ Therefore, it’s necessary to the Fourier transform and its inverse at each lay
         <span class="bp">self</span><span class="o">.</span><span class="n">weights2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">modes1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">modes2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">cfloat</span><span class="p">))</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Forward pass of the spectral convolution layer.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : torch.Tensor</span>
+<span class="sd">            Input tensor (batch_size, in_channels, height, width)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        torch.Tensor</span>
+<span class="sd">            Output tensor (batch_size, out_channels, height, width)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">batchsize</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="c1">#Compute Fourier coeffcients</span>
+        <span class="c1"># Compute Fourier coefficients</span>
         <span class="n">x_ft</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfft2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
         <span class="c1"># Multiply relevant Fourier modes</span>
@@ -322,26 +343,41 @@ Therefore, it’s necessary to the Fourier transform and its inverse at each lay
         <span class="n">out_ft</span><span class="p">[:,</span> <span class="p">:,</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">modes1</span><span class="p">:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">modes2</span><span class="p">]</span> <span class="o">=</span> \
             <span class="bp">self</span><span class="o">.</span><span class="n">compl_mul2d</span><span class="p">(</span><span class="n">x_ft</span><span class="p">[:,</span> <span class="p">:,</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">modes1</span><span class="p">:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">modes2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights2</span><span class="p">)</span>
 
-        <span class="c1">#Return to physical space</span>
+        <span class="c1"># Return to physical space</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">irfft2</span><span class="p">(</span><span class="n">out_ft</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
         <span class="k">return</span> <span class="n">x</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">compl_mul2d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">weights</span><span class="p">):</span>
-        <span class="c1"># (batch, in_channel, x,y ), (in_channel, out_channel, x,y) -&gt; (batch, out_channel, x,y)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Complex matrix multiplication for Fourier coefficients.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        input : torch.Tensor</span>
+<span class="sd">            Input Fourier coefficients</span>
+<span class="sd">        weights : torch.Tensor</span>
+<span class="sd">            Learnable weight matrix</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        torch.Tensor</span>
+<span class="sd">            Result of the complex matrix multiplication</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># (batch, in_channel, x,y ), (in_channel, out_channel, x, y) -&gt; (batch, out_channel, x, y)</span>
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;bixy,ioxy-&gt;boxy&quot;</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>where the input <code class="code docutils literal notranslate"><span class="pre">x</span></code> has the shape (N,C,H,W),
+<p>where the input <code class="code docutils literal notranslate"><span class="pre">x</span></code> has the shape <code class="code docutils literal notranslate"><span class="pre">(N,</span> <span class="pre">C,</span> <span class="pre">H,</span> <span class="pre">W)</span></code>,
 <code class="code docutils literal notranslate"><span class="pre">self.weights1</span></code> and <code class="code docutils literal notranslate"><span class="pre">self.weights2</span></code> are the weight matrices;
-<code class="code docutils literal notranslate"><span class="pre">self.mode1</span></code> and <code class="code docutils literal notranslate"><span class="pre">self.mode2</span></code> truncate the lower-frequency modes;
+<code class="code docutils literal notranslate"><span class="pre">self.modes1</span></code> and <code class="code docutils literal notranslate"><span class="pre">self.modes2</span></code> truncate the lower-frequency modes;
 and <code class="code docutils literal notranslate"><span class="pre">compl_mul2d()</span></code> is the matrix multiplication for complex numbers.</p>
 <p>Note in the forward call above that <code class="code docutils literal notranslate"><span class="pre">torch.fft.rfft()</span></code> returns a matrix
-of size <cite>n</cite> along each dim that indexes Fourier modes <code class="code docutils literal notranslate"><span class="pre">0,</span> <span class="pre">1,</span> <span class="pre">2,</span> <span class="pre">...</span> <span class="pre">n//2,</span> <span class="pre">-n//2,</span> <span class="pre">-n//2</span> <span class="pre">-</span> <span class="pre">1,</span> <span class="pre">...-1</span></code>. Since our
+of size <code class="code docutils literal notranslate"><span class="pre">n</span></code> along each dim that indexes Fourier modes <code class="code docutils literal notranslate"><span class="pre">0,</span> <span class="pre">1,</span> <span class="pre">2,</span> <span class="pre">...</span> <span class="pre">n//2,</span> <span class="pre">-n//2,</span> <span class="pre">-n//2</span> <span class="pre">-</span> <span class="pre">1,</span> <span class="pre">...-1</span></code>. Since our
 inputs are real-valued, we take the real-valued FFT, which is skew-symmetric, so information is repeated across
 one axis. Therefore it is sufficient to keep only two of the four corners of the FFT matrix.</p>
-<p><strong>Shifting the FFT signal</strong>
-.. _fft_shift_explanation :
-Equivalently, we could also apply a periodic FFT-shift using <code class="code docutils literal notranslate"><span class="pre">torch.fft.fftshift</span></code> to move the zero-frequency component
+<div style="margin-top: 3em;"></div><section id="shifting-the-fft-signal">
+<h3>Shifting the FFT signal<a class="headerlink" href="#shifting-the-fft-signal" title="Link to this heading"></a></h3>
+<p id="fft-shift-explanation">Equivalently, we could also apply a periodic FFT-shift using <code class="code docutils literal notranslate"><span class="pre">torch.fft.fftshift</span></code> to move the zero-frequency component
 to the center of the FFT matrix, such that the matrix would be indexed with modes <code class="code docutils literal notranslate"><span class="pre">-n//2,</span> <span class="pre">-n//2</span> <span class="pre">+</span> <span class="pre">1,</span> <span class="pre">...-1,</span> <span class="pre">0,</span> <span class="pre">1,</span> <span class="pre">...</span></code>
 as shown below:</p>
 <figure class="align-default" id="id7">
@@ -354,15 +390,19 @@ from the middle out. Note that the last half of modes are only redundant when us
 transform. For more details, see the source paper <a class="footnote-reference brackets" href="#id6" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>.</span><a class="headerlink" href="#id7" title="Link to this image"></a></p>
 </figcaption>
 </figure>
-<p><strong>Convolutional Filters in Fourier Space</strong></p>
+<div style="margin-top: 3em;"></div></section>
+<section id="convolutional-filters-in-fourier-space">
+<h3>Convolutional Filters in Fourier Space<a class="headerlink" href="#convolutional-filters-in-fourier-space" title="Link to this heading"></a></h3>
 <a class="reference internal image-reference" href="../_images/filters.jpg"><img alt="../_images/filters.jpg" src="../_images/filters.jpg" style="width: 800px;" />
 </a>
 <p>Filters in convolution neural networks are usually local.
 They are good for capturing local patterns such as edges and shapes.
 Fourier filters are global sinusoidal functions.
 They are better for representing continuous functions.</p>
-<p><strong>Higher-frequency modes and non-periodic boundary</strong>
-The Fourier layer on its own loses higher-frequency modes
+<div style="margin-top: 3em;"></div></section>
+<section id="higher-frequency-modes-and-non-periodic-boundary">
+<h3>Higher-frequency modes and non-periodic boundary<a class="headerlink" href="#higher-frequency-modes-and-non-periodic-boundary" title="Link to this heading"></a></h3>
+<p>The Fourier layer on its own loses higher-frequency modes
 and works only with periodic boundary conditions.
 However, the Fourier neural operator as a whole does not have these limitations
 (examples shown in the experiments).
@@ -370,30 +410,35 @@ The encoder-decoder structure
 helps to recover the higher Fourier modes.
 And the bias term <span class="math notranslate nohighlight">\(W\)</span>
 helps to recover the non-periodic boundary.</p>
-<p><strong>Complexity</strong>
-The Fourier layer has a quasilinear complexity.
+<div style="margin-top: 3em;"></div></section>
+<section id="complexity">
+<h3>Complexity<a class="headerlink" href="#complexity" title="Link to this heading"></a></h3>
+<p>The Fourier layer has a quasilinear complexity.
 Denote the number of points (pixels) <span class="math notranslate nohighlight">\(n\)</span> and truncating at <span class="math notranslate nohighlight">\(k_{max}\)</span> frequency modes.
-The multiplication has complexity <span class="math notranslate nohighlight">\(% &lt;![CDATA[
-O(k_{max}) &lt; O(n) %]]&gt;\)</span> .
+The multiplication has complexity <span class="math notranslate nohighlight">\(O(k_{max}) &lt; O(n)\)</span>.
 The majority of the computational cost lies in computing the Fourier transform and its inverse.
 General Fourier transforms have complexity <span class="math notranslate nohighlight">\(O(n^2)\)</span>,
 however, since we truncate the series the complexity is in fact <span class="math notranslate nohighlight">\(O(n k_{max})\)</span>,
 while the FFT has complexity <span class="math notranslate nohighlight">\(O(n \log n)\)</span>.</p>
-<p><strong>resolution-invariance”&gt;Resolution-invariance</strong>
-The Fourier layers are discretization-invariant,
+<div style="margin-top: 3em;"></div></section>
+<section id="resolution-invariance">
+<h3>Resolution-invariance<a class="headerlink" href="#resolution-invariance" title="Link to this heading"></a></h3>
+<p>The Fourier layers are discretization-invariant,
 because they can learn from and evaluate functions
 which are discretized in an arbitrary way.
 Since parameters are learned directly in Fourier space,
 resolving the functions in physical space simply amounts to projecting on the basis
 of wave functions which are well-defined everywhere on the space.
-This allows us to transfer among discretization.
+This allows us to transfer among discretizations.
 If implemented with standard FFT, then it will be restricted to uniform mesh,
-but still resolution-invariant.</p>
+but it is still resolution-invariant.</p>
+<div style="margin-top: 3em;"></div></section>
 </section>
 <section id="experiments">
 <h2>Experiments<a class="headerlink" href="#experiments" title="Link to this heading"></a></h2>
-<p><strong>Burgers Equation</strong>
-The 1-d Burgers’ equation is a non-linear PDE with various applications
+<div style="margin-top: 3em;"></div><section id="burgers-equation">
+<h3>Burgers Equation<a class="headerlink" href="#burgers-equation" title="Link to this heading"></a></h3>
+<p>The 1D Burgers’ equation is a non-linear PDE with various applications
 including modeling the one-dimensional flow of a viscous fluid. It takes the form</p>
 <div class="math notranslate nohighlight">
 \[\partial_t u(x,t) + \partial_x ( u^2(x,t)/2) = \nu \partial_{xx} u(x,t), \qquad x \in (0,1), t \in (0,1]\]</div>
@@ -451,14 +496,16 @@ at time one, defined by <span class="math notranslate nohighlight">\(u_0 \mapsto
 </tbody>
 </table>
 </div></blockquote>
-<p><strong>Darcy Flow</strong></p>
-<p>We consider the steady state of the 2-d Darcy Flow equation
-on the unit box which is the second order, linear, elliptic PDE</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="darcy-flow">
+<h3>Darcy Flow<a class="headerlink" href="#darcy-flow" title="Link to this heading"></a></h3>
+<p>We consider the steady state of the 2D Darcy Flow equation
+on the unit box which is a second order, linear, elliptic PDE</p>
 <div class="math notranslate nohighlight">
 \[- \nabla \cdot (a(x) \nabla u(x)) = f(x) \qquad x \in (0,1)^2\]</div>
 <div class="math notranslate nohighlight">
 \[u(x) = 0 \qquad \quad \:\:x \in \partial (0,1)^2\]</div>
-<p>with a Dirichlet boundary where <span class="math notranslate nohighlight">\(a \in L^\infty\left({(0,1)}^2;\mathbb{R}_+\right)\)</span>  is the diffusion coefficient and <span class="math notranslate nohighlight">\(f \in L^2\left({(0,1)}^2;\mathbb{R}\right)\)</span> is the forcing function.
+<p>with a Dirichlet boundary condition where <span class="math notranslate nohighlight">\(a \in L^\infty\left({(0,1)}^2;\mathbb{R}_+\right)\)</span> is the diffusion coefficient and <span class="math notranslate nohighlight">\(f \in L^2\left({(0,1)}^2;\mathbb{R}\right)\)</span> is the forcing function.
 This PDE has numerous applications including modeling the pressure of the subsurface flow,
 the deformation of linearly elastic materials, and the electric potential in conductive materials.
 We are interested in learning the operator mapping the diffusion coefficient to the solution,
@@ -512,7 +559,9 @@ defined by <span class="math notranslate nohighlight">\(a \mapsto u\)</span>. No
 </div></blockquote>
 <a class="reference internal image-reference" href="../_images/fourier_error.jpg"><img alt="../_images/fourier_error.jpg" src="../_images/fourier_error.jpg" style="width: 800px;" />
 </a>
-<p>Benchmarks for time-independent problems (Burgers and Darcy):</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="benchmarks-for-time-independent-problems-burgers-and-darcy">
+<h3>Benchmarks for time-independent problems (Burgers and Darcy):<a class="headerlink" href="#benchmarks-for-time-independent-problems-burgers-and-darcy" title="Link to this heading"></a></h3>
 <blockquote>
 <div><ul class="simple">
 <li><p>NN: a simple point-wise feedforward neural network.</p></li>
@@ -525,8 +574,10 @@ defined by <span class="math notranslate nohighlight">\(a \mapsto u\)</span>. No
 <li><p>FNO: the newly purposed Fourier neural operator.</p></li>
 </ul>
 </div></blockquote>
-<p><strong>Navier-Stokes Equation</strong></p>
-<p>We consider the 2-d Navier-Stokes equation for a viscous,
+<div style="margin-top: 3em;"></div></section>
+<section id="navier-stokes-equation">
+<h3>Navier-Stokes Equation<a class="headerlink" href="#navier-stokes-equation" title="Link to this heading"></a></h3>
+<p>We consider the 2D Navier-Stokes equation for a viscous,
 incompressible fluid in vorticity form on the unit torus:</p>
 <div class="math notranslate nohighlight">
 \[\partial_t w(x,t) + u(x,t) \cdot \nabla w(x,t) = \nu \Delta w(x,t) + f(x), \qquad x \in (0,1)^2, t \in (0,T]\]</div>
@@ -536,7 +587,7 @@ incompressible fluid in vorticity form on the unit torus:</p>
 \[w(x,0) = w_0(x), \qquad \qquad \qquad  x \in (0,1)^2\]</div>
 <p>where <span class="math notranslate nohighlight">\(u\)</span> is the velocity field,
 <span class="math notranslate nohighlight">\(w = \nabla \times u\)</span> is the vorticity,
-<span class="math notranslate nohighlight">\(w_0\)</span> is the initial vorticity,&lt;br /&gt;
+<span class="math notranslate nohighlight">\(w_0\)</span> is the initial vorticity,
 <span class="math notranslate nohighlight">\(\nu\)</span> is the viscosity coefficient,
 and <span class="math notranslate nohighlight">\(f\)</span> is the forcing function.
 We are interested in learning the operator mapping the vorticity up to time 10
@@ -550,10 +601,10 @@ decreasing the final time <span class="math notranslate nohighlight">\(T\)</span
 <thead>
 <tr class="row-odd"><th class="head"><p>Configs</p></th>
 <th class="head"><p>Parameters</p></th>
-<th class="head"><p>Time per epoch</p></th>
-<th class="head"><p>nu=1e-3</p></th>
-<th class="head"><p>nu=1e-4</p></th>
-<th class="head"><p>nu=1e-5</p></th>
+<th class="head"><p>Time/epoch</p></th>
+<th class="head"><p>ν=1e-3</p></th>
+<th class="head"><p>ν=1e-4</p></th>
+<th class="head"><p>ν=1e-5</p></th>
 </tr>
 </thead>
 <tbody>
@@ -597,14 +648,14 @@ decreasing the final time <span class="math notranslate nohighlight">\(T\)</span
 </div></blockquote>
 <a class="reference internal image-reference" href="../_images/fourier_ns1e4.jpg"><img alt="../_images/fourier_ns1e4.jpg" src="../_images/fourier_ns1e4.jpg" style="width: 800px;" />
 </a>
-<p>Benchmarks for time-dependent problems (Navier-Stokes):</p>
+<div style="margin-top: 3em;"></div><p>Benchmarks for time-dependent problems (Navier-Stokes):</p>
 <blockquote>
 <div><ul class="simple">
 <li><p>ResNet: 18 layers of 2-d convolution with residual connections.</p></li>
 <li><p>U-Net: A popular choice for image-to-image regression tasks consisting of four blocks with 2-d convolutions and deconvolutions.</p></li>
 <li><p>TF-Net: A network designed for learning turbulent flows based on a combination of spatial and temporal convolutions.</p></li>
-<li><p>FNO-2d: 2-d Fourier neural operator with an RNN structure in time.</p></li>
-<li><p>FNO-3d: 3-d Fourier neural operator that directly convolves in space-time.</p></li>
+<li><p>FNO-2d: 2D Fourier neural operator with an RNN structure in time.</p></li>
+<li><p>FNO-3d: 3D Fourier neural operator that directly convolves in space-time.</p></li>
 </ul>
 </div></blockquote>
 <p>The FNO-3D has the best performance
@@ -619,7 +670,9 @@ Increasing it degrades their performance while FNO achieves the same errors.</p>
 <p>FNO-2D, U-Net, TF-Net, and ResNet all use 2D convolution in the spatial domain
 and recurrently propagate in the time domain (2D+RNN).
 On the other hand, FNO-3D performs convolution in space-time.</p>
-<p><strong>Bayesian Inverse Problem</strong></p>
+<div style="margin-top: 3em;"></div></section>
+<section id="bayesian-inverse-problem">
+<h3>Bayesian Inverse Problem<a class="headerlink" href="#bayesian-inverse-problem" title="Link to this heading"></a></h3>
 <p>In this experiment, we use a function space Markov chain Monte Carlo (MCMC) method
 to draw samples from the posterior distribution of the initial vorticity
 in Navier-Stokes given sparse, noisy observations at time <span class="math notranslate nohighlight">\(T=50\)</span>.
@@ -633,14 +686,15 @@ requiring 30,000 evaluations of the forward operator.</p>
 the true observed vorticity at <span class="math notranslate nohighlight">\(T=50\)</span> with black dots indicating
 the locations of the observation points placed on a <span class="math notranslate nohighlight">\(7 \times 7\)</span> grid.
 The top middle panel shows the posterior mean of the initial vorticity
-given the noisy observations estimated with MCMC using the traditional solver,
+given the noisy observations estimated with MCMC using the traditional solver.
 while the top right panel shows the same thing but using FNO as a surrogate model.
 The bottom middle and right panels show the vorticity at <span class="math notranslate nohighlight">\(T=50\)</span>
 when the respective approximate posterior means are used as initial conditions.</p>
+<div style="margin-top: 3em;"></div></section>
 </section>
 <section id="conclusion">
 <h2>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading"></a></h2>
-<p>We propose a neural operator based on Fourier Transformation.
+<p>We propose a neural operator based on the Fourier transform.
 It is the first work that learns the resolution-invariant solution operator
 for the family of Navier-Stokes equation in the turbulent regime,
 where previous graph-based neural operators do not converge.
@@ -655,7 +709,7 @@ It achieves error rates that are <span class="math notranslate nohighlight">\(30
 On a <span class="math notranslate nohighlight">\(256 \times 256\)</span> grid,
 the Fourier neural operator has an inference time of only <span class="math notranslate nohighlight">\(0.005\)</span>
 compared to the <span class="math notranslate nohighlight">\(2.2s\)</span> of the pseudo-spectral method used to solve Navier-Stokes.</p>
-</section>
+<div style="margin-top: 3em;"></div></section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
 <aside class="footnote-list brackets">
@@ -665,11 +719,15 @@ compared to the <span class="math notranslate nohighlight">\(2.2s\)</span> of th
 Zongyi Li and Nikola Kovachki and Kamyar Azizzadenesheli
 and Burigede Liu and Kaushik Bhattacharya and Andrew Stuart and Anima Anandkumar, 2020.</p>
 </aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
 <aside class="footnote brackets" id="id5" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
 <p>Hao, K. (2021, October 20). Ai has cracked a key mathematical puzzle for understanding our world.
 MIT Technology Review. <a class="reference external" href="https://www.technologyreview.com/2020/10/30/1011435/ai-fourier-neural-network-cracks-navier-stokes-and-partial-differential-equations/">https://www.technologyreview.com/2020/10/30/1011435/ai-fourier-neural-network-cracks-navier-stokes-and-partial-differential-equations/</a></p>
 </aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
 <aside class="footnote brackets" id="id6" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>
 <p>Multi-Grid Tensorized Fourier Neural Operator for High-Resolution PDEs,
@@ -694,8 +752,8 @@ TMLR 2024. <a class="reference external" href="https://openreview.net/pdf?id=AWi
     </a>
     
     
-    <a class="button pagination-next" href="../user_guide/index.html" title="next page" accesskey="n">
-        <span>User Guide </span>
+    <a class="button pagination-next" href="advantages.html" title="next page" accesskey="n">
+        <span>Advantages of Neural Operators </span>
         <span class="icon">
             <i class="fa fa-arrow-circle-right"></i>
         </span>
@@ -735,8 +793,22 @@ TMLR 2024. <a class="reference external" href="https://openreview.net/pdf?id=AWi
 <li><a class="reference internal" href="#operator-learning">Operator learning</a></li>
 <li><a class="reference internal" href="#framework-of-neural-operators">Framework of Neural Operators</a></li>
 <li><a class="reference internal" href="#fourier-layer">Fourier Layer</a></li>
-<li><a class="reference internal" href="#implementation">Implementation</a></li>
-<li><a class="reference internal" href="#experiments">Experiments</a></li>
+<li><a class="reference internal" href="#implementation">Implementation</a><ul>
+<li><a class="reference internal" href="#shifting-the-fft-signal">Shifting the FFT signal</a></li>
+<li><a class="reference internal" href="#convolutional-filters-in-fourier-space">Convolutional Filters in Fourier Space</a></li>
+<li><a class="reference internal" href="#higher-frequency-modes-and-non-periodic-boundary">Higher-frequency modes and non-periodic boundary</a></li>
+<li><a class="reference internal" href="#complexity">Complexity</a></li>
+<li><a class="reference internal" href="#resolution-invariance">Resolution-invariance</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#experiments">Experiments</a><ul>
+<li><a class="reference internal" href="#burgers-equation">Burgers Equation</a></li>
+<li><a class="reference internal" href="#darcy-flow">Darcy Flow</a></li>
+<li><a class="reference internal" href="#benchmarks-for-time-independent-problems-burgers-and-darcy">Benchmarks for time-independent problems (Burgers and Darcy):</a></li>
+<li><a class="reference internal" href="#navier-stokes-equation">Navier-Stokes Equation</a></li>
+<li><a class="reference internal" href="#bayesian-inverse-problem">Bayesian Inverse Problem</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#conclusion">Conclusion</a></li>
 <li><a class="reference internal" href="#references">References</a></li>
 </ul>

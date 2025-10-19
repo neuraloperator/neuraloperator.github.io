@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Advantages of Neural Operators &#8212; neuraloperator 1.0.2 documentation</title> 
+<link rel="stylesheet" href="../_static/tensorly_style.css">
+<link rel="apple-touch-icon" sizes="180x180" href="../_static/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../_static/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../_static/favicon/favicon-16x16.png">
+<link rel="manifest" href="../_static/favicon/site.webmanifest">
+<link rel="mask-icon" href="../_static/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="../_static/favicon/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/tensorly_style.css?v=a02e9698" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+    <script src="../_static/documentation_options.js?v=1ed6394b"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+ <script src="../_static/navbar_burger.js"></script>
+ <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+ 
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Examples of Neural Operator Applications" href="applications.html" />
+    <link rel="prev" title="Fourier Neural Operators" href="fno.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  </head>
+<body  class="has-navbar-fixed-top">
+
+  <header>
+    <navbar>
+      <nav class="navbar top-navbar is-fixed-top has-shadow is-flex-wrap-wrap" role="navigation" aria-label="main top navigation">
+        <div class="navbar-brand">
+        
+
+          <a class="navbar-item" href="../index.html">
+            <img src="../_static/neuraloperator_logo.png" height="28">
+          </a>
+          <a class="navbar-item is-hidden-desktop" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon"><i class="fab fa-github"></i></span>
+          </a>
+
+          <a role="button" class="navbar-burger" data-target="top-nav-menu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+
+        </div>
+        
+        <div class="navbar-menu" id="top-nav-menu">
+        
+
+          <div class="navbar-start">
+            
+              <a class="navbar-item" href="../install.html">
+              Install
+            </a>
+              <a class="navbar-item" href="index.html">
+              Theory Guide
+            </a>
+              <a class="navbar-item" href="../user_guide/index.html">
+              User Guide
+            </a>
+              <a class="navbar-item" href="../modules/api.html">
+              API
+            </a>
+              <a class="navbar-item" href="../auto_examples/index.html">
+              Examples
+            </a>
+              <a class="navbar-item" href="../dev_guide/index.html">
+              Developer's Guide
+            </a>
+          </div>
+        
+          <div class="navbar-end">
+            <div class="navbar-item">
+            
+            <a class="button is-hidden-touch is-dark" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon-text">
+                <span class="icon is-large">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Github</span>
+              </span>
+            </a>
+
+            </div> 
+          </div> 
+        </div> 
+
+      </nav>
+      
+    </navbar>
+  </header>
+
+
+  <div id="column-container">
+  <div class="columns is-mobile is-centered">
+	
+  
+      <div class="column is-10-mobile is-one-third-tablet is-3-desktop is-hidden-mobile" id="sidebar">
+    
+    <aside class="sticky-nav sidebar-menu">
+<div class="sidebar-search">
+  <form class="field" id="searchbox" role="search" action="../search.html" method="get">
+    <!-- <label class="label" id="searchlabel">Quick search</label> -->
+    <div class="field has-addons">
+      <div class="control is-expanded">
+        <input class="input" type="text" placeholder="Search the doc" name="q" aria-labelledby="searchlabel autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      </div>
+      <div class="control">
+        <input class="button is-info" type="submit" value="Go" />
+      </div>
+    </div>
+  </form>
+  <script>document.getElementById('searchbox').style.display = "block"</script>
+
+</div>
+      
+      <div class="sidebar-menu-toc">
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installing NeuralOperator</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Theory Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="neural_operators.html">Neural Operators: an Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fno.html">Fourier Neural Operators</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Advantages of Neural Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="applications.html">Examples of Neural Operator Applications</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Development guide</a></li>
+</ul>
+ 
+      </div>
+    </aside>
+  </div>
+  
+
+  <div class="column main-column">
+
+    
+    <div class="main-section">
+
+      
+      
+      <div class="side-menu-toggle">
+        <button class="button" id="toggle-sidebar" onclick="toggle_sidebar()">
+          <span class="icon"><i class="fa fa-bars" aria-hidden="true"></i></span>
+          <span>menu</span> 
+        </button>
+      </div>
+      
+
+      <div class="container content main-content">
+        
+  <section id="advantages-of-neural-operators">
+<span id="neural-op-advantages"></span><h1>Advantages of Neural Operators<a class="headerlink" href="#advantages-of-neural-operators" title="Link to this heading"></a></h1>
+<p>This guide explores the key advantages of neural operators over traditional
+neural networks and numerical methods for solving partial differential equations
+and learning mappings between function spaces.</p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
+<p>Neural operators represent a fundamental advancement in machine learning for
+scientific computing, offering unique capabilities that address the limitations
+of both traditional neural networks and classical numerical methods.
+Unlike conventional approaches that operate on fixed discretizations,
+neural operators are naturally formulated to work with functions,
+enabling them to learn mappings between infinite-dimensional function spaces.</p>
+<p>The advantages of neural operators stem from their mathematical foundation in
+operator theory and their ability to maintain consistency across different discretizations.
+This guide examines these advantages in detail, drawing from both theoretical insights
+and practical applications.</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="mathematical-well-posedness">
+<h2>Mathematical Well-Posedness<a class="headerlink" href="#mathematical-well-posedness" title="Link to this heading"></a></h2>
+<p>The ground-truth mapping is an operator.</p>
+<p>The fundamental advantage of neural operators lies in their mathematical foundation.
+In scientific computing, the problems we aim to solve are inherently operator learning tasks.
+Consider a general differential equation:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}u = f\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathcal{L}\)</span> is a differential operator, <span class="math notranslate nohighlight">\(f\)</span> is the input function,
+and <span class="math notranslate nohighlight">\(u\)</span> is the solution function.</p>
+<p>Neural operators are designed to approximate these true operators directly,
+rather than learning discretized approximations.
+This alignment with the underlying mathematical structure ensures that:</p>
+<ul class="simple">
+<li><p>The learned mapping respects the continuous nature of the problem</p></li>
+</ul>
+<div style="margin-top: 1em;"></div><ul class="simple">
+<li><p>The approximation error can be bounded theoretically</p></li>
+</ul>
+<div style="margin-top: 1em;"></div><ul class="simple">
+<li><p>The method converges to the true operator as the neural network capacity increases</p></li>
+</ul>
+<p>This well-posedness property is crucial for scientific applications where
+mathematical rigor is essential.</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="function-representation-and-computational-flexibility">
+<h2>Function Representation and Computational Flexibility<a class="headerlink" href="#function-representation-and-computational-flexibility" title="Link to this heading"></a></h2>
+<p>The ability to output continuous functions is useful for follow-up computations.</p>
+<p>One of the most significant advantages of neural operators is their ability
+to output continuous functions that can be queried at arbitrary coordinates.
+This capability enables:</p>
+<dl class="simple">
+<dt><strong>Arbitrary Resolution Inference</strong></dt><dd><p>Neural operators can be evaluated at any resolution without retraining,
+enabling zero-shot super-resolution. This is particularly valuable when
+high-resolution predictions are needed but training data is only available at
+lower resolutions.</p>
+</dd>
+</dl>
+<div style="margin-top: 2em;"></div><dl class="simple">
+<dt><strong>Downstream Operations</strong></dt><dd><p>Since neural operators output functions rather than discrete values,
+they enable natural computation of derivatives, integrals, and other mathematical
+operations on the solution.</p>
+</dd>
+</dl>
+<div style="margin-top: 2em;"></div><dl class="simple">
+<dt><strong>Consistent Interpolation</strong></dt><dd><p>The output functions are consistent across different query points,
+avoiding artifacts that might arise from discrete-to-continuous interpolation.</p>
+</dd>
+</dl>
+<div style="margin-top: 3em;"></div></section>
+<section id="universal-approximation-capability">
+<h2>Universal Approximation Capability<a class="headerlink" href="#universal-approximation-capability" title="Link to this heading"></a></h2>
+<p>Neural operators possess universal approximation properties, meaning they can
+approximate any continuous operator between function spaces to arbitrary accuracy,
+given sufficient network capacity. This theoretical guarantee ensures that:</p>
+<dl class="simple">
+<dt><strong>No fundamental limitations</strong></dt><dd><p>Neural operators are not restricted to specific
+types of operators or function spaces</p>
+</dd>
+</dl>
+<div style="margin-top: 2em;"></div><dl class="simple">
+<dt><strong>Convergence guarantees</strong></dt><dd><p>The approximation error can be made arbitrarily
+small with sufficient network capacity</p>
+</dd>
+</dl>
+<div style="margin-top: 2em;"></div><dl class="simple">
+<dt><strong>Broad applicability</strong></dt><dd><p>The same architecture can be applied to diverse scientific problems,
+from fluid dynamics to materials science.</p>
+</dd>
+</dl>
+<p>The universal approximation property is particularly important for complex,
+nonlinear operators that arise in real-world applications, such as turbulent
+fluid flows or multi-physics simulations.</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="solving-parametrized-pdes">
+<h2>Solving Parametrized PDEs<a class="headerlink" href="#solving-parametrized-pdes" title="Link to this heading"></a></h2>
+<p>Traditional numerical methods solve one specific instance of a PDE with fixed parameters,
+boundary conditions, and initial conditions. Neural operators, in contrast,
+can learn solution operators for entire families of PDEs:</p>
+<dl class="simple">
+<dt><strong>Parameter Flexibility</strong></dt><dd><p>A single neural operator can handle different parameter values
+(e.g., different viscosities, conductivities, or material properties) without retraining.</p>
+</dd>
+</dl>
+<div style="margin-top: 2em;"></div><dl class="simple">
+<dt><strong>Boundary Condition Generalization</strong></dt><dd><p>The same model can work with various boundary conditions, from Dirichlet to Neumann
+to mixed conditions.</p>
+</dd>
+</dl>
+<div style="margin-top: 2em;"></div><dl class="simple">
+<dt><strong>Geometry Adaptation</strong></dt><dd><p>Neural operators can generalize across different domain geometries,
+making them valuable for shape optimization and design problems.</p>
+</dd>
+</dl>
+<div style="margin-top: 2em;"></div><dl class="simple">
+<dt><strong>Multi-Physics Capability</strong></dt><dd><p>A single operator can learn mappings for coupled systems involving multiple
+physics phenomena.</p>
+</dd>
+</dl>
+<p>This capability is particularly valuable in engineering applications where rapid
+evaluation across parameter spaces is essential for optimization, uncertainty
+quantification, and design exploration.</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="flexible-inference-and-resolution-invariance">
+<h2>Flexible Inference and Resolution Invariance<a class="headerlink" href="#flexible-inference-and-resolution-invariance" title="Link to this heading"></a></h2>
+<p>Neural operators can be queried at arbitrary resolution</p>
+<dl class="simple">
+<dt><strong>Discretization Invariance</strong></dt><dd><p>Neural operators produce consistent results regardless of the input discretization.
+The same model can process inputs on regular grids, irregular meshes, or even
+point clouds, maintaining mathematical consistency.</p>
+</dd>
+</dl>
+<div style="margin-top: 2em;"></div><dl class="simple">
+<dt><strong>Resolution Convergence</strong></dt><dd><p>The approximation quality improves as the input resolution increases, with the
+error vanishing in the limit of infinite resolution.</p>
+</dd>
+</dl>
+<div style="margin-top: 2em;"></div><dl class="simple">
+<dt><strong>Multi-Scale Capability</strong></dt><dd><p>A single neural operator can capture phenomena across multiple scales,
+from fine-scale details to large-scale patterns.</p>
+</dd>
+</dl>
+<div style="margin-top: 2em;"></div><dl class="simple">
+<dt><strong>Computational Efficiency</strong></dt><dd><p>Once trained, neural operators can produce high-resolution solutions much
+faster than traditional numerical methods, often achieving speedups of 100-1,000,000x!</p>
+</dd>
+</dl>
+<div style="margin-top: 3em;"></div></section>
+<section id="data-efficiency-and-training-advantages">
+<h2>Data Efficiency and Training Advantages<a class="headerlink" href="#data-efficiency-and-training-advantages" title="Link to this heading"></a></h2>
+<p>Neural operators can learn from mixed-resolution datasets</p>
+<dl class="simple">
+<dt><strong>Mixed-Resolution Training</strong></dt><dd><p>Neural operators can be trained on datasets containing samples at different resolutions,
+making efficient use of available computational resources and data.</p>
+</dd>
+</dl>
+<div style="margin-top: 2em;"></div><dl class="simple">
+<dt><strong>Curriculum Learning</strong></dt><dd><p>Training can follow a curriculum: start with low-resolution samples for fast
+initial learning, then progressively incorporate higher-resolution data for fine-tuning.</p>
+</dd>
+</dl>
+<div style="margin-top: 2em;"></div><dl class="simple">
+<dt><strong>Faster Training</strong></dt><dd><p>The ability to use low-resolution data for initial training significantly
+reduces computational costs while maintaining learning effectiveness.</p>
+</dd>
+</dl>
+<div style="margin-top: 2em;"></div><dl class="simple">
+<dt><strong>Data Augmentation</strong></dt><dd><p>The same physical system can be represented at multiple resolutions,
+effectively increasing the training dataset size.</p>
+</dd>
+</dl>
+<div style="margin-top: 2em;"></div><dl class="simple">
+<dt><strong>Transfer Learning</strong></dt><dd><p>Models trained on one resolution can be fine-tuned for different resolutions
+with minimal additional training.</p>
+</dd>
+</dl>
+<div style="margin-top: 3em;"></div></section>
+<section id="practical-implementation-benefits">
+<h2>Practical Implementation Benefits<a class="headerlink" href="#practical-implementation-benefits" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><strong>Memory Efficiency</strong></dt><dd><p>Neural operators can process high-resolution inputs without requiring
+proportionally large memory, as they operate in function space rather than on dense
+discretizations.</p>
+</dd>
+</dl>
+<div style="margin-top: 2em;"></div><dl class="simple">
+<dt><strong>Parallelization</strong></dt><dd><p>The function-to-function mapping nature of neural operators enables efficient
+parallelization across different spatial and temporal scales.</p>
+</dd>
+</dl>
+<div style="margin-top: 2em;"></div><dl class="simple">
+<dt><strong>Robustness</strong></dt><dd><p>The continuous nature of the learned operators provides robustness to noise and
+discretization artifacts.</p>
+</dd>
+</dl>
+<div style="margin-top: 2em;"></div><dl class="simple">
+<dt><strong>Interpretability</strong></dt><dd><p>The learned operators often have interpretable structure, with different components
+corresponding to different physical phenomena.</p>
+</dd>
+</dl>
+<div style="margin-top: 3em;"></div></section>
+<section id="comparison-with-traditional-methods">
+<h2>Comparison with Traditional Methods<a class="headerlink" href="#comparison-with-traditional-methods" title="Link to this heading"></a></h2>
+<p>The advantages of neural operators become clear when compared to alternative approaches:</p>
+<p><strong>Traditional Neural Networks vs. Neural Operators</strong></p>
+<blockquote>
+<div><table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Traditional Neural Networks</p></th>
+<th class="head"><p>Neural Operators</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Fixed discretization</p></td>
+<td><p>Resolution-invariant</p></td>
+</tr>
+<tr class="row-odd"><td><p>Vector-to-vector mapping</p></td>
+<td><p>Function-to-function mapping</p></td>
+</tr>
+<tr class="row-even"><td><p>Limited generalization</p></td>
+<td><p>Universal approximation</p></td>
+</tr>
+<tr class="row-odd"><td><p>Resolution-dependent training</p></td>
+<td><p>Mixed-resolution training</p></td>
+</tr>
+<tr class="row-even"><td><p>Discrete outputs</p></td>
+<td><p>Continuous function outputs</p></td>
+</tr>
+<tr class="row-odd"><td><p>Single problem instance</p></td>
+<td><p>Parametrized family of problems</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p><strong>Traditional Numerical Methods vs. Neural Operators</strong></p>
+<blockquote>
+<div><table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Traditional Numerical Methods</p></th>
+<th class="head"><p>Neural Operators</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Solve one instance</p></td>
+<td><p>Learn solution operators</p></td>
+</tr>
+<tr class="row-odd"><td><p>Require explicit PDE form</p></td>
+<td><p>Black-box, data-driven</p></td>
+</tr>
+<tr class="row-even"><td><p>Slow on fine grids</p></td>
+<td><p>Fast at all resolutions</p></td>
+</tr>
+<tr class="row-odd"><td><p>High computational cost</p></td>
+<td><p>Fast inference after training</p></td>
+</tr>
+<tr class="row-even"><td><p>Parameter-specific</p></td>
+<td><p>Parameter-agnostic</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div style="margin-top: 3em;"></div></section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading"></a></h2>
+<p>Neural operators represent a paradigm shift in scientific computing, offering advantages
+that address fundamental limitations of both traditional neural networks and classical
+numerical methods. Their mathematical foundation in operator theory, combined with
+practical benefits like resolution invariance and computational efficiency,
+makes them uniquely suited for the challenges of modern scientific computing.</p>
+<p>The key advantages (well-posedness, function representation, universal approximation,
+parametrized PDE solving, flexible inference, and data efficiency) work together to
+enable new capabilities in scientific computing that were previously impossible or
+computationally prohibitive.</p>
+<p>As the field continues to develop, these advantages will likely expand further,
+opening new possibilities for scientific discovery and engineering applications.</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id1" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Principled Approaches for Extending Neural Architectures to Function Spaces for Operator Learning,
+Julius Berner, Miguel Liu-Schiaffini, Jean Kossaifi, Valentin Duruisseaux,
+Boris Bonev, Kamyar Azizzadenesheli, Anima Anandkumar, 2025.
+arXiv:2506.10973. https://arxiv.org/abs/2506.10973</p>
+</aside>
+</aside>
+<div style="margin-top: 1em;"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id2" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<p>Neural operator: Graph kernel network for partial differential equations,
+Zongyi Li, Nikola Kovachki, Kamyar Azizzadenesheli, Burigede Liu,
+Kaushik Bhattacharya, Andrew Stuart, Anima Anandkumar, 2020.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em;"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id3" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
+<p>Fourier Neural Operator for Parametric Partial Differential Equations,
+Zongyi Li, Nikola Kovachki, Kamyar Azizzadenesheli, Burigede Liu,
+Kaushik Bhattacharya, Andrew Stuart, Anima Anandkumar, 2020.</p>
+</aside>
+</aside>
+</section>
+</section>
+
+
+      </div>
+
+      
+        <nav class="pagination" role="navigation" aria-label="pagination">
+    
+    <a class="button pagination-previous" href="fno.html" title="previous page" accesskey="p">
+        <span class="icon">
+            <i class="fa fa-arrow-circle-left"></i>
+        </span>
+        <span>Fourier Neural Operators</span>
+    </a>
+    
+    
+    <a class="button pagination-next" href="applications.html" title="next page" accesskey="n">
+        <span>Examples of Neural Operator Applications </span>
+        <span class="icon">
+            <i class="fa fa-arrow-circle-right"></i>
+        </span>
+    </a>
+    
+</nav>
+
+      
+
+        <footer class="footer">
+    <div class="content has-text-centered">
+        <div class="block">
+          &copy; Copyright 2025, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+        </div>
+    </div>
+  </footer>
+
+    </div>
+
+  </div>  
+
+	
+    
+    <div class="column is-hidden-touch is-2-desktop is-one-fifth-widescreen" id="localtoc-column">
+
+    <aside class="sticky-nav localtoc"> 
+        <p class="menu-label"> 
+            <span class="icon-text">
+                <span class="icon"><i class="fas fa-duotone fa-list"></i></span>
+                <span> On this page </span>
+            </span>
+        </p>
+
+        <div class="menu menu-list localtoc-list">
+        <ul>
+<li><a class="reference internal" href="#">Advantages of Neural Operators</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#mathematical-well-posedness">Mathematical Well-Posedness</a></li>
+<li><a class="reference internal" href="#function-representation-and-computational-flexibility">Function Representation and Computational Flexibility</a></li>
+<li><a class="reference internal" href="#universal-approximation-capability">Universal Approximation Capability</a></li>
+<li><a class="reference internal" href="#solving-parametrized-pdes">Solving Parametrized PDEs</a></li>
+<li><a class="reference internal" href="#flexible-inference-and-resolution-invariance">Flexible Inference and Resolution Invariance</a></li>
+<li><a class="reference internal" href="#data-efficiency-and-training-advantages">Data Efficiency and Training Advantages</a></li>
+<li><a class="reference internal" href="#practical-implementation-benefits">Practical Implementation Benefits</a></li>
+<li><a class="reference internal" href="#comparison-with-traditional-methods">Comparison with Traditional Methods</a></li>
+<li><a class="reference internal" href="#conclusion">Conclusion</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+    </aside>
+    </div>
+
+  
+
+  </div>  
+  </div> 
+
+  
+  <script>
+    function toggle_sidebar() {
+        var element = document.getElementById("sidebar");
+        var container = document.getElementById("column-container");
+        var localtoccolumn = document.getElementById("localtoc-column");
+        element.classList.toggle("hide-tablet");
+        element.classList.toggle("is-hidden-mobile");
+        container.classList.toggle("sidemenu-hidden");
+        localtoccolumn.classList.toggle("is-one-fifth-widescreen");
+        localtoccolumn.classList.toggle("is-2-desktop");
+        localtoccolumn.classList.toggle("is-3-desktop");
+    }
+  </script> 
+
+
+
+  </body>
+</html>
