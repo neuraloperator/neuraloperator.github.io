@@ -21,16 +21,28 @@
 .. _fourier_diff :
 
 Fourier Differentiation
-========================================================
-An example of usage of our Fourier Differentiation Function
+======================
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-13
+This tutorial demonstrates Fourier-based differentiation methods for computing
+derivatives of periodic functions. Fourier differentiation is crucial for:
+
+- Computing derivatives of functions with spectral accuracy
+- Implementing physics-informed loss functions
+
+The `FourierDiff` class provides efficient implementations of spectral
+differentiation for periodic functions in 1D, 2D, and 3D domains.
+
+.. GENERATED FROM PYTHON SOURCE LINES 18-25
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Import the library
 ------------------
 We first import our `neuralop` library and required dependencies.
 
-.. GENERATED FROM PYTHON SOURCE LINES 13-22
+.. GENERATED FROM PYTHON SOURCE LINES 25-34
 
 .. code-block:: Python
 
@@ -50,13 +62,17 @@ We first import our `neuralop` library and required dependencies.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 23-26
+.. GENERATED FROM PYTHON SOURCE LINES 35-42
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Creating an example of periodic 1D curve
 ----------------------------------------
 Here we consider sin(x) and cos(x), which are periodic on the interval [0, 2π]
 
-.. GENERATED FROM PYTHON SOURCE LINES 26-31
+.. GENERATED FROM PYTHON SOURCE LINES 42-47
 
 .. code-block:: Python
 
@@ -72,13 +88,17 @@ Here we consider sin(x) and cos(x), which are periodic on the interval [0, 2π]
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 32-35
+.. GENERATED FROM PYTHON SOURCE LINES 48-55
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Differentiate the signal
 -----------------------------------------
 We use the FourierDiff class to differentiate the signal
 
-.. GENERATED FROM PYTHON SOURCE LINES 35-40
+.. GENERATED FROM PYTHON SOURCE LINES 55-60
 
 .. code-block:: Python
 
@@ -94,12 +114,16 @@ We use the FourierDiff class to differentiate the signal
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 41-43
+.. GENERATED FROM PYTHON SOURCE LINES 61-67
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Plot the results for sin(x)
 ---------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 43-54
+.. GENERATED FROM PYTHON SOURCE LINES 67-78
 
 .. code-block:: Python
 
@@ -126,12 +150,16 @@ Plot the results for sin(x)
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 55-57
+.. GENERATED FROM PYTHON SOURCE LINES 79-85
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Plot the results for cos(x)
 ---------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 57-70
+.. GENERATED FROM PYTHON SOURCE LINES 85-98
 
 .. code-block:: Python
 
@@ -160,13 +188,17 @@ Plot the results for cos(x)
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 71-74
+.. GENERATED FROM PYTHON SOURCE LINES 99-106
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Creating an example of non-periodic 1D curve
 -------------------------------------------
 Here we consider sin(3x)-cos(x) and exp(-0.8x)+sin(x)
 
-.. GENERATED FROM PYTHON SOURCE LINES 74-79
+.. GENERATED FROM PYTHON SOURCE LINES 106-111
 
 .. code-block:: Python
 
@@ -182,13 +214,17 @@ Here we consider sin(3x)-cos(x) and exp(-0.8x)+sin(x)
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 80-83
+.. GENERATED FROM PYTHON SOURCE LINES 112-119
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Differentiate the signal
 -----------------------------------------
 We use the FourierDiff class with Fourier continuation to differentiate the signal
 
-.. GENERATED FROM PYTHON SOURCE LINES 83-88
+.. GENERATED FROM PYTHON SOURCE LINES 119-124
 
 .. code-block:: Python
 
@@ -204,12 +240,16 @@ We use the FourierDiff class with Fourier continuation to differentiate the sign
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 89-91
+.. GENERATED FROM PYTHON SOURCE LINES 125-131
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Plot the results for sin(3x)-cos(x)
 --------------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 91-100
+.. GENERATED FROM PYTHON SOURCE LINES 131-140
 
 .. code-block:: Python
 
@@ -234,12 +274,16 @@ Plot the results for sin(3x)-cos(x)
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 101-103
+.. GENERATED FROM PYTHON SOURCE LINES 141-147
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Plot the results for exp(-0.8x)+sin(x)
 ---------------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 103-113
+.. GENERATED FROM PYTHON SOURCE LINES 147-157
 
 .. code-block:: Python
 
@@ -265,19 +309,27 @@ Plot the results for exp(-0.8x)+sin(x)
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 114-117
+.. GENERATED FROM PYTHON SOURCE LINES 158-165
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 2D Fourier Differentiation Examples
 ===================================
 Here we demonstrate the FourierDiff class for 2D functions
 
-.. GENERATED FROM PYTHON SOURCE LINES 119-122
+.. GENERATED FROM PYTHON SOURCE LINES 167-174
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Creating an example of periodic 2D function
 -----------------------------------------
 Here we consider f(x,y) = sin(x) * cos(y), which is periodic on the interval [0, 2π] × [0, 2π]
 
-.. GENERATED FROM PYTHON SOURCE LINES 122-131
+.. GENERATED FROM PYTHON SOURCE LINES 174-183
 
 .. code-block:: Python
 
@@ -297,13 +349,17 @@ Here we consider f(x,y) = sin(x) * cos(y), which is periodic on the interval [0,
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 132-135
+.. GENERATED FROM PYTHON SOURCE LINES 184-191
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Differentiate the 2D signal
 -----------------------------------------
 We use the FourierDiff class to compute derivatives
 
-.. GENERATED FROM PYTHON SOURCE LINES 135-147
+.. GENERATED FROM PYTHON SOURCE LINES 191-203
 
 .. code-block:: Python
 
@@ -326,12 +382,16 @@ We use the FourierDiff class to compute derivatives
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 148-150
+.. GENERATED FROM PYTHON SOURCE LINES 204-210
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Plot the 2D results
 ----------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 150-195
+.. GENERATED FROM PYTHON SOURCE LINES 210-255
 
 .. code-block:: Python
 
@@ -392,19 +452,27 @@ Plot the 2D results
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 196-199
+.. GENERATED FROM PYTHON SOURCE LINES 256-263
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 3D Fourier Differentiation Examples
 ===================================
 Here we demonstrate the FourierDiff class for 3D functions
 
-.. GENERATED FROM PYTHON SOURCE LINES 201-204
+.. GENERATED FROM PYTHON SOURCE LINES 265-272
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Creating an example of periodic 3D function
 -----------------------------------------
 Here we consider f(x,y,z) = sin(x) * cos(y) * sin(z), which is periodic on [0, 2π]³
 
-.. GENERATED FROM PYTHON SOURCE LINES 204-217
+.. GENERATED FROM PYTHON SOURCE LINES 272-285
 
 .. code-block:: Python
 
@@ -428,13 +496,17 @@ Here we consider f(x,y,z) = sin(x) * cos(y) * sin(z), which is periodic on [0, 2
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 218-221
+.. GENERATED FROM PYTHON SOURCE LINES 286-293
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Differentiate the 3D signal
 -----------------------------------------
 We use the FourierDiff class to compute derivatives
 
-.. GENERATED FROM PYTHON SOURCE LINES 221-235
+.. GENERATED FROM PYTHON SOURCE LINES 293-307
 
 .. code-block:: Python
 
@@ -459,12 +531,16 @@ We use the FourierDiff class to compute derivatives
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 236-238
+.. GENERATED FROM PYTHON SOURCE LINES 308-314
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Plot a slice of the 3D results (z=0 plane)
 ------------------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 238-284
+.. GENERATED FROM PYTHON SOURCE LINES 314-360
 
 .. code-block:: Python
 
@@ -529,7 +605,7 @@ Plot a slice of the 3D results (z=0 plane)
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 3.735 seconds)
+   **Total running time of the script:** (0 minutes 3.809 seconds)
 
 
 .. _sphx_glr_download_auto_examples_layers_plot_fourier_diff.py:

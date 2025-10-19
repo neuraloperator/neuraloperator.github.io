@@ -179,7 +179,17 @@ to download the full example code.</p>
 <span id="sphx-glr-auto-examples-training-plot-count-flops-py"></span><h1>Using <cite>torchtnt</cite> to count FLOPS<a class="headerlink" href="#using-torchtnt-to-count-flops" title="Link to this heading"></a></h1>
 <p>A demo using <code class="docutils literal notranslate"><span class="pre">torchtnt</span></code> to estimate the number of floating-point
 operations per second (FLOPS) required for a model’s forward and backward pass.</p>
-<p>We will use the FLOP computation to compare the resources used by a base FNO.</p>
+<p>This tutorial demonstrates how to profile neural operator models to understand
+their computational requirements. FLOPS counting is crucial for:
+- Comparing different model architectures
+- Understanding computational bottlenecks
+- Optimizing model efficiency
+- Making informed decisions about model deployment</p>
+<p>We will use the FLOP computation to analyze the computational resources
+used by a FNO model.</p>
+<div style="margin-top: 3em;"></div><section id="import-dependencies">
+<h2>Import dependencies<a class="headerlink" href="#import-dependencies" title="Link to this heading"></a></h2>
+<p>We import the necessary modules for FLOPS counting and model creation</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torchtnt.utils.flops</span><span class="w"> </span><span class="kn">import</span> <span class="n">FlopTensorDispatchMode</span>
@@ -187,47 +197,68 @@ operations per second (FLOPS) required for a model’s forward and backward pass
 <span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">FNO</span>
 
 <span class="n">device</span> <span class="o">=</span> <span class="s1">&#39;cpu&#39;</span>
-
-<span class="n">fno</span> <span class="o">=</span> <span class="n">FNO</span><span class="p">(</span><span class="n">n_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span><span class="mi">64</span><span class="p">),</span>
-          <span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-          <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-          <span class="n">hidden_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
-          <span class="n">projection_channel_ratio</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">4</span>
-<span class="n">model_input</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
-
-
-<span class="k">with</span> <span class="n">FlopTensorDispatchMode</span><span class="p">(</span><span class="n">fno</span><span class="p">)</span> <span class="k">as</span> <span class="n">ftdm</span><span class="p">:</span>
-    <span class="c1"># count forward flops</span>
-    <span class="n">res</span> <span class="o">=</span> <span class="n">fno</span><span class="p">(</span><span class="n">model_input</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-    <span class="n">fno_forward_flops</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">ftdm</span><span class="o">.</span><span class="n">flop_counts</span><span class="p">)</span>
-
-    <span class="n">ftdm</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-    <span class="n">res</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
-    <span class="n">fno_backward_flops</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">ftdm</span><span class="o">.</span><span class="n">flop_counts</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.13.8/x64/lib/python3.13/site-packages/torchtnt/utils/version.py:12: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools&lt;81.
   import pkg_resources
 </pre></div>
 </div>
-<p>This output is organized as a defaultdict object that counts the FLOPS used in each submodule.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">fno_forward_flops</span><span class="p">)</span>
+<div style="margin-top: 3em;"></div></section>
+<section id="creating-the-fno-model-for-analysis">
+<h2>Creating the FNO model for analysis<a class="headerlink" href="#creating-the-fno-model-for-analysis" title="Link to this heading"></a></h2>
+<p>We create a moderately-sized FNO model to demonstrate FLOPS counting</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fno</span> <span class="o">=</span> <span class="n">FNO</span><span class="p">(</span><span class="n">n_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span><span class="mi">64</span><span class="p">),</span>
+          <span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+          <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+          <span class="n">hidden_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+          <span class="n">projection_channel_ratio</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Create a sample input tensor for FLOPS counting</span>
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">model_input</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>defaultdict(&lt;function FlopTensorDispatchMode.__init__.&lt;locals&gt;.&lt;lambda&gt; at 0x7f4084dbade0&gt;, {&#39;&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 2982150144, &#39;bmm.default&#39;: 138412032}), &#39;lifting&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 562036736}), &#39;lifting.fcs.0&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 25165824}), &#39;lifting.fcs.1&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 536870912}), &#39;fno_blocks&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 2147483648, &#39;bmm.default&#39;: 138412032}), &#39;fno_blocks.fno_skips.0&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.fno_skips.0.conv&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.convs.0&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;bmm.default&#39;: 34603008}), &#39;fno_blocks.channel_mlp.0&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.channel_mlp.0.fcs.0&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 134217728}), &#39;fno_blocks.channel_mlp.0.fcs.1&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 134217728}), &#39;fno_blocks.fno_skips.1&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.fno_skips.1.conv&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.convs.1&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;bmm.default&#39;: 34603008}), &#39;fno_blocks.channel_mlp.1&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.channel_mlp.1.fcs.0&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 134217728}), &#39;fno_blocks.channel_mlp.1.fcs.1&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 134217728}), &#39;fno_blocks.fno_skips.2&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.fno_skips.2.conv&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.convs.2&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;bmm.default&#39;: 34603008}), &#39;fno_blocks.channel_mlp.2&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.channel_mlp.2.fcs.0&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 134217728}), &#39;fno_blocks.channel_mlp.2.fcs.1&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 134217728}), &#39;fno_blocks.fno_skips.3&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.fno_skips.3.conv&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.convs.3&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;bmm.default&#39;: 34603008}), &#39;fno_blocks.channel_mlp.3&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.channel_mlp.3.fcs.0&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 134217728}), &#39;fno_blocks.channel_mlp.3.fcs.1&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 134217728}), &#39;projection&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 272629760}), &#39;projection.fcs.0&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;projection.fcs.1&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 4194304})})
+<div style="margin-top: 3em;"></div></section>
+<section id="counting-flops-for-forward-and-backward-passes">
+<h2>Counting FLOPS for forward and backward passes<a class="headerlink" href="#counting-flops-for-forward-and-backward-passes" title="Link to this heading"></a></h2>
+<p>We use the FlopTensorDispatchMode to count FLOPS during both forward and backward passes</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">FlopTensorDispatchMode</span><span class="p">(</span><span class="n">fno</span><span class="p">)</span> <span class="k">as</span> <span class="n">ftdm</span><span class="p">:</span>
+    <span class="c1"># Count forward pass FLOPS</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">fno</span><span class="p">(</span><span class="n">model_input</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">fno_forward_flops</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">ftdm</span><span class="o">.</span><span class="n">flop_counts</span><span class="p">)</span>
+
+    <span class="c1"># Reset the counter and count backward pass FLOPS</span>
+    <span class="n">ftdm</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="n">fno_backward_flops</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">ftdm</span><span class="o">.</span><span class="n">flop_counts</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>To check the maximum FLOPS used during the forward pass, let’s create a recursive function to search the nested dict:</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="analyzing-flops-breakdown">
+<h2>Analyzing FLOPS breakdown<a class="headerlink" href="#analyzing-flops-breakdown" title="Link to this heading"></a></h2>
+<p>The output is organized as a defaultdict object that counts the FLOPS used in each submodule.
+This gives us detailed insight into which parts of the model are computationally expensive.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Forward pass FLOPS breakdown:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">fno_forward_flops</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Forward pass FLOPS breakdown:
+defaultdict(&lt;function FlopTensorDispatchMode.__init__.&lt;locals&gt;.&lt;lambda&gt; at 0x7ff1ed716d40&gt;, {&#39;&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 2982150144, &#39;bmm.default&#39;: 138412032}), &#39;lifting&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 562036736}), &#39;lifting.fcs.0&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 25165824}), &#39;lifting.fcs.1&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 536870912}), &#39;fno_blocks&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 2147483648, &#39;bmm.default&#39;: 138412032}), &#39;fno_blocks.fno_skips.0&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.fno_skips.0.conv&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.convs.0&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;bmm.default&#39;: 34603008}), &#39;fno_blocks.channel_mlp.0&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.channel_mlp.0.fcs.0&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 134217728}), &#39;fno_blocks.channel_mlp.0.fcs.1&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 134217728}), &#39;fno_blocks.fno_skips.1&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.fno_skips.1.conv&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.convs.1&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;bmm.default&#39;: 34603008}), &#39;fno_blocks.channel_mlp.1&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.channel_mlp.1.fcs.0&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 134217728}), &#39;fno_blocks.channel_mlp.1.fcs.1&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 134217728}), &#39;fno_blocks.fno_skips.2&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.fno_skips.2.conv&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.convs.2&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;bmm.default&#39;: 34603008}), &#39;fno_blocks.channel_mlp.2&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.channel_mlp.2.fcs.0&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 134217728}), &#39;fno_blocks.channel_mlp.2.fcs.1&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 134217728}), &#39;fno_blocks.fno_skips.3&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.fno_skips.3.conv&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.convs.3&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;bmm.default&#39;: 34603008}), &#39;fno_blocks.channel_mlp.3&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;fno_blocks.channel_mlp.3.fcs.0&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 134217728}), &#39;fno_blocks.channel_mlp.3.fcs.1&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 134217728}), &#39;projection&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 272629760}), &#39;projection.fcs.0&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 268435456}), &#39;projection.fcs.1&#39;: defaultdict(&lt;class &#39;int&#39;&gt;, {&#39;convolution.default&#39;: 4194304})})
+</pre></div>
+</div>
+<div style="margin-top: 3em;"></div></section>
+<section id="finding-maximum-flops-usage">
+<h2>Finding maximum FLOPS usage<a class="headerlink" href="#finding-maximum-flops-usage" title="Link to this heading"></a></h2>
+<p>To check the maximum FLOPS used during the forward pass, let’s create a recursive function
+to search the nested dictionary structure:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_max_flops</span><span class="p">(</span><span class="n">flop_count_dict</span><span class="p">,</span> <span class="n">max_value</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">flop_count_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="c1"># if not nested, compare leaf value to max</span>
+        <span class="c1"># If not nested, compare leaf value to max</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
             <span class="n">max_value</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">max_value</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
-        <span class="c1"># otherwise compute recursive max value below node</span>
+        <span class="c1"># Otherwise compute recursive max value below node</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">defaultdict</span><span class="p">):</span>
             <span class="n">new_val</span> <span class="o">=</span> <span class="n">get_max_flops</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">max_value</span><span class="p">)</span>
             <span class="n">max_value</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">max_value</span><span class="p">,</span> <span class="n">new_val</span><span class="p">)</span>
@@ -241,7 +272,7 @@ operations per second (FLOPS) required for a model’s forward and backward pass
 Max FLOPS required for FNO.backward: 5939134464
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.466 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.542 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-training-plot-count-flops-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/ad09635e95b4c99fdd7ef577e4237f93/plot_count_flops.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_count_flops.ipynb</span></code></a></p>
@@ -254,6 +285,7 @@ Max FLOPS required for FNO.backward: 5939134464
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
 </section>
 
 
@@ -295,6 +327,31 @@ Max FLOPS required for FNO.backward: 5939134464
 
 	
     
+    <div class="column is-hidden-touch is-2-desktop is-one-fifth-widescreen" id="localtoc-column">
+
+    <aside class="sticky-nav localtoc"> 
+        <p class="menu-label"> 
+            <span class="icon-text">
+                <span class="icon"><i class="fas fa-duotone fa-list"></i></span>
+                <span> On this page </span>
+            </span>
+        </p>
+
+        <div class="menu menu-list localtoc-list">
+        <ul>
+<li><a class="reference internal" href="#">Using <cite>torchtnt</cite> to count FLOPS</a><ul>
+<li><a class="reference internal" href="#import-dependencies">Import dependencies</a></li>
+<li><a class="reference internal" href="#creating-the-fno-model-for-analysis">Creating the FNO model for analysis</a></li>
+<li><a class="reference internal" href="#counting-flops-for-forward-and-backward-passes">Counting FLOPS for forward and backward passes</a></li>
+<li><a class="reference internal" href="#analyzing-flops-breakdown">Analyzing FLOPS breakdown</a></li>
+<li><a class="reference internal" href="#finding-maximum-flops-usage">Finding maximum FLOPS usage</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+    </aside>
+    </div>
 
   
 

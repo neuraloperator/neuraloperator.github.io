@@ -21,16 +21,30 @@
 .. _fourier_continuation :
 
 Fourier Continuation
-========================================================
-An example of usage of our Fourier continuation layer on 1d, 2d, and 3d data.
+====================
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-13
+This tutorial demonstrates Fourier continuation methods for extending non-periodic
+functions to periodic ones, enabling efficient spectral analysis and neural operator
+applications. Fourier continuation is crucial for:
+
+- Converting non-periodic data to periodic form
+- Enabling spectral methods on arbitrary domains
+- Improving convergence of Fourier-based neural operators
+- Handling boundary conditions in spectral computations
+
+The tutorial covers both FC-Legendre and FC-Gram methods for 1D, 2D, and 3D data.
+
+.. GENERATED FROM PYTHON SOURCE LINES 20-27
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Import the library
 ------------------
 We first import our `neuralop` library and required dependencies.
 
-.. GENERATED FROM PYTHON SOURCE LINES 13-21
+.. GENERATED FROM PYTHON SOURCE LINES 27-35
 
 .. code-block:: Python
 
@@ -49,21 +63,28 @@ We first import our `neuralop` library and required dependencies.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 22-25
+.. GENERATED FROM PYTHON SOURCE LINES 36-45
 
-Creating an example of 1D curve
---------------------
-Here we consider sin(16x) - cos(8x), which is not periodic on the interval [0,1]
+.. raw:: html
 
-.. GENERATED FROM PYTHON SOURCE LINES 25-36
+   <div style="margin-top: 3em;"></div>
+
+Creating an example of 1D non-periodic function
+----------------------------------------------
+We consider f(x) = sin(16x) - cos(8x) on the interval [0,1].
+This function is not periodic on [0,1], making it a good test case
+for Fourier continuation methods.
+
+.. GENERATED FROM PYTHON SOURCE LINES 45-57
 
 .. code-block:: Python
 
 
-    length_signal = 101   # length of the original 1D signal
-    add_pts = 50          # number of points to add
-    batch_size = 3        # the Fourier continuation layer can be applied to batches of signals
+    length_signal = 101   # Length of the original 1D signal
+    add_pts = 50          # Number of additional points for continuation
+    batch_size = 3        # Batch size for processing multiple signals
 
+    # Create the input signal
     x = torch.linspace(0, 1, length_signal).repeat(batch_size,1)
     f = torch.sin(16 * x) - torch.cos(8 * x)
 
@@ -77,20 +98,26 @@ Here we consider sin(16x) - cos(8x), which is not periodic on the interval [0,1]
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 37-40
+.. GENERATED FROM PYTHON SOURCE LINES 58-65
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Extending the signal
 -----------------------------------------
 We use the FC-Legendre and FC-Gram Fourier continuation layers to extend the signal.
 
-.. GENERATED FROM PYTHON SOURCE LINES 40-48
+.. GENERATED FROM PYTHON SOURCE LINES 65-75
 
 .. code-block:: Python
 
 
+    # FC-Legendre: Uses Legendre polynomial basis for continuation
     Extension_Legendre = FCLegendre(d=2, n_additional_pts=add_pts)
     f_extend_Legendre = Extension_Legendre(f, dim=1)
 
+    # FC-Gram: Uses Gram polynomial basis for continuation
     Extension_Gram = FCGram(d=4, n_additional_pts=add_pts)
     f_extend_Gram = Extension_Gram(f, dim=1)
 
@@ -102,12 +129,18 @@ We use the FC-Legendre and FC-Gram Fourier continuation layers to extend the sig
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 49-51
+.. GENERATED FROM PYTHON SOURCE LINES 76-84
 
-Plot the FC-Legendre and FC-Gram results for 1D
-----------------------
+.. raw:: html
 
-.. GENERATED FROM PYTHON SOURCE LINES 51-85
+   <div style="margin-top: 3em;"></div>
+
+Visualizing the 1D Fourier continuation results
+----------------------------------------------
+We plot the original function and both continuation methods to compare
+their effectiveness in creating smooth periodic extensions.
+
+.. GENERATED FROM PYTHON SOURCE LINES 84-118
 
 .. code-block:: Python
 
@@ -157,25 +190,33 @@ Plot the FC-Legendre and FC-Gram results for 1D
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 86-89
+.. GENERATED FROM PYTHON SOURCE LINES 119-128
 
-Creating an example of a 2D function
---------------------
-Here we consider sin(12x) - cos(14y) + 3xy, which is not periodic on [0,1]x[0,1]
+.. raw:: html
 
-.. GENERATED FROM PYTHON SOURCE LINES 89-100
+   <div style="margin-top: 3em;"></div>
+
+Creating an example of 2D non-periodic function
+------------------------------------------------
+We consider f(x,y) = sin(12x) - cos(14y) + 3xy on the domain [0,1]×[0,1].
+This function is not periodic on the unit square, making it suitable
+for testing 2D Fourier continuation methods.
+
+.. GENERATED FROM PYTHON SOURCE LINES 128-141
 
 .. code-block:: Python
 
 
-    length_signal = 101   # length of the signal in each dimension
-    add_pts = 50          # number of points to add in each dimension
-    batch_size = 3        # the Fourier continuation layer can be applied to batches of signals
+    length_signal = 101   # Length of the signal in each dimension
+    add_pts = 50          # Number of additional points for continuation in each dimension
+    batch_size = 3        # Batch size for processing multiple signals
 
-
+    # Create the 2D coordinate grids
     x = torch.linspace(0, 1, length_signal).view(1, length_signal, 1).repeat(batch_size, 1, length_signal)
     y = torch.linspace(0, 1, length_signal).view(1, 1, length_signal).repeat(batch_size, length_signal, 1)
-    f = torch.sin(12 * x)  - torch.cos(14 * y) + 3*x*y
+
+    # Define the 2D test function
+    f = torch.sin(12 * x) - torch.cos(14 * y) + 3*x*y
 
 
 
@@ -185,20 +226,26 @@ Here we consider sin(12x) - cos(14y) + 3xy, which is not periodic on [0,1]x[0,1]
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 101-104
+.. GENERATED FROM PYTHON SOURCE LINES 142-149
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Extending the signal
 -----------------------------------------
 We use the FC-Legendre and FC-Gram Fourier continuation layers to extend the signal.
 
-.. GENERATED FROM PYTHON SOURCE LINES 104-112
+.. GENERATED FROM PYTHON SOURCE LINES 149-159
 
 .. code-block:: Python
 
 
+    # FC-Legendre: Uses Legendre polynomial basis for 2D continuation
     Extension_Legendre = FCLegendre(d=3, n_additional_pts=add_pts)
     f_extend_Legendre = Extension_Legendre(f, dim=2)
 
+    # FC-Gram: Uses Gram polynomial basis for 2D continuation
     Extension_Gram = FCGram(d=3, n_additional_pts=add_pts)
     f_extend_Gram = Extension_Gram(f, dim=2)
 
@@ -210,18 +257,26 @@ We use the FC-Legendre and FC-Gram Fourier continuation layers to extend the sig
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 113-116
+.. GENERATED FROM PYTHON SOURCE LINES 160-169
 
-Plot the FC-Legendre and FC-Gram results for 2D
-----------------------
-We also add black lines to deliminate the original signal
+.. raw:: html
 
-.. GENERATED FROM PYTHON SOURCE LINES 116-139
+   <div style="margin-top: 3em;"></div>
+
+Visualizing the 2D Fourier continuation results
+----------------------------------------------
+We plot the original function and both continuation methods to compare
+their effectiveness in creating smooth 2D periodic extensions.
+Black lines delineate the original domain boundaries.
+
+.. GENERATED FROM PYTHON SOURCE LINES 169-194
 
 .. code-block:: Python
 
 
     fig, axs = plt.subplots(figsize=(15,5), nrows=1, ncols=3)
+
+    # Plot the original function
     axs[0].imshow(f[0])
     axs[0].set_title(r"Original Function", fontsize=15.5)
     axs[1].imshow(f_extend_Legendre[0])
@@ -255,14 +310,18 @@ We also add black lines to deliminate the original signal
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 140-144
+.. GENERATED FROM PYTHON SOURCE LINES 195-203
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Creating an example of a 3D function
 --------------------
 Here we consider f(x,y,z) = exp(-2z) + 2xz + sin(12xy) + y sin(10yz) 
 which is not periodic on [0,1]x[0,1]x[0,1]
 
-.. GENERATED FROM PYTHON SOURCE LINES 144-158
+.. GENERATED FROM PYTHON SOURCE LINES 203-217
 
 .. code-block:: Python
 
@@ -287,13 +346,17 @@ which is not periodic on [0,1]x[0,1]x[0,1]
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 159-162
+.. GENERATED FROM PYTHON SOURCE LINES 218-225
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Extending the signal
 -----------------------------------------
 We use the FC-Legendre and FC-Gram Fourier continuation layers to extend the signal.
 
-.. GENERATED FROM PYTHON SOURCE LINES 162-171
+.. GENERATED FROM PYTHON SOURCE LINES 225-234
 
 .. code-block:: Python
 
@@ -313,13 +376,17 @@ We use the FC-Legendre and FC-Gram Fourier continuation layers to extend the sig
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 172-175
+.. GENERATED FROM PYTHON SOURCE LINES 235-242
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Plot the FC-Legendre and FC-Gram results for 3D
 ----------------------
 We also add white lines to deliminate the original signal
 
-.. GENERATED FROM PYTHON SOURCE LINES 175-186
+.. GENERATED FROM PYTHON SOURCE LINES 242-253
 
 .. code-block:: Python
 
@@ -341,11 +408,15 @@ We also add white lines to deliminate the original signal
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 187-188
+.. GENERATED FROM PYTHON SOURCE LINES 254-259
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Figure for X slices
 
-.. GENERATED FROM PYTHON SOURCE LINES 188-240
+.. GENERATED FROM PYTHON SOURCE LINES 259-311
 
 .. code-block:: Python
 
@@ -413,11 +484,15 @@ Figure for X slices
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 241-242
+.. GENERATED FROM PYTHON SOURCE LINES 312-317
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Figure for Y-slices
 
-.. GENERATED FROM PYTHON SOURCE LINES 242-292
+.. GENERATED FROM PYTHON SOURCE LINES 317-367
 
 .. code-block:: Python
 
@@ -483,11 +558,15 @@ Figure for Y-slices
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 293-294
+.. GENERATED FROM PYTHON SOURCE LINES 368-373
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Figure for Z-slices
 
-.. GENERATED FROM PYTHON SOURCE LINES 294-343
+.. GENERATED FROM PYTHON SOURCE LINES 373-422
 
 .. code-block:: Python
 
@@ -555,7 +634,7 @@ Figure for Z-slices
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 2.077 seconds)
+   **Total running time of the script:** (0 minutes 2.093 seconds)
 
 
 .. _sphx_glr_download_auto_examples_layers_plot_fourier_continuation.py:

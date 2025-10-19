@@ -18,17 +18,31 @@
 .. _sphx_glr_auto_examples_layers_plot_DISCO_convolutions.py:
 
 
-Visualizing discrete-continuous convolutions
-===================================================
-Visualizing the behavior of DISCO convolutions, the building block of the localized neural operator framework.
+DISCO Convolutions
+==================
 
-These modules can be used on both equidistant and unstructured grids.
+This tutorial demonstrates Discrete-Continuous (DISCO) convolutions, which are
+the building blocks of localized neural operator frameworks. DISCO convolutions
+are crucial for:
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-11
+- Learning localized patterns in data
+- Handling both equidistant and unstructured grids
+- Enabling efficient computation on irregular domains
+- Bridging discrete and continuous representations
+
+The tutorial covers various DISCO convolution types and their applications
+in neural operator architectures.
+    
+
+.. GENERATED FROM PYTHON SOURCE LINES 21-26
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Preparation
 
-.. GENERATED FROM PYTHON SOURCE LINES 11-31
+.. GENERATED FROM PYTHON SOURCE LINES 26-46
 
 .. code-block:: Python
 
@@ -59,11 +73,15 @@ Preparation
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 32-33
+.. GENERATED FROM PYTHON SOURCE LINES 47-52
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Let's start by loading an example image
 
-.. GENERATED FROM PYTHON SOURCE LINES 33-43
+.. GENERATED FROM PYTHON SOURCE LINES 52-62
 
 .. code-block:: Python
 
@@ -90,17 +108,21 @@ Let's start by loading an example image
 
  .. code-block:: none
 
-    /home/runner/work/neuraloperator/neuraloperator/examples/layers/plot_DISCO_convolutions.py:39: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:206.)
+    /home/runner/work/neuraloperator/neuraloperator/examples/layers/plot_DISCO_convolutions.py:58: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:206.)
       data = nn.functional.interpolate(torch.from_numpy(img).unsqueeze(0).unsqueeze(0), size=(ny,nx)).squeeze()
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 44-45
+.. GENERATED FROM PYTHON SOURCE LINES 63-68
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Let's create a grid on which the data lives
 
-.. GENERATED FROM PYTHON SOURCE LINES 45-58
+.. GENERATED FROM PYTHON SOURCE LINES 68-81
 
 .. code-block:: Python
 
@@ -124,11 +146,15 @@ Let's create a grid on which the data lives
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 59-60
+.. GENERATED FROM PYTHON SOURCE LINES 82-87
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Visualize the grid
 
-.. GENERATED FROM PYTHON SOURCE LINES 60-68
+.. GENERATED FROM PYTHON SOURCE LINES 87-95
 
 .. code-block:: Python
 
@@ -152,11 +178,15 @@ Visualize the grid
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 69-70
+.. GENERATED FROM PYTHON SOURCE LINES 96-101
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Format data into the same format and plot it on the grid
 
-.. GENERATED FROM PYTHON SOURCE LINES 70-80
+.. GENERATED FROM PYTHON SOURCE LINES 101-111
 
 .. code-block:: Python
 
@@ -182,11 +212,15 @@ Format data into the same format and plot it on the grid
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 81-82
+.. GENERATED FROM PYTHON SOURCE LINES 112-117
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 For the convolution output we require an output mesh
 
-.. GENERATED FROM PYTHON SOURCE LINES 82-96
+.. GENERATED FROM PYTHON SOURCE LINES 117-131
 
 .. code-block:: Python
 
@@ -211,11 +245,15 @@ For the convolution output we require an output mesh
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 97-98
+.. GENERATED FROM PYTHON SOURCE LINES 132-137
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Initialize the convolution and set the weights to something resembling an edge filter/finit differences
 
-.. GENERATED FROM PYTHON SOURCE LINES 98-107
+.. GENERATED FROM PYTHON SOURCE LINES 137-146
 
 .. code-block:: Python
 
@@ -235,11 +273,16 @@ Initialize the convolution and set the weights to something resembling an edge f
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 108-109
+.. GENERATED FROM PYTHON SOURCE LINES 147-153
 
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
+
+Apply the DISCO convolution to the data and plot it
 in order to compute the convolved image, we need to first bring it into the right shape with `batch_size x n_channels x n_grid_points`
 
-.. GENERATED FROM PYTHON SOURCE LINES 109-120
+.. GENERATED FROM PYTHON SOURCE LINES 153-164
 
 .. code-block:: Python
 
@@ -272,7 +315,15 @@ in order to compute the convolved image, we need to first bring it into the righ
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 121-144
+.. GENERATED FROM PYTHON SOURCE LINES 165-170
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
+
+Do the same but on an equidistant grid
+
+.. GENERATED FROM PYTHON SOURCE LINES 170-193
 
 .. code-block:: Python
 
@@ -318,7 +369,15 @@ in order to compute the convolved image, we need to first bring it into the righ
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 145-158
+.. GENERATED FROM PYTHON SOURCE LINES 194-199
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
+
+Visualize the local filter matrix
+
+.. GENERATED FROM PYTHON SOURCE LINES 199-212
 
 .. code-block:: Python
 
@@ -349,11 +408,19 @@ in order to compute the convolved image, we need to first bring it into the righ
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7f40ae138b90>
+    <matplotlib.colorbar.Colorbar object at 0x7ff2169760d0>
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 159-181
+.. GENERATED FROM PYTHON SOURCE LINES 213-218
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
+
+Test the transpose convolution
+
+.. GENERATED FROM PYTHON SOURCE LINES 218-240
 
 .. code-block:: Python
 
@@ -397,7 +464,15 @@ in order to compute the convolved image, we need to first bring it into the righ
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 182-201
+.. GENERATED FROM PYTHON SOURCE LINES 241-246
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
+
+Test the equidistant transpose convolution
+
+.. GENERATED FROM PYTHON SOURCE LINES 246-265
 
 .. code-block:: Python
 
@@ -441,7 +516,7 @@ in order to compute the convolved image, we need to first bring it into the righ
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 27.715 seconds)
+   **Total running time of the script:** (0 minutes 27.793 seconds)
 
 
 .. _sphx_glr_download_auto_examples_layers_plot_DISCO_convolutions.py:

@@ -177,18 +177,27 @@ to download the full example code.</p>
 </div>
 <section class="sphx-glr-example-title" id="finite-differences">
 <span id="finite-diff"></span><span id="sphx-glr-auto-examples-layers-plot-finite-diff-py"></span><h1>Finite Differences<a class="headerlink" href="#finite-differences" title="Link to this heading"></a></h1>
-<p>An example of usage of Finite Differences</p>
+<p>This tutorial demonstrates the use of finite difference methods for computing
+derivatives of functions in neural operators. Finite differences are crucial for:</p>
+<ul class="simple">
+<li><p>Computing gradients and higher-order derivatives</p></li>
+<li><p>Implementing physics-informed loss functions</p></li>
+<li><p>Enforcing differential equation constraints</p></li>
+<li><p>Computing divergence, curl, and Laplacian operators</p></li>
+</ul>
+<p>The <cite>FiniteDiff</cite> class provides efficient implementations of finite difference
+schemes for computing derivatives in 1D, 2D, and 3D domains.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.losses.differentiation</span><span class="w"> </span><span class="kn">import</span> <span class="n">FiniteDiff</span>
 </pre></div>
 </div>
-</section>
+<div style="margin-top: 3em;"></div></section>
 <section id="d-finite-difference-examples">
 <h1>1D Finite Difference Examples<a class="headerlink" href="#d-finite-difference-examples" title="Link to this heading"></a></h1>
 <p>Here we demonstrate the FiniteDiff class for 1D functions</p>
-<section id="creating-an-example-of-1d-function">
+<div style="margin-top: 3em;"></div><section id="creating-an-example-of-1d-function">
 <h2>Creating an example of 1D function<a class="headerlink" href="#creating-an-example-of-1d-function" title="Link to this heading"></a></h2>
 <p>Here we consider f(x) = exp(-x) * sin(x) on [0, 2π]</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">L_x</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">pi</span>
@@ -198,7 +207,7 @@ to download the full example code.</p>
 <span class="n">f_1d</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
+<div style="margin-top: 3em;"></div></section>
 <section id="differentiate-the-1d-signal">
 <h2>Differentiate the 1D signal<a class="headerlink" href="#differentiate-the-1d-signal" title="Link to this heading"></a></h2>
 <p>We use the FiniteDiff class with dim=1</p>
@@ -214,7 +223,7 @@ to download the full example code.</p>
 <span class="n">d2f_dx2_expected</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>  <span class="c1"># ∂²f/∂x²</span>
 </pre></div>
 </div>
-</section>
+<div style="margin-top: 3em;"></div></section>
 <section id="plot-the-1d-results">
 <h2>Plot the 1D results<a class="headerlink" href="#plot-the-1d-results" title="Link to this heading"></a></h2>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">18</span><span class="p">))</span>
@@ -246,12 +255,12 @@ to download the full example code.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_finite_diff_001.png" srcset="../../_images/sphx_glr_plot_finite_diff_001.png" alt="1D Finite Differences: f(x) = exp(-x) * sin(x), Original: exp(-x) * sin(x), ∂f/∂x, ∂²f/∂x²" class = "sphx-glr-single-img"/></section>
+<img src="../../_images/sphx_glr_plot_finite_diff_001.png" srcset="../../_images/sphx_glr_plot_finite_diff_001.png" alt="1D Finite Differences: f(x) = exp(-x) * sin(x), Original: exp(-x) * sin(x), ∂f/∂x, ∂²f/∂x²" class = "sphx-glr-single-img"/><div style="margin-top: 3em;"></div></section>
 </section>
 <section id="id1">
 <h1>2D Finite Difference Examples<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
 <p>Here we demonstrate the FiniteDiff class for 2D functions</p>
-<section id="creating-an-example-of-2d-function">
+<div style="margin-top: 3em;"></div><section id="creating-an-example-of-2d-function">
 <h2>Creating an example of 2D function<a class="headerlink" href="#creating-an-example-of-2d-function" title="Link to this heading"></a></h2>
 <p>Here we consider f(x,y) = exp(-x) * sin(y), which is non-periodic on [0, 2π] × [0, 2π]</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">L_x</span><span class="p">,</span> <span class="n">L_y</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">pi</span>
@@ -264,7 +273,7 @@ to download the full example code.</p>
 <span class="n">f_2d</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">X</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
+<div style="margin-top: 3em;"></div></section>
 <section id="differentiate-the-2d-signal">
 <h2>Differentiate the 2D signal<a class="headerlink" href="#differentiate-the-2d-signal" title="Link to this heading"></a></h2>
 <p>We use the FiniteDiff class with dim=2 to compute derivatives</p>
@@ -285,7 +294,7 @@ to download the full example code.</p>
 <span class="n">laplacian_expected</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>  <span class="c1"># ∇²f</span>
 </pre></div>
 </div>
-</section>
+<div style="margin-top: 3em;"></div></section>
 <section id="plot-the-2d-results">
 <h2>Plot the 2D results<a class="headerlink" href="#plot-the-2d-results" title="Link to this heading"></a></h2>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
@@ -352,7 +361,7 @@ to download the full example code.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_finite_diff_002.png" srcset="../../_images/sphx_glr_plot_finite_diff_002.png" alt="2D Finite Differences: f(x,y) = exp(-x) * sin(y), Original: exp(-x) * sin(y), ∂f/∂x (computed), ∂f/∂x (expected: -exp(-x) * sin(y)), ∂f/∂y (computed), ∂f/∂y (expected: exp(-x) * cos(y)), ∇²f (computed), ∇²f (expected: 0), Error in ∇²f" class = "sphx-glr-single-img"/></section>
+<img src="../../_images/sphx_glr_plot_finite_diff_002.png" srcset="../../_images/sphx_glr_plot_finite_diff_002.png" alt="2D Finite Differences: f(x,y) = exp(-x) * sin(y), Original: exp(-x) * sin(y), ∂f/∂x (computed), ∂f/∂x (expected: -exp(-x) * sin(y)), ∂f/∂y (computed), ∂f/∂y (expected: exp(-x) * cos(y)), ∇²f (computed), ∇²f (expected: 0), Error in ∇²f" class = "sphx-glr-single-img"/><div style="margin-top: 3em;"></div></section>
 <section id="test-gradient-computation">
 <h2>Test gradient computation<a class="headerlink" href="#test-gradient-computation" title="Link to this heading"></a></h2>
 <p>Compute gradient of the scalar field</p>
@@ -385,7 +394,7 @@ to download the full example code.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_finite_diff_003.png" srcset="../../_images/sphx_glr_plot_finite_diff_003.png" alt="Gradient Components: ∇f = [∂f/∂x, ∂f/∂y], ∂f/∂x from gradient, ∂f/∂y from gradient, Difference: gradient[0] - df_dx, Difference: gradient[1] - df_dy" class = "sphx-glr-single-img"/></section>
+<img src="../../_images/sphx_glr_plot_finite_diff_003.png" srcset="../../_images/sphx_glr_plot_finite_diff_003.png" alt="Gradient Components: ∇f = [∂f/∂x, ∂f/∂y], ∂f/∂x from gradient, ∂f/∂y from gradient, Difference: gradient[0] - df_dx, Difference: gradient[1] - df_dy" class = "sphx-glr-single-img"/><div style="margin-top: 3em;"></div></section>
 <section id="test-vector-field-operations">
 <h2>Test vector field operations<a class="headerlink" href="#test-vector-field-operations" title="Link to this heading"></a></h2>
 <p>Create a vector field: u = [exp(-x), sin(y)]</p>
@@ -404,7 +413,7 @@ to download the full example code.</p>
 <span class="n">curl_expected</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
+<div style="margin-top: 3em;"></div></section>
 <section id="plot-vector-field-operations">
 <h2>Plot vector field operations<a class="headerlink" href="#plot-vector-field-operations" title="Link to this heading"></a></h2>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
@@ -457,7 +466,7 @@ to download the full example code.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_finite_diff_004.png" srcset="../../_images/sphx_glr_plot_finite_diff_004.png" alt="Vector Field Operations: u = [exp(-x), sin(y)], u₁ = exp(-x), u₂ = sin(y), ∇·u (computed), ∇·u (expected: -exp(-x) + cos(y)), ∇×u (computed), ∇×u (expected: 0)" class = "sphx-glr-single-img"/></section>
+<img src="../../_images/sphx_glr_plot_finite_diff_004.png" srcset="../../_images/sphx_glr_plot_finite_diff_004.png" alt="Vector Field Operations: u = [exp(-x), sin(y)], u₁ = exp(-x), u₂ = sin(y), ∇·u (computed), ∇·u (expected: -exp(-x) + cos(y)), ∇×u (computed), ∇×u (expected: 0)" class = "sphx-glr-single-img"/><div style="margin-top: 3em;"></div></section>
 <section id="additional-verification-plots">
 <h2>Additional verification plots<a class="headerlink" href="#additional-verification-plots" title="Link to this heading"></a></h2>
 <p>Show second derivatives with consistent colorbars</p>
@@ -488,12 +497,12 @@ to download the full example code.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_finite_diff_005.png" srcset="../../_images/sphx_glr_plot_finite_diff_005.png" alt="Second Derivatives: ∂²f/∂x² and ∂²f/∂y², ∂²f/∂x² (computed), ∂²f/∂x² (expected: exp(-x) * sin(y)), ∂²f/∂y² (computed), ∂²f/∂y² (expected: -exp(-x) * sin(y))" class = "sphx-glr-single-img"/></section>
+<img src="../../_images/sphx_glr_plot_finite_diff_005.png" srcset="../../_images/sphx_glr_plot_finite_diff_005.png" alt="Second Derivatives: ∂²f/∂x² and ∂²f/∂y², ∂²f/∂x² (computed), ∂²f/∂x² (expected: exp(-x) * sin(y)), ∂²f/∂y² (computed), ∂²f/∂y² (expected: -exp(-x) * sin(y))" class = "sphx-glr-single-img"/><div style="margin-top: 3em;"></div></section>
 </section>
 <section id="id2">
 <h1>3D Finite Difference Examples<a class="headerlink" href="#id2" title="Link to this heading"></a></h1>
 <p>Here we demonstrate the FiniteDiff class for 3D functions</p>
-<section id="creating-an-example-of-3d-function">
+<div style="margin-top: 3em;"></div><section id="creating-an-example-of-3d-function">
 <h2>Creating an example of 3D function<a class="headerlink" href="#creating-an-example-of-3d-function" title="Link to this heading"></a></h2>
 <p>Here we consider f(x,y,z) = exp(-x) * sin(y) * cos(z), which is on [0, 2π]³</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">L_x</span><span class="p">,</span> <span class="n">L_y</span><span class="p">,</span> <span class="n">L_z</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">pi</span>
@@ -507,7 +516,7 @@ to download the full example code.</p>
 <span class="n">f_3d</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">X</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
+<div style="margin-top: 3em;"></div></section>
 <section id="differentiate-the-3d-signal">
 <h2>Differentiate the 3D signal<a class="headerlink" href="#differentiate-the-3d-signal" title="Link to this heading"></a></h2>
 <p>We use the FiniteDiff class with dim=3 to compute derivatives</p>
@@ -535,7 +544,7 @@ to download the full example code.</p>
 <span class="n">laplacian_3d_expected</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">X</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
+<div style="margin-top: 3em;"></div></section>
 <section id="plot-3d-results-at-a-specific-z-slice">
 <h2>Plot 3D results at a specific z-slice<a class="headerlink" href="#plot-3d-results-at-a-specific-z-slice" title="Link to this heading"></a></h2>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">z_slice_idx</span> <span class="o">=</span> <span class="n">nz</span> <span class="o">//</span> <span class="mi">2</span>  <span class="c1"># Middle z-slice</span>
@@ -593,7 +602,7 @@ to download the full example code.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_finite_diff_006.png" srcset="../../_images/sphx_glr_plot_finite_diff_006.png" alt="3D Finite Differences: f(x,y,z) = exp(-x) * sin(y) * cos(z) at z = 3.18, Original: exp(-x) * sin(y) * cos(z) at z = 3.18, ∂f/∂x (computed), ∂f/∂x (expected: -exp(-x) * sin(y) * cos(z)), ∂f/∂y (computed), ∂f/∂y (expected: exp(-x) * cos(y) * cos(z)), ∂f/∂z (expected: -exp(-x) * sin(y) * sin(z))" class = "sphx-glr-single-img"/></section>
+<img src="../../_images/sphx_glr_plot_finite_diff_006.png" srcset="../../_images/sphx_glr_plot_finite_diff_006.png" alt="3D Finite Differences: f(x,y,z) = exp(-x) * sin(y) * cos(z) at z = 3.18, Original: exp(-x) * sin(y) * cos(z) at z = 3.18, ∂f/∂x (computed), ∂f/∂x (expected: -exp(-x) * sin(y) * cos(z)), ∂f/∂y (computed), ∂f/∂y (expected: exp(-x) * cos(y) * cos(z)), ∂f/∂z (expected: -exp(-x) * sin(y) * sin(z))" class = "sphx-glr-single-img"/><div style="margin-top: 3em;"></div></section>
 <section id="test-3d-gradient-computation">
 <h2>Test 3D gradient computation<a class="headerlink" href="#test-3d-gradient-computation" title="Link to this heading"></a></h2>
 <p>Compute gradient of the 3D scalar field</p>
@@ -635,7 +644,7 @@ to download the full example code.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_finite_diff_007.png" srcset="../../_images/sphx_glr_plot_finite_diff_007.png" alt="3D Gradient Components: ∇f = [∂f/∂x, ∂f/∂y, ∂f/∂z] at z = 3.18, ∂f/∂x from gradient, ∂f/∂y from gradient, ∂f/∂z from gradient, ∂f/∂x (expected), ∂f/∂y (expected), ∂f/∂z (expected)" class = "sphx-glr-single-img"/></section>
+<img src="../../_images/sphx_glr_plot_finite_diff_007.png" srcset="../../_images/sphx_glr_plot_finite_diff_007.png" alt="3D Gradient Components: ∇f = [∂f/∂x, ∂f/∂y, ∂f/∂z] at z = 3.18, ∂f/∂x from gradient, ∂f/∂y from gradient, ∂f/∂z from gradient, ∂f/∂x (expected), ∂f/∂y (expected), ∂f/∂z (expected)" class = "sphx-glr-single-img"/><div style="margin-top: 3em;"></div></section>
 <section id="test-3d-vector-field-operations">
 <h2>Test 3D vector field operations<a class="headerlink" href="#test-3d-vector-field-operations" title="Link to this heading"></a></h2>
 <p>Create a 3D vector field: u = [exp(-x), sin(y), cos(z)]</p>
@@ -652,7 +661,7 @@ to download the full example code.</p>
 <span class="n">divergence_3d_expected</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">X</span><span class="p">)</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span> <span class="o">-</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
+<div style="margin-top: 3em;"></div></section>
 <section id="plot-3d-vector-field-operations-at-z-slice">
 <h2>Plot 3D vector field operations at z-slice<a class="headerlink" href="#plot-3d-vector-field-operations-at-z-slice" title="Link to this heading"></a></h2>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
@@ -706,7 +715,7 @@ to download the full example code.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_finite_diff_008.png" srcset="../../_images/sphx_glr_plot_finite_diff_008.png" alt="3D Vector Field Operations: u = [exp(-x), sin(y), cos(z)] at z = 3.18, u₁ = exp(-x), u₂ = sin(y), u₃ = cos(z), ∇·u (computed), ∇·u (expected: -exp(-x) + cos(y) - sin(z))" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 6.056 seconds)</p>
+<img src="../../_images/sphx_glr_plot_finite_diff_008.png" srcset="../../_images/sphx_glr_plot_finite_diff_008.png" alt="3D Vector Field Operations: u = [exp(-x), sin(y), cos(z)] at z = 3.18, u₁ = exp(-x), u₂ = sin(y), u₃ = cos(z), ∇·u (computed), ∇·u (expected: -exp(-x) + cos(y) - sin(z))" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 6.167 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-layers-plot-finite-diff-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/f7c2c241b35a2a2d686ab79f9b387bf0/plot_finite_diff.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_finite_diff.ipynb</span></code></a></p>

@@ -22,15 +22,23 @@
 
 A simple Darcy-Flow dataset
 ===========================
-An intro to the small Darcy-Flow example dataset we ship with the package.
+An introduction to the small Darcy-Flow example dataset we ship with the package.
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-13
+The Darcy-Flow problem is a fundamental partial differential equation (PDE) in fluid mechanics
+that describes the flow of a fluid through a porous medium. In this tutorial, we explore the
+dataset structure and visualize how the data is processed for neural operator training.
+
+.. GENERATED FROM PYTHON SOURCE LINES 15-22
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Import the library
 ------------------
 We first import our `neuralop` library and required dependencies.
 
-.. GENERATED FROM PYTHON SOURCE LINES 13-18
+.. GENERATED FROM PYTHON SOURCE LINES 22-27
 
 .. code-block:: Python
 
@@ -46,14 +54,18 @@ We first import our `neuralop` library and required dependencies.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 19-23
+.. GENERATED FROM PYTHON SOURCE LINES 28-36
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Load the dataset
 ----------------
 Training samples are 16x16 and we load testing samples at both 
 16x16 and 32x32 (to test resolution invariance).
 
-.. GENERATED FROM PYTHON SOURCE LINES 23-31
+.. GENERATED FROM PYTHON SOURCE LINES 36-44
 
 .. code-block:: Python
 
@@ -79,24 +91,29 @@ Training samples are 16x16 and we load testing samples at both
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 32-34
+.. GENERATED FROM PYTHON SOURCE LINES 45-52
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Visualizing the data
 --------------------
+Let's examine the shape and structure of our dataset at different resolutions.
 
-.. GENERATED FROM PYTHON SOURCE LINES 34-82
+.. GENERATED FROM PYTHON SOURCE LINES 52-84
 
 .. code-block:: Python
 
 
     for res, test_loader in test_loaders.items():
-        print(res)
+        print(f"Resolution: {res}")
         # Get first batch
         batch = next(iter(test_loader))
-        x = batch['x']
-        y = batch['y']
+        x = batch['x']  # Input
+        y = batch['y']  # Output
 
-        print(f'Testing samples for res {res} have shape {x.shape[1:]}')
+        print(f'Testing samples for resolution {res} have shape {x.shape[1:]}')
 
 
     data = train_dataset[0]
@@ -104,7 +121,6 @@ Visualizing the data
     y = data['y']
 
     print(f'Training samples have shape {x.shape[1:]}')
-
 
     # Which sample to view
     index = 0
@@ -116,46 +132,70 @@ Visualizing the data
     # positional embedding. We will add it manually here to
     # visualize the channels appended by this embedding.
     positional_embedding = GridEmbedding2D(in_channels=1)
-    # at train time, data will be collated with a batch dim.
-    # we create a batch dim to pass into the embedding, then re-squeeze
+    # At train time, data will be collated with a batch dimension.
+    # We create a batch dimension to pass into the embedding, then re-squeeze
     x = positional_embedding(data['x'].unsqueeze(0)).squeeze(0)
     y = data['y']
-    fig = plt.figure(figsize=(7, 7))
-    ax = fig.add_subplot(2, 2, 1)
-    ax.imshow(x[0], cmap='gray')
-    ax.set_title('input x')
-    ax = fig.add_subplot(2, 2, 2)
-    ax.imshow(y.squeeze())
-    ax.set_title('input y')
-    ax = fig.add_subplot(2, 2, 3)
-    ax.imshow(x[1])
-    ax.set_title('x: 1st pos embedding')
-    ax = fig.add_subplot(2, 2, 4)
-    ax.imshow(x[2])
-    ax.set_title('x: 2nd pos embedding')
-    fig.suptitle('Visualizing one input sample', y=0.98)
-    plt.tight_layout()
-    fig.show()
 
 
 
-.. image-sg:: /auto_examples/data/images/sphx_glr_plot_darcy_flow_001.png
-   :alt: Visualizing one input sample, input x, input y, x: 1st pos embedding, x: 2nd pos embedding
-   :srcset: /auto_examples/data/images/sphx_glr_plot_darcy_flow_001.png
-   :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
 
  .. code-block:: none
 
-    16
+    Resolution: 16
     /opt/hostedtoolcache/Python/3.13.8/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:668: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
       warnings.warn(warn_msg)
-    Testing samples for res 16 have shape torch.Size([1, 16, 16])
-    32
-    Testing samples for res 32 have shape torch.Size([1, 32, 32])
+    Testing samples for resolution 16 have shape torch.Size([1, 16, 16])
+    Resolution: 32
+    Testing samples for resolution 32 have shape torch.Size([1, 32, 32])
     Training samples have shape torch.Size([16, 16])
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 85-93
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
+
+Visualizing the processed data
+------------------------------
+We can see how the positional embedding adds coordinate information to our input data.
+This helps the neural operator understand spatial relationships in the data.
+
+.. GENERATED FROM PYTHON SOURCE LINES 93-110
+
+.. code-block:: Python
+
+
+    fig = plt.figure(figsize=(7, 7))
+    ax = fig.add_subplot(2, 2, 1)
+    ax.imshow(x[0], cmap='gray')
+    ax.set_title('Input x')
+    ax = fig.add_subplot(2, 2, 2)
+    ax.imshow(y.squeeze())
+    ax.set_title('Output y')
+    ax = fig.add_subplot(2, 2, 3)
+    ax.imshow(x[1])
+    ax.set_title('Positional embedding: x-coordinates')
+    ax = fig.add_subplot(2, 2, 4)
+    ax.imshow(x[2])
+    ax.set_title('Positional embedding: y-coordinates')
+    fig.suptitle('Visualizing one input sample with positional embeddings', y=0.98)
+    plt.tight_layout()
+    fig.show()
+
+
+
+.. image-sg:: /auto_examples/data/images/sphx_glr_plot_darcy_flow_001.png
+   :alt: Visualizing one input sample with positional embeddings, Input x, Output y, Positional embedding: x-coordinates, Positional embedding: y-coordinates
+   :srcset: /auto_examples/data/images/sphx_glr_plot_darcy_flow_001.png
+   :class: sphx-glr-single-img
+
 
 
 
@@ -163,7 +203,7 @@ Visualizing the data
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 7.551 seconds)
+   **Total running time of the script:** (0 minutes 10.007 seconds)
 
 
 .. _sphx_glr_download_auto_examples_data_plot_darcy_flow.py:

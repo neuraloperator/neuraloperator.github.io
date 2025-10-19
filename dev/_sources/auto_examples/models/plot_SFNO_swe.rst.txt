@@ -22,12 +22,29 @@ Training a SFNO on the spherical Shallow Water equations
 ==========================================================
 
 Using the small Spherical Shallow Water Equations example we ship with the package
-to train a Spherical Fourier-Neural Operator
+to train a Spherical Fourier-Neural Operator (SFNO).
 
-.. GENERATED FROM PYTHON SOURCE LINES 12-26
+This tutorial demonstrates how to train neural operators on spherical domains, which is
+crucial for many geophysical applications like weather prediction, ocean modeling, and
+climate science. The SFNO extends the FNO architecture to handle data on the sphere
+using spherical harmonics instead of regular Fourier modes.
+
+The Shallow Water Equations describe the motion of a thin layer of fluid and are
+fundamental in atmospheric and oceanic dynamics.
+
+.. GENERATED FROM PYTHON SOURCE LINES 18-25
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
+
+Import dependencies
+-------------------
+We import the necessary modules for training a Spherical Fourier Neural Operator
+
+.. GENERATED FROM PYTHON SOURCE LINES 25-38
 
 .. code-block:: Python
-
 
 
     import torch
@@ -49,13 +66,22 @@ to train a Spherical Fourier-Neural Operator
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 27-28
+.. GENERATED FROM PYTHON SOURCE LINES 39-48
 
-Loading the Spherical Shallow Water Equations in multiple resolutions
+.. raw:: html
 
-.. GENERATED FROM PYTHON SOURCE LINES 28-32
+   <div style="margin-top: 3em;"></div>
+
+Loading the Spherical Shallow Water Equations dataset
+-----------------------------------------------------
+We load the spherical shallow water equations dataset with multiple resolutions.
+The dataset contains velocity and height fields on the sphere, which are the
+fundamental variables in shallow water dynamics.
+
+.. GENERATED FROM PYTHON SOURCE LINES 48-53
 
 .. code-block:: Python
+
 
     train_loader, test_loaders = load_spherical_swe(n_train=200, batch_size=4, train_resolution=(32, 64),
                                                     test_resolutions=[(32, 64), (64, 128)], n_tests=[50, 50], test_batch_sizes=[10, 10],)
@@ -76,13 +102,19 @@ Loading the Spherical Shallow Water Equations in multiple resolutions
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 33-34
+.. GENERATED FROM PYTHON SOURCE LINES 54-60
 
-We create a spherical FNO model
+.. raw:: html
 
-.. GENERATED FROM PYTHON SOURCE LINES 34-48
+   <div style="margin-top: 3em;"></div>
+
+Creating the Spherical FNO model
+---------------------------------
+
+.. GENERATED FROM PYTHON SOURCE LINES 60-76
 
 .. code-block:: Python
+
 
 
     model = SFNO(n_modes=(32, 32),
@@ -93,6 +125,7 @@ We create a spherical FNO model
                  factorization='dense')
     model = model.to(device)
 
+    # Count and display the number of parameters
     n_params = count_model_params(model)
     print(f'\nOur model has {n_params} parameters.')
     sys.stdout.flush()
@@ -112,11 +145,17 @@ We create a spherical FNO model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 49-50
+.. GENERATED FROM PYTHON SOURCE LINES 77-84
 
-Create the optimizer
+.. raw:: html
 
-.. GENERATED FROM PYTHON SOURCE LINES 50-56
+   <div style="margin-top: 3em;"></div>
+
+Creating the optimizer and scheduler
+------------------------------------
+We use AdamW optimizer with a lower learning rate for spherical data
+
+.. GENERATED FROM PYTHON SOURCE LINES 84-89
 
 .. code-block:: Python
 
@@ -132,19 +171,25 @@ Create the optimizer
 
 
 
+.. GENERATED FROM PYTHON SOURCE LINES 90-98
 
-.. GENERATED FROM PYTHON SOURCE LINES 57-58
+.. raw:: html
 
-Creating the losses
+   <div style="margin-top: 3em;"></div>
 
-.. GENERATED FROM PYTHON SOURCE LINES 58-64
+Setting up loss functions
+-------------------------
+For spherical data, we use L2 loss with sum reduction to handle the varying
+grid sizes across different latitudes on the sphere
+
+.. GENERATED FROM PYTHON SOURCE LINES 98-104
 
 .. code-block:: Python
 
     l2loss = LpLoss(d=2, p=2, reduction='sum')
 
     train_loss = l2loss
-    eval_losses={'l2': l2loss} #'h1': h1loss, 
+    eval_losses={'l2': l2loss}
 
 
 
@@ -154,7 +199,7 @@ Creating the losses
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 65-76
+.. GENERATED FROM PYTHON SOURCE LINES 105-116
 
 .. code-block:: Python
 
@@ -234,31 +279,37 @@ Creating the losses
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f40a82fd400>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7ff210b5d400>
 
     ### LOSSES ###
 
-     * Train: <neuralop.losses.data_losses.LpLoss object at 0x7f40a82fd550>
+     * Train: <neuralop.losses.data_losses.LpLoss object at 0x7ff210b5d550>
 
-     * Test: {'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f40a82fd550>}
-
-
+     * Test: {'l2': <neuralop.losses.data_losses.LpLoss object at 0x7ff210b5d550>}
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 77-78
 
-Create the trainer
 
-.. GENERATED FROM PYTHON SOURCE LINES 78-86
+.. GENERATED FROM PYTHON SOURCE LINES 117-124
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
+
+Creating the trainer
+---------------------
+We create a Trainer object that handles the training loop for spherical data
+
+.. GENERATED FROM PYTHON SOURCE LINES 124-131
 
 .. code-block:: Python
 
     trainer = Trainer(model=model, n_epochs=20,
                       device=device,
-                      wandb_log=False,
-                      eval_interval=3,
-                      use_distributed=False,
-                      verbose=True)
+                      wandb_log=False,        # Disable Weights & Biases logging
+                      eval_interval=3,       # Evaluate every 3 epochs
+                      use_distributed=False,  # Single GPU/CPU training
+                      verbose=True)          # Print training progress
 
 
 
@@ -267,12 +318,19 @@ Create the trainer
 
 
 
+.. GENERATED FROM PYTHON SOURCE LINES 132-141
 
-.. GENERATED FROM PYTHON SOURCE LINES 87-88
+.. raw:: html
 
-Train the model on the spherical SWE dataset
+   <div style="margin-top: 3em;"></div>
 
-.. GENERATED FROM PYTHON SOURCE LINES 88-98
+Training the SFNO model
+------------------------
+We train the model on the spherical shallow water equations dataset.
+The trainer will handle the forward pass through the SFNO, compute the L2 loss,
+backpropagate, and evaluate on test data.
+
+.. GENERATED FROM PYTHON SOURCE LINES 141-151
 
 .. code-block:: Python
 
@@ -297,39 +355,44 @@ Train the model on the spherical SWE dataset
     Training on 200 samples
     Testing on [50, 50] samples         on resolutions [(32, 64), (64, 128)].
     Raw outputs of shape torch.Size([4, 3, 32, 64])
-    [0] time=3.42, avg_loss=2.6714, train_err=10.6854
+    [0] time=3.39, avg_loss=2.6714, train_err=10.6854
     Eval: (32, 64)_l2=2.2698, (64, 128)_l2=2.5103
-    [3] time=3.31, avg_loss=0.4234, train_err=1.6934
+    [3] time=3.33, avg_loss=0.4234, train_err=1.6934
     Eval: (32, 64)_l2=0.9410, (64, 128)_l2=2.6106
-    [6] time=3.30, avg_loss=0.2877, train_err=1.1510
+    [6] time=3.36, avg_loss=0.2877, train_err=1.1510
     Eval: (32, 64)_l2=0.8048, (64, 128)_l2=2.5193
-    [9] time=3.33, avg_loss=0.2265, train_err=0.9061
+    [9] time=3.41, avg_loss=0.2265, train_err=0.9061
     Eval: (32, 64)_l2=0.7628, (64, 128)_l2=2.5219
-    [12] time=3.34, avg_loss=0.2054, train_err=0.8216
+    [12] time=3.36, avg_loss=0.2054, train_err=0.8216
     Eval: (32, 64)_l2=0.6143, (64, 128)_l2=2.5106
-    [15] time=3.29, avg_loss=0.1619, train_err=0.6477
+    [15] time=3.34, avg_loss=0.1619, train_err=0.6477
     Eval: (32, 64)_l2=0.4317, (64, 128)_l2=2.4616
-    [18] time=3.30, avg_loss=0.1396, train_err=0.5582
+    [18] time=3.34, avg_loss=0.1396, train_err=0.5582
     Eval: (32, 64)_l2=0.3924, (64, 128)_l2=2.4545
 
-    {'train_err': 0.5375380676984787, 'avg_loss': 0.13438451692461967, 'avg_lasso_loss': None, 'epoch_train_time': 3.327597878000006}
+    {'train_err': 0.5375380676984787, 'avg_loss': 0.13438451692461967, 'avg_lasso_loss': None, 'epoch_train_time': 3.3714284429999566}
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 99-109
+.. GENERATED FROM PYTHON SOURCE LINES 152-167
 
-Plot the prediction, and compare with the ground-truth 
-Note that we trained on a very small resolution for
-a very small number of epochs
-In practice, we would train at larger resolution, on many more samples.
+.. raw:: html
 
-However, for practicity, we created a minimal example that
-i) fits in just a few Mb of memory
+   <div style="margin-top: 3em;"></div>
+
+Visualizing SFNO predictions on spherical data
+------------------------------------------------
+We visualize the model's predictions on spherical shallow water equations data.
+Note that we trained on a very small resolution for a very small number of epochs.
+In practice, we would train at larger resolution on many more samples.
+
+However, for practicality, we created a minimal example that:
+i) fits in just a few MB of memory
 ii) can be trained quickly on CPU
 
 In practice we would train a Neural Operator on one or multiple GPUs
 
-.. GENERATED FROM PYTHON SOURCE LINES 109-144
+.. GENERATED FROM PYTHON SOURCE LINES 167-205
 
 .. code-block:: Python
 
@@ -342,37 +405,40 @@ In practice we would train a Neural Operator on one or multiple GPUs
         x = data['x']
         # Ground-truth
         y = data['y'][0, ...].numpy()
-        # Model prediction
+        # Model prediction: SFNO output
         x_in = x.unsqueeze(0).to(device)
         out = model(x_in).squeeze()[0, ...].detach().cpu().numpy()
         x = x[0, ...].detach().numpy()
 
+        # Plot input fields
         ax = fig.add_subplot(2, 3, index*3 + 1)
         ax.imshow(x)
         ax.set_title(f'Input x {resolution}')
         plt.xticks([], [])
         plt.yticks([], [])
 
+        # Plot ground-truth fields
         ax = fig.add_subplot(2, 3, index*3 + 2)
         ax.imshow(y)
         ax.set_title('Ground-truth y')
         plt.xticks([], [])
         plt.yticks([], [])
 
+        # Plot model prediction
         ax = fig.add_subplot(2, 3, index*3 + 3)
         ax.imshow(out)
-        ax.set_title('Model prediction')
+        ax.set_title('SFNO prediction')
         plt.xticks([], [])
         plt.yticks([], [])
 
-    fig.suptitle('Inputs, ground-truth output and prediction.', y=0.98)
+    fig.suptitle('SFNO predictions on spherical shallow water equations', y=0.98)
     plt.tight_layout()
     fig.show()
 
 
 
 .. image-sg:: /auto_examples/models/images/sphx_glr_plot_SFNO_swe_001.png
-   :alt: Inputs, ground-truth output and prediction., Input x (32, 64), Ground-truth y, Model prediction, Input x (64, 128), Ground-truth y, Model prediction
+   :alt: SFNO predictions on spherical shallow water equations, Input x (32, 64), Ground-truth y, SFNO prediction, Input x (64, 128), Ground-truth y, SFNO prediction
    :srcset: /auto_examples/models/images/sphx_glr_plot_SFNO_swe_001.png
    :class: sphx-glr-single-img
 
@@ -383,7 +449,7 @@ In practice we would train a Neural Operator on one or multiple GPUs
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (1 minutes 22.323 seconds)
+   **Total running time of the script:** (1 minutes 23.454 seconds)
 
 
 .. _sphx_glr_download_auto_examples_models_plot_SFNO_swe.py:

@@ -178,7 +178,14 @@ to download the full example code.</p>
 <section class="sphx-glr-example-title" id="visualizing-computational-fluid-dynamics-on-a-car">
 <span id="sphx-glr-auto-examples-data-plot-mini-car-cfd-py"></span><h1>Visualizing computational fluid dynamics on a car<a class="headerlink" href="#visualizing-computational-fluid-dynamics-on-a-car" title="Link to this heading"></a></h1>
 <p>In this example we visualize a mesh drawn from the <a class="reference internal" href="../../modules/api.html#car-cfd-dataset-api"><span class="std std-ref">CarCFDDataset</span></a>.</p>
-<section id="import-dependencies">
+<p>This tutorial demonstrates how to work with unstructured mesh data from computational fluid dynamics (CFD)
+simulations. We will explore the 3D geometry of a car and understand how pressure fields are distributed
+over the surface, which is crucial for aerodynamic analysis and neural operator applications.</p>
+<p>The CarCFD dataset contains:
+- 3D triangular mesh data representing the car surface
+- Pressure fields computed from CFD simulations
+- Query points for neural operator training</p>
+<div style="margin-top: 3em;"></div><section id="import-dependencies">
 <h2>Import dependencies<a class="headerlink" href="#import-dependencies" title="Link to this heading"></a></h2>
 <p>We first import our <cite>neuralop</cite> library and required dependencies.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
@@ -194,50 +201,52 @@ to download the full example code.</p>
 <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
-<section id="understanding-the-data">
-<h2>Understanding the data<a class="headerlink" href="#understanding-the-data" title="Link to this heading"></a></h2>
+<div style="margin-top: 3em;"></div></section>
+<section id="understanding-the-data-structure">
+<h2>Understanding the data structure<a class="headerlink" href="#understanding-the-data-structure" title="Link to this heading"></a></h2>
 <p>The data in a <code class="docutils literal notranslate"><span class="pre">MeshDataModule</span></code> is structured as a dictionary of tensors and important scalar values encoding
-a 3-d triangle mesh over the surface of a car.
+a 3D triangle mesh over the surface of a car.
 Each sample includes the coordinates of all triangle vertices and the centroids of each triangle face.</p>
 <p>In this case, the creators used OpenFOAM to simulate the surface air pressure on car geometries in a wind tunnel.
-The 3-d Navier-Stokes equations were simulated for a variety of inlet velocities over each surface using the
+The 3D Navier-Stokes equations were simulated for a variety of inlet velocities over each surface using the
 <strong>OpenFOAM</strong> computational solver to predict pressure at every vertex on the mesh.
 Each sample here also has an inlet velocity scalar and a pressure field that maps 1-to-1 with the vertices on the mesh.
 The <a class="reference internal" href="../../modules/api.html#car-cfd-dataset-api"><span class="std std-ref">full CarCFDDataset</span></a> is stored in triangle mesh files for downstream processing.
 For the sake of simplicity, we’ve packaged a few examples of the data after processing in tensor form to visualize here:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_list</span> <span class="o">=</span> <span class="n">load_mini_car</span><span class="p">()</span>
 <span class="n">sample</span> <span class="o">=</span> <span class="n">data_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sample</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Available data keys: </span><span class="si">{</span><span class="n">sample</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>sample.keys()=dict_keys([&#39;vertices&#39;, &#39;vertex_normals&#39;, &#39;triangle_normals&#39;, &#39;centroids&#39;, &#39;triangle_areas&#39;, &#39;distance&#39;, &#39;closest_points&#39;, &#39;normalized_triangle_areas&#39;, &#39;press&#39;, &#39;query_points&#39;])
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Available data keys: dict_keys([&#39;vertices&#39;, &#39;vertex_normals&#39;, &#39;triangle_normals&#39;, &#39;centroids&#39;, &#39;triangle_areas&#39;, &#39;distance&#39;, &#39;closest_points&#39;, &#39;normalized_triangle_areas&#39;, &#39;press&#39;, &#39;query_points&#39;])
 </pre></div>
 </div>
-</section>
-<section id="visualizing-the-car">
-<h2>Visualizing the car<a class="headerlink" href="#visualizing-the-car" title="Link to this heading"></a></h2>
-<p>Let’s take a look at the vertices and pressure values.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<div style="margin-top: 3em;"></div></section>
+<section id="visualizing-the-car-surface-with-pressure-distribution">
+<h2>Visualizing the car surface with pressure distribution<a class="headerlink" href="#visualizing-the-car-surface-with-pressure-distribution" title="Link to this heading"></a></h2>
+<p>Let’s take a look at the vertices and pressure values to understand the 3D structure
+and how pressure varies across the car surface.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+
 <span class="c1"># By default the data is normalized into the unit cube. To get a</span>
 <span class="c1"># better look at it, we scale the z-direction up.</span>
 <span class="n">scatter</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="s1">&#39;vertices&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">],</span><span class="n">sample</span><span class="p">[</span><span class="s1">&#39;vertices&#39;</span><span class="p">][:,</span><span class="mi">1</span><span class="p">],</span>
-                     <span class="n">sample</span><span class="p">[</span><span class="s1">&#39;vertices&#39;</span><span class="p">][:,</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">sample</span><span class="p">[</span><span class="s1">&#39;press&#39;</span><span class="p">])</span>
+                     <span class="n">sample</span><span class="p">[</span><span class="s1">&#39;vertices&#39;</span><span class="p">][:,</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">sample</span><span class="p">[</span><span class="s1">&#39;press&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s2">&quot;z&quot;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">azim</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">roll</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vertical_axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Pressure over car mesh vertices&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Pressure distribution over car mesh vertices&quot;</span><span class="p">)</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">scatter</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;normalized pressure&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_mini_car_cfd_001.png" srcset="../../_images/sphx_glr_plot_mini_car_cfd_001.png" alt="Pressure over car mesh vertices" class = "sphx-glr-single-img"/></section>
-<section id="query-points">
-<h2>Query points<a class="headerlink" href="#query-points" title="Link to this heading"></a></h2>
+<img src="../../_images/sphx_glr_plot_mini_car_cfd_001.png" srcset="../../_images/sphx_glr_plot_mini_car_cfd_001.png" alt="Pressure distribution over car mesh vertices" class = "sphx-glr-single-img"/><div style="margin-top: 3em;"></div></section>
+<section id="understanding-query-points-for-neural-operator-training">
+<h2>Understanding query points for neural operator training<a class="headerlink" href="#understanding-query-points-for-neural-operator-training" title="Link to this heading"></a></h2>
 <p>Each sample in the <code class="docutils literal notranslate"><span class="pre">CarCFDDataset</span></code> also includes a set of latent query points on which we learn a function
 to enable learning with an FNO in the middle of our geometry-informed models. Let’s visualize the queries
 on top of the car from before:</p>
@@ -255,20 +264,20 @@ on top of the car from before:</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s2">&quot;z&quot;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">azim</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">roll</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vertical_axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Query points and vertices&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Query points and car surface vertices&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_mini_car_cfd_002.png" srcset="../../_images/sphx_glr_plot_mini_car_cfd_002.png" alt="Query points and vertices" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Query points and vertices&#39;)
+<img src="../../_images/sphx_glr_plot_mini_car_cfd_002.png" srcset="../../_images/sphx_glr_plot_mini_car_cfd_002.png" alt="Query points and car surface vertices" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Query points and car surface vertices&#39;)
 </pre></div>
 </div>
-<p>Neighbor search between 3D point clouds
-In <a class="reference internal" href="../layers/plot_neighbor_search.html"><span class="doc">Visualizing neighbor search</span></a> we demonstrate our neighbor search
-on a simple 2-d point cloud. Let’s try that again with our points here:</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="neighbor-search-between-3d-point-clouds">
+<h2>Neighbor search between 3D point clouds<a class="headerlink" href="#neighbor-search-between-3d-point-clouds" title="Link to this heading"></a></h2>
+<p>In <a class="reference internal" href="../layers/plot_neighbor_search.html"><span class="doc">Neighbor Search for Graph Neural Operators</span></a> we demonstrate our neighbor search
+on a simple 2D point cloud. Let’s try that again with our 3D car surface points here.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.layers.neighbor_search</span><span class="w"> </span><span class="kn">import</span> <span class="n">native_neighbor_search</span>
 <span class="n">verts</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="s1">&#39;vertices&#39;</span><span class="p">]</span>
-<span class="c1">#query_point = queries[1000]</span>
-<span class="n">query_point</span> <span class="o">=</span> <span class="n">queries</span><span class="p">[</span><span class="mi">3300</span><span class="p">]</span> <span class="c1"># 1550 and 0.4 is really good</span>
-<span class="c1">#nbr_data = native_neighbor_search(data=verts, queries=query_point.unsqueeze(0), radius=0.15)</span>
+<span class="n">query_point</span> <span class="o">=</span> <span class="n">queries</span><span class="p">[</span><span class="mi">3300</span><span class="p">]</span>
 <span class="n">nbr_data</span> <span class="o">=</span> <span class="n">native_neighbor_search</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">verts</span><span class="p">,</span> <span class="n">queries</span><span class="o">=</span><span class="n">query_point</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">radius</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -313,7 +322,9 @@ on a simple 2-d point cloud. Let’s try that again with our points here:</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_mini_car_cfd_003.png" srcset="../../_images/sphx_glr_plot_mini_car_cfd_003.png" alt="One query point, Neighbor points from car for one query point" class = "sphx-glr-single-img"/><p><strong>Connecting neighbors to query</strong></p>
+<img src="../../_images/sphx_glr_plot_mini_car_cfd_003.png" srcset="../../_images/sphx_glr_plot_mini_car_cfd_003.png" alt="One query point, Neighbor points from car for one query point" class = "sphx-glr-single-img"/><div style="margin-top: 3em;"></div></section>
+<section id="connecting-neighbors-to-query">
+<h2>Connecting neighbors to query<a class="headerlink" href="#connecting-neighbors-to-query" title="Link to this heading"></a></h2>
 <p>First, let’s make a simple utiltiy to add arrows to our 3D plot:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
@@ -371,7 +382,7 @@ on a simple 2-d point cloud. Let’s try that again with our points here:</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_mini_car_cfd_004.png" srcset="../../_images/sphx_glr_plot_mini_car_cfd_004.png" alt="One query point" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 4.399 seconds)</p>
+<img src="../../_images/sphx_glr_plot_mini_car_cfd_004.png" srcset="../../_images/sphx_glr_plot_mini_car_cfd_004.png" alt="One query point" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 4.377 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-data-plot-mini-car-cfd-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/d1e3f0356958f7433510304c5cfe45ce/plot_mini_car_cfd.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_mini_car_cfd.ipynb</span></code></a></p>
@@ -440,9 +451,11 @@ on a simple 2-d point cloud. Let’s try that again with our points here:</p>
         <ul>
 <li><a class="reference internal" href="#">Visualizing computational fluid dynamics on a car</a><ul>
 <li><a class="reference internal" href="#import-dependencies">Import dependencies</a></li>
-<li><a class="reference internal" href="#understanding-the-data">Understanding the data</a></li>
-<li><a class="reference internal" href="#visualizing-the-car">Visualizing the car</a></li>
-<li><a class="reference internal" href="#query-points">Query points</a></li>
+<li><a class="reference internal" href="#understanding-the-data-structure">Understanding the data structure</a></li>
+<li><a class="reference internal" href="#visualizing-the-car-surface-with-pressure-distribution">Visualizing the car surface with pressure distribution</a></li>
+<li><a class="reference internal" href="#understanding-query-points-for-neural-operator-training">Understanding query points for neural operator training</a></li>
+<li><a class="reference internal" href="#neighbor-search-between-3d-point-clouds">Neighbor search between 3D point clouds</a></li>
+<li><a class="reference internal" href="#connecting-neighbors-to-query">Connecting neighbors to query</a></li>
 </ul>
 </li>
 </ul>

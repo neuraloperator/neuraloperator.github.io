@@ -24,9 +24,19 @@ Checkpointing and loading training states
 Demonstrating the ``Trainer``'s saving and loading functionality, 
 which makes it easy to checkpoint and resume training states.
 
-.. GENERATED FROM PYTHON SOURCE LINES 12-25
+.. GENERATED FROM PYTHON SOURCE LINES 11-17
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
+
+Import dependencies
+-------------------
+
+.. GENERATED FROM PYTHON SOURCE LINES 17-31
 
 .. code-block:: Python
+
 
     import torch
     import matplotlib.pyplot as plt
@@ -42,11 +52,16 @@ which makes it easy to checkpoint and resume training states.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 26-27
+.. GENERATED FROM PYTHON SOURCE LINES 32-38
 
-Loading the Navier-Stokes dataset in 128x128 resolution
+.. raw:: html
 
-.. GENERATED FROM PYTHON SOURCE LINES 27-34
+   <div style="margin-top: 3em;"></div>
+
+Loading the Darcy-Flow dataset
+------------------------------
+
+.. GENERATED FROM PYTHON SOURCE LINES 38-45
 
 .. code-block:: Python
 
@@ -58,11 +73,16 @@ Loading the Navier-Stokes dataset in 128x128 resolution
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 35-36
+.. GENERATED FROM PYTHON SOURCE LINES 46-52
 
-We create an FNO model
+.. raw:: html
 
-.. GENERATED FROM PYTHON SOURCE LINES 36-52
+   <div style="margin-top: 3em;"></div>
+
+Creating the FNO model
+----------------------
+
+.. GENERATED FROM PYTHON SOURCE LINES 52-68
 
 .. code-block:: Python
 
@@ -83,11 +103,16 @@ We create an FNO model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 53-54
+.. GENERATED FROM PYTHON SOURCE LINES 69-75
 
-Create the optimizer
+.. raw:: html
 
-.. GENERATED FROM PYTHON SOURCE LINES 54-60
+   <div style="margin-top: 3em;"></div>
+
+Creating the optimizer and scheduler
+------------------------------------
+
+.. GENERATED FROM PYTHON SOURCE LINES 75-81
 
 .. code-block:: Python
 
@@ -98,11 +123,16 @@ Create the optimizer
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 61-62
+.. GENERATED FROM PYTHON SOURCE LINES 82-88
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Creating the losses
+------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 62-69
+.. GENERATED FROM PYTHON SOURCE LINES 88-95
 
 .. code-block:: Python
 
@@ -114,10 +144,18 @@ Creating the losses
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 70-81
+.. GENERATED FROM PYTHON SOURCE LINES 96-102
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
+
+Displaying configuration
+------------------------
+
+.. GENERATED FROM PYTHON SOURCE LINES 102-112
 
 .. code-block:: Python
-
 
 
     print('\n### MODEL ###\n', model)
@@ -130,11 +168,16 @@ Creating the losses
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 82-83
+.. GENERATED FROM PYTHON SOURCE LINES 113-119
 
-Create the trainer
+.. raw:: html
 
-.. GENERATED FROM PYTHON SOURCE LINES 83-92
+   <div style="margin-top: 3em;"></div>
+
+Creating the trainer
+--------------------
+
+.. GENERATED FROM PYTHON SOURCE LINES 119-128
 
 .. code-block:: Python
 
@@ -148,11 +191,17 @@ Create the trainer
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 93-94
+.. GENERATED FROM PYTHON SOURCE LINES 129-136
 
-Actually train the model on our small Darcy-Flow dataset
+.. raw:: html
 
-.. GENERATED FROM PYTHON SOURCE LINES 94-122
+   <div style="margin-top: 3em;"></div>
+
+Training the model
+------------------
+We train and save checkpoints
+
+.. GENERATED FROM PYTHON SOURCE LINES 136-164
 
 .. code-block:: Python
 

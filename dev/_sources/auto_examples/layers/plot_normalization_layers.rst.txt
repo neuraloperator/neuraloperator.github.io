@@ -21,17 +21,31 @@
 Normalization Layers
 ====================
 
-We provide several normalization layers that can be used to stabilize and accelerate model training. These layers are designed to be dimension-agnostic, making them flexible for use in various neural operator models. 
+This tutorial demonstrates normalization layers designed for neural operators.
+Normalization is crucial for:
 
-In this tutorial, we explore `InstanceNorm`, `BatchNorm`, and `AdaIN`, and visualize their effects on 1D data.
+- Stabilizing training dynamics
+- Accelerating convergence
+- Improving generalization
+- Handling different data distributions
 
-.. GENERATED FROM PYTHON SOURCE LINES 12-13
+The tutorial covers `InstanceNorm`, `BatchNorm`, and `AdaIN` layers, which are
+dimension-agnostic and flexible for various neural operator architectures.
 
-We first import the neuralop library and required dependencies.
+.. GENERATED FROM PYTHON SOURCE LINES 19-26
 
-.. GENERATED FROM PYTHON SOURCE LINES 13-22
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
+
+Import dependencies
+-------------------
+We import the necessary modules for working with normalization layers
+
+.. GENERATED FROM PYTHON SOURCE LINES 26-36
 
 .. code-block:: Python
+
 
     import torch
     import torch.nn as nn
@@ -49,14 +63,18 @@ We first import the neuralop library and required dependencies.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 23-27
+.. GENERATED FROM PYTHON SOURCE LINES 37-45
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Understanding Normalization with 1D Functions
 ---------------------------------------------
 To clearly see how these layers work, we create a synthetic dataset of 1D functions.
 Our batch will consist of 10 functions. The first 5 will be sine waves with high amplitude and positive vertical shift, while the next 5 will be cosine waves with low amplitude and negative vertical shift. 
 
-.. GENERATED FROM PYTHON SOURCE LINES 27-47
+.. GENERATED FROM PYTHON SOURCE LINES 45-66
 
 .. code-block:: Python
 
@@ -66,15 +84,16 @@ Our batch will consist of 10 functions. The first 5 will be sine waves with high
     x = torch.linspace(0, 2 * torch.pi, n_points)
     data = torch.zeros((n_samples, 1, n_points))
 
+    # Generate two groups of functions with different characteristics
     for i in range(n_samples):
         if i < 5:
-            # Group 1: High amplitude, positive shift
+            # Group 1: High amplitude sine waves with positive vertical shift
             amplitude = np.random.uniform(2.0, 3.0)
             shift = np.random.uniform(1.0, 2.0)
             frequency = np.random.uniform(2.0, 3.0)
             data[i, 0, :] = amplitude * torch.sin(frequency * x) + shift
         else:
-            # Group 2: Low amplitude, negative shift
+            # Group 2: Low amplitude cosine waves with negative vertical shift
             amplitude = np.random.uniform(0.5, 1.0)
             shift = np.random.uniform(-2.0, -1.0)
             frequency = np.random.uniform(1.0, 2.0)
@@ -87,13 +106,22 @@ Our batch will consist of 10 functions. The first 5 will be sine waves with high
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 48-49
+.. GENERATED FROM PYTHON SOURCE LINES 67-76
 
-Let's visualize the original data
+.. raw:: html
 
-.. GENERATED FROM PYTHON SOURCE LINES 49-67
+   <div style="margin-top: 3em;"></div>
+
+Visualizing the original data
+------------------------------
+We plot the synthetic functions to see their different statistical properties.
+The blue functions have high amplitude and positive shift, while the red functions
+have low amplitude and negative shift.
+
+.. GENERATED FROM PYTHON SOURCE LINES 76-96
 
 .. code-block:: Python
+
 
     plt.figure(figsize=(12, 6))
     plt.title("Original Data", fontsize=20)
@@ -102,6 +130,7 @@ Let's visualize the original data
             plt.plot(x, data[i, 0, :], 'b-', label='High Amplitude Functions with Positive Shift' if i == 0 else "")
         else:
             plt.plot(x, data[i, 0, :], 'r-', label='Low Amplitude Functions with Negative Shift' if i == 5 else "")
+
     plt.legend(fontsize=20, loc='lower center', bbox_to_anchor=(0.5, -0.5), ncol=1)
     plt.xlabel("$x$", fontsize=18)
     plt.ylabel("$f(x)$", fontsize=18)
@@ -125,7 +154,7 @@ Let's visualize the original data
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 68-75
+.. GENERATED FROM PYTHON SOURCE LINES 97-104
 
 .. raw:: html
 
@@ -135,11 +164,12 @@ InstanceNorm
 ------------
 `InstanceNorm` normalizes each sample in the batch **independently**. This means it rescales each of the 10 functions to have a mean of 0 and a standard deviation of 1, regardless of the other functions in the batch. This is useful when the statistical properties of each sample are distinct and should be treated separately.
 
-.. GENERATED FROM PYTHON SOURCE LINES 75-98
+.. GENERATED FROM PYTHON SOURCE LINES 104-128
 
 .. code-block:: Python
 
 
+    # Apply instance normalization
     instance_norm = InstanceNorm()
     data_in = instance_norm(data)
 
@@ -174,11 +204,15 @@ InstanceNorm
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 99-100
+.. GENERATED FROM PYTHON SOURCE LINES 129-134
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Notice how all functions are now perfectly scaled to the same range, centered around zero. The original differences in amplitude and shift between the functions have been completely removed by instance-wise normalization.
 
-.. GENERATED FROM PYTHON SOURCE LINES 102-109
+.. GENERATED FROM PYTHON SOURCE LINES 136-143
 
 .. raw:: html
 
@@ -188,7 +222,7 @@ BatchNorm
 ---------
 `BatchNorm` normalizes the data **across the entire batch**. It computes a single mean and standard deviation for all 10 functions combined and uses these values to normalize all the data. This is the most common form of normalization and is effective when batch statistics are a good approximation of the overall data distribution.
 
-.. GENERATED FROM PYTHON SOURCE LINES 109-133
+.. GENERATED FROM PYTHON SOURCE LINES 143-167
 
 .. code-block:: Python
 
@@ -228,12 +262,12 @@ BatchNorm
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 134-136
+.. GENERATED FROM PYTHON SOURCE LINES 168-170
 
 With `BatchNorm`, the relative differences between the two groups of functions are preserved. The high-amplitude functions are still visibly distinct from the low-amplitude ones, but the entire batch is now centered around a mean of zero with a standard deviation of one.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 138-147
+.. GENERATED FROM PYTHON SOURCE LINES 172-181
 
 .. raw:: html
 
@@ -245,7 +279,7 @@ AdaIN (Adaptive Instance Normalization)
 
 To guarantee a clear and deterministic result for this tutorial, we define our own simple MLP. This MLP maps our chosen style embeddings directly to a desired `weight` and `bias`.
 
-.. GENERATED FROM PYTHON SOURCE LINES 147-188
+.. GENERATED FROM PYTHON SOURCE LINES 181-222
 
 .. code-block:: Python
 
@@ -302,14 +336,18 @@ To guarantee a clear and deterministic result for this tutorial, we define our o
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 189-189
+.. GENERATED FROM PYTHON SOURCE LINES 223-227
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 As you can see, the same content function is transformed into two very different outputs. **Style 1** produces a simple sinusoidal wave with larger amplitude and positive shift. **Style 2** produces a more complex transformation: the function is inverted (phase-shifted), its amplitude is reduced, and it's shifted downwards. This demonstrates how AdaIN can modulate network layer output in diverse ways based on the style embedding.
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.546 seconds)
+   **Total running time of the script:** (0 minutes 0.533 seconds)
 
 
 .. _sphx_glr_download_auto_examples_layers_plot_normalization_layers.py:

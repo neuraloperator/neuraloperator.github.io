@@ -177,9 +177,20 @@ to download the full example code.</p>
 </div>
 <section class="sphx-glr-example-title" id="training-an-fno-on-darcy-flow">
 <span id="sphx-glr-auto-examples-models-plot-fno-darcy-py"></span><h1>Training an FNO on Darcy-Flow<a class="headerlink" href="#training-an-fno-on-darcy-flow" title="Link to this heading"></a></h1>
-<p>We train a Fourier Neural Operator on our small <a class="reference internal" href="../data/plot_darcy_flow.html#sphx-glr-auto-examples-data-plot-darcy-flow-py"><span class="std std-ref">Darcy-Flow example</span></a>.</p>
+<p>We train a Fourier Neural Operator (FNO) on our small <a class="reference internal" href="../data/plot_darcy_flow.html#sphx-glr-auto-examples-data-plot-darcy-flow-py"><span class="std std-ref">Darcy-Flow example</span></a>.</p>
+<p>This tutorial demonstrates the complete workflow of training a neural operator:
+1. Loading and preprocessing the Darcy-Flow dataset
+2. Creating an FNO model architecture
+3. Setting up training components (optimizer, scheduler, losses)
+4. Training the model
+5. Evaluating predictions and zero-shot super-resolution</p>
 <p>Note that this dataset is much smaller than one we would use in practice. The small Darcy-flow is an example built to
 be trained on a CPU in a few seconds, whereas normally we would train on one or multiple GPUs.</p>
+<p>The FNO’s key advantage is its resolution invariance - it can make predictions at different resolutions
+without retraining, which we will demonstrate in the zero-shot super-resolution section.</p>
+<div style="margin-top: 3em;"></div><section id="import-dependencies">
+<h2>Import dependencies<a class="headerlink" href="#import-dependencies" title="Link to this heading"></a></h2>
+<p>We import the necessary modules from <cite>neuralop</cite> for training a Fourier Neural Operator</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
@@ -193,7 +204,11 @@ be trained on a CPU in a few seconds, whereas normally we would train on one or 
 <span class="n">device</span> <span class="o">=</span> <span class="s1">&#39;cpu&#39;</span>
 </pre></div>
 </div>
-<p>Let’s load the small Darcy-flow dataset.</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="loading-the-darcy-flow-dataset">
+<h2>Loading the Darcy-Flow dataset<a class="headerlink" href="#loading-the-darcy-flow-dataset" title="Link to this heading"></a></h2>
+<p>We load the small Darcy-Flow dataset with multiple resolutions for training and testing.
+The dataset contains permeability fields (input) and pressure fields (output).</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">train_loader</span><span class="p">,</span> <span class="n">test_loaders</span><span class="p">,</span> <span class="n">data_processor</span> <span class="o">=</span> <span class="n">load_darcy_flow_small</span><span class="p">(</span>
         <span class="n">n_train</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
         <span class="n">test_resolutions</span><span class="o">=</span><span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span> <span class="n">n_tests</span><span class="o">=</span><span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span>
@@ -206,42 +221,51 @@ be trained on a CPU in a few seconds, whereas normally we would train on one or 
 Loading test db for resolution 32 with 50 samples
 </pre></div>
 </div>
-<p>We create a simple FNO model</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">FNO</span><span class="p">(</span><span class="n">n_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span>
+<div style="margin-top: 3em;"></div></section>
+<section id="creating-the-fno-model">
+<h2>Creating the FNO model<a class="headerlink" href="#creating-the-fno-model" title="Link to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">FNO</span><span class="p">(</span><span class="n">n_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
              <span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
              <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
              <span class="n">hidden_channels</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
              <span class="n">projection_channel_ratio</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
+<span class="c1"># Count and display the number of parameters</span>
 <span class="n">n_params</span> <span class="o">=</span> <span class="n">count_model_params</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Our model has </span><span class="si">{</span><span class="n">n_params</span><span class="si">}</span><span class="s1"> parameters.&#39;</span><span class="p">)</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Our model has 1192801 parameters.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Our model has 340833 parameters.
 </pre></div>
 </div>
-<section id="training-setup">
-<h2>Training setup<a class="headerlink" href="#training-setup" title="Link to this heading"></a></h2>
-<p>Create the optimizer</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="creating-the-optimizer-and-scheduler">
+<h2>Creating the optimizer and scheduler<a class="headerlink" href="#creating-the-optimizer-and-scheduler" title="Link to this heading"></a></h2>
+<p>We use AdamW optimizer with weight decay for regularization</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">AdamW</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span>
                                 <span class="n">lr</span><span class="o">=</span><span class="mf">8e-3</span><span class="p">,</span>
                                 <span class="n">weight_decay</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">)</span>
 <span class="n">scheduler</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">lr_scheduler</span><span class="o">.</span><span class="n">CosineAnnealingLR</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">T_max</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Then create the losses</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">l2loss</span> <span class="o">=</span> <span class="n">LpLoss</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">h1loss</span> <span class="o">=</span> <span class="n">H1Loss</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<div style="margin-top: 3em;"></div></section>
+<section id="setting-up-loss-functions">
+<h2>Setting up loss functions<a class="headerlink" href="#setting-up-loss-functions" title="Link to this heading"></a></h2>
+<p>We use H1 loss for training and L2 loss for evaluation
+H1 loss is particularly good for PDE problems as it penalizes both function values and gradients</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">l2loss</span> <span class="o">=</span> <span class="n">LpLoss</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># L2 loss for function values</span>
+<span class="n">h1loss</span> <span class="o">=</span> <span class="n">H1Loss</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>       <span class="c1"># H1 loss includes gradient information</span>
 
 <span class="n">train_loss</span> <span class="o">=</span> <span class="n">h1loss</span>
 <span class="n">eval_losses</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;h1&#39;</span><span class="p">:</span> <span class="n">h1loss</span><span class="p">,</span> <span class="s1">&#39;l2&#39;</span><span class="p">:</span> <span class="n">l2loss</span><span class="p">}</span>
 </pre></div>
 </div>
-</section>
+<div style="margin-top: 3em;"></div></section>
 <section id="training-the-model">
 <h2>Training the model<a class="headerlink" href="#training-the-model" title="Link to this heading"></a></h2>
+<p>We display the training configuration and then train the model</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### MODEL ###</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### OPTIMIZER ###</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### SCHEDULER ###</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">scheduler</span><span class="p">)</span>
@@ -257,7 +281,7 @@ Loading test db for resolution 32 with 50 samples
   (fno_blocks): FNOBlocks(
     (convs): ModuleList(
       (0-3): 4 x SpectralConv(
-        (weight): DenseTensor(shape=torch.Size([32, 32, 16, 9]), rank=None)
+        (weight): DenseTensor(shape=torch.Size([32, 32, 8, 5]), rank=None)
       )
     )
     (fno_skips): ModuleList(
@@ -303,26 +327,36 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f40a82d2e90&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7ff1fcc24910&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f40a82d2990&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7ff1fcc242d0&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f40a82d2990&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f4094befed0&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7ff1fcc242d0&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7ff1fcc256d0&gt;}
 </pre></div>
 </div>
-<p>Create the trainer:</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="creating-the-trainer">
+<h2>Creating the trainer<a class="headerlink" href="#creating-the-trainer" title="Link to this heading"></a></h2>
+<p>We create a Trainer object that handles the training loop, evaluation, and logging</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">n_epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
                   <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
                   <span class="n">data_processor</span><span class="o">=</span><span class="n">data_processor</span><span class="p">,</span>
-                  <span class="n">wandb_log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                  <span class="n">eval_interval</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-                  <span class="n">use_distributed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                  <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                  <span class="n">wandb_log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>        <span class="c1"># Disable Weights &amp; Biases logging for this tutorial</span>
+                  <span class="n">eval_interval</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>       <span class="c1"># Evaluate every 3 epochs</span>
+                  <span class="n">use_distributed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># Single GPU/CPU training</span>
+                  <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>          <span class="c1"># Print training progress</span>
 </pre></div>
 </div>
-<p>Then train the model on our small Darcy-Flow dataset:</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="id1">
+<h2>Training the model<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>We train the model on our Darcy-Flow dataset. The trainer will:
+1. Run the forward pass through the FNO
+2. Compute the H1 loss
+3. Backpropagate and update weights
+4. Evaluate on test data every 3 epochs</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_loader</span><span class="o">=</span><span class="n">train_loader</span><span class="p">,</span>
               <span class="n">test_loaders</span><span class="o">=</span><span class="n">test_loaders</span><span class="p">,</span>
               <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
@@ -337,44 +371,47 @@ Testing on [50, 50] samples         on resolutions [16, 32].
 /opt/hostedtoolcache/Python/3.13.8/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:668: UserWarning: &#39;pin_memory&#39; argument is set as true but no accelerator is found, then device pinned memory won&#39;t be used.
   warnings.warn(warn_msg)
 Raw outputs of shape torch.Size([32, 1, 16, 16])
-[0] time=2.44, avg_loss=0.6102, train_err=19.0684
-Eval: 16_h1=0.3939, 16_l2=0.2682, 32_h1=0.5796, 32_l2=0.2938
-[3] time=2.43, avg_loss=0.2054, train_err=6.4173
-Eval: 16_h1=0.2049, 16_l2=0.1377, 32_h1=0.4886, 32_l2=0.1798
-[6] time=2.40, avg_loss=0.1828, train_err=5.7121
-Eval: 16_h1=0.2071, 16_l2=0.1313, 32_h1=0.4970, 32_l2=0.1720
-[9] time=2.41, avg_loss=0.1697, train_err=5.3023
-Eval: 16_h1=0.2014, 16_l2=0.1310, 32_h1=0.4852, 32_l2=0.1732
-[12] time=2.41, avg_loss=0.1334, train_err=4.1702
-Eval: 16_h1=0.2303, 16_l2=0.1576, 32_h1=0.4826, 32_l2=0.1820
-[15] time=2.44, avg_loss=0.1290, train_err=4.0307
-Eval: 16_h1=0.2067, 16_l2=0.1286, 32_h1=0.4834, 32_l2=0.1706
-[18] time=2.44, avg_loss=0.1015, train_err=3.1722
-Eval: 16_h1=0.2183, 16_l2=0.1358, 32_h1=0.4667, 32_l2=0.1676
+[0] time=1.54, avg_loss=0.6141, train_err=19.1911
+Eval: 16_h1=0.4252, 16_l2=0.2707, 32_h1=0.4970, 32_l2=0.2717
+[3] time=1.55, avg_loss=0.2390, train_err=7.4678
+Eval: 16_h1=0.2436, 16_l2=0.1654, 32_h1=0.3876, 32_l2=0.1860
+[6] time=1.57, avg_loss=0.2012, train_err=6.2885
+Eval: 16_h1=0.2322, 16_l2=0.1602, 32_h1=0.3543, 32_l2=0.1800
+[9] time=1.57, avg_loss=0.1814, train_err=5.6696
+Eval: 16_h1=0.1937, 16_l2=0.1270, 32_h1=0.3264, 32_l2=0.1557
+[12] time=1.58, avg_loss=0.1639, train_err=5.1214
+Eval: 16_h1=0.1878, 16_l2=0.1161, 32_h1=0.3305, 32_l2=0.1454
+[15] time=1.56, avg_loss=0.1658, train_err=5.1822
+Eval: 16_h1=0.1876, 16_l2=0.1156, 32_h1=0.3280, 32_l2=0.1445
+[18] time=1.56, avg_loss=0.1548, train_err=4.8376
+Eval: 16_h1=0.1805, 16_l2=0.1033, 32_h1=0.3136, 32_l2=0.1240
 
-{&#39;train_err&#39;: 3.4201044477522373, &#39;avg_loss&#39;: 0.1094433423280716, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 2.450665301000072}
+{&#39;train_err&#39;: 4.470375899225473, &#39;avg_loss&#39;: 0.14305202877521514, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 1.5546738699999878}
 </pre></div>
 </div>
-</section>
+<div style="margin-top: 3em;"></div></section>
 <section id="visualizing-predictions">
 <span id="plot-preds"></span><h2>Visualizing predictions<a class="headerlink" href="#visualizing-predictions" title="Link to this heading"></a></h2>
 <p>Let’s take a look at what our model’s predicted outputs look like.
-Again note that in this example, we train on a very small resolution for
-a very small number of epochs.
-In practice, we would train at a larger resolution, on many more samples.</p>
+We wll compare the inputs, ground-truth outputs, and model predictions side by side.</p>
+<p>Note that in this example, we train on a very small resolution for
+a very small number of epochs. In practice, we would train at a larger
+resolution on many more samples.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">test_samples</span> <span class="o">=</span> <span class="n">test_loaders</span><span class="p">[</span><span class="mi">16</span><span class="p">]</span><span class="o">.</span><span class="n">dataset</span>
 
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
 <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">test_samples</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">data_processor</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">batched</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="c1"># Input x</span>
+
+    <span class="c1"># Input</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
-    <span class="c1"># Ground-truth</span>
+    <span class="c1"># Ground-truth output</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
     <span class="c1"># Model prediction</span>
     <span class="n">out</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
 
+    <span class="c1"># Plot input</span>
     <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">index</span><span class="o">*</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -382,13 +419,15 @@ In practice, we would train at a larger resolution, on many more samples.</p>
     <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([],</span> <span class="p">[])</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([],</span> <span class="p">[])</span>
 
+    <span class="c1"># Plot ground-truth output</span>
     <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">index</span><span class="o">*</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">squeeze</span><span class="p">())</span>
     <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Ground-truth y&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Ground-truth output&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([],</span> <span class="p">[])</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([],</span> <span class="p">[])</span>
 
+    <span class="c1"># Plot model prediction</span>
     <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">index</span><span class="o">*</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
     <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -396,66 +435,76 @@ In practice, we would train at a larger resolution, on many more samples.</p>
     <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([],</span> <span class="p">[])</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([],</span> <span class="p">[])</span>
 
-<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Inputs, ground-truth output and prediction (16x16).&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.98</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;FNO predictions on 16x16 Darcy-Flow data&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.98</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_FNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_FNO_darcy_001.png" alt="Inputs, ground-truth output and prediction (16x16)., Input x, Ground-truth y, Model prediction" class = "sphx-glr-single-img"/></section>
-<section id="zero-shot-super-evaluation">
-<h2>Zero-shot super-evaluation<a class="headerlink" href="#zero-shot-super-evaluation" title="Link to this heading"></a></h2>
-<p>In addition to training and making predictions on the same input size,
-the FNO’s invariance to the discretization of input data means we
-can natively make predictions on higher-resolution inputs and get higher-resolution outputs.</p>
+<img src="../../_images/sphx_glr_plot_FNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_FNO_darcy_001.png" alt="FNO predictions on 16x16 Darcy-Flow data, Input x, Ground-truth output, Model prediction" class = "sphx-glr-single-img"/><div style="margin-top: 3em;"></div></section>
+<section id="zero-shot-super-resolution-evaluation">
+<h2>Zero-shot super-resolution evaluation<a class="headerlink" href="#zero-shot-super-resolution-evaluation" title="Link to this heading"></a></h2>
+<p>One of the key advantages of neural operators is their resolution invariance.
+The FNO’s invariance to the discretization of input data means we can natively
+make predictions on higher-resolution inputs and get higher-resolution outputs
+without retraining the model!</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">test_samples</span> <span class="o">=</span> <span class="n">test_loaders</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">.</span><span class="n">dataset</span>
 
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
 <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">test_samples</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">data_processor</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">batched</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="c1"># Input x</span>
+
+    <span class="c1"># Input at higher-resolution</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
-    <span class="c1"># Ground-truth</span>
+    <span class="c1"># Ground-truth output at higher-resolution</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
-    <span class="c1"># Model prediction</span>
+    <span class="c1"># Model prediction at higher-resolution</span>
     <span class="n">out</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
 
+    <span class="c1"># Plot input at higher-resolution</span>
     <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">index</span><span class="o">*</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Input x&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Input at 32x32&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([],</span> <span class="p">[])</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([],</span> <span class="p">[])</span>
 
+    <span class="c1"># Plot ground-truth output at higher-resolution</span>
     <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">index</span><span class="o">*</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">squeeze</span><span class="p">())</span>
     <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Ground-truth y&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Ground-truth at 32x32&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([],</span> <span class="p">[])</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([],</span> <span class="p">[])</span>
 
+    <span class="c1"># Plot model prediction at higher-resolution</span>
     <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">index</span><span class="o">*</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
     <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Model prediction&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;FNO prediction at 32x32&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([],</span> <span class="p">[])</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([],</span> <span class="p">[])</span>
 
-<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Inputs, ground-truth output and prediction (32x32).&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.98</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Zero-shot super-resolution: 16x16 → 32x32&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.98</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_FNO_darcy_002.png" srcset="../../_images/sphx_glr_plot_FNO_darcy_002.png" alt="Inputs, ground-truth output and prediction (32x32)., Input x, Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p>We only trained the model on data at a resolution of 16x16, and with no modifications
+<img src="../../_images/sphx_glr_plot_FNO_darcy_002.png" srcset="../../_images/sphx_glr_plot_FNO_darcy_002.png" alt="Zero-shot super-resolution: 16x16 → 32x32, Input at 32x32, Ground-truth at 32x32, FNO prediction at 32x32" class = "sphx-glr-single-img"/><div style="margin-top: 3em;"></div></section>
+<section id="understanding-zero-shot-super-resolution">
+<h2>Understanding zero-shot super-resolution<a class="headerlink" href="#understanding-zero-shot-super-resolution" title="Link to this heading"></a></h2>
+<p>We only trained the model on data at a resolution of 16x16, and with no modifications
 or special prompting, we were able to perform inference on higher-resolution input data
-and get higher-resolution predictions! In practice, we often want to evaluate neural operators
-at multiple resolutions to track a model’s zero-shot super-evaluation performance throughout
-training. That’s why many of our datasets, including the small Darcy-flow we showcased,
-are parameterized with a list of <cite>test_resolutions</cite> to choose from.</p>
-<p>However, as you can see, these predictions are noisier than we would expect for a model evaluated
-at the same resolution at which it was trained. Leveraging the FNO’s discretization-invariance, there
-are other ways to scale the outputs of the FNO to train a true super-resolution capability.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 51.525 seconds)</p>
+and get higher-resolution predictions! This is a powerful capability of neural operators.</p>
+<p>In practice, we often want to evaluate neural operators at multiple resolutions to track
+a model’s zero-shot super-resolution performance throughout training. That’s why many of
+our datasets, including the small Darcy-flow we showcased, are parameterized with a list
+of <cite>test_resolutions</cite> to choose from.</p>
+<p>Note: These predictions may be noisier than we would expect for a model evaluated
+at the same resolution at which it was trained. This is because the model hasn’t seen
+the higher-frequency patterns present in the 32x32 data during training. However, this
+demonstrates the fundamental resolution invariance of neural operators.</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 34.306 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-models-plot-fno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/b4fadb168a06acc8c292c808f47f0e7f/plot_FNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_FNO_darcy.ipynb</span></code></a></p>
@@ -523,10 +572,17 @@ are other ways to scale the outputs of the FNO to train a true super-resolution 
         <div class="menu menu-list localtoc-list">
         <ul>
 <li><a class="reference internal" href="#">Training an FNO on Darcy-Flow</a><ul>
-<li><a class="reference internal" href="#training-setup">Training setup</a></li>
+<li><a class="reference internal" href="#import-dependencies">Import dependencies</a></li>
+<li><a class="reference internal" href="#loading-the-darcy-flow-dataset">Loading the Darcy-Flow dataset</a></li>
+<li><a class="reference internal" href="#creating-the-fno-model">Creating the FNO model</a></li>
+<li><a class="reference internal" href="#creating-the-optimizer-and-scheduler">Creating the optimizer and scheduler</a></li>
+<li><a class="reference internal" href="#setting-up-loss-functions">Setting up loss functions</a></li>
 <li><a class="reference internal" href="#training-the-model">Training the model</a></li>
+<li><a class="reference internal" href="#creating-the-trainer">Creating the trainer</a></li>
+<li><a class="reference internal" href="#id1">Training the model</a></li>
 <li><a class="reference internal" href="#visualizing-predictions">Visualizing predictions</a></li>
-<li><a class="reference internal" href="#zero-shot-super-evaluation">Zero-shot super-evaluation</a></li>
+<li><a class="reference internal" href="#zero-shot-super-resolution-evaluation">Zero-shot super-resolution evaluation</a></li>
+<li><a class="reference internal" href="#understanding-zero-shot-super-resolution">Understanding zero-shot super-resolution</a></li>
 </ul>
 </li>
 </ul>

@@ -21,12 +21,26 @@
 U-NO on Darcy-Flow
 ==================
 
-Training a U-shaped Neural Operator on the small Darcy-Flow example we ship with the package
+Training a U-shaped Neural Operator (U-NO) on the small Darcy-Flow example we ship with the package.
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-25
+This tutorial demonstrates the U-NO architecture, which combines the resolution invariance
+of neural operators with the multi-scale feature extraction of U-Net architectures.
+The U-NO uses skip connections and multi-resolution processing to capture both local
+and global features in the data, making it particularly effective for complex PDE problems.
+
+.. GENERATED FROM PYTHON SOURCE LINES 15-22
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
+
+Import dependencies
+-------------------
+We import the necessary modules for working with the UNO model
+
+.. GENERATED FROM PYTHON SOURCE LINES 22-36
 
 .. code-block:: Python
-
 
 
     import torch
@@ -49,19 +63,62 @@ Training a U-shaped Neural Operator on the small Darcy-Flow example we ship with
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 26-27
+.. GENERATED FROM PYTHON SOURCE LINES 37-44
 
-Loading the Darcy Flow dataset
+.. raw:: html
 
-.. GENERATED FROM PYTHON SOURCE LINES 27-52
+   <div style="margin-top: 3em;"></div>
+
+Loading the Darcy-Flow dataset
+------------------------------
+We load the Darcy-Flow dataset with multiple resolutions for training and testing.
+
+.. GENERATED FROM PYTHON SOURCE LINES 44-51
 
 .. code-block:: Python
+
 
     train_loader, test_loaders, data_processor = load_darcy_flow_small(
             n_train=1000, batch_size=32, 
             test_resolutions=[16, 32], n_tests=[100, 50],
             test_batch_sizes=[32, 32],
     )
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    Loading test db for resolution 16 with 100 samples 
+    Loading test db for resolution 32 with 50 samples 
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 52-66
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
+
+Creating the U-NO model
+------------------------
+We create a U-shaped Neural Operator with the following architecture:
+- in_channels: Number of input channels 
+- out_channels: Number of output channels 
+- hidden_channels: Width of the hidden layers
+- uno_out_channels: Channel dimensions for each layer in the U-Net structure
+- uno_n_modes: Fourier modes for each layer (decreasing then increasing)
+- uno_scalings: Scaling factors for each layer
+- domain_padding: Padding to handle boundary effects
+
+.. GENERATED FROM PYTHON SOURCE LINES 66-87
+
+.. code-block:: Python
+
 
     model = UNO(in_channels=1, 
                 out_channels=1, 
@@ -77,6 +134,7 @@ Loading the Darcy Flow dataset
 
     model = model.to(device)
 
+    # Count and display the number of parameters
     n_params = count_model_params(model)
     print(f'\nOur model has {n_params} parameters.')
     sys.stdout.flush()
@@ -90,8 +148,6 @@ Loading the Darcy Flow dataset
 
  .. code-block:: none
 
-    Loading test db for resolution 16 with 100 samples 
-    Loading test db for resolution 32 with 50 samples 
     fno_skip='linear'
     channel_mlp_skip='linear'
     fno_skip='linear'
@@ -108,11 +164,17 @@ Loading the Darcy Flow dataset
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 53-54
+.. GENERATED FROM PYTHON SOURCE LINES 88-95
 
-Create the optimizer
+.. raw:: html
 
-.. GENERATED FROM PYTHON SOURCE LINES 54-60
+   <div style="margin-top: 3em;"></div>
+
+Creating the optimizer and scheduler
+------------------------------------
+We use AdamW optimizer with weight decay for regularization
+
+.. GENERATED FROM PYTHON SOURCE LINES 95-100
 
 .. code-block:: Python
 
@@ -128,17 +190,22 @@ Create the optimizer
 
 
 
+.. GENERATED FROM PYTHON SOURCE LINES 101-108
 
-.. GENERATED FROM PYTHON SOURCE LINES 61-62
+.. raw:: html
 
-Creating the losses
+   <div style="margin-top: 3em;"></div>
 
-.. GENERATED FROM PYTHON SOURCE LINES 62-69
+Setting up loss functions
+-------------------------
+We use H1 loss for training and L2 loss for evaluation
+
+.. GENERATED FROM PYTHON SOURCE LINES 108-115
 
 .. code-block:: Python
 
-    l2loss = LpLoss(d=2, p=2)
-    h1loss = H1Loss(d=2)
+    l2loss = LpLoss(d=2, p=2)  
+    h1loss = H1Loss(d=2)       
 
     train_loss = h1loss
     eval_losses={'h1': h1loss, 'l2': l2loss}
@@ -151,10 +218,19 @@ Creating the losses
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 70-81
+.. GENERATED FROM PYTHON SOURCE LINES 116-123
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
+
+Displaying configuration
+------------------------
+We print the model architecture, optimizer, scheduler, and loss functions
+
+.. GENERATED FROM PYTHON SOURCE LINES 123-133
 
 .. code-block:: Python
-
 
 
     print('\n### MODEL ###\n', model)
@@ -340,22 +416,28 @@ Creating the losses
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f4094609e50>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7ff1fcd2c2d0>
 
     ### LOSSES ###
 
-     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7f40943ad400>
+     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7ff1fd011550>
 
-     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7f40943ad400>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f409460b610>}
-
-
+     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7ff1fd011550>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7ff1fcd2c910>}
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 82-83
 
-Create the trainer
 
-.. GENERATED FROM PYTHON SOURCE LINES 83-93
+.. GENERATED FROM PYTHON SOURCE LINES 134-141
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
+
+Creating the trainer
+---------------------
+We create a Trainer object that handles the training loop for the U-NO
+
+.. GENERATED FROM PYTHON SOURCE LINES 141-150
 
 .. code-block:: Python
 
@@ -363,10 +445,10 @@ Create the trainer
                        n_epochs=20,
                       device=device,
                       data_processor=data_processor,
-                      wandb_log=False,
-                      eval_interval=3,
-                      use_distributed=False,
-                      verbose=True)
+                      wandb_log=False,        # Disable Weights & Biases logging
+                      eval_interval=3,       # Evaluate every 3 epochs
+                      use_distributed=False,  # Single GPU/CPU training
+                      verbose=True)          # Print training progress
 
 
 
@@ -375,12 +457,21 @@ Create the trainer
 
 
 
+.. GENERATED FROM PYTHON SOURCE LINES 151-162
 
-.. GENERATED FROM PYTHON SOURCE LINES 94-95
+.. raw:: html
 
-Actually train the model on our small Darcy-Flow dataset
+   <div style="margin-top: 3em;"></div>
 
-.. GENERATED FROM PYTHON SOURCE LINES 95-105
+Training the U-NO model
+------------------------
+We train the model on our Darcy-Flow dataset. The trainer will:
+1. Run the forward pass through the U-NO
+2. Compute the H1 loss
+3. Backpropagate and update weights
+4. Evaluate on test data every 3 epochs
+
+.. GENERATED FROM PYTHON SOURCE LINES 162-172
 
 .. code-block:: Python
 
@@ -407,39 +498,44 @@ Actually train the model on our small Darcy-Flow dataset
     /opt/hostedtoolcache/Python/3.13.8/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:668: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
       warnings.warn(warn_msg)
     Raw outputs of shape torch.Size([32, 1, 16, 16])
-    [0] time=8.72, avg_loss=0.7192, train_err=22.4742
+    [0] time=8.87, avg_loss=0.7192, train_err=22.4742
     Eval: 16_h1=0.4670, 16_l2=0.3055, 32_h1=0.7125, 32_l2=0.3924
-    [3] time=8.63, avg_loss=0.2413, train_err=7.5420
+    [3] time=8.46, avg_loss=0.2413, train_err=7.5420
     Eval: 16_h1=0.2711, 16_l2=0.1796, 32_h1=0.5284, 32_l2=0.3361
     [6] time=8.42, avg_loss=0.2083, train_err=6.5092
     Eval: 16_h1=0.3397, 16_l2=0.2732, 32_h1=0.5667, 32_l2=0.4138
-    [9] time=8.53, avg_loss=0.1860, train_err=5.8128
+    [9] time=8.45, avg_loss=0.1860, train_err=5.8128
     Eval: 16_h1=0.2224, 16_l2=0.1386, 32_h1=0.5346, 32_l2=0.3237
-    [12] time=8.44, avg_loss=0.2075, train_err=6.4833
+    [12] time=8.42, avg_loss=0.2075, train_err=6.4833
     Eval: 16_h1=0.2227, 16_l2=0.1353, 32_h1=0.4988, 32_l2=0.2996
-    [15] time=8.33, avg_loss=0.1757, train_err=5.4895
+    [15] time=8.47, avg_loss=0.1757, train_err=5.4895
     Eval: 16_h1=0.2521, 16_l2=0.1504, 32_h1=0.4995, 32_l2=0.3142
-    [18] time=8.42, avg_loss=0.1341, train_err=4.1897
+    [18] time=8.52, avg_loss=0.1341, train_err=4.1897
     Eval: 16_h1=0.2161, 16_l2=0.1299, 32_h1=0.5307, 32_l2=0.3298
 
-    {'train_err': 4.030218005180359, 'avg_loss': 0.1289669761657715, 'avg_lasso_loss': None, 'epoch_train_time': 8.350701813000114}
+    {'train_err': 4.030218005180359, 'avg_loss': 0.1289669761657715, 'avg_lasso_loss': None, 'epoch_train_time': 8.415921563999973}
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 106-116
+.. GENERATED FROM PYTHON SOURCE LINES 173-188
 
-Plot the prediction, and compare with the ground-truth 
-Note that we trained on a very small resolution for
-a very small number of epochs
-In practice, we would train at larger resolution, on many more samples.
+.. raw:: html
 
-However, for practicity, we created a minimal example that
-i) fits in just a few Mb of memory
+   <div style="margin-top: 3em;"></div>
+
+Visualizing U-NO predictions
+-----------------------------
+We visualize the model's predictions on the Darcy-Flow dataset.
+Note that we trained on a very small resolution for a very small number of epochs.
+In practice, we would train at larger resolution on many more samples.
+
+However, for practicality, we created a minimal example that:
+i) fits in just a few MB of memory
 ii) can be trained quickly on CPU
 
 In practice we would train a Neural Operator on one or multiple GPUs
 
-.. GENERATED FROM PYTHON SOURCE LINES 116-154
+.. GENERATED FROM PYTHON SOURCE LINES 188-229
 
 .. code-block:: Python
 
@@ -454,9 +550,10 @@ In practice we would train a Neural Operator on one or multiple GPUs
         x = data['x']
         # Ground-truth
         y = data['y']
-        # Model prediction
+        # Model prediction: U-NO output
         out = model(x.unsqueeze(0).to(device)).cpu()
 
+        # Plot input x
         ax = fig.add_subplot(3, 3, index*3 + 1)
         ax.imshow(x[0], cmap='gray')
         if index == 0: 
@@ -464,6 +561,7 @@ In practice we would train a Neural Operator on one or multiple GPUs
         plt.xticks([], [])
         plt.yticks([], [])
 
+        # Plot ground-truth y
         ax = fig.add_subplot(3, 3, index*3 + 2)
         ax.imshow(y.squeeze())
         if index == 0: 
@@ -471,21 +569,22 @@ In practice we would train a Neural Operator on one or multiple GPUs
         plt.xticks([], [])
         plt.yticks([], [])
 
+        # Plot model prediction
         ax = fig.add_subplot(3, 3, index*3 + 3)
         ax.imshow(out.squeeze().detach().numpy())
         if index == 0: 
-            ax.set_title('Model prediction')
+            ax.set_title('U-NO prediction')
         plt.xticks([], [])
         plt.yticks([], [])
 
-    fig.suptitle('Inputs, ground-truth output and prediction.', y=0.98)
+    fig.suptitle('U-NO predictions on 32x32 Darcy-Flow data', y=0.98)
     plt.tight_layout()
     fig.show()
 
 
 
 .. image-sg:: /auto_examples/models/images/sphx_glr_plot_UNO_darcy_001.png
-   :alt: Inputs, ground-truth output and prediction., Input x, Ground-truth y, Model prediction
+   :alt: U-NO predictions on 32x32 Darcy-Flow data, Input x, Ground-truth y, U-NO prediction
    :srcset: /auto_examples/models/images/sphx_glr_plot_UNO_darcy_001.png
    :class: sphx-glr-single-img
 
@@ -496,7 +595,7 @@ In practice we would train a Neural Operator on one or multiple GPUs
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (2 minutes 55.544 seconds)
+   **Total running time of the script:** (2 minutes 56.534 seconds)
 
 
 .. _sphx_glr_download_auto_examples_models_plot_UNO_darcy.py:

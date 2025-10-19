@@ -34,7 +34,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Fourier Differentiation" href="plot_fourier_diff.html" />
-    <link rel="prev" title="Visualizing discrete-continuous convolutions" href="plot_DISCO_convolutions.html" />
+    <link rel="prev" title="DISCO Convolutions" href="plot_DISCO_convolutions.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   </head>
@@ -177,9 +177,19 @@ to download the full example code.</p>
 </div>
 <section class="sphx-glr-example-title" id="normalization-layers">
 <span id="sphx-glr-auto-examples-layers-plot-normalization-layers-py"></span><h1>Normalization Layers<a class="headerlink" href="#normalization-layers" title="Link to this heading"></a></h1>
-<p>We provide several normalization layers that can be used to stabilize and accelerate model training. These layers are designed to be dimension-agnostic, making them flexible for use in various neural operator models.</p>
-<p>In this tutorial, we explore <cite>InstanceNorm</cite>, <cite>BatchNorm</cite>, and <cite>AdaIN</cite>, and visualize their effects on 1D data.</p>
-<p>We first import the neuralop library and required dependencies.</p>
+<p>This tutorial demonstrates normalization layers designed for neural operators.
+Normalization is crucial for:</p>
+<ul class="simple">
+<li><p>Stabilizing training dynamics</p></li>
+<li><p>Accelerating convergence</p></li>
+<li><p>Improving generalization</p></li>
+<li><p>Handling different data distributions</p></li>
+</ul>
+<p>The tutorial covers <cite>InstanceNorm</cite>, <cite>BatchNorm</cite>, and <cite>AdaIN</cite> layers, which are
+dimension-agnostic and flexible for various neural operator architectures.</p>
+<div style="margin-top: 3em;"></div><section id="import-dependencies">
+<h2>Import dependencies<a class="headerlink" href="#import-dependencies" title="Link to this heading"></a></h2>
+<p>We import the necessary modules for working with normalization layers</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
@@ -190,6 +200,7 @@ to download the full example code.</p>
 <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+<div style="margin-top: 3em;"></div></section>
 <section id="understanding-normalization-with-1d-functions">
 <h2>Understanding Normalization with 1D Functions<a class="headerlink" href="#understanding-normalization-with-1d-functions" title="Link to this heading"></a></h2>
 <p>To clearly see how these layers work, we create a synthetic dataset of 1D functions.
@@ -199,22 +210,28 @@ Our batch will consist of 10 functions. The first 5 will be sine waves with high
 <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">n_points</span><span class="p">)</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_samples</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_points</span><span class="p">))</span>
 
+<span class="c1"># Generate two groups of functions with different characteristics</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_samples</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
-        <span class="c1"># Group 1: High amplitude, positive shift</span>
+        <span class="c1"># Group 1: High amplitude sine waves with positive vertical shift</span>
         <span class="n">amplitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)</span>
         <span class="n">shift</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
         <span class="n">frequency</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)</span>
         <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">amplitude</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">frequency</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">shift</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># Group 2: Low amplitude, negative shift</span>
+        <span class="c1"># Group 2: Low amplitude cosine waves with negative vertical shift</span>
         <span class="n">amplitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
         <span class="n">shift</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span>
         <span class="n">frequency</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
         <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">amplitude</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">frequency</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">shift</span>
 </pre></div>
 </div>
-<p>Let’s visualize the original data</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="visualizing-the-original-data">
+<h2>Visualizing the original data<a class="headerlink" href="#visualizing-the-original-data" title="Link to this heading"></a></h2>
+<p>We plot the synthetic functions to see their different statistical properties.
+The blue functions have high amplitude and positive shift, while the red functions
+have low amplitude and negative shift.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Original Data&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_samples</span><span class="p">):</span>
@@ -222,6 +239,7 @@ Our batch will consist of 10 functions. The first 5 will be sine waves with high
         <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;High Amplitude Functions with Positive Shift&#39;</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Low Amplitude Functions with Negative Shift&#39;</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">5</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower center&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$x$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$f(x)$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
@@ -238,7 +256,8 @@ Our batch will consist of 10 functions. The first 5 will be sine waves with high
 <section id="instancenorm">
 <h2>InstanceNorm<a class="headerlink" href="#instancenorm" title="Link to this heading"></a></h2>
 <p><cite>InstanceNorm</cite> normalizes each sample in the batch <strong>independently</strong>. This means it rescales each of the 10 functions to have a mean of 0 and a standard deviation of 1, regardless of the other functions in the batch. This is useful when the statistical properties of each sample are distinct and should be treated separately.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">instance_norm</span> <span class="o">=</span> <span class="n">InstanceNorm</span><span class="p">()</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Apply instance normalization</span>
+<span class="n">instance_norm</span> <span class="o">=</span> <span class="n">InstanceNorm</span><span class="p">()</span>
 <span class="n">data_in</span> <span class="o">=</span> <span class="n">instance_norm</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
@@ -261,7 +280,7 @@ Our batch will consist of 10 functions. The first 5 will be sine waves with high
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_normalization_layers_002.png" srcset="../../_images/sphx_glr_plot_normalization_layers_002.png" alt="After InstanceNorm" class = "sphx-glr-single-img"/><p>Notice how all functions are now perfectly scaled to the same range, centered around zero. The original differences in amplitude and shift between the functions have been completely removed by instance-wise normalization.</p>
+<img src="../../_images/sphx_glr_plot_normalization_layers_002.png" srcset="../../_images/sphx_glr_plot_normalization_layers_002.png" alt="After InstanceNorm" class = "sphx-glr-single-img"/><div style="margin-top: 3em;"></div><p>Notice how all functions are now perfectly scaled to the same range, centered around zero. The original differences in amplitude and shift between the functions have been completely removed by instance-wise normalization.</p>
 <div style="margin-top: 3em;"></div></section>
 <section id="batchnorm">
 <h2>BatchNorm<a class="headerlink" href="#batchnorm" title="Link to this heading"></a></h2>
@@ -337,8 +356,8 @@ Our batch will consist of 10 functions. The first 5 will be sine waves with high
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_normalization_layers_004.png" srcset="../../_images/sphx_glr_plot_normalization_layers_004.png" alt="AdaIN for Style Transfer" class = "sphx-glr-single-img"/><p>As you can see, the same content function is transformed into two very different outputs. <strong>Style 1</strong> produces a simple sinusoidal wave with larger amplitude and positive shift. <strong>Style 2</strong> produces a more complex transformation: the function is inverted (phase-shifted), its amplitude is reduced, and it’s shifted downwards. This demonstrates how AdaIN can modulate network layer output in diverse ways based on the style embedding.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.546 seconds)</p>
+<img src="../../_images/sphx_glr_plot_normalization_layers_004.png" srcset="../../_images/sphx_glr_plot_normalization_layers_004.png" alt="AdaIN for Style Transfer" class = "sphx-glr-single-img"/><div style="margin-top: 3em;"></div><p>As you can see, the same content function is transformed into two very different outputs. <strong>Style 1</strong> produces a simple sinusoidal wave with larger amplitude and positive shift. <strong>Style 2</strong> produces a more complex transformation: the function is inverted (phase-shifted), its amplitude is reduced, and it’s shifted downwards. This demonstrates how AdaIN can modulate network layer output in diverse ways based on the style embedding.</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.533 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-layers-plot-normalization-layers-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/86c6178518a7e815d48f1b8e56a6cefc/plot_normalization_layers.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_normalization_layers.ipynb</span></code></a></p>
@@ -364,7 +383,7 @@ Our batch will consist of 10 functions. The first 5 will be sine waves with high
         <span class="icon">
             <i class="fa fa-arrow-circle-left"></i>
         </span>
-        <span>Visualizing discrete-continuous convolutions</span>
+        <span>DISCO Convolutions</span>
     </a>
     
     
@@ -406,7 +425,9 @@ Our batch will consist of 10 functions. The first 5 will be sine waves with high
         <div class="menu menu-list localtoc-list">
         <ul>
 <li><a class="reference internal" href="#">Normalization Layers</a><ul>
+<li><a class="reference internal" href="#import-dependencies">Import dependencies</a></li>
 <li><a class="reference internal" href="#understanding-normalization-with-1d-functions">Understanding Normalization with 1D Functions</a></li>
+<li><a class="reference internal" href="#visualizing-the-original-data">Visualizing the original data</a></li>
 <li><a class="reference internal" href="#instancenorm">InstanceNorm</a></li>
 <li><a class="reference internal" href="#batchnorm">BatchNorm</a></li>
 <li><a class="reference internal" href="#adain-adaptive-instance-normalization">AdaIN (Adaptive Instance Normalization)</a></li>

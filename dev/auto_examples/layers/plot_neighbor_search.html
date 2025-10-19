@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Visualizing neighbor search &#8212; neuraloperator 1.0.2 documentation</title> 
+    <title>Neighbor Search for Graph Neural Operators &#8212; neuraloperator 1.0.2 documentation</title> 
 <link rel="stylesheet" href="../../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../_static/favicon/favicon-32x32.png">
@@ -33,7 +33,7 @@
  
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Grid embeddings" href="plot_embeddings.html" />
+    <link rel="next" title="Grid Embeddings" href="plot_embeddings.html" />
     <link rel="prev" title="Layers" href="index.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -175,9 +175,20 @@
 <p><a class="reference internal" href="#sphx-glr-download-auto-examples-layers-plot-neighbor-search-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code.</p>
 </div>
-<section class="sphx-glr-example-title" id="visualizing-neighbor-search">
-<span id="sphx-glr-auto-examples-layers-plot-neighbor-search-py"></span><h1>Visualizing neighbor search<a class="headerlink" href="#visualizing-neighbor-search" title="Link to this heading"></a></h1>
-<p>Understanding the spatial search used to compute neighborhoods for the Graph Neural Operator.</p>
+<section class="sphx-glr-example-title" id="neighbor-search-for-graph-neural-operators">
+<span id="sphx-glr-auto-examples-layers-plot-neighbor-search-py"></span><h1>Neighbor Search for Graph Neural Operators<a class="headerlink" href="#neighbor-search-for-graph-neural-operators" title="Link to this heading"></a></h1>
+<p>This tutorial demonstrates neighbor search algorithms used in Graph Neural Operators (GNO).
+Neighbor search is crucial for:</p>
+<ul class="simple">
+<li><p>Finding spatial relationships in irregular point clouds</p></li>
+<li><p>Computing Nyström approximations of kernel integrals</p></li>
+<li><p>Enabling GNO to work with arbitrary point cloud data</p></li>
+<li><p>Implementing efficient spatial queries for neural operators</p></li>
+</ul>
+<p>The tutorial covers the <cite>native_neighbor_search</cite> function and its role in GNO architectures.</p>
+<div style="margin-top: 3em;"></div><section id="import-dependencies">
+<h2>Import dependencies<a class="headerlink" href="#import-dependencies" title="Link to this heading"></a></h2>
+<p>We import the necessary modules for neighbor search and visualization</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
@@ -189,45 +200,65 @@ to download the full example code.</p>
 <span class="n">device</span> <span class="o">=</span> <span class="s1">&#39;cpu&#39;</span>
 </pre></div>
 </div>
-<section id="basic-logic">
-<h2>Basic logic<a class="headerlink" href="#basic-logic" title="Link to this heading"></a></h2>
+<div style="margin-top: 3em;"></div></section>
+<section id="understanding-graph-neural-operators-and-neighbor-search">
+<h2>Understanding Graph Neural Operators and neighbor search<a class="headerlink" href="#understanding-graph-neural-operators-and-neighbor-search" title="Link to this heading"></a></h2>
 <p>Many problems involve data collected over irregular point clouds.
-The Graph Neural Operator (GNO) is a simple neural operator architecture
-that learns a map between functions evaluated on (potentially different) arbitrary point clouds.
-For a set of input coordinates Y, an input function f evaluated at all y ∈ Y,
-and a set of output coordinates X, our goal is to map to a new function g evaluated at all x ∈ X.
-To do so, the GNO computes the Nyström approximation of a continuous kernel integral by
-summing the values of f across a neighborhood of each point x drawn from the input coordinates Y (with an optional kernel k):
-int_{N_r(x)} f(y) k(x,y) dy</p>
-<p>The first step of this process is a neighbor search:
-%%</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">input_coords</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">regular_grid_2d</span><span class="p">(</span><span class="n">spatial_dims</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">)))</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="c1">#reshape into (64, 2)</span>
+The Graph Neural Operator (GNO) is a neural operator architecture
+that learns mappings between functions evaluated on arbitrary point clouds.</p>
+<p>For input coordinates Y, input function f evaluated at all y ∈ Y,
+and output coordinates X, our goal is to map to function g evaluated at all x ∈ X.
+The GNO computes the Nyström approximation of a continuous kernel integral:
+∫_{N_r(x)} f(y) k(x,y) dy</p>
+<p>The first step is neighbor search to find spatial relationships.</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="setting-up-the-point-cloud-data">
+<h2>Setting up the point cloud data<a class="headerlink" href="#setting-up-the-point-cloud-data" title="Link to this heading"></a></h2>
+<p>We create a regular grid of input coordinates and random output query points
+to demonstrate the neighbor search functionality.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a regular 8x8 grid of input coordinates</span>
+<span class="n">input_coords</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">regular_grid_2d</span><span class="p">(</span><span class="n">spatial_dims</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">)))</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Generate random output query points</span>
 <span class="n">output_queries</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">([</span><span class="mi">50</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">input_coords</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">input_coords</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Input coordinates&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">output_queries</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">output_queries</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Output queries&quot;</span><span class="p">)</span>
+<span class="c1"># Visualize the input coordinates and query points</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">input_coords</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">input_coords</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Input coordinates&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">output_queries</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">output_queries</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Output queries&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Input coordinates and output query points&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_neighbor_search_001.png" srcset="../../_images/sphx_glr_plot_neighbor_search_001.png" alt="plot neighbor search" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f40ae380f50&gt;
-</pre></div>
-</div>
-</section>
-<section id="visualizing-neighborhoods">
-<h2>Visualizing neighborhoods<a class="headerlink" href="#visualizing-neighborhoods" title="Link to this heading"></a></h2>
-<p>Now, let’s select a point in the output and visualize its neighbors.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">query_index</span> <span class="o">=</span> <span class="mi">25</span>
+<img src="../../_images/sphx_glr_plot_neighbor_search_001.png" srcset="../../_images/sphx_glr_plot_neighbor_search_001.png" alt="Input coordinates and output query points" class = "sphx-glr-single-img"/><div style="margin-top: 3em;"></div></section>
+<section id="performing-neighbor-search">
+<h2>Performing neighbor search<a class="headerlink" href="#performing-neighbor-search" title="Link to this heading"></a></h2>
+<p>We select a query point and find all input coordinates within a specified radius.
+This demonstrates how the neighbor search algorithm identifies spatial relationships.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">query_index</span> <span class="o">=</span> <span class="mi">12</span>
 <span class="n">query_point</span> <span class="o">=</span> <span class="n">output_queries</span><span class="p">[</span><span class="n">query_index</span><span class="p">]</span>
-<span class="c1"># Let&#39;s search, assuming a radius of 0.25. Note that this is quite high for the density of our data.</span>
-<span class="c1"># in practice we tend to use values that find on the order of 10 neighbors.</span>
+
+<span class="c1"># Perform neighbor search with radius 0.25</span>
+<span class="c1"># Note: This radius is relatively large for our data density.</span>
+<span class="c1"># In practice, we typically use values that find around 10 neighbors.</span>
 <span class="n">nbr_data</span> <span class="o">=</span> <span class="n">native_neighbor_search</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">input_coords</span><span class="p">,</span> <span class="n">queries</span><span class="o">=</span><span class="n">query_point</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">radius</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+</pre></div>
+</div>
+<div style="margin-top: 3em;"></div></section>
+<section id="visualizing-the-neighbor-search-results">
+<h2>Visualizing the neighbor search results<a class="headerlink" href="#visualizing-the-neighbor-search-results" title="Link to this heading"></a></h2>
+<p>We plot the query point, its neighbors, and the search radius to understand
+how the neighbor search algorithm works.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
 <span class="n">neighbors</span> <span class="o">=</span> <span class="n">input_coords</span><span class="p">[</span><span class="n">nbr_data</span><span class="p">[</span><span class="s1">&#39;neighbors_index&#39;</span><span class="p">]]</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">input_coords</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">input_coords</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">query_point</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">query_point</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">neighbors</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">neighbors</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;neighbors of x&quot;</span><span class="p">)</span>
 <span class="n">c</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Circle</span><span class="p">(</span><span class="n">query_point</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
 <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
@@ -236,7 +267,7 @@ int_{N_r(x)} f(y) k(x,y) dy</p>
 <img src="../../_images/sphx_glr_plot_neighbor_search_002.png" srcset="../../_images/sphx_glr_plot_neighbor_search_002.png" alt="plot neighbor search" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(0.0, 1.0)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.128 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.137 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-layers-plot-neighbor-search-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/8493117ba5e00de248ebbdc605ca910c/plot_neighbor_search.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_neighbor_search.ipynb</span></code></a></p>
@@ -267,7 +298,7 @@ int_{N_r(x)} f(y) k(x,y) dy</p>
     
     
     <a class="button pagination-next" href="plot_embeddings.html" title="next page" accesskey="n">
-        <span>Grid embeddings </span>
+        <span>Grid Embeddings </span>
         <span class="icon">
             <i class="fa fa-arrow-circle-right"></i>
         </span>
@@ -303,9 +334,12 @@ int_{N_r(x)} f(y) k(x,y) dy</p>
 
         <div class="menu menu-list localtoc-list">
         <ul>
-<li><a class="reference internal" href="#">Visualizing neighbor search</a><ul>
-<li><a class="reference internal" href="#basic-logic">Basic logic</a></li>
-<li><a class="reference internal" href="#visualizing-neighborhoods">Visualizing neighborhoods</a></li>
+<li><a class="reference internal" href="#">Neighbor Search for Graph Neural Operators</a><ul>
+<li><a class="reference internal" href="#import-dependencies">Import dependencies</a></li>
+<li><a class="reference internal" href="#understanding-graph-neural-operators-and-neighbor-search">Understanding Graph Neural Operators and neighbor search</a></li>
+<li><a class="reference internal" href="#setting-up-the-point-cloud-data">Setting up the point cloud data</a></li>
+<li><a class="reference internal" href="#performing-neighbor-search">Performing neighbor search</a></li>
+<li><a class="reference internal" href="#visualizing-the-neighbor-search-results">Visualizing the neighbor search results</a></li>
 </ul>
 </li>
 </ul>

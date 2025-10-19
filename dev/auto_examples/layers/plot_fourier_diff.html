@@ -177,8 +177,15 @@ to download the full example code.</p>
 </div>
 <section class="sphx-glr-example-title" id="fourier-differentiation">
 <span id="fourier-diff"></span><span id="sphx-glr-auto-examples-layers-plot-fourier-diff-py"></span><h1>Fourier Differentiation<a class="headerlink" href="#fourier-differentiation" title="Link to this heading"></a></h1>
-<p>An example of usage of our Fourier Differentiation Function</p>
-<section id="import-the-library">
+<p>This tutorial demonstrates Fourier-based differentiation methods for computing
+derivatives of periodic functions. Fourier differentiation is crucial for:</p>
+<ul class="simple">
+<li><p>Computing derivatives of functions with spectral accuracy</p></li>
+<li><p>Implementing physics-informed loss functions</p></li>
+</ul>
+<p>The <cite>FourierDiff</cite> class provides efficient implementations of spectral
+differentiation for periodic functions in 1D, 2D, and 3D domains.</p>
+<div style="margin-top: 3em;"></div><section id="import-the-library">
 <h2>Import the library<a class="headerlink" href="#import-the-library" title="Link to this heading"></a></h2>
 <p>We first import our <cite>neuralop</cite> library and required dependencies.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
@@ -189,7 +196,7 @@ to download the full example code.</p>
 <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
+<div style="margin-top: 3em;"></div></section>
 <section id="creating-an-example-of-periodic-1d-curve">
 <h2>Creating an example of periodic 1D curve<a class="headerlink" href="#creating-an-example-of-periodic-1d-curve" title="Link to this heading"></a></h2>
 <p>Here we consider sin(x) and cos(x), which are periodic on the interval [0, 2π]</p>
@@ -199,7 +206,7 @@ to download the full example code.</p>
 <span class="n">x_np</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
 </pre></div>
 </div>
-</section>
+<div style="margin-top: 3em;"></div></section>
 <section id="differentiate-the-signal">
 <h2>Differentiate the signal<a class="headerlink" href="#differentiate-the-signal" title="Link to this heading"></a></h2>
 <p>We use the FourierDiff class to differentiate the signal</p>
@@ -208,7 +215,7 @@ to download the full example code.</p>
 <span class="n">dfdx</span><span class="p">,</span> <span class="n">df2dx2</span><span class="p">,</span> <span class="n">df3dx3</span> <span class="o">=</span> <span class="n">derivatives</span>
 </pre></div>
 </div>
-</section>
+<div style="margin-top: 3em;"></div></section>
 <section id="plot-the-results-for-sin-x">
 <h2>Plot the results for sin(x)<a class="headerlink" href="#plot-the-results-for-sin-x" title="Link to this heading"></a></h2>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
@@ -223,7 +230,7 @@ to download the full example code.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_fourier_diff_001.png" srcset="../../_images/sphx_glr_plot_fourier_diff_001.png" alt="plot fourier diff" class = "sphx-glr-single-img"/></section>
+<img src="../../_images/sphx_glr_plot_fourier_diff_001.png" srcset="../../_images/sphx_glr_plot_fourier_diff_001.png" alt="plot fourier diff" class = "sphx-glr-single-img"/><div style="margin-top: 3em;"></div></section>
 <section id="plot-the-results-for-cos-x">
 <h2>Plot the results for cos(x)<a class="headerlink" href="#plot-the-results-for-cos-x" title="Link to this heading"></a></h2>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
@@ -238,7 +245,7 @@ to download the full example code.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_fourier_diff_002.png" srcset="../../_images/sphx_glr_plot_fourier_diff_002.png" alt="plot fourier diff" class = "sphx-glr-single-img"/></section>
+<img src="../../_images/sphx_glr_plot_fourier_diff_002.png" srcset="../../_images/sphx_glr_plot_fourier_diff_002.png" alt="plot fourier diff" class = "sphx-glr-single-img"/><div style="margin-top: 3em;"></div></section>
 <section id="creating-an-example-of-non-periodic-1d-curve">
 <h2>Creating an example of non-periodic 1D curve<a class="headerlink" href="#creating-an-example-of-non-periodic-1d-curve" title="Link to this heading"></a></h2>
 <p>Here we consider sin(3x)-cos(x) and exp(-0.8x)+sin(x)</p>
@@ -248,7 +255,7 @@ to download the full example code.</p>
 <span class="n">x_np</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
 </pre></div>
 </div>
-</section>
+<div style="margin-top: 3em;"></div></section>
 <section id="id1">
 <h2>Differentiate the signal<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
 <p>We use the FourierDiff class with Fourier continuation to differentiate the signal</p>
@@ -257,7 +264,7 @@ to download the full example code.</p>
 <span class="n">dfdx</span><span class="p">,</span> <span class="n">df2dx2</span> <span class="o">=</span> <span class="n">derivatives</span>
 </pre></div>
 </div>
-</section>
+<div style="margin-top: 3em;"></div></section>
 <section id="plot-the-results-for-sin-3x-cos-x">
 <h2>Plot the results for sin(3x)-cos(x)<a class="headerlink" href="#plot-the-results-for-sin-3x-cos-x" title="Link to this heading"></a></h2>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
@@ -270,7 +277,7 @@ to download the full example code.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_fourier_diff_003.png" srcset="../../_images/sphx_glr_plot_fourier_diff_003.png" alt="plot fourier diff" class = "sphx-glr-single-img"/></section>
+<img src="../../_images/sphx_glr_plot_fourier_diff_003.png" srcset="../../_images/sphx_glr_plot_fourier_diff_003.png" alt="plot fourier diff" class = "sphx-glr-single-img"/><div style="margin-top: 3em;"></div></section>
 <section id="plot-the-results-for-exp-0-8x-sin-x">
 <h2>Plot the results for exp(-0.8x)+sin(x)<a class="headerlink" href="#plot-the-results-for-exp-0-8x-sin-x" title="Link to this heading"></a></h2>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
@@ -283,12 +290,12 @@ to download the full example code.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_fourier_diff_004.png" srcset="../../_images/sphx_glr_plot_fourier_diff_004.png" alt="plot fourier diff" class = "sphx-glr-single-img"/></section>
+<img src="../../_images/sphx_glr_plot_fourier_diff_004.png" srcset="../../_images/sphx_glr_plot_fourier_diff_004.png" alt="plot fourier diff" class = "sphx-glr-single-img"/><div style="margin-top: 3em;"></div></section>
 </section>
 <section id="d-fourier-differentiation-examples">
 <h1>2D Fourier Differentiation Examples<a class="headerlink" href="#d-fourier-differentiation-examples" title="Link to this heading"></a></h1>
 <p>Here we demonstrate the FourierDiff class for 2D functions</p>
-<section id="creating-an-example-of-periodic-2d-function">
+<div style="margin-top: 3em;"></div><section id="creating-an-example-of-periodic-2d-function">
 <h2>Creating an example of periodic 2D function<a class="headerlink" href="#creating-an-example-of-periodic-2d-function" title="Link to this heading"></a></h2>
 <p>Here we consider f(x,y) = sin(x) * cos(y), which is periodic on the interval [0, 2π] × [0, 2π]</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">L_x</span><span class="p">,</span> <span class="n">L_y</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">pi</span>
@@ -301,7 +308,7 @@ to download the full example code.</p>
 <span class="n">f_2d</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
+<div style="margin-top: 3em;"></div></section>
 <section id="differentiate-the-2d-signal">
 <h2>Differentiate the 2D signal<a class="headerlink" href="#differentiate-the-2d-signal" title="Link to this heading"></a></h2>
 <p>We use the FourierDiff class to compute derivatives</p>
@@ -318,7 +325,7 @@ to download the full example code.</p>
 <span class="n">laplacian_expected</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
+<div style="margin-top: 3em;"></div></section>
 <section id="plot-the-2d-results">
 <h2>Plot the 2D results<a class="headerlink" href="#plot-the-2d-results" title="Link to this heading"></a></h2>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
@@ -364,12 +371,12 @@ to download the full example code.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_fourier_diff_005.png" srcset="../../_images/sphx_glr_plot_fourier_diff_005.png" alt="2D Fourier Differentiation Results: f(x,y) = sin(x) * cos(y), Original: sin(x) * cos(y), ∂f/∂x (computed), ∂f/∂x (expected: cos(x) * cos(y)), ∂f/∂y (computed), ∂f/∂y (expected: -sin(x) * sin(y)), ∇²f (computed)" class = "sphx-glr-single-img"/></section>
+<img src="../../_images/sphx_glr_plot_fourier_diff_005.png" srcset="../../_images/sphx_glr_plot_fourier_diff_005.png" alt="2D Fourier Differentiation Results: f(x,y) = sin(x) * cos(y), Original: sin(x) * cos(y), ∂f/∂x (computed), ∂f/∂x (expected: cos(x) * cos(y)), ∂f/∂y (computed), ∂f/∂y (expected: -sin(x) * sin(y)), ∇²f (computed)" class = "sphx-glr-single-img"/><div style="margin-top: 3em;"></div></section>
 </section>
 <section id="id2">
 <h1>3D Fourier Differentiation Examples<a class="headerlink" href="#id2" title="Link to this heading"></a></h1>
 <p>Here we demonstrate the FourierDiff class for 3D functions</p>
-<section id="creating-an-example-of-periodic-3d-function">
+<div style="margin-top: 3em;"></div><section id="creating-an-example-of-periodic-3d-function">
 <h2>Creating an example of periodic 3D function<a class="headerlink" href="#creating-an-example-of-periodic-3d-function" title="Link to this heading"></a></h2>
 <p>Here we consider f(x,y,z) = sin(x) * cos(y) * sin(z), which is periodic on [0, 2π]³</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">L_x</span><span class="p">,</span> <span class="n">L_y</span><span class="p">,</span> <span class="n">L_z</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">pi</span>
@@ -386,7 +393,7 @@ to download the full example code.</p>
 <span class="n">f_3d_alt</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nz</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
+<div style="margin-top: 3em;"></div></section>
 <section id="differentiate-the-3d-signal">
 <h2>Differentiate the 3D signal<a class="headerlink" href="#differentiate-the-3d-signal" title="Link to this heading"></a></h2>
 <p>We use the FourierDiff class to compute derivatives</p>
@@ -405,7 +412,7 @@ to download the full example code.</p>
 <span class="n">laplacian_expected_3d</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
+<div style="margin-top: 3em;"></div></section>
 <section id="plot-a-slice-of-the-3d-results-z-0-plane">
 <h2>Plot a slice of the 3D results (z=0 plane)<a class="headerlink" href="#plot-a-slice-of-the-3d-results-z-0-plane" title="Link to this heading"></a></h2>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">z_slice_idx</span> <span class="o">=</span> <span class="n">nz</span> <span class="o">//</span> <span class="mi">2</span>
@@ -457,7 +464,7 @@ to download the full example code.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_fourier_diff_006.png" srcset="../../_images/sphx_glr_plot_fourier_diff_006.png" alt="3D Fourier Differentiation Results (z=0 slice): f(x,y,z) = sin(x) * cos(y) * sin(z), Original: sin(x) * cos(y) * sin(z), ∂f/∂x (computed), ∂f/∂x (expected: cos(x) * cos(y) * sin(z)), ∂f/∂y (computed), ∂f/∂y (expected: -sin(x) * sin(y) * sin(z)), ∂f/∂z (computed)" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 3.735 seconds)</p>
+<img src="../../_images/sphx_glr_plot_fourier_diff_006.png" srcset="../../_images/sphx_glr_plot_fourier_diff_006.png" alt="3D Fourier Differentiation Results (z=0 slice): f(x,y,z) = sin(x) * cos(y) * sin(z), Original: sin(x) * cos(y) * sin(z), ∂f/∂x (computed), ∂f/∂x (expected: cos(x) * cos(y) * sin(z)), ∂f/∂y (computed), ∂f/∂y (expected: -sin(x) * sin(y) * sin(z)), ∂f/∂z (computed)" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 3.809 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-layers-plot-fourier-diff-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/eb28a201468c5f83d085cda702d4cb13/plot_fourier_diff.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_fourier_diff.ipynb</span></code></a></p>

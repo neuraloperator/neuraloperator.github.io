@@ -33,8 +33,8 @@
  
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Visualizing neighbor search" href="plot_neighbor_search.html" />
-    <link rel="prev" title="A Numerical Solver for Burgers’ Equation in 2 Dimensions" href="../data_gen/plot_burgers_2d_solver.html" />
+    <link rel="next" title="Neighbor Search for Graph Neural Operators" href="plot_neighbor_search.html" />
+    <link rel="prev" title="A finite difference solver for Burgers’ equation in 2 dimensions" href="../data_gen/plot_burgers_2d_solver.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   </head>
@@ -173,31 +173,31 @@
   <section id="layers">
 <span id="layer-examples"></span><span id="sphx-glr-auto-examples-layers"></span><h1>Layers<a class="headerlink" href="#layers" title="Link to this heading"></a></h1>
 <p>Examples of individual layers which comprise operators or parts of operators for composition into end-to-end models.</p>
-<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="Understanding the spatial search used to compute neighborhoods for the Graph Neural Operator. "><img alt="" src="../../_images/sphx_glr_plot_neighbor_search_thumb.png" />
-<p><a class="reference internal" href="plot_neighbor_search.html#sphx-glr-auto-examples-layers-plot-neighbor-search-py"><span class="std std-ref">Visualizing neighbor search</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Visualizing neighbor search</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Grid embeddings"><img alt="" src="../../_images/sphx_glr_plot_embeddings_thumb.png" />
-<p><a class="reference internal" href="plot_embeddings.html#sphx-glr-auto-examples-layers-plot-embeddings-py"><span class="std std-ref">Grid embeddings</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Grid embeddings</div>
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates neighbor search algorithms used in Graph Neural Operators (GNO). Neighbor search is crucial for:"><img alt="" src="../../_images/sphx_glr_plot_neighbor_search_thumb.png" />
+<p><a class="reference internal" href="plot_neighbor_search.html#sphx-glr-auto-examples-layers-plot-neighbor-search-py"><span class="std std-ref">Neighbor Search for Graph Neural Operators</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Neighbor Search for Graph Neural Operators</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Grid embeddings encode spatial coordinates in neural operators, helping models understand geometric structure. This tutorial shows how to use:"><img alt="" src="../../_images/sphx_glr_plot_embeddings_thumb.png" />
+<p><a class="reference internal" href="plot_embeddings.html#sphx-glr-auto-examples-layers-plot-embeddings-py"><span class="std std-ref">Grid Embeddings</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Grid Embeddings</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="When working with neural operators, we often need to change the resolution of our data. For some architectures, like the FNO, this is handled automatically due to the  resolution-invariant nature of the Fourier domain."><img alt="" src="../../_images/sphx_glr_plot_resample_thumb.png" />
 <p><a class="reference internal" href="plot_resample.html#sphx-glr-auto-examples-layers-plot-resample-py"><span class="std std-ref">Resampling layers</span></a></p>
   <div class="sphx-glr-thumbnail-title">Resampling layers</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="These modules can be used on both equidistant and unstructured grids."><img alt="" src="../../_images/sphx_glr_plot_DISCO_convolutions_thumb.png" />
-<p><a class="reference internal" href="plot_DISCO_convolutions.html#sphx-glr-auto-examples-layers-plot-disco-convolutions-py"><span class="std std-ref">Visualizing discrete-continuous convolutions</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Visualizing discrete-continuous convolutions</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="We provide several normalization layers that can be used to stabilize and accelerate model training. These layers are designed to be dimension-agnostic, making them flexible for use in various neural operator models. "><img alt="" src="../../_images/sphx_glr_plot_normalization_layers_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates Discrete-Continuous (DISCO) convolutions, which are the building blocks of localized neural operator frameworks. DISCO convolutions are crucial for:"><img alt="" src="../../_images/sphx_glr_plot_DISCO_convolutions_thumb.png" />
+<p><a class="reference internal" href="plot_DISCO_convolutions.html#sphx-glr-auto-examples-layers-plot-disco-convolutions-py"><span class="std std-ref">DISCO Convolutions</span></a></p>
+  <div class="sphx-glr-thumbnail-title">DISCO Convolutions</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates normalization layers designed for neural operators. Normalization is crucial for:"><img alt="" src="../../_images/sphx_glr_plot_normalization_layers_thumb.png" />
 <p><a class="reference internal" href="plot_normalization_layers.html#sphx-glr-auto-examples-layers-plot-normalization-layers-py"><span class="std std-ref">Normalization Layers</span></a></p>
   <div class="sphx-glr-thumbnail-title">Normalization Layers</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Fourier Differentiation"><img alt="" src="../../_images/sphx_glr_plot_fourier_diff_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates Fourier-based differentiation methods for computing derivatives of periodic functions. Fourier differentiation is crucial for:"><img alt="" src="../../_images/sphx_glr_plot_fourier_diff_thumb.png" />
 <p><a class="reference internal" href="plot_fourier_diff.html#sphx-glr-auto-examples-layers-plot-fourier-diff-py"><span class="std std-ref">Fourier Differentiation</span></a></p>
   <div class="sphx-glr-thumbnail-title">Fourier Differentiation</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="Inputs to deep learning models often represent positions on a spatial, temporal, or  spatio-temporal grid. To enrich these coordinates, positional embeddings can be introduced  to improve a model&#x27;s capacity to generalize across the domain. In this tutorial, we focus  on sinusoidal positional embeddings."><img alt="" src="../../_images/sphx_glr_plot_sinusoidal_embeddings_thumb.png" />
 <p><a class="reference internal" href="plot_sinusoidal_embeddings.html#sphx-glr-auto-examples-layers-plot-sinusoidal-embeddings-py"><span class="std std-ref">Sinusoidal Embeddings</span></a></p>
   <div class="sphx-glr-thumbnail-title">Sinusoidal Embeddings</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Fourier Continuation"><img alt="" src="../../_images/sphx_glr_plot_fourier_continuation_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates Fourier continuation methods for extending non-periodic functions to periodic ones, enabling efficient spectral analysis and neural operator applications. Fourier continuation is crucial for:"><img alt="" src="../../_images/sphx_glr_plot_fourier_continuation_thumb.png" />
 <p><a class="reference internal" href="plot_fourier_continuation.html#sphx-glr-auto-examples-layers-plot-fourier-continuation-py"><span class="std std-ref">Fourier Continuation</span></a></p>
   <div class="sphx-glr-thumbnail-title">Fourier Continuation</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Finite Differences"><img alt="" src="../../_images/sphx_glr_plot_finite_diff_thumb.png" />
+</div><div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates the use of finite difference methods for computing derivatives of functions in neural operators. Finite differences are crucial for:"><img alt="" src="../../_images/sphx_glr_plot_finite_diff_thumb.png" />
 <p><a class="reference internal" href="plot_finite_diff.html#sphx-glr-auto-examples-layers-plot-finite-diff-py"><span class="std std-ref">Finite Differences</span></a></p>
   <div class="sphx-glr-thumbnail-title">Finite Differences</div>
 </div></div><div class="toctree-wrapper compound">
@@ -214,12 +214,12 @@
         <span class="icon">
             <i class="fa fa-arrow-circle-left"></i>
         </span>
-        <span>A Numerical Solver for Burgers’ Equation in 2 Dimensions</span>
+        <span>A finite difference solver for Burgers’ equation in 2 dimensions</span>
     </a>
     
     
     <a class="button pagination-next" href="plot_neighbor_search.html" title="next page" accesskey="n">
-        <span>Visualizing neighbor search </span>
+        <span>Neighbor Search for Graph Neural Operators </span>
         <span class="icon">
             <i class="fa fa-arrow-circle-right"></i>
         </span>

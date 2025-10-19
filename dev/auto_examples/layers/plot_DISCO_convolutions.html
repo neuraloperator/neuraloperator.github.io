@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Visualizing discrete-continuous convolutions &#8212; neuraloperator 1.0.2 documentation</title> 
+    <title>DISCO Convolutions &#8212; neuraloperator 1.0.2 documentation</title> 
 <link rel="stylesheet" href="../../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../_static/favicon/favicon-32x32.png">
@@ -175,11 +175,20 @@
 <p><a class="reference internal" href="#sphx-glr-download-auto-examples-layers-plot-disco-convolutions-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code.</p>
 </div>
-<section class="sphx-glr-example-title" id="visualizing-discrete-continuous-convolutions">
-<span id="sphx-glr-auto-examples-layers-plot-disco-convolutions-py"></span><h1>Visualizing discrete-continuous convolutions<a class="headerlink" href="#visualizing-discrete-continuous-convolutions" title="Link to this heading"></a></h1>
-<p>Visualizing the behavior of DISCO convolutions, the building block of the localized neural operator framework.</p>
-<p>These modules can be used on both equidistant and unstructured grids.</p>
-<p>Preparation</p>
+<section class="sphx-glr-example-title" id="disco-convolutions">
+<span id="sphx-glr-auto-examples-layers-plot-disco-convolutions-py"></span><h1>DISCO Convolutions<a class="headerlink" href="#disco-convolutions" title="Link to this heading"></a></h1>
+<p>This tutorial demonstrates Discrete-Continuous (DISCO) convolutions, which are
+the building blocks of localized neural operator frameworks. DISCO convolutions
+are crucial for:</p>
+<ul class="simple">
+<li><p>Learning localized patterns in data</p></li>
+<li><p>Handling both equidistant and unstructured grids</p></li>
+<li><p>Enabling efficient computation on irregular domains</p></li>
+<li><p>Bridging discrete and continuous representations</p></li>
+</ul>
+<p>The tutorial covers various DISCO convolution types and their applications
+in neural operator architectures.</p>
+<div style="margin-top: 3em;"></div><p>Preparation</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
@@ -199,7 +208,7 @@ to download the full example code.</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.layers.discrete_continuous_convolution</span><span class="w"> </span><span class="kn">import</span> <span class="n">DiscreteContinuousConv2d</span><span class="p">,</span> <span class="n">DiscreteContinuousConvTranspose2d</span><span class="p">,</span> <span class="n">EquidistantDiscreteContinuousConv2d</span><span class="p">,</span> <span class="n">EquidistantDiscreteContinuousConvTranspose2d</span>
 </pre></div>
 </div>
-<p>Let’s start by loading an example image</p>
+<div style="margin-top: 3em;"></div><p>Let’s start by loading an example image</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;curl https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Albert_Einstein_Head.jpg/360px-Albert_Einstein_Head.jpg -o ./einstein.jpg&quot;</span><span class="p">)</span>
 
 <span class="n">nx</span> <span class="o">=</span> <span class="mi">90</span>
@@ -211,11 +220,11 @@ to download the full example code.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_DISCO_convolutions_001.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_001.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/neuraloperator/neuraloperator/examples/layers/plot_DISCO_convolutions.py:39: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:206.)
+<img src="../../_images/sphx_glr_plot_DISCO_convolutions_001.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_001.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/neuraloperator/neuraloperator/examples/layers/plot_DISCO_convolutions.py:58: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:206.)
   data = nn.functional.interpolate(torch.from_numpy(img).unsqueeze(0).unsqueeze(0), size=(ny,nx)).squeeze()
 </pre></div>
 </div>
-<p>Let’s create a grid on which the data lives</p>
+<div style="margin-top: 3em;"></div><p>Let’s create a grid on which the data lives</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">x_in</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
 <span class="n">y_in</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">ny</span><span class="p">)</span>
 
@@ -229,7 +238,7 @@ to download the full example code.</p>
 <span class="n">q_in</span> <span class="o">=</span> <span class="p">(</span><span class="n">w_x</span> <span class="o">*</span> <span class="n">w_y</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Visualize the grid</p>
+<div style="margin-top: 3em;"></div><p>Visualize the grid</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span> <span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">grid_in</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">grid_in</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
@@ -237,7 +246,7 @@ to download the full example code.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_DISCO_convolutions_002.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_002.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><p>Format data into the same format and plot it on the grid</p>
+<img src="../../_images/sphx_glr_plot_DISCO_convolutions_002.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_002.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div style="margin-top: 3em;"></div><p>Format data into the same format and plot it on the grid</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span> <span class="p">)</span>
@@ -248,7 +257,7 @@ to download the full example code.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_DISCO_convolutions_003.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_003.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><p>For the convolution output we require an output mesh</p>
+<img src="../../_images/sphx_glr_plot_DISCO_convolutions_003.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_003.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div style="margin-top: 3em;"></div><p>For the convolution output we require an output mesh</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">nxo</span> <span class="o">=</span> <span class="mi">90</span>
 <span class="n">nyo</span> <span class="o">=</span> <span class="mi">120</span>
 
@@ -264,7 +273,7 @@ to download the full example code.</p>
 <span class="n">q_out</span> <span class="o">=</span> <span class="p">(</span><span class="n">w_x</span> <span class="o">*</span> <span class="n">w_y</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Initialize the convolution and set the weights to something resembling an edge filter/finit differences</p>
+<div style="margin-top: 3em;"></div><p>Initialize the convolution and set the weights to something resembling an edge filter/finit differences</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">conv</span> <span class="o">=</span> <span class="n">DiscreteContinuousConv2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">grid_in</span><span class="o">=</span><span class="n">grid_in</span><span class="p">,</span> <span class="n">grid_out</span><span class="o">=</span><span class="n">grid_out</span><span class="p">,</span> <span class="n">quadrature_weights</span><span class="o">=</span><span class="n">q_in</span><span class="p">,</span> <span class="n">kernel_shape</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">radius_cutoff</span><span class="o">=</span><span class="mi">5</span><span class="o">/</span><span class="n">nyo</span><span class="p">,</span> <span class="n">periodic</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
 
 <span class="c1"># initialize a kernel resembling an edge filter</span>
@@ -275,7 +284,8 @@ to download the full example code.</p>
 <span class="n">psi</span> <span class="o">=</span> <span class="n">conv</span><span class="o">.</span><span class="n">get_local_filter_matrix</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>in order to compute the convolved image, we need to first bring it into the right shape with <cite>batch_size x n_channels x n_grid_points</cite></p>
+<div style="margin-top: 3em;"></div><p>Apply the DISCO convolution to the data and plot it
+in order to compute the convolved image, we need to first bring it into the right shape with <cite>batch_size x n_channels x n_grid_points</cite></p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">out</span> <span class="o">=</span> <span class="n">conv</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
@@ -291,6 +301,7 @@ to download the full example code.</p>
 <img src="../../_images/sphx_glr_plot_DISCO_convolutions_004.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_004.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>torch.Size([1, 1, 10800])
 </pre></div>
 </div>
+<div style="margin-top: 3em;"></div><p>Do the same but on an equidistant grid</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">conv_equi</span> <span class="o">=</span> <span class="n">EquidistantDiscreteContinuousConv2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">),</span> <span class="p">(</span><span class="n">nxo</span><span class="p">,</span> <span class="n">nyo</span><span class="p">),</span> <span class="n">kernel_shape</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">radius_cutoff</span><span class="o">=</span><span class="mi">5</span><span class="o">/</span><span class="n">nyo</span><span class="p">,</span> <span class="n">domain_length</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
 
 <span class="c1"># initialize a kernel resembling an edge filter</span>
@@ -319,6 +330,7 @@ to download the full example code.</p>
 torch.Size([119, 89])
 </pre></div>
 </div>
+<div style="margin-top: 3em;"></div><p>Visualize the local filter matrix</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span> <span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">conv_equi</span><span class="o">.</span><span class="n">get_local_filter_matrix</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
@@ -332,9 +344,10 @@ torch.Size([119, 89])
 <span class="c1"># plt.show()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_DISCO_convolutions_006.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_006.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7f40ae138b90&gt;
+<img src="../../_images/sphx_glr_plot_DISCO_convolutions_006.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_006.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7ff2169760d0&gt;
 </pre></div>
 </div>
+<div style="margin-top: 3em;"></div><p>Test the transpose convolution</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">convt</span> <span class="o">=</span> <span class="n">DiscreteContinuousConvTranspose2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">grid_in</span><span class="o">=</span><span class="n">grid_out</span><span class="p">,</span> <span class="n">grid_out</span><span class="o">=</span><span class="n">grid_in</span><span class="p">,</span> <span class="n">quadrature_weights</span><span class="o">=</span><span class="n">q_out</span><span class="p">,</span> <span class="n">kernel_shape</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">radius_cutoff</span><span class="o">=</span><span class="mi">3</span><span class="o">/</span><span class="n">nyo</span><span class="p">,</span> <span class="n">periodic</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
 
 <span class="c1"># initialize a flat</span>
@@ -359,6 +372,7 @@ torch.Size([119, 89])
 <img src="../../_images/sphx_glr_plot_DISCO_convolutions_007.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_007.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>torch.Size([1, 1, 10800])
 </pre></div>
 </div>
+<div style="margin-top: 3em;"></div><p>Test the equidistant transpose convolution</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">convt_equi</span> <span class="o">=</span> <span class="n">EquidistantDiscreteContinuousConvTranspose2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">nxo</span><span class="p">,</span> <span class="n">nyo</span><span class="p">),</span> <span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">),</span> <span class="n">kernel_shape</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">radius_cutoff</span><span class="o">=</span><span class="mi">3</span><span class="o">/</span><span class="n">nyo</span><span class="p">,</span> <span class="n">domain_length</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
 
 <span class="c1"># initialize a flat</span>
@@ -383,7 +397,7 @@ torch.Size([119, 89])
 <img src="../../_images/sphx_glr_plot_DISCO_convolutions_008.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_008.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>torch.Size([1, 1, 120, 90])
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 27.715 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 27.793 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-layers-plot-disco-convolutions-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/3f74a91662afa758e3d845617240e471/plot_DISCO_convolutions.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_DISCO_convolutions.ipynb</span></code></a></p>

@@ -21,10 +21,20 @@
 .. _finite_diff :
 
 Finite Differences
-========================================================
-An example of usage of Finite Differences 
+==================
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-14
+This tutorial demonstrates the use of finite difference methods for computing
+derivatives of functions in neural operators. Finite differences are crucial for:
+
+- Computing gradients and higher-order derivatives
+- Implementing physics-informed loss functions
+- Enforcing differential equation constraints
+- Computing divergence, curl, and Laplacian operators
+
+The `FiniteDiff` class provides efficient implementations of finite difference
+schemes for computing derivatives in 1D, 2D, and 3D domains.
+
+.. GENERATED FROM PYTHON SOURCE LINES 18-24
 
 .. code-block:: Python
 
@@ -41,19 +51,27 @@ An example of usage of Finite Differences
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 15-18
+.. GENERATED FROM PYTHON SOURCE LINES 25-32
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 1D Finite Difference Examples
 =============================
 Here we demonstrate the FiniteDiff class for 1D functions
 
-.. GENERATED FROM PYTHON SOURCE LINES 20-23
+.. GENERATED FROM PYTHON SOURCE LINES 34-41
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Creating an example of 1D function
 -----------------------------------------------
 Here we consider f(x) = exp(-x) * sin(x) on [0, 2π]
 
-.. GENERATED FROM PYTHON SOURCE LINES 23-29
+.. GENERATED FROM PYTHON SOURCE LINES 41-47
 
 .. code-block:: Python
 
@@ -70,13 +88,17 @@ Here we consider f(x) = exp(-x) * sin(x) on [0, 2π]
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 30-33
+.. GENERATED FROM PYTHON SOURCE LINES 48-55
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Differentiate the 1D signal 
 ----------------------------------------------------------------
 We use the FiniteDiff class with dim=1
 
-.. GENERATED FROM PYTHON SOURCE LINES 33-44
+.. GENERATED FROM PYTHON SOURCE LINES 55-66
 
 .. code-block:: Python
 
@@ -98,12 +120,16 @@ We use the FiniteDiff class with dim=1
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 45-47
+.. GENERATED FROM PYTHON SOURCE LINES 67-73
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Plot the 1D results
 ---------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 47-75
+.. GENERATED FROM PYTHON SOURCE LINES 73-101
 
 .. code-block:: Python
 
@@ -147,19 +173,27 @@ Plot the 1D results
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 76-79
+.. GENERATED FROM PYTHON SOURCE LINES 102-109
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 2D Finite Difference Examples
 =============================
 Here we demonstrate the FiniteDiff class for 2D functions
 
-.. GENERATED FROM PYTHON SOURCE LINES 81-84
+.. GENERATED FROM PYTHON SOURCE LINES 111-118
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Creating an example of 2D function
 -----------------------------------------------
 Here we consider f(x,y) = exp(-x) * sin(y), which is non-periodic on [0, 2π] × [0, 2π]
 
-.. GENERATED FROM PYTHON SOURCE LINES 84-93
+.. GENERATED FROM PYTHON SOURCE LINES 118-127
 
 .. code-block:: Python
 
@@ -179,13 +213,17 @@ Here we consider f(x,y) = exp(-x) * sin(y), which is non-periodic on [0, 2π] ×
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 94-97
+.. GENERATED FROM PYTHON SOURCE LINES 128-135
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Differentiate the 2D signal 
 ----------------------------------------------------------------
 We use the FiniteDiff class with dim=2 to compute derivatives
 
-.. GENERATED FROM PYTHON SOURCE LINES 97-113
+.. GENERATED FROM PYTHON SOURCE LINES 135-151
 
 .. code-block:: Python
 
@@ -212,12 +250,16 @@ We use the FiniteDiff class with dim=2 to compute derivatives
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 114-116
+.. GENERATED FROM PYTHON SOURCE LINES 152-158
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Plot the 2D results
 ---------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 116-179
+.. GENERATED FROM PYTHON SOURCE LINES 158-221
 
 .. code-block:: Python
 
@@ -296,13 +338,17 @@ Plot the 2D results
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 180-183
+.. GENERATED FROM PYTHON SOURCE LINES 222-229
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Test gradient computation
 -------------------------
 Compute gradient of the scalar field
 
-.. GENERATED FROM PYTHON SOURCE LINES 183-211
+.. GENERATED FROM PYTHON SOURCE LINES 229-257
 
 .. code-block:: Python
 
@@ -346,13 +392,17 @@ Compute gradient of the scalar field
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 212-215
+.. GENERATED FROM PYTHON SOURCE LINES 258-265
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Test vector field operations
 -----------------------------
 Create a vector field: u = [exp(-x), sin(y)]
 
-.. GENERATED FROM PYTHON SOURCE LINES 215-229
+.. GENERATED FROM PYTHON SOURCE LINES 265-279
 
 .. code-block:: Python
 
@@ -377,12 +427,16 @@ Create a vector field: u = [exp(-x), sin(y)]
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 230-232
+.. GENERATED FROM PYTHON SOURCE LINES 280-286
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Plot vector field operations
 -----------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 232-281
+.. GENERATED FROM PYTHON SOURCE LINES 286-335
 
 .. code-block:: Python
 
@@ -447,13 +501,17 @@ Plot vector field operations
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 282-285
+.. GENERATED FROM PYTHON SOURCE LINES 336-343
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Additional verification plots
 -----------------------------
 Show second derivatives with consistent colorbars
 
-.. GENERATED FROM PYTHON SOURCE LINES 285-311
+.. GENERATED FROM PYTHON SOURCE LINES 343-369
 
 .. code-block:: Python
 
@@ -495,19 +553,27 @@ Show second derivatives with consistent colorbars
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 312-315
+.. GENERATED FROM PYTHON SOURCE LINES 370-377
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 3D Finite Difference Examples
 =============================
 Here we demonstrate the FiniteDiff class for 3D functions
 
-.. GENERATED FROM PYTHON SOURCE LINES 317-320
+.. GENERATED FROM PYTHON SOURCE LINES 379-386
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Creating an example of 3D function
 -----------------------------------------------
 Here we consider f(x,y,z) = exp(-x) * sin(y) * cos(z), which is on [0, 2π]³
 
-.. GENERATED FROM PYTHON SOURCE LINES 320-330
+.. GENERATED FROM PYTHON SOURCE LINES 386-396
 
 .. code-block:: Python
 
@@ -528,13 +594,17 @@ Here we consider f(x,y,z) = exp(-x) * sin(y) * cos(z), which is on [0, 2π]³
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 331-334
+.. GENERATED FROM PYTHON SOURCE LINES 397-404
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Differentiate the 3D signal 
 ----------------------------------------------------------------
 We use the FiniteDiff class with dim=3 to compute derivatives
 
-.. GENERATED FROM PYTHON SOURCE LINES 334-357
+.. GENERATED FROM PYTHON SOURCE LINES 404-427
 
 .. code-block:: Python
 
@@ -568,12 +638,16 @@ We use the FiniteDiff class with dim=3 to compute derivatives
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 358-360
+.. GENERATED FROM PYTHON SOURCE LINES 428-434
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Plot 3D results at a specific z-slice
 -------------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 360-414
+.. GENERATED FROM PYTHON SOURCE LINES 434-488
 
 .. code-block:: Python
 
@@ -643,13 +717,17 @@ Plot 3D results at a specific z-slice
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 415-418
+.. GENERATED FROM PYTHON SOURCE LINES 489-496
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Test 3D gradient computation
 -----------------------------
 Compute gradient of the 3D scalar field
 
-.. GENERATED FROM PYTHON SOURCE LINES 418-455
+.. GENERATED FROM PYTHON SOURCE LINES 496-533
 
 .. code-block:: Python
 
@@ -702,13 +780,17 @@ Compute gradient of the 3D scalar field
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 456-459
+.. GENERATED FROM PYTHON SOURCE LINES 534-541
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Test 3D vector field operations
 --------------------------------
 Create a 3D vector field: u = [exp(-x), sin(y), cos(z)]
 
-.. GENERATED FROM PYTHON SOURCE LINES 459-471
+.. GENERATED FROM PYTHON SOURCE LINES 541-553
 
 .. code-block:: Python
 
@@ -731,12 +813,16 @@ Create a 3D vector field: u = [exp(-x), sin(y), cos(z)]
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 472-474
+.. GENERATED FROM PYTHON SOURCE LINES 554-560
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
 
 Plot 3D vector field operations at z-slice
 -------------------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 474-523
+.. GENERATED FROM PYTHON SOURCE LINES 560-609
 
 .. code-block:: Python
 
@@ -804,7 +890,7 @@ Plot 3D vector field operations at z-slice
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 6.056 seconds)
+   **Total running time of the script:** (0 minutes 6.167 seconds)
 
 
 .. _sphx_glr_download_auto_examples_layers_plot_finite_diff.py:

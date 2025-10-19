@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>A simple finite-difference solver &#8212; neuraloperator 1.0.2 documentation</title> 
+    <title>A simple finite-difference solver for the diffusion-advection equation &#8212; neuraloperator 1.0.2 documentation</title> 
 <link rel="stylesheet" href="../../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../_static/favicon/favicon-32x32.png">
@@ -34,7 +34,7 @@
  
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="A Numerical Solver for Burgers’ Equation in 2 Dimensions" href="plot_burgers_2d_solver.html" />
+    <link rel="next" title="A finite difference solver for Burgers’ equation in 2 dimensions" href="plot_burgers_2d_solver.html" />
     <link rel="prev" title="Data Generation" href="index.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -176,11 +176,11 @@
 <p><a class="reference internal" href="#sphx-glr-download-auto-examples-data-gen-plot-diffusion-advection-solver-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code.</p>
 </div>
-<section class="sphx-glr-example-title" id="a-simple-finite-difference-solver">
-<span id="diffusion-advection-fd-vis"></span><span id="sphx-glr-auto-examples-data-gen-plot-diffusion-advection-solver-py"></span><h1>A simple finite-difference solver<a class="headerlink" href="#a-simple-finite-difference-solver" title="Link to this heading"></a></h1>
+<section class="sphx-glr-example-title" id="a-simple-finite-difference-solver-for-the-diffusion-advection-equation">
+<span id="diffusion-advection-fd-vis"></span><span id="sphx-glr-auto-examples-data-gen-plot-diffusion-advection-solver-py"></span><h1>A simple finite-difference solver for the diffusion-advection equation<a class="headerlink" href="#a-simple-finite-difference-solver-for-the-diffusion-advection-equation" title="Link to this heading"></a></h1>
 <p>An intro to our loss module’s finite difference utility demonstrating
 its use to create a simple numerical solver for the diffusion-advection equation.</p>
-<section id="import-the-library">
+<div style="margin-top: 3em;"></div><section id="import-the-library">
 <h2>Import the library<a class="headerlink" href="#import-the-library" title="Link to this heading"></a></h2>
 <p>We first import our <cite>neuralop</cite> library and required dependencies.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
@@ -193,12 +193,13 @@ its use to create a simple numerical solver for the diffusion-advection equation
 <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
+<div style="margin-top: 3em;"></div></section>
 <section id="defining-our-problem">
 <h2>Defining our problem<a class="headerlink" href="#defining-our-problem" title="Link to this heading"></a></h2>
 <p>We aim to solve the 2D diffusion advection equation:</p>
-<p><span class="math notranslate nohighlight">\(u_t + cx \cdot u_x + cy \cdot u_y = \nu (u_xx + u_yy) + f(x,y,t)\)</span>,</p>
-<p>Where <span class="math notranslate nohighlight">\(f(x,y,t)\)</span> is a source term and <span class="math notranslate nohighlight">\(cx\)</span> and <span class="math notranslate nohighlight">\(cy\)</span> are advection speeds in x and y.
+<div class="math notranslate nohighlight">
+\[\frac{\partial u}{\partial t} + c_x \frac{\partial u}{\partial x} + c_y \frac{\partial u}{\partial y} = \nu \left(\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2}\right) + f(x,y,t)\]</div>
+<p>Where <span class="math notranslate nohighlight">\(f(x,y,t)\)</span> is a source term and <span class="math notranslate nohighlight">\(c_x\)</span> and <span class="math notranslate nohighlight">\(c_y\)</span> are advection speeds in x and y.
 We set simulation parameters below:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1">## Simulation parameters</span>
 <span class="n">Lx</span><span class="p">,</span> <span class="n">Ly</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span>   <span class="c1"># Domain lengths</span>
@@ -228,7 +229,7 @@ We set simulation parameters below:</p>
     <span class="k">return</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">X</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">Y</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
+<div style="margin-top: 3em;"></div></section>
 <section id="simulate-evolution-using-numerical-solver">
 <h2>Simulate evolution using numerical solver<a class="headerlink" href="#simulate-evolution-using-numerical-solver" title="Link to this heading"></a></h2>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">u_evolution</span> <span class="o">=</span> <span class="p">[</span><span class="n">u</span><span class="o">.</span><span class="n">clone</span><span class="p">()]</span>
@@ -250,7 +251,7 @@ We set simulation parameters below:</p>
 <span class="n">u_evolution</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">u_evolution</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
 </pre></div>
 </div>
-</section>
+<div style="margin-top: 3em;"></div></section>
 <section id="animate-our-solution">
 <h2>Animate our solution<a class="headerlink" href="#animate-our-solution" title="Link to this heading"></a></h2>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">num_frames</span> <span class="o">=</span> <span class="mi">100</span>
@@ -457,42 +458,42 @@ input[type=range].anim-slider {
 </style>
 
 <div class="animation">
-  <img id="_anim_img1e0c3ca6daf34a8589512695cd7e6e27">
+  <img id="_anim_imgf9ab75f4a1cd46a491a0412c345479ad">
   <div class="anim-controls">
-    <input id="_anim_slider1e0c3ca6daf34a8589512695cd7e6e27" type="range" class="anim-slider"
+    <input id="_anim_sliderf9ab75f4a1cd46a491a0412c345479ad" type="range" class="anim-slider"
            name="points" min="0" max="1" step="1" value="0"
-           oninput="anim1e0c3ca6daf34a8589512695cd7e6e27.set_frame(parseInt(this.value));">
+           oninput="animf9ab75f4a1cd46a491a0412c345479ad.set_frame(parseInt(this.value));">
     <div class="anim-buttons">
-      <button title="Decrease speed" aria-label="Decrease speed" onclick="anim1e0c3ca6daf34a8589512695cd7e6e27.slower()">
+      <button title="Decrease speed" aria-label="Decrease speed" onclick="animf9ab75f4a1cd46a491a0412c345479ad.slower()">
           <i class="fa fa-minus"></i></button>
-      <button title="First frame" aria-label="First frame" onclick="anim1e0c3ca6daf34a8589512695cd7e6e27.first_frame()">
+      <button title="First frame" aria-label="First frame" onclick="animf9ab75f4a1cd46a491a0412c345479ad.first_frame()">
         <i class="fa fa-fast-backward"></i></button>
-      <button title="Previous frame" aria-label="Previous frame" onclick="anim1e0c3ca6daf34a8589512695cd7e6e27.previous_frame()">
+      <button title="Previous frame" aria-label="Previous frame" onclick="animf9ab75f4a1cd46a491a0412c345479ad.previous_frame()">
           <i class="fa fa-step-backward"></i></button>
-      <button title="Play backwards" aria-label="Play backwards" onclick="anim1e0c3ca6daf34a8589512695cd7e6e27.reverse_animation()">
+      <button title="Play backwards" aria-label="Play backwards" onclick="animf9ab75f4a1cd46a491a0412c345479ad.reverse_animation()">
           <i class="fa fa-play fa-flip-horizontal"></i></button>
-      <button title="Pause" aria-label="Pause" onclick="anim1e0c3ca6daf34a8589512695cd7e6e27.pause_animation()">
+      <button title="Pause" aria-label="Pause" onclick="animf9ab75f4a1cd46a491a0412c345479ad.pause_animation()">
           <i class="fa fa-pause"></i></button>
-      <button title="Play" aria-label="Play" onclick="anim1e0c3ca6daf34a8589512695cd7e6e27.play_animation()">
+      <button title="Play" aria-label="Play" onclick="animf9ab75f4a1cd46a491a0412c345479ad.play_animation()">
           <i class="fa fa-play"></i></button>
-      <button title="Next frame" aria-label="Next frame" onclick="anim1e0c3ca6daf34a8589512695cd7e6e27.next_frame()">
+      <button title="Next frame" aria-label="Next frame" onclick="animf9ab75f4a1cd46a491a0412c345479ad.next_frame()">
           <i class="fa fa-step-forward"></i></button>
-      <button title="Last frame" aria-label="Last frame" onclick="anim1e0c3ca6daf34a8589512695cd7e6e27.last_frame()">
+      <button title="Last frame" aria-label="Last frame" onclick="animf9ab75f4a1cd46a491a0412c345479ad.last_frame()">
           <i class="fa fa-fast-forward"></i></button>
-      <button title="Increase speed" aria-label="Increase speed" onclick="anim1e0c3ca6daf34a8589512695cd7e6e27.faster()">
+      <button title="Increase speed" aria-label="Increase speed" onclick="animf9ab75f4a1cd46a491a0412c345479ad.faster()">
           <i class="fa fa-plus"></i></button>
     </div>
-    <form title="Repetition mode" aria-label="Repetition mode" action="#n" name="_anim_loop_select1e0c3ca6daf34a8589512695cd7e6e27"
+    <form title="Repetition mode" aria-label="Repetition mode" action="#n" name="_anim_loop_selectf9ab75f4a1cd46a491a0412c345479ad"
           class="anim-state">
-      <input type="radio" name="state" value="once" id="_anim_radio1_1e0c3ca6daf34a8589512695cd7e6e27"
+      <input type="radio" name="state" value="once" id="_anim_radio1_f9ab75f4a1cd46a491a0412c345479ad"
              >
-      <label for="_anim_radio1_1e0c3ca6daf34a8589512695cd7e6e27">Once</label>
-      <input type="radio" name="state" value="loop" id="_anim_radio2_1e0c3ca6daf34a8589512695cd7e6e27"
+      <label for="_anim_radio1_f9ab75f4a1cd46a491a0412c345479ad">Once</label>
+      <input type="radio" name="state" value="loop" id="_anim_radio2_f9ab75f4a1cd46a491a0412c345479ad"
              checked>
-      <label for="_anim_radio2_1e0c3ca6daf34a8589512695cd7e6e27">Loop</label>
-      <input type="radio" name="state" value="reflect" id="_anim_radio3_1e0c3ca6daf34a8589512695cd7e6e27"
+      <label for="_anim_radio2_f9ab75f4a1cd46a491a0412c345479ad">Loop</label>
+      <input type="radio" name="state" value="reflect" id="_anim_radio3_f9ab75f4a1cd46a491a0412c345479ad"
              >
-      <label for="_anim_radio3_1e0c3ca6daf34a8589512695cd7e6e27">Reflect</label>
+      <label for="_anim_radio3_f9ab75f4a1cd46a491a0412c345479ad">Reflect</label>
     </form>
   </div>
 </div>
@@ -502,9 +503,9 @@ input[type=range].anim-slider {
   /* Instantiate the Animation class. */
   /* The IDs given should match those used in the template above. */
   (function() {
-    var img_id = "_anim_img1e0c3ca6daf34a8589512695cd7e6e27";
-    var slider_id = "_anim_slider1e0c3ca6daf34a8589512695cd7e6e27";
-    var loop_select_id = "_anim_loop_select1e0c3ca6daf34a8589512695cd7e6e27";
+    var img_id = "_anim_imgf9ab75f4a1cd46a491a0412c345479ad";
+    var slider_id = "_anim_sliderf9ab75f4a1cd46a491a0412c345479ad";
+    var loop_select_id = "_anim_loop_selectf9ab75f4a1cd46a491a0412c345479ad";
     var frames = new Array(100);
 
   frames[0] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAJYCAYAAAC+ZpjcAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
@@ -38498,12 +38499,12 @@ AABjBFgAAADGCLAAAACM/X+pFATcV82mXwAAAABJRU5ErkJggg==\
     /* set a timeout to make sure all the above elements are created before
        the object is initialized. */
     setTimeout(function() {
-        anim1e0c3ca6daf34a8589512695cd7e6e27 = new Animation(frames, img_id, slider_id, 50.0,
+        animf9ab75f4a1cd46a491a0412c345479ad = new Animation(frames, img_id, slider_id, 50.0,
                                  loop_select_id);
     }, 0);
   })()
 </script></div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 9.338 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 9.434 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-data-gen-plot-diffusion-advection-solver-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/07795e165bda9881ff980becb31905ab/plot_diffusion_advection_solver.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_diffusion_advection_solver.ipynb</span></code></a></p>
@@ -38534,7 +38535,7 @@ AABjBFgAAADGCLAAAACM/X+pFATcV82mXwAAAABJRU5ErkJggg==\
     
     
     <a class="button pagination-next" href="plot_burgers_2d_solver.html" title="next page" accesskey="n">
-        <span>A Numerical Solver for Burgers’ Equation in 2 Dimensions </span>
+        <span>A finite difference solver for Burgers’ equation in 2 dimensions </span>
         <span class="icon">
             <i class="fa fa-arrow-circle-right"></i>
         </span>
@@ -38570,7 +38571,7 @@ AABjBFgAAADGCLAAAACM/X+pFATcV82mXwAAAABJRU5ErkJggg==\
 
         <div class="menu menu-list localtoc-list">
         <ul>
-<li><a class="reference internal" href="#">A simple finite-difference solver</a><ul>
+<li><a class="reference internal" href="#">A simple finite-difference solver for the diffusion-advection equation</a><ul>
 <li><a class="reference internal" href="#import-the-library">Import the library</a></li>
 <li><a class="reference internal" href="#defining-our-problem">Defining our problem</a></li>
 <li><a class="reference internal" href="#simulate-evolution-using-numerical-solver">Simulate evolution using numerical solver</a></li>

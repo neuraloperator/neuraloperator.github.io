@@ -179,6 +179,8 @@ to download the full example code.</p>
 <span id="sphx-glr-auto-examples-training-checkpoint-fno-darcy-py"></span><h1>Checkpointing and loading training states<a class="headerlink" href="#checkpointing-and-loading-training-states" title="Link to this heading"></a></h1>
 <p>Demonstrating the <code class="docutils literal notranslate"><span class="pre">Trainer</span></code>’s saving and loading functionality,
 which makes it easy to checkpoint and resume training states.</p>
+<div style="margin-top: 3em;"></div><section id="import-dependencies">
+<h2>Import dependencies<a class="headerlink" href="#import-dependencies" title="Link to this heading"></a></h2>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
@@ -192,7 +194,9 @@ which makes it easy to checkpoint and resume training states.</p>
 <span class="n">device</span> <span class="o">=</span> <span class="s1">&#39;cpu&#39;</span>
 </pre></div>
 </div>
-<p>Loading the Navier-Stokes dataset in 128x128 resolution</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="loading-the-darcy-flow-dataset">
+<h2>Loading the Darcy-Flow dataset<a class="headerlink" href="#loading-the-darcy-flow-dataset" title="Link to this heading"></a></h2>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">train_loader</span><span class="p">,</span> <span class="n">test_loaders</span><span class="p">,</span> <span class="n">data_processor</span> <span class="o">=</span> <span class="n">load_darcy_flow_small</span><span class="p">(</span>
         <span class="n">n_train</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
         <span class="n">test_resolutions</span><span class="o">=</span><span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span> <span class="n">n_tests</span><span class="o">=</span><span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span>
@@ -200,7 +204,9 @@ which makes it easy to checkpoint and resume training states.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>We create an FNO model</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="creating-the-fno-model">
+<h2>Creating the FNO model<a class="headerlink" href="#creating-the-fno-model" title="Link to this heading"></a></h2>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">FNO</span><span class="p">(</span><span class="n">n_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span>
              <span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
              <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
@@ -216,14 +222,18 @@ which makes it easy to checkpoint and resume training states.</p>
 <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Create the optimizer</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="creating-the-optimizer-and-scheduler">
+<h2>Creating the optimizer and scheduler<a class="headerlink" href="#creating-the-optimizer-and-scheduler" title="Link to this heading"></a></h2>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">AdamW</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span>
                                 <span class="n">lr</span><span class="o">=</span><span class="mf">8e-3</span><span class="p">,</span>
                                 <span class="n">weight_decay</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">)</span>
 <span class="n">scheduler</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">lr_scheduler</span><span class="o">.</span><span class="n">CosineAnnealingLR</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">T_max</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Creating the losses</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="creating-the-losses">
+<h2>Creating the losses<a class="headerlink" href="#creating-the-losses" title="Link to this heading"></a></h2>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">l2loss</span> <span class="o">=</span> <span class="n">LpLoss</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">h1loss</span> <span class="o">=</span> <span class="n">H1Loss</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
@@ -231,6 +241,9 @@ which makes it easy to checkpoint and resume training states.</p>
 <span class="n">eval_losses</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;h1&#39;</span><span class="p">:</span> <span class="n">h1loss</span><span class="p">,</span> <span class="s1">&#39;l2&#39;</span><span class="p">:</span> <span class="n">l2loss</span><span class="p">}</span>
 </pre></div>
 </div>
+<div style="margin-top: 3em;"></div></section>
+<section id="displaying-configuration">
+<h2>Displaying configuration<a class="headerlink" href="#displaying-configuration" title="Link to this heading"></a></h2>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### MODEL ###</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### OPTIMIZER ###</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### SCHEDULER ###</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">scheduler</span><span class="p">)</span>
@@ -240,7 +253,9 @@ which makes it easy to checkpoint and resume training states.</p>
 <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Create the trainer</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="creating-the-trainer">
+<h2>Creating the trainer<a class="headerlink" href="#creating-the-trainer" title="Link to this heading"></a></h2>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">n_epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
                   <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
                   <span class="n">data_processor</span><span class="o">=</span><span class="n">data_processor</span><span class="p">,</span>
@@ -250,7 +265,10 @@ which makes it easy to checkpoint and resume training states.</p>
                   <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Actually train the model on our small Darcy-Flow dataset</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="training-the-model">
+<h2>Training the model<a class="headerlink" href="#training-the-model" title="Link to this heading"></a></h2>
+<p>We train and save checkpoints</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_loader</span><span class="o">=</span><span class="n">train_loader</span><span class="p">,</span>
               <span class="n">test_loaders</span><span class="o">=</span><span class="p">{},</span>
               <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
@@ -294,6 +312,7 @@ which makes it easy to checkpoint and resume training states.</p>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </section>
+</section>
 
 
       </div>
@@ -334,6 +353,34 @@ which makes it easy to checkpoint and resume training states.</p>
 
 	
     
+    <div class="column is-hidden-touch is-2-desktop is-one-fifth-widescreen" id="localtoc-column">
+
+    <aside class="sticky-nav localtoc"> 
+        <p class="menu-label"> 
+            <span class="icon-text">
+                <span class="icon"><i class="fas fa-duotone fa-list"></i></span>
+                <span> On this page </span>
+            </span>
+        </p>
+
+        <div class="menu menu-list localtoc-list">
+        <ul>
+<li><a class="reference internal" href="#">Checkpointing and loading training states</a><ul>
+<li><a class="reference internal" href="#import-dependencies">Import dependencies</a></li>
+<li><a class="reference internal" href="#loading-the-darcy-flow-dataset">Loading the Darcy-Flow dataset</a></li>
+<li><a class="reference internal" href="#creating-the-fno-model">Creating the FNO model</a></li>
+<li><a class="reference internal" href="#creating-the-optimizer-and-scheduler">Creating the optimizer and scheduler</a></li>
+<li><a class="reference internal" href="#creating-the-losses">Creating the losses</a></li>
+<li><a class="reference internal" href="#displaying-configuration">Displaying configuration</a></li>
+<li><a class="reference internal" href="#creating-the-trainer">Creating the trainer</a></li>
+<li><a class="reference internal" href="#training-the-model">Training the model</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+    </aside>
+    </div>
 
   
 

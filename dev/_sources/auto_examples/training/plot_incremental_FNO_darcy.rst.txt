@@ -22,7 +22,27 @@ Training an FNO with incremental meta-learning
 ===============================================
 A demo of the Incremental FNO meta-learning algorithm on our small Darcy-Flow dataset.
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-23
+This tutorial demonstrates incremental meta-learning for neural operators, which allows
+the model to gradually increase its complexity during training. This approach can lead to:
+- Better convergence properties
+- More stable training dynamics
+- Improved generalization
+- Reduced computational requirements during early training
+
+The incremental approach starts with a small number of Fourier modes and gradually
+increases the model capacity as training progresses.
+
+.. GENERATED FROM PYTHON SOURCE LINES 18-25
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
+
+Import dependencies
+-------------------
+We import the necessary modules for incremental FNO training
+
+.. GENERATED FROM PYTHON SOURCE LINES 25-37
 
 .. code-block:: Python
 
@@ -45,14 +65,20 @@ A demo of the Incremental FNO meta-learning algorithm on our small Darcy-Flow da
 
 
 
+.. GENERATED FROM PYTHON SOURCE LINES 38-45
 
-.. GENERATED FROM PYTHON SOURCE LINES 24-25
+.. raw:: html
 
-Loading the Darcy flow dataset
+   <div style="margin-top: 3em;"></div>
 
-.. GENERATED FROM PYTHON SOURCE LINES 25-33
+Loading the Darcy-Flow dataset
+------------------------------
+We load the Darcy-Flow dataset with multiple resolutions for incremental training.
+
+.. GENERATED FROM PYTHON SOURCE LINES 45-56
 
 .. code-block:: Python
+
 
     train_loader, test_loaders, output_encoder = load_darcy_flow_small(
         n_train=100,
@@ -61,6 +87,8 @@ Loading the Darcy flow dataset
         n_tests=[100, 50],
         test_batch_sizes=[32, 32],
     )
+
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 
@@ -76,38 +104,27 @@ Loading the Darcy flow dataset
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 34-35
+.. GENERATED FROM PYTHON SOURCE LINES 57-66
 
-Choose device
+.. raw:: html
 
-.. GENERATED FROM PYTHON SOURCE LINES 35-37
+   <div style="margin-top: 3em;"></div>
 
-.. code-block:: Python
+Configuring incremental training
+--------------------------------
+We set up the incremental FNO model with a small starting number of modes.
+The model will gradually increase its capacity during training.
+We choose to update the modes using the incremental gradient explained algorithm
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 38-41
-
-Set up the incremental FNO model
-We start with 2 modes in each dimension
-We choose to update the modes by the incremental gradient explained algorithm
-
-.. GENERATED FROM PYTHON SOURCE LINES 41-47
+.. GENERATED FROM PYTHON SOURCE LINES 66-72
 
 .. code-block:: Python
 
     incremental = True
     if incremental:
-        starting_modes = (2, 2)
+        starting_modes = (2, 2)  # Start with very few modes
     else:
-        starting_modes = (16, 16)
+        starting_modes = (16, 16)  # Standard number of modes
 
 
 
@@ -116,17 +133,24 @@ We choose to update the modes by the incremental gradient explained algorithm
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 48-49
+.. GENERATED FROM PYTHON SOURCE LINES 73-81
 
-set up model
+.. raw:: html
 
-.. GENERATED FROM PYTHON SOURCE LINES 49-59
+   <div style="margin-top: 3em;"></div>
+
+Creating the incremental FNO model
+----------------------------------
+We create an FNO model with a maximum number of modes that can be reached
+during incremental training. The model starts with fewer modes and grows.
+
+.. GENERATED FROM PYTHON SOURCE LINES 81-91
 
 .. code-block:: Python
 
     model = FNO(
-        max_n_modes=(16, 16),
-        n_modes=starting_modes,
+        max_n_modes=(16, 16),    # Maximum modes the model can reach
+        n_modes=starting_modes,  # Starting number of modes
         hidden_channels=32,
         in_channels=1,
         out_channels=1,
@@ -141,11 +165,17 @@ set up model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 60-61
+.. GENERATED FROM PYTHON SOURCE LINES 92-99
 
-Set up the optimizer and scheduler
+.. raw:: html
 
-.. GENERATED FROM PYTHON SOURCE LINES 61-86
+   <div style="margin-top: 3em;"></div>
+
+Setting up the optimizer and scheduler
+-------------------------------------
+We use AdamW optimizer with weight decay for regularization
+
+.. GENERATED FROM PYTHON SOURCE LINES 99-102
 
 .. code-block:: Python
 
@@ -153,24 +183,47 @@ Set up the optimizer and scheduler
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=30)
 
 
-    # If one wants to use Incremental Resolution, one should use the IncrementalDataProcessor - When passed to the trainer, the trainer will automatically update the resolution
-    # Incremental_resolution : bool, default is False
-    #    if True, increase the resolution of the input incrementally
-    #    uses the incremental_res_gap parameter
-    #    uses the subsampling_rates parameter - a list of resolutions to use
-    #    uses the dataset_indices parameter - a list of indices of the dataset to slice to regularize the input resolution
-    #    uses the dataset_resolution parameter - the resolution of the input
-    #    uses the epoch_gap parameter - the number of epochs to wait before increasing the resolution
-    #    uses the verbose parameter - if True, print the resolution and the number of modes
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 103-121
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
+
+Configuring incremental data processing
+---------------------------------------
+If one wants to use Incremental Resolution, one should use the IncrementalDataProcessor.
+When passed to the trainer, the trainer will automatically update the resolution.
+
+Key parameters for incremental resolution:
+- incremental_resolution: bool, default is False
+  if True, increase the resolution of the input incrementally
+- incremental_res_gap: parameter for resolution updates
+- subsampling_rates: a list of resolutions to use
+- dataset_indices: a list of indices of the dataset to slice to regularize the input resolution
+- dataset_resolution: the resolution of the input
+- epoch_gap: the number of epochs to wait before increasing the resolution
+- verbose: if True, print the resolution and the number of modes
+
+.. GENERATED FROM PYTHON SOURCE LINES 121-134
+
+.. code-block:: Python
+
+
     data_transform = IncrementalDataProcessor(
         in_normalizer=None,
         out_normalizer=None,
         device=device,
-        subsampling_rates=[2, 1],
-        dataset_resolution=16,
-        dataset_indices=[2, 3],
-        epoch_gap=10,
-        verbose=True,
+        subsampling_rates=[2, 1],      # Resolution scaling factors
+        dataset_resolution=16,          # Base resolution
+        dataset_indices=[2, 3],        # Dataset indices for regularization
+        epoch_gap=10,                  # Epochs between resolution updates
+        verbose=True,                  # Print progress information
     )
 
     data_transform = data_transform.to(device)
@@ -189,18 +242,47 @@ Set up the optimizer and scheduler
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 87-88
+.. GENERATED FROM PYTHON SOURCE LINES 135-142
 
-Set up the losses
+.. raw:: html
 
-.. GENERATED FROM PYTHON SOURCE LINES 88-101
+   <div style="margin-top: 3em;"></div>
+
+Setting up loss functions
+-------------------------
+We use H1 loss for training and L2 loss for evaluation
+
+.. GENERATED FROM PYTHON SOURCE LINES 142-147
 
 .. code-block:: Python
 
-    l2loss = LpLoss(d=2, p=2)
-    h1loss = H1Loss(d=2)
+    l2loss = LpLoss(d=2, p=2)  
+    h1loss = H1Loss(d=2)       
     train_loss = h1loss
     eval_losses = {"h1": h1loss, "l2": l2loss}
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 148-156
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
+
+Displaying training configuration
+---------------------------------
+We display the model parameters, optimizer, scheduler, and loss functions
+to verify our incremental training setup
+
+.. GENERATED FROM PYTHON SOURCE LINES 156-165
+
+.. code-block:: Python
+
     print("\n### N PARAMS ###\n", n_params)
     print("\n### OPTIMIZER ###\n", optimizer)
     print("\n### SCHEDULER ###\n", scheduler)
@@ -234,57 +316,64 @@ Set up the losses
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f40aac84c30>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7ff2136988a0>
 
     ### LOSSES ###
 
     ### INCREMENTAL RESOLUTION + GRADIENT EXPLAINED ###
 
-     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7f4084d80a50>
+     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7ff1ed6d8b90>
 
-     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7f4084d80a50>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f40aac84b00>}
-
-
+     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7ff1ed6d8b90>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7ff213698c30>}
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 102-117
 
-Set up the IncrementalTrainer
-other options include setting incremental_loss_gap = True
-If one wants to use incremental resolution set it to True
-In this example we only update the modes and not the resolution
-When using the incremental resolution one should keep in mind that the numnber of modes initially set should be strictly less than the resolution
-Again these are the various paramaters for the various incremental settings
-incremental_grad : bool, default is False
-   if True, use the base incremental algorithm which is based on gradient variance
-   uses the incremental_grad_eps parameter - set the threshold for gradient variance
-   uses the incremental_buffer paramater - sets the number of buffer modes to calculate the gradient variance
-   uses the incremental_max_iter parameter - sets the initial number of iterations
-   uses the incremental_grad_max_iter parameter - sets the maximum number of iterations to accumulate the gradients
-incremental_loss_gap : bool, default is False
-   if True, use the incremental algorithm based on loss gap
-   uses the incremental_loss_eps parameter
 
-.. GENERATED FROM PYTHON SOURCE LINES 117-135
+.. GENERATED FROM PYTHON SOURCE LINES 166-189
+
+.. raw:: html
+
+   <div style="margin-top: 3em;"></div>
+
+Configuring the IncrementalFNOTrainer
+--------------------------------------
+We set up the IncrementalFNOTrainer with various incremental learning options.
+Other options include setting incremental_loss_gap = True.
+If one wants to use incremental resolution, set it to True.
+In this example we only update the modes and not the resolution.
+When using incremental resolution, keep in mind that the number of modes 
+initially set should be strictly less than the resolution.
+
+Key parameters for incremental training:
+- incremental_grad: bool, default is False
+  if True, use the base incremental algorithm based on gradient variance
+  - incremental_grad_eps: threshold for gradient variance
+  - incremental_buffer: number of buffer modes to calculate gradient variance
+  - incremental_max_iter: initial number of iterations
+  - incremental_grad_max_iter: maximum iterations to accumulate gradients
+- incremental_loss_gap: bool, default is False
+  if True, use the incremental algorithm based on loss gap
+  - incremental_loss_eps: threshold for loss gap
+
+.. GENERATED FROM PYTHON SOURCE LINES 189-206
 
 .. code-block:: Python
 
 
-
-    # Finally pass all of these to the Trainer
+    # Create the IncrementalFNOTrainer with our configuration
     trainer = IncrementalFNOTrainer(
         model=model,
         n_epochs=20,
         data_processor=data_transform,
         device=device,
         verbose=True,
-        incremental_loss_gap=False,
-        incremental_grad=True,
-        incremental_grad_eps=0.9999,
-        incremental_loss_eps = 0.001,
-        incremental_buffer=5,
-        incremental_max_iter=1,
-        incremental_grad_max_iter=2,
+        incremental_loss_gap=False,     # Use gradient-based incremental learning
+        incremental_grad=True,          # Enable gradient-based mode updates
+        incremental_grad_eps=0.9999,    # Gradient variance threshold
+        incremental_loss_eps=0.001,     # Loss gap threshold
+        incremental_buffer=5,           # Buffer modes for gradient calculation
+        incremental_max_iter=1,         # Initial iterations
+        incremental_grad_max_iter=2,    # Maximum gradient accumulation iterations
     )
 
 
@@ -294,13 +383,24 @@ incremental_loss_gap : bool, default is False
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 136-137
+.. GENERATED FROM PYTHON SOURCE LINES 207-218
 
-Train the model
+.. raw:: html
 
-.. GENERATED FROM PYTHON SOURCE LINES 137-147
+   <div style="margin-top: 3em;"></div>
+
+Training the incremental FNO model
+----------------------------------
+We train the model using incremental meta-learning. The trainer will:
+1. Start with a small number of Fourier modes
+2. Gradually increase the model capacity based on gradient variance
+3. Monitor the incremental learning progress
+4. Evaluate on test data throughout training
+
+.. GENERATED FROM PYTHON SOURCE LINES 218-229
 
 .. code-block:: Python
+
 
     trainer.train(
         train_loader,
@@ -325,71 +425,76 @@ Train the model
     /opt/hostedtoolcache/Python/3.13.8/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:668: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
       warnings.warn(warn_msg)
     Raw outputs of shape torch.Size([16, 1, 8, 8])
-    [0] time=0.34, avg_loss=0.9234, train_err=13.1917
-    Eval: 16_h1=0.8813, 16_l2=0.5729, 32_h1=0.9161, 32_l2=0.5737
-    [1] time=0.32, avg_loss=0.8366, train_err=11.9507
-    Eval: 16_h1=0.8966, 16_l2=0.6193, 32_h1=1.0586, 32_l2=0.6402
-    [2] time=0.32, avg_loss=0.7270, train_err=10.3852
+    [0] time=0.34, avg_loss=0.9243, train_err=13.2048
+    Eval: 16_h1=0.9534, 16_l2=0.8806, 32_h1=1.1958, 32_l2=0.9061
+    [1] time=0.32, avg_loss=0.7827, train_err=11.1808
+    Eval: 16_h1=0.8564, 16_l2=0.6700, 32_h1=0.8839, 32_l2=0.6700
+    [2] time=0.32, avg_loss=0.8049, train_err=11.4980
     /home/runner/work/neuraloperator/neuraloperator/neuralop/training/incremental.py:160: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
     Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
       incremental_modes - self.incremental_buffer, torch.Tensor(strength_vector))
-    Eval: 16_h1=0.9372, 16_l2=0.5477, 32_h1=1.1899, 32_l2=0.5718
-    [3] time=0.32, avg_loss=0.7050, train_err=10.0713
-    Eval: 16_h1=0.8758, 16_l2=0.6209, 32_h1=1.0415, 32_l2=0.6467
-    [4] time=0.32, avg_loss=0.6401, train_err=9.1443
-    Eval: 16_h1=0.9029, 16_l2=0.5518, 32_h1=1.2216, 32_l2=0.5923
-    [5] time=0.32, avg_loss=0.6365, train_err=9.0928
-    Eval: 16_h1=0.7803, 16_l2=0.4305, 32_h1=0.9446, 32_l2=0.4500
-    [6] time=0.33, avg_loss=0.5896, train_err=8.4234
-    Eval: 16_h1=0.7403, 16_l2=0.4018, 32_h1=0.9982, 32_l2=0.4357
-    [7] time=0.33, avg_loss=0.5007, train_err=7.1533
-    Eval: 16_h1=0.6647, 16_l2=0.3449, 32_h1=0.8849, 32_l2=0.3728
-    [8] time=0.34, avg_loss=0.4450, train_err=6.3577
-    Eval: 16_h1=0.8081, 16_l2=0.4564, 32_h1=1.0240, 32_l2=0.4881
-    [9] time=0.34, avg_loss=0.5604, train_err=8.0056
-    Eval: 16_h1=0.6531, 16_l2=0.3916, 32_h1=0.8906, 32_l2=0.4229
+    Eval: 16_h1=0.9575, 16_l2=0.7642, 32_h1=1.2390, 32_l2=0.7657
+    [3] time=0.32, avg_loss=0.7089, train_err=10.1266
+    Eval: 16_h1=0.7859, 16_l2=0.6639, 32_h1=0.9917, 32_l2=0.6876
+    [4] time=0.32, avg_loss=0.6143, train_err=8.7757
+    Eval: 16_h1=0.8288, 16_l2=0.4462, 32_h1=1.1422, 32_l2=0.4906
+    [5] time=0.32, avg_loss=0.5798, train_err=8.2822
+    Eval: 16_h1=1.0814, 16_l2=0.6752, 32_h1=1.3831, 32_l2=0.6993
+    [6] time=0.33, avg_loss=0.6898, train_err=9.8549
+    Eval: 16_h1=0.7418, 16_l2=0.4494, 32_h1=0.8665, 32_l2=0.4705
+    [7] time=0.33, avg_loss=0.5636, train_err=8.0517
+    Eval: 16_h1=0.6759, 16_l2=0.3575, 32_h1=0.9154, 32_l2=0.3875
+    [8] time=0.33, avg_loss=0.4536, train_err=6.4801
+    Eval: 16_h1=0.7670, 16_l2=0.4425, 32_h1=1.0364, 32_l2=0.4801
+    [9] time=0.34, avg_loss=0.5155, train_err=7.3637
+    Eval: 16_h1=0.6233, 16_l2=0.3333, 32_h1=0.9005, 32_l2=0.3704
     Incre Res Update: change index to 1
     Incre Res Update: change sub to 1
     Incre Res Update: change res to 16
-    [10] time=0.43, avg_loss=0.5972, train_err=8.5313
-    Eval: 16_h1=0.5544, 16_l2=0.3252, 32_h1=0.6496, 32_l2=0.3138
-    [11] time=0.41, avg_loss=0.5098, train_err=7.2831
-    Eval: 16_h1=0.5599, 16_l2=0.3369, 32_h1=0.7287, 32_l2=0.3620
-    [12] time=0.41, avg_loss=0.4914, train_err=7.0202
-    Eval: 16_h1=0.4652, 16_l2=0.2948, 32_h1=0.5667, 32_l2=0.2865
-    [13] time=0.41, avg_loss=0.4206, train_err=6.0087
-    Eval: 16_h1=0.4645, 16_l2=0.2917, 32_h1=0.6157, 32_l2=0.3038
-    [14] time=0.40, avg_loss=0.4098, train_err=5.8542
-    Eval: 16_h1=0.5003, 16_l2=0.2950, 32_h1=0.5982, 32_l2=0.2963
-    [15] time=0.40, avg_loss=0.4451, train_err=6.3590
-    Eval: 16_h1=0.4005, 16_l2=0.2444, 32_h1=0.5473, 32_l2=0.2561
-    [16] time=0.41, avg_loss=0.3825, train_err=5.4637
-    Eval: 16_h1=0.3871, 16_l2=0.2595, 32_h1=0.4978, 32_l2=0.2672
-    [17] time=0.41, avg_loss=0.3542, train_err=5.0597
-    Eval: 16_h1=0.4311, 16_l2=0.2653, 32_h1=0.5492, 32_l2=0.2667
-    [18] time=0.41, avg_loss=0.3847, train_err=5.4962
-    Eval: 16_h1=0.3746, 16_l2=0.2383, 32_h1=0.5059, 32_l2=0.2493
-    [19] time=0.40, avg_loss=0.3433, train_err=4.9047
-    Eval: 16_h1=0.3557, 16_l2=0.2294, 32_h1=0.4823, 32_l2=0.2414
+    [10] time=0.41, avg_loss=0.5669, train_err=8.0993
+    Eval: 16_h1=0.5299, 16_l2=0.3396, 32_h1=0.6401, 32_l2=0.3353
+    [11] time=0.40, avg_loss=0.4987, train_err=7.1238
+    Eval: 16_h1=0.5249, 16_l2=0.3015, 32_h1=0.6580, 32_l2=0.3139
+    [12] time=0.40, avg_loss=0.4790, train_err=6.8430
+    Eval: 16_h1=0.4389, 16_l2=0.2627, 32_h1=0.5762, 32_l2=0.2702
+    [13] time=0.40, avg_loss=0.4104, train_err=5.8630
+    Eval: 16_h1=0.4197, 16_l2=0.2524, 32_h1=0.5390, 32_l2=0.2599
+    [14] time=0.40, avg_loss=0.3792, train_err=5.4168
+    Eval: 16_h1=0.4713, 16_l2=0.2681, 32_h1=0.5947, 32_l2=0.2830
+    [15] time=0.40, avg_loss=0.4189, train_err=5.9842
+    Eval: 16_h1=0.3960, 16_l2=0.2346, 32_h1=0.5202, 32_l2=0.2376
+    [16] time=0.40, avg_loss=0.3652, train_err=5.2176
+    Eval: 16_h1=0.3709, 16_l2=0.2278, 32_h1=0.5125, 32_l2=0.2413
+    [17] time=0.40, avg_loss=0.3380, train_err=4.8286
+    Eval: 16_h1=0.4387, 16_l2=0.2623, 32_h1=0.5748, 32_l2=0.2667
+    [18] time=0.40, avg_loss=0.3902, train_err=5.5743
+    Eval: 16_h1=0.3759, 16_l2=0.2355, 32_h1=0.5155, 32_l2=0.2516
+    [19] time=0.40, avg_loss=0.3373, train_err=4.8183
+    Eval: 16_h1=0.3395, 16_l2=0.2149, 32_h1=0.4755, 32_l2=0.2298
 
-    {'train_err': 4.904727799551828, 'avg_loss': 0.34333094596862795, 'avg_lasso_loss': None, 'epoch_train_time': 0.4003168519998326, '16_h1': tensor(0.3557), '16_l2': tensor(0.2294), '32_h1': tensor(0.4823), '32_l2': tensor(0.2414)}
+    {'train_err': 4.818341153008597, 'avg_loss': 0.3372838807106018, 'avg_lasso_loss': None, 'epoch_train_time': 0.40313793500001793, '16_h1': tensor(0.3395), '16_l2': tensor(0.2149), '32_h1': tensor(0.4755), '32_l2': tensor(0.2298)}
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 148-158
+.. GENERATED FROM PYTHON SOURCE LINES 230-245
 
-Plot the prediction, and compare with the ground-truth
-Note that we trained on a very small resolution for
-a very small number of epochs
-In practice, we would train at larger resolution, on many more samples.
+.. raw:: html
 
-However, for practicity, we created a minimal example that
-i) fits in just a few Mb of memory
+   <div style="margin-top: 3em;"></div>
+
+Visualizing incremental FNO predictions
+----------------------------------------
+We visualize the model's predictions after incremental training.
+Note that we trained on a very small resolution for a very small number of epochs.
+In practice, we would train at larger resolution on many more samples.
+
+However, for practicality, we created a minimal example that:
+i) fits in just a few MB of memory
 ii) can be trained quickly on CPU
 
 In practice we would train a Neural Operator on one or multiple GPUs
 
-.. GENERATED FROM PYTHON SOURCE LINES 158-196
+.. GENERATED FROM PYTHON SOURCE LINES 245-287
 
 .. code-block:: Python
 
@@ -403,8 +508,10 @@ In practice we would train a Neural Operator on one or multiple GPUs
         x = data["x"].to(device)
         # Ground-truth
         y = data["y"].to(device)
-        # Model prediction
+        # Model prediction: incremental FNO output
         out = model(x.unsqueeze(0))
+    
+        # Plot input x
         ax = fig.add_subplot(3, 3, index * 3 + 1)
         x = x.cpu().squeeze().detach().numpy()
         y = y.cpu().squeeze().detach().numpy()
@@ -414,6 +521,7 @@ In practice we would train a Neural Operator on one or multiple GPUs
         plt.xticks([], [])
         plt.yticks([], [])
 
+        # Plot ground-truth y
         ax = fig.add_subplot(3, 3, index * 3 + 2)
         ax.imshow(y.squeeze())
         if index == 0:
@@ -421,21 +529,22 @@ In practice we would train a Neural Operator on one or multiple GPUs
         plt.xticks([], [])
         plt.yticks([], [])
 
+        # Plot model prediction
         ax = fig.add_subplot(3, 3, index * 3 + 3)
         ax.imshow(out.cpu().squeeze().detach().numpy())
         if index == 0:
-            ax.set_title("Model prediction")
+            ax.set_title("Incremental FNO prediction")
         plt.xticks([], [])
         plt.yticks([], [])
 
-    fig.suptitle("Inputs, ground-truth output and prediction.", y=0.98)
+    fig.suptitle("Incremental FNO predictions on Darcy-Flow data", y=0.98)
     plt.tight_layout()
     fig.show()
 
 
 
 .. image-sg:: /auto_examples/training/images/sphx_glr_plot_incremental_FNO_darcy_001.png
-   :alt: Inputs, ground-truth output and prediction., Input x, Ground-truth y, Model prediction
+   :alt: Incremental FNO predictions on Darcy-Flow data, Input x, Ground-truth y, Incremental FNO prediction
    :srcset: /auto_examples/training/images/sphx_glr_plot_incremental_FNO_darcy_001.png
    :class: sphx-glr-single-img
 
@@ -446,7 +555,7 @@ In practice we would train a Neural Operator on one or multiple GPUs
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 13.526 seconds)
+   **Total running time of the script:** (0 minutes 13.744 seconds)
 
 
 .. _sphx_glr_download_auto_examples_training_plot_incremental_FNO_darcy.py:
