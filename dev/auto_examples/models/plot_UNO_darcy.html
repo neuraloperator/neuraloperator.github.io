@@ -422,13 +422,13 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f95aca68690&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f4094609e50&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f95ac92d400&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f40943ad400&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f95ac92d400&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f95aca69bd0&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f40943ad400&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f409460b610&gt;}
 </pre></div>
 </div>
 <p>Create the trainer</p>
@@ -454,25 +454,25 @@ Parameter Group 0
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Training on 1000 samples
 Testing on [50, 50] samples         on resolutions [16, 32].
-/opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:668: UserWarning: &#39;pin_memory&#39; argument is set as true but no accelerator is found, then device pinned memory won&#39;t be used.
+/opt/hostedtoolcache/Python/3.13.8/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:668: UserWarning: &#39;pin_memory&#39; argument is set as true but no accelerator is found, then device pinned memory won&#39;t be used.
   warnings.warn(warn_msg)
 Raw outputs of shape torch.Size([32, 1, 16, 16])
-[0] time=8.62, avg_loss=0.7192, train_err=22.4742
+[0] time=8.72, avg_loss=0.7192, train_err=22.4742
 Eval: 16_h1=0.4670, 16_l2=0.3055, 32_h1=0.7125, 32_l2=0.3924
-[3] time=8.47, avg_loss=0.2413, train_err=7.5420
+[3] time=8.63, avg_loss=0.2413, train_err=7.5420
 Eval: 16_h1=0.2711, 16_l2=0.1796, 32_h1=0.5284, 32_l2=0.3361
-[6] time=8.39, avg_loss=0.2083, train_err=6.5092
+[6] time=8.42, avg_loss=0.2083, train_err=6.5092
 Eval: 16_h1=0.3397, 16_l2=0.2732, 32_h1=0.5667, 32_l2=0.4138
-[9] time=8.42, avg_loss=0.1860, train_err=5.8128
+[9] time=8.53, avg_loss=0.1860, train_err=5.8128
 Eval: 16_h1=0.2224, 16_l2=0.1386, 32_h1=0.5346, 32_l2=0.3237
-[12] time=8.32, avg_loss=0.2075, train_err=6.4833
+[12] time=8.44, avg_loss=0.2075, train_err=6.4833
 Eval: 16_h1=0.2227, 16_l2=0.1353, 32_h1=0.4988, 32_l2=0.2996
-[15] time=8.40, avg_loss=0.1757, train_err=5.4895
+[15] time=8.33, avg_loss=0.1757, train_err=5.4895
 Eval: 16_h1=0.2521, 16_l2=0.1504, 32_h1=0.4995, 32_l2=0.3142
-[18] time=8.31, avg_loss=0.1341, train_err=4.1897
+[18] time=8.42, avg_loss=0.1341, train_err=4.1897
 Eval: 16_h1=0.2161, 16_l2=0.1299, 32_h1=0.5307, 32_l2=0.3298
 
-{&#39;train_err&#39;: 4.030218005180359, &#39;avg_loss&#39;: 0.1289669761657715, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 8.341144799000062}
+{&#39;train_err&#39;: 4.030218005180359, &#39;avg_loss&#39;: 0.1289669761657715, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 8.350701813000114}
 </pre></div>
 </div>
 <p>Plot the prediction, and compare with the ground-truth
@@ -522,7 +522,7 @@ ii) can be trained quickly on CPU</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_UNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_UNO_darcy_001.png" alt="Inputs, ground-truth output and prediction., Input x, Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 55.032 seconds)</p>
+<img src="../../_images/sphx_glr_plot_UNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_UNO_darcy_001.png" alt="Inputs, ground-truth output and prediction., Input x, Ground-truth y, Model prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 55.544 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-models-plot-uno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/fee630be9801a5d2d76c0b9e3091063c/plot_UNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_UNO_darcy.ipynb</span></code></a></p>
