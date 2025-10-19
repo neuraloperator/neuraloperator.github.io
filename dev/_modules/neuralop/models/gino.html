@@ -126,6 +126,11 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn.functional</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">F</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 
+<span class="c1"># Set warning filter to show each warning only once</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;once&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
+
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">.base_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..layers.channel_mlp</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChannelMLP</span>
@@ -230,8 +235,6 @@
 <span class="sd">        whether to use tanh to stabilize outputs of the output GNO, by default False</span>
 <span class="sd">    fno_resolution_scaling_factor : float | None, optional</span>
 <span class="sd">        factor by which to scale output of FNO, by default None</span>
-<span class="sd">    fno_incremental_n_modes : list[int] | None, defaults to None</span>
-<span class="sd">    if passed, sets n_modes separately for each FNO layer.</span>
 <span class="sd">    fno_block_precision : str, defaults to &#39;full&#39;</span>
 <span class="sd">        data precision to compute within fno block</span>
 <span class="sd">    fno_use_channel_mlp : bool, defaults to True</span>
@@ -266,8 +269,6 @@
 <span class="sd">        Tensor factorization of the parameters weight to use</span>
 <span class="sd">    fno_rank : float, defaults to 1.0</span>
 <span class="sd">        Rank of the tensor factorization of the Fourier weights.</span>
-<span class="sd">    fno_joint_factorization : bool, defaults to False</span>
-<span class="sd">        Whether all the Fourier layers should be parameterized by a single tensor (vs one per layer).</span>
 <span class="sd">    fno_fixed_rank_modes : bool, defaults to False</span>
 <span class="sd">        Modes to not factorize.</span>
 <span class="sd">    fno_implementation : str {&#39;factorized&#39;, &#39;reconstructed&#39;} | None, defaults to &#39;factorized&#39;</span>
@@ -319,7 +320,6 @@
         <span class="n">out_gno_tanh</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="c1"># Other FNO Params</span>
         <span class="n">fno_resolution_scaling_factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">fno_incremental_n_modes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">fno_block_precision</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">,</span>
         <span class="n">fno_use_channel_mlp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
         <span class="n">fno_channel_mlp_dropout</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
@@ -335,12 +335,10 @@
         <span class="n">fno_separable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">fno_factorization</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">fno_rank</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-        <span class="n">fno_joint_factorization</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
         <span class="n">fno_fixed_rank_modes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">fno_implementation</span><span class="o">=</span><span class="s1">&#39;factorized&#39;</span><span class="p">,</span>
         <span class="n">fno_decomposition_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span>
         <span class="n">fno_conv_module</span><span class="o">=</span><span class="n">SpectralConv</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
         <span class="p">):</span>
         
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -433,13 +431,10 @@
         <span class="c1"># possibly concatenated feature channels `latent_features` </span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fno_blocks</span> <span class="o">=</span> <span class="n">FNOBlocks</span><span class="p">(</span>
                 <span class="n">n_modes</span><span class="o">=</span><span class="n">fno_n_modes</span><span class="p">,</span>
-                <span class="n">hidden_channels</span><span class="o">=</span><span class="n">fno_hidden_channels</span><span class="p">,</span>
                 <span class="n">in_channels</span><span class="o">=</span><span class="n">fno_hidden_channels</span><span class="p">,</span>
                 <span class="n">out_channels</span><span class="o">=</span><span class="n">fno_hidden_channels</span><span class="p">,</span>
-                <span class="n">positional_embedding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">n_layers</span><span class="o">=</span><span class="n">fno_n_layers</span><span class="p">,</span>
                 <span class="n">resolution_scaling_factor</span><span class="o">=</span><span class="n">fno_resolution_scaling_factor</span><span class="p">,</span>
-                <span class="n">incremental_n_modes</span><span class="o">=</span><span class="n">fno_incremental_n_modes</span><span class="p">,</span>
                 <span class="n">fno_block_precision</span><span class="o">=</span><span class="n">fno_block_precision</span><span class="p">,</span>
                 <span class="n">use_channel_mlp</span><span class="o">=</span><span class="n">fno_use_channel_mlp</span><span class="p">,</span>
                 <span class="n">channel_mlp_expansion</span><span class="o">=</span><span class="n">fno_channel_mlp_expansion</span><span class="p">,</span>
@@ -454,14 +449,11 @@
                 <span class="n">separable</span><span class="o">=</span><span class="n">fno_separable</span><span class="p">,</span>
                 <span class="n">factorization</span><span class="o">=</span><span class="n">fno_factorization</span><span class="p">,</span>
                 <span class="n">rank</span><span class="o">=</span><span class="n">fno_rank</span><span class="p">,</span>
-                <span class="n">joint_factorization</span><span class="o">=</span><span class="n">fno_joint_factorization</span><span class="p">,</span> 
                 <span class="n">fixed_rank_modes</span><span class="o">=</span><span class="n">fno_fixed_rank_modes</span><span class="p">,</span>
                 <span class="n">implementation</span><span class="o">=</span><span class="n">fno_implementation</span><span class="p">,</span>
                 <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="n">fno_decomposition_kwargs</span><span class="p">,</span>
-                <span class="n">domain_padding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">conv_module</span><span class="o">=</span><span class="n">fno_conv_module</span><span class="p">,</span>
-                <span class="o">**</span><span class="n">kwargs</span>
-        <span class="p">)</span>
+            <span class="p">)</span>
 
         <span class="c1">### output GNO</span>
         <span class="k">if</span> <span class="n">gno_weighting_function</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="c1">#sq radius**2?</span>
@@ -523,6 +515,14 @@
 <div class="viewcode-block" id="GINO.forward">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.models.GINO.html#neuralop.models.GINO.forward">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_geom</span><span class="p">,</span> <span class="n">latent_queries</span><span class="p">,</span> <span class="n">output_queries</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">latent_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ada_in</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;GINO.forward() received unexpected keyword arguments: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">. &quot;</span>
+                <span class="s2">&quot;These arguments will be ignored.&quot;</span><span class="p">,</span>
+                <span class="ne">UserWarning</span><span class="p">,</span>
+                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span>
+            <span class="p">)</span>
+<span class="w">        </span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The GINO&#39;s forward call:</span>
 <span class="sd">        Input GNO --&gt; FNOBlocks --&gt; output GNO + projection to output queries.</span>
 

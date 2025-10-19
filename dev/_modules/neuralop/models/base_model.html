@@ -288,10 +288,13 @@
         <span class="n">metadata_filepath</span> <span class="o">=</span> <span class="n">save_folder</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">save_name</span><span class="si">}</span><span class="s1">_metadata.pkl&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">as_posix</span><span class="p">()</span>
         <span class="n">init_kwargs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">metadata_filepath</span><span class="p">,</span> <span class="n">weights_only</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         
-        <span class="n">version</span> <span class="o">=</span> <span class="n">init_kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;_version&#39;</span><span class="p">)</span>
+        <span class="n">version</span> <span class="o">=</span> <span class="n">init_kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;_version&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_version&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">version</span> <span class="o">!=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_version</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">version</span><span class="p">)</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Checkpoint saved for version </span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s1"> of model </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s1"> but current code is version </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="n">_version</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># Remove metadata fields that shouldn&#39;t be passed to __init__</span>
+        <span class="n">init_kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;_name&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         
         <span class="k">if</span> <span class="s1">&#39;args&#39;</span> <span class="ow">in</span> <span class="n">init_kwargs</span><span class="p">:</span>
             <span class="n">init_args</span> <span class="o">=</span> <span class="n">init_kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;args&#39;</span><span class="p">)</span>
@@ -336,7 +339,10 @@
 <span class="sd">        the instanciated module</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">arch</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;model_arch&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="n">model_config</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">model</span>
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="c1"># Remove model_arch from config as it&#39;s not a model parameter</span>
+    <span class="n">model_config</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;model_arch&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
     <span class="c1"># Set the number of input channels depending on channels in data + mg patching</span>
     <span class="n">data_channels</span> <span class="o">=</span> <span class="n">model_config</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;data_channels&quot;</span><span class="p">)</span>

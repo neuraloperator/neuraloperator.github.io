@@ -242,7 +242,7 @@ fno_lifting_channel_ratio * hidden_channels (i.e. default 128)</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.models.GINO.forward" title="neuralop.models.GINO.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>(input_geom, latent_queries, ...[, ...])</p></td>
-<td><p>The GINO's forward call: Input GNO --&gt; FNOBlocks --&gt; output GNO + projection to output queries.</p></td>
+<td><p>Define the computation performed at every call.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">latent_embedding</span></code>(in_p[, ada_in])</p></td>
 <td><p></p></td>
@@ -280,8 +280,6 @@ for more information.</p>
 </dd>
 <dt><strong>fno_resolution_scaling_factor</strong><span class="classifier">float | None, optional</span></dt><dd><p>factor by which to scale output of FNO, by default None</p>
 </dd>
-<dt><strong>fno_incremental_n_modes</strong><span class="classifier">list[int] | None, defaults to None</span></dt><dd></dd>
-<dt><strong>if passed, sets n_modes separately for each FNO layer.</strong></dt><dd></dd>
 <dt><strong>fno_block_precision</strong><span class="classifier">str, defaults to ‘full’</span></dt><dd><p>data precision to compute within fno block</p>
 </dd>
 <dt><strong>fno_use_channel_mlp</strong><span class="classifier">bool, defaults to True</span></dt><dd><p>Whether to use a ChannelMLP layer after each FNO block.</p>
@@ -316,8 +314,6 @@ If None, adaptive mesh embedding is not used.</p>
 </dd>
 <dt><strong>fno_rank</strong><span class="classifier">float, defaults to 1.0</span></dt><dd><p>Rank of the tensor factorization of the Fourier weights.</p>
 </dd>
-<dt><strong>fno_joint_factorization</strong><span class="classifier">bool, defaults to False</span></dt><dd><p>Whether all the Fourier layers should be parameterized by a single tensor (vs one per layer).</p>
-</dd>
 <dt><strong>fno_fixed_rank_modes</strong><span class="classifier">bool, defaults to False</span></dt><dd><p>Modes to not factorize.</p>
 </dd>
 <dt><strong>fno_implementation</strong><span class="classifier">str {‘factorized’, ‘reconstructed’} | None, defaults to ‘factorized’</span></dt><dd><p>If factorization is not None, forward mode to use::
@@ -348,53 +344,15 @@ Geometry-Informed Neural Operator for Large-Scale 3D PDEs. NeurIPS 2023,
 <dl class="py method">
 <dt class="sig sig-object py" id="neuralop.models.GINO.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_geom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latent_queries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_queries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latent_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ada_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/models/gino.html#GINO.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.models.GINO.forward" title="Link to this definition"></a></dt>
-<dd><p>The GINO’s forward call:
-Input GNO –&gt; FNOBlocks –&gt; output GNO + projection to output queries.</p>
+<dd><p>Define the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>GINO currently supports batching <strong>only in cases where the geometry of
-inputs and outputs is shared across the entire batch</strong>. Inputs can have a batch dim
-in <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">latent_features</span></code>, but it must be shared for both.</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
 </div>
-<dl class="field-list">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl>
-<dt><strong>input_geom</strong><span class="classifier">torch.Tensor</span></dt><dd><p>input domain coordinate mesh
-shape (1, n_in, gno_coord_dim)</p>
-</dd>
-<dt><strong>latent_queries</strong><span class="classifier">torch.Tensor</span></dt><dd><p>latent geometry on which to compute FNO latent embeddings
-a grid on [0,1] x [0,1] x ….
-shape (1, n_gridpts_1, …. n_gridpts_n, gno_coord_dim)</p>
-</dd>
-<dt><strong>output_queries</strong><span class="classifier">torch.Tensor | dict[torch.Tensor]</span></dt><dd><p>points at which to query the final GNO layer to get output.</p>
-<p>shape (1, n_out, gno_coord_dim) per tensor.</p>
-<ul class="simple">
-<li><p>if a tensor, the model will output a tensor.</p></li>
-<li><p>if a dict of tensors, the model will return a dict of outputs, so</p></li>
-</ul>
-<p>that <code class="docutils literal notranslate"><span class="pre">output[key]</span></code> corresponds to the model queried at 
-<code class="docutils literal notranslate"><span class="pre">output_queries[key]</span></code>.</p>
-</dd>
-<dt><strong>x</strong><span class="classifier">torch.Tensor, optional</span></dt><dd><p>input function a defined on the input domain <cite>input_geom</cite>
-shape (batch, n_in, in_channels). Default None</p>
-</dd>
-<dt><strong>latent_features</strong><span class="classifier">torch.Tensor, optional</span></dt><dd><p>optional feature map to concatenate onto latent embedding
-before being passed into the latent FNO, default None
-if <cite>latent_feature_channels</cite> is set, must be passed</p>
-</dd>
-<dt><strong>ada_in</strong><span class="classifier">torch.Tensor, optional</span></dt><dd><p>adaptive scalar instance parameter, defaults to None</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>out</strong><span class="classifier">torch.Tensor | dict[torch.Tensor]</span></dt><dd><p>Function over the output query coordinates
-* tensor if if <code class="docutils literal notranslate"><span class="pre">output_queries</span></code> is a tensor
-* dict if if <code class="docutils literal notranslate"><span class="pre">output_queries</span></code> is a dict</p>
-</dd>
-</dl>
-</dd>
-</dl>
 </dd></dl>
 
 </dd></dl>

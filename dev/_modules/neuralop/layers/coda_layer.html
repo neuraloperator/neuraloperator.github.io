@@ -235,7 +235,6 @@
         <span class="n">fixed_rank_modes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">implementation</span><span class="o">=</span><span class="s1">&#39;factorized&#39;</span><span class="p">,</span>
         <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">_kwargs</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
@@ -292,8 +291,7 @@
             <span class="n">use_channel_mlp</span><span class="o">=</span><span class="n">use_channel_mlp</span><span class="p">,</span>
             <span class="n">preactivation</span><span class="o">=</span><span class="n">preactivation</span><span class="p">,</span>
             <span class="n">channel_mlp_skip</span><span class="o">=</span><span class="n">channel_mlp_skip</span><span class="p">,</span>
-            <span class="n">mlp_dropout</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-            <span class="n">incremental_n_modes</span><span class="o">=</span><span class="n">incremental_n_modes</span><span class="p">,</span>
+            <span class="n">channel_mlp_dropout</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
             <span class="n">rank</span><span class="o">=</span><span class="n">rank</span><span class="p">,</span>
             <span class="n">channel_mlp_expansion</span><span class="o">=</span><span class="n">channel_mlp_expansion</span><span class="p">,</span>
             <span class="n">fixed_rank_modes</span><span class="o">=</span><span class="n">fixed_rank_modes</span><span class="p">,</span>
@@ -301,7 +299,6 @@
             <span class="n">separable</span><span class="o">=</span><span class="n">separable</span><span class="p">,</span>
             <span class="n">factorization</span><span class="o">=</span><span class="n">factorization</span><span class="p">,</span>
             <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="n">decomposition_kwargs</span><span class="p">,</span>
-            <span class="n">joint_factorization</span><span class="o">=</span><span class="n">joint_factorization</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="n">kqv_args</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>

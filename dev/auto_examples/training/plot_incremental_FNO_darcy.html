@@ -334,15 +334,15 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7ff2136988a0&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f10aac8c9d0&gt;
 
 ### LOSSES ###
 
 ### INCREMENTAL RESOLUTION + GRADIENT EXPLAINED ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7ff1ed6d8b90&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f1084cfca50&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7ff1ed6d8b90&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7ff213698c30&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f1084cfca50&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f10aac8cd60&gt;}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -408,55 +408,61 @@ if True, use the incremental algorithm based on loss gap
 Testing on [50, 50] samples         on resolutions [16, 32].
 /opt/hostedtoolcache/Python/3.13.8/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:668: UserWarning: &#39;pin_memory&#39; argument is set as true but no accelerator is found, then device pinned memory won&#39;t be used.
   warnings.warn(warn_msg)
+/opt/hostedtoolcache/Python/3.13.8/x64/lib/python3.13/site-packages/torch/nn/modules/module.py:1786: UserWarning: FNO.forward() received unexpected keyword arguments: [&#39;y&#39;]. These arguments will be ignored.
+  return forward_call(*args, **kwargs)
 Raw outputs of shape torch.Size([16, 1, 8, 8])
-[0] time=0.34, avg_loss=0.9243, train_err=13.2048
+/home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:507: UserWarning: H1Loss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
+  loss += training_loss(out, **sample)
+[0] time=0.33, avg_loss=0.9243, train_err=13.2048
+/home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:557: UserWarning: LpLoss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
+  val_loss = loss(out, **sample)
 Eval: 16_h1=0.9534, 16_l2=0.8806, 32_h1=1.1958, 32_l2=0.9061
-[1] time=0.32, avg_loss=0.7827, train_err=11.1808
+[1] time=0.31, avg_loss=0.7827, train_err=11.1808
 Eval: 16_h1=0.8564, 16_l2=0.6700, 32_h1=0.8839, 32_l2=0.6700
-[2] time=0.32, avg_loss=0.8049, train_err=11.4980
+[2] time=0.31, avg_loss=0.8049, train_err=11.4980
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/incremental.py:160: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
 Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
   incremental_modes - self.incremental_buffer, torch.Tensor(strength_vector))
 Eval: 16_h1=0.9575, 16_l2=0.7642, 32_h1=1.2390, 32_l2=0.7657
-[3] time=0.32, avg_loss=0.7089, train_err=10.1266
+[3] time=0.31, avg_loss=0.7089, train_err=10.1266
 Eval: 16_h1=0.7859, 16_l2=0.6639, 32_h1=0.9917, 32_l2=0.6876
-[4] time=0.32, avg_loss=0.6143, train_err=8.7757
+[4] time=0.31, avg_loss=0.6143, train_err=8.7757
 Eval: 16_h1=0.8288, 16_l2=0.4462, 32_h1=1.1422, 32_l2=0.4906
 [5] time=0.32, avg_loss=0.5798, train_err=8.2822
 Eval: 16_h1=1.0814, 16_l2=0.6752, 32_h1=1.3831, 32_l2=0.6993
-[6] time=0.33, avg_loss=0.6898, train_err=9.8549
+[6] time=0.32, avg_loss=0.6898, train_err=9.8549
 Eval: 16_h1=0.7418, 16_l2=0.4494, 32_h1=0.8665, 32_l2=0.4705
-[7] time=0.33, avg_loss=0.5636, train_err=8.0517
+[7] time=0.32, avg_loss=0.5636, train_err=8.0517
 Eval: 16_h1=0.6759, 16_l2=0.3575, 32_h1=0.9154, 32_l2=0.3875
-[8] time=0.33, avg_loss=0.4536, train_err=6.4801
+[8] time=0.32, avg_loss=0.4536, train_err=6.4801
 Eval: 16_h1=0.7670, 16_l2=0.4425, 32_h1=1.0364, 32_l2=0.4801
-[9] time=0.34, avg_loss=0.5155, train_err=7.3637
+[9] time=0.32, avg_loss=0.5155, train_err=7.3637
 Eval: 16_h1=0.6233, 16_l2=0.3333, 32_h1=0.9005, 32_l2=0.3704
 Incre Res Update: change index to 1
 Incre Res Update: change sub to 1
 Incre Res Update: change res to 16
-[10] time=0.41, avg_loss=0.5669, train_err=8.0993
+[10] time=0.40, avg_loss=0.5669, train_err=8.0993
 Eval: 16_h1=0.5299, 16_l2=0.3396, 32_h1=0.6401, 32_l2=0.3353
-[11] time=0.40, avg_loss=0.4987, train_err=7.1238
+[11] time=0.39, avg_loss=0.4987, train_err=7.1238
 Eval: 16_h1=0.5249, 16_l2=0.3015, 32_h1=0.6580, 32_l2=0.3139
-[12] time=0.40, avg_loss=0.4790, train_err=6.8430
+[12] time=0.39, avg_loss=0.4790, train_err=6.8430
 Eval: 16_h1=0.4389, 16_l2=0.2627, 32_h1=0.5762, 32_l2=0.2702
-[13] time=0.40, avg_loss=0.4104, train_err=5.8630
+[13] time=0.39, avg_loss=0.4104, train_err=5.8630
 Eval: 16_h1=0.4197, 16_l2=0.2524, 32_h1=0.5390, 32_l2=0.2599
-[14] time=0.40, avg_loss=0.3792, train_err=5.4168
+[14] time=0.39, avg_loss=0.3792, train_err=5.4168
 Eval: 16_h1=0.4713, 16_l2=0.2681, 32_h1=0.5947, 32_l2=0.2830
-[15] time=0.40, avg_loss=0.4189, train_err=5.9842
+[15] time=0.39, avg_loss=0.4189, train_err=5.9842
 Eval: 16_h1=0.3960, 16_l2=0.2346, 32_h1=0.5202, 32_l2=0.2376
 [16] time=0.40, avg_loss=0.3652, train_err=5.2176
 Eval: 16_h1=0.3709, 16_l2=0.2278, 32_h1=0.5125, 32_l2=0.2413
-[17] time=0.40, avg_loss=0.3380, train_err=4.8286
+[17] time=0.39, avg_loss=0.3380, train_err=4.8286
 Eval: 16_h1=0.4387, 16_l2=0.2623, 32_h1=0.5748, 32_l2=0.2667
-[18] time=0.40, avg_loss=0.3902, train_err=5.5743
+[18] time=0.39, avg_loss=0.3902, train_err=5.5743
 Eval: 16_h1=0.3759, 16_l2=0.2355, 32_h1=0.5155, 32_l2=0.2516
-[19] time=0.40, avg_loss=0.3373, train_err=4.8183
+[19] time=0.39, avg_loss=0.3373, train_err=4.8183
 Eval: 16_h1=0.3395, 16_l2=0.2149, 32_h1=0.4755, 32_l2=0.2298
 
-{&#39;train_err&#39;: 4.818341153008597, &#39;avg_loss&#39;: 0.3372838807106018, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 0.40313793500001793, &#39;16_h1&#39;: tensor(0.3395), &#39;16_l2&#39;: tensor(0.2149), &#39;32_h1&#39;: tensor(0.4755), &#39;32_l2&#39;: tensor(0.2298)}
+{&#39;train_err&#39;: 4.818341153008597, &#39;avg_loss&#39;: 0.3372838807106018, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 0.3891734550001047, &#39;16_h1&#39;: tensor(0.3395), &#39;16_l2&#39;: tensor(0.2149), &#39;32_h1&#39;: tensor(0.4755), &#39;32_l2&#39;: tensor(0.2298)}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -512,7 +518,7 @@ ii) can be trained quickly on CPU</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" alt="Incremental FNO predictions on Darcy-Flow data, Input x, Ground-truth y, Incremental FNO prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 13.744 seconds)</p>
+<img src="../../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" alt="Incremental FNO predictions on Darcy-Flow data, Input x, Ground-truth y, Incremental FNO prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 12.945 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-training-plot-incremental-fno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/cfa67f99f9c5464f9ef46d85700f3993/plot_incremental_FNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_incremental_FNO_darcy.ipynb</span></code></a></p>
