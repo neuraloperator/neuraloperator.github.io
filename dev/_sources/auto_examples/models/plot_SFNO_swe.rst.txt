@@ -279,13 +279,13 @@ grid sizes across different latitudes on the sphere
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fbfbaf38ec0>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f0ef66fcec0>
 
     ### LOSSES ###
 
-     * Train: <neuralop.losses.data_losses.LpLoss object at 0x7fbfbaf39010>
+     * Train: <neuralop.losses.data_losses.LpLoss object at 0x7f0ef66fd010>
 
-     * Test: {'l2': <neuralop.losses.data_losses.LpLoss object at 0x7fbfbaf39010>}
+     * Test: {'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f0ef66fd010>}
 
 
 
@@ -359,22 +359,22 @@ backpropagate, and evaluate on test data.
     Raw outputs of shape torch.Size([4, 3, 32, 64])
     /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:536: UserWarning: LpLoss.__call__() received unexpected keyword arguments: ['x']. These arguments will be ignored.
       loss += training_loss(out, **sample)
-    [0] time=3.43, avg_loss=2.6714, train_err=10.6854
-    Eval: (32, 64)_l2=2.2698, (64, 128)_l2=2.5103
-    [3] time=3.37, avg_loss=0.4234, train_err=1.6934
-    Eval: (32, 64)_l2=0.9410, (64, 128)_l2=2.6106
-    [6] time=3.37, avg_loss=0.2877, train_err=1.1510
-    Eval: (32, 64)_l2=0.8048, (64, 128)_l2=2.5193
-    [9] time=3.39, avg_loss=0.2265, train_err=0.9061
-    Eval: (32, 64)_l2=0.7629, (64, 128)_l2=2.5219
-    [12] time=3.40, avg_loss=0.2054, train_err=0.8216
-    Eval: (32, 64)_l2=0.6143, (64, 128)_l2=2.5106
-    [15] time=3.36, avg_loss=0.1619, train_err=0.6477
-    Eval: (32, 64)_l2=0.4317, (64, 128)_l2=2.4616
-    [18] time=3.36, avg_loss=0.1396, train_err=0.5582
-    Eval: (32, 64)_l2=0.3924, (64, 128)_l2=2.4545
+    [0] time=3.40, avg_loss=2.6477, train_err=10.5908
+    Eval: (32, 64)_l2=2.0991, (64, 128)_l2=2.4930
+    [3] time=3.34, avg_loss=0.4356, train_err=1.7426
+    Eval: (32, 64)_l2=0.4196, (64, 128)_l2=2.4630
+    [6] time=3.34, avg_loss=0.2665, train_err=1.0659
+    Eval: (32, 64)_l2=0.3350, (64, 128)_l2=2.4235
+    [9] time=3.33, avg_loss=0.2154, train_err=0.8617
+    Eval: (32, 64)_l2=0.2543, (64, 128)_l2=2.3731
+    [12] time=3.33, avg_loss=0.1783, train_err=0.7130
+    Eval: (32, 64)_l2=0.2299, (64, 128)_l2=2.3361
+    [15] time=3.36, avg_loss=0.1543, train_err=0.6170
+    Eval: (32, 64)_l2=0.2103, (64, 128)_l2=2.3057
+    [18] time=3.36, avg_loss=0.1417, train_err=0.5668
+    Eval: (32, 64)_l2=0.2001, (64, 128)_l2=2.3058
 
-    {'train_err': 0.5375380736589431, 'avg_loss': 0.13438451841473578, 'avg_lasso_loss': None, 'epoch_train_time': 3.3727510530000018}
+    {'train_err': 0.5598851031064987, 'avg_loss': 0.1399712757766247, 'avg_lasso_loss': None, 'epoch_train_time': 3.3246560499999873}
 
 
 
@@ -453,7 +453,7 @@ In practice we would train a Neural Operator on one or multiple GPUs
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (1 minutes 23.391 seconds)
+   **Total running time of the script:** (1 minutes 23.280 seconds)
 
 
 .. _sphx_glr_download_auto_examples_models_plot_SFNO_swe.py:

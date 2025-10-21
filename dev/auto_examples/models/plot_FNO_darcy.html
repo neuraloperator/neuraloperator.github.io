@@ -328,13 +328,13 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fbfbaf13b10&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f0ee255ed50&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fbfbaf13c50&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f0ee255f610&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fbfbaf13c50&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fbfbaf13750&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f0ee255f610&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f0ee255e210&gt;}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -376,24 +376,24 @@ Testing on [50, 50] samples         on resolutions [16, 32].
 Raw outputs of shape torch.Size([32, 1, 16, 16])
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:536: UserWarning: H1Loss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
   loss += training_loss(out, **sample)
-[0] time=1.55, avg_loss=0.6187, train_err=19.3351
+[0] time=1.51, avg_loss=0.6936, train_err=21.6741
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:581: UserWarning: LpLoss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
   val_loss = loss(out, **sample)
-Eval: 16_h1=0.4499, 16_l2=0.2930, 32_h1=0.5270, 32_l2=0.3010
-[3] time=1.53, avg_loss=0.2391, train_err=7.4729
-Eval: 16_h1=0.2387, 16_l2=0.1591, 32_h1=0.3755, 32_l2=0.1767
-[6] time=1.51, avg_loss=0.1952, train_err=6.0990
-Eval: 16_h1=0.2325, 16_l2=0.1577, 32_h1=0.3526, 32_l2=0.1765
-[9] time=1.54, avg_loss=0.1784, train_err=5.5735
-Eval: 16_h1=0.1883, 16_l2=0.1127, 32_h1=0.3345, 32_l2=0.1466
-[12] time=1.52, avg_loss=0.1606, train_err=5.0201
-Eval: 16_h1=0.1828, 16_l2=0.1058, 32_h1=0.3339, 32_l2=0.1321
-[15] time=1.52, avg_loss=0.1578, train_err=4.9310
-Eval: 16_h1=0.1887, 16_l2=0.1100, 32_h1=0.3292, 32_l2=0.1341
-[18] time=1.52, avg_loss=0.1456, train_err=4.5506
-Eval: 16_h1=0.1774, 16_l2=0.0938, 32_h1=0.3155, 32_l2=0.1171
+Eval: 16_h1=0.4676, 16_l2=0.2973, 32_h1=0.5650, 32_l2=0.3127
+[3] time=1.53, avg_loss=0.2319, train_err=7.2453
+Eval: 16_h1=0.2230, 16_l2=0.1526, 32_h1=0.3659, 32_l2=0.1778
+[6] time=1.49, avg_loss=0.1881, train_err=5.8791
+Eval: 16_h1=0.2137, 16_l2=0.1294, 32_h1=0.3373, 32_l2=0.1528
+[9] time=1.49, avg_loss=0.1705, train_err=5.3293
+Eval: 16_h1=0.1852, 16_l2=0.1036, 32_h1=0.3380, 32_l2=0.1348
+[12] time=1.49, avg_loss=0.1766, train_err=5.5174
+Eval: 16_h1=0.1918, 16_l2=0.1161, 32_h1=0.3323, 32_l2=0.1448
+[15] time=1.49, avg_loss=0.1495, train_err=4.6705
+Eval: 16_h1=0.1910, 16_l2=0.0989, 32_h1=0.3549, 32_l2=0.1289
+[18] time=1.49, avg_loss=0.1317, train_err=4.1144
+Eval: 16_h1=0.1839, 16_l2=0.1009, 32_h1=0.3334, 32_l2=0.1255
 
-{&#39;train_err&#39;: 4.338394977152348, &#39;avg_loss&#39;: 0.13882863926887512, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 1.5276497480000444}
+{&#39;train_err&#39;: 4.114910505712032, &#39;avg_loss&#39;: 0.13167713618278504, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 1.4836488920000193}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -511,7 +511,7 @@ of <cite>test_resolutions</cite> to choose from.</p>
 at the same resolution at which it was trained. This is because the model hasn’t seen
 the higher-frequency patterns present in the 32x32 data during training. However, this
 demonstrates the fundamental resolution invariance of neural operators.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 35.983 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 33.003 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-models-plot-fno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/b4fadb168a06acc8c292c808f47f0e7f/plot_FNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_FNO_darcy.ipynb</span></code></a></p>

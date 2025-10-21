@@ -288,13 +288,13 @@ We display the training configuration and then train the model
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fbfbaf13b10>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f0ee255ed50>
 
     ### LOSSES ###
 
-     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7fbfbaf13c50>
+     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7f0ee255f610>
 
-     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7fbfbaf13c50>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7fbfbaf13750>}
+     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7f0ee255f610>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f0ee255e210>}
 
 
 
@@ -372,24 +372,24 @@ We train the model on our Darcy-Flow dataset. The trainer will:
     Raw outputs of shape torch.Size([32, 1, 16, 16])
     /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:536: UserWarning: H1Loss.__call__() received unexpected keyword arguments: ['x']. These arguments will be ignored.
       loss += training_loss(out, **sample)
-    [0] time=1.55, avg_loss=0.6187, train_err=19.3351
+    [0] time=1.51, avg_loss=0.6936, train_err=21.6741
     /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:581: UserWarning: LpLoss.__call__() received unexpected keyword arguments: ['x']. These arguments will be ignored.
       val_loss = loss(out, **sample)
-    Eval: 16_h1=0.4499, 16_l2=0.2930, 32_h1=0.5270, 32_l2=0.3010
-    [3] time=1.53, avg_loss=0.2391, train_err=7.4729
-    Eval: 16_h1=0.2387, 16_l2=0.1591, 32_h1=0.3755, 32_l2=0.1767
-    [6] time=1.51, avg_loss=0.1952, train_err=6.0990
-    Eval: 16_h1=0.2325, 16_l2=0.1577, 32_h1=0.3526, 32_l2=0.1765
-    [9] time=1.54, avg_loss=0.1784, train_err=5.5735
-    Eval: 16_h1=0.1883, 16_l2=0.1127, 32_h1=0.3345, 32_l2=0.1466
-    [12] time=1.52, avg_loss=0.1606, train_err=5.0201
-    Eval: 16_h1=0.1828, 16_l2=0.1058, 32_h1=0.3339, 32_l2=0.1321
-    [15] time=1.52, avg_loss=0.1578, train_err=4.9310
-    Eval: 16_h1=0.1887, 16_l2=0.1100, 32_h1=0.3292, 32_l2=0.1341
-    [18] time=1.52, avg_loss=0.1456, train_err=4.5506
-    Eval: 16_h1=0.1774, 16_l2=0.0938, 32_h1=0.3155, 32_l2=0.1171
+    Eval: 16_h1=0.4676, 16_l2=0.2973, 32_h1=0.5650, 32_l2=0.3127
+    [3] time=1.53, avg_loss=0.2319, train_err=7.2453
+    Eval: 16_h1=0.2230, 16_l2=0.1526, 32_h1=0.3659, 32_l2=0.1778
+    [6] time=1.49, avg_loss=0.1881, train_err=5.8791
+    Eval: 16_h1=0.2137, 16_l2=0.1294, 32_h1=0.3373, 32_l2=0.1528
+    [9] time=1.49, avg_loss=0.1705, train_err=5.3293
+    Eval: 16_h1=0.1852, 16_l2=0.1036, 32_h1=0.3380, 32_l2=0.1348
+    [12] time=1.49, avg_loss=0.1766, train_err=5.5174
+    Eval: 16_h1=0.1918, 16_l2=0.1161, 32_h1=0.3323, 32_l2=0.1448
+    [15] time=1.49, avg_loss=0.1495, train_err=4.6705
+    Eval: 16_h1=0.1910, 16_l2=0.0989, 32_h1=0.3549, 32_l2=0.1289
+    [18] time=1.49, avg_loss=0.1317, train_err=4.1144
+    Eval: 16_h1=0.1839, 16_l2=0.1009, 32_h1=0.3334, 32_l2=0.1255
 
-    {'train_err': 4.338394977152348, 'avg_loss': 0.13882863926887512, 'avg_lasso_loss': None, 'epoch_train_time': 1.5276497480000444}
+    {'train_err': 4.114910505712032, 'avg_loss': 0.13167713618278504, 'avg_lasso_loss': None, 'epoch_train_time': 1.4836488920000193}
 
 
 
@@ -567,7 +567,7 @@ demonstrates the fundamental resolution invariance of neural operators.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 35.983 seconds)
+   **Total running time of the script:** (0 minutes 33.003 seconds)
 
 
 .. _sphx_glr_download_auto_examples_models_plot_FNO_darcy.py:
