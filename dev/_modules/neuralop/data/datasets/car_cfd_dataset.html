@@ -130,6 +130,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.web_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">download_from_zenodo_record</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_project_root</span>
 
+
 <div class="viewcode-block" id="CarCFDDataset">
 <a class="viewcode-back" href="../../../../modules/generated/neuralop.data.datasets.car_cfd_dataset.CarCFDDataset.html#neuralop.data.datasets.car_cfd_dataset.CarCFDDataset">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CarCFDDataset</span><span class="p">(</span><span class="n">MeshDataModule</span><span class="p">):</span>
@@ -138,13 +139,13 @@
 <span class="sd">    and provides the air pressure at each centroid and vertex of the mesh when</span>
 <span class="sd">    the car is placed in a simulated wind tunnel with a recorded inlet velocity.</span>
 <span class="sd">    In our case, inputs are a signed distance function evaluated over a regular</span>
-<span class="sd">    3D grid of query points, as well as the inlet velocity. Outputs are pressure </span>
+<span class="sd">    3D grid of query points, as well as the inlet velocity. Outputs are pressure</span>
 <span class="sd">    values at each centroid of the triangle mesh.</span>
-<span class="sd">    </span>
-<span class="sd">        .. warning:: </span>
+
+<span class="sd">        .. warning::</span>
 
 <span class="sd">        ``CarCFDDataset`` inherits from ``MeshDataModule``, which requires the optional ``open3d`` dependency.</span>
-<span class="sd">        See :ref:`open3d_dependency` for more information. </span>
+<span class="sd">        See :ref:`open3d_dependency` for more information.</span>
 
 <span class="sd">    We also add additional manifest files to split the provided examples</span>
 <span class="sd">    into training and testing sets, as well as remove instances that are corrupted.</span>
@@ -160,11 +161,11 @@
 <span class="sd">    n_test : int, optional</span>
 <span class="sd">        Number of testing instances to load, by default 1</span>
 <span class="sd">    query_res : List[int], optional</span>
-<span class="sd">        Dimension-wise resolution of signed distance function </span>
+<span class="sd">        Dimension-wise resolution of signed distance function</span>
 <span class="sd">        (SDF) query cube, by default [32,32,32]</span>
 <span class="sd">    download : bool, optional</span>
 <span class="sd">        Whether to download data from Zenodo, by default True</span>
-<span class="sd">    </span>
+
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -175,47 +176,51 @@
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
-<span class="sd">    .. [1] : Umetani, N. and Bickel, B. (2018). &quot;Learning three-dimensional flow for interactive </span>
-<span class="sd">        aerodynamic design&quot;. ACM Transactions on Graphics, 2018. </span>
+<span class="sd">    .. [1] : Umetani, N. and Bickel, B. (2018). &quot;Learning three-dimensional flow for interactive</span>
+<span class="sd">        aerodynamic design&quot;. ACM Transactions on Graphics, 2018.</span>
 <span class="sd">        https://dl.acm.org/doi/10.1145/3197517.3201325.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
         <span class="n">root_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
         <span class="n">n_train</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
         <span class="n">n_test</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
-        <span class="n">query_res</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">32</span><span class="p">],</span>
-        <span class="n">download</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span>
-        <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the CarCFDDataset.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">query_res</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span>
+        <span class="n">download</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the CarCFDDataset.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">zenodo_record_id</span> <span class="o">=</span> <span class="s2">&quot;13936501&quot;</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">root_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">root_dir</span><span class="p">)</span>
-        
+
         <span class="k">if</span> <span class="ow">not</span> <span class="n">root_dir</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
             <span class="n">root_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        
+
         <span class="k">if</span> <span class="n">download</span><span class="p">:</span>
-            <span class="n">download_from_zenodo_record</span><span class="p">(</span><span class="n">record_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">zenodo_record_id</span><span class="p">,</span>
-                                        <span class="n">root</span><span class="o">=</span><span class="n">root_dir</span><span class="p">)</span>
+            <span class="n">download_from_zenodo_record</span><span class="p">(</span><span class="n">record_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">zenodo_record_id</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root_dir</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">root_dir</span><span class="o">=</span><span class="n">root_dir</span><span class="p">,</span>
-            <span class="n">item_dir_name</span><span class="o">=</span><span class="s1">&#39;data/&#39;</span><span class="p">,</span>
+            <span class="n">item_dir_name</span><span class="o">=</span><span class="s2">&quot;data/&quot;</span><span class="p">,</span>
             <span class="n">n_train</span><span class="o">=</span><span class="n">n_train</span><span class="p">,</span>
             <span class="n">n_test</span><span class="o">=</span><span class="n">n_test</span><span class="p">,</span>
             <span class="n">query_res</span><span class="o">=</span><span class="n">query_res</span><span class="p">,</span>
-            <span class="n">attributes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;press&#39;</span><span class="p">]</span>
+            <span class="n">attributes</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;press&quot;</span><span class="p">],</span>
         <span class="p">)</span>
 
         <span class="c1"># process data list to remove specific vertices from pressure to match number of vertices</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_data</span><span class="o">.</span><span class="n">data_list</span><span class="p">):</span>
-            <span class="n">press</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;press&#39;</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">train_data</span><span class="o">.</span><span class="n">data_list</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;press&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">press</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="mi">16</span><span class="p">],</span> <span class="n">press</span><span class="p">[:,</span><span class="mi">112</span><span class="p">:]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">press</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;press&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_data</span><span class="o">.</span><span class="n">data_list</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;press&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">press</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">16</span><span class="p">],</span> <span class="n">press</span><span class="p">[:,</span> <span class="mi">112</span><span class="p">:]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+            <span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_data</span><span class="o">.</span><span class="n">data_list</span><span class="p">):</span>
-            <span class="n">press</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;press&#39;</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">test_data</span><span class="o">.</span><span class="n">data_list</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;press&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">press</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="mi">16</span><span class="p">],</span> <span class="n">press</span><span class="p">[:,</span><span class="mi">112</span><span class="p">:]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+            <span class="n">press</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;press&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">test_data</span><span class="o">.</span><span class="n">data_list</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;press&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">press</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">16</span><span class="p">],</span> <span class="n">press</span><span class="p">[:,</span> <span class="mi">112</span><span class="p">:]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+            <span class="p">)</span></div>
+
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">load_mini_car</span><span class="p">():</span>

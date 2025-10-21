@@ -175,8 +175,18 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.data.transforms.data_processors.DefaultDataProcessor">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.data.transforms.data_processors.</span></span><span class="sig-name descname"><span class="pre">DefaultDataProcessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_normalizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_normalizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/data/transforms/data_processors.html#DefaultDataProcessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.data.transforms.data_processors.DefaultDataProcessor" title="Link to this definition"></a></dt>
-<dd><p>DefaultDataProcessor is a simple processor 
+<dd><p>DefaultDataProcessor is a simple processor
 to pre/post process data before training/inferencing a model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>in_normalizer</strong><span class="classifier">Transform, optional, default is None</span></dt><dd><p>normalizer (e.g. StandardScaler) for the input samples</p>
+</dd>
+<dt><strong>out_normalizer</strong><span class="classifier">Transform, optional, default is None</span></dt><dd><p>normalizer (e.g. StandardScaler) for the target and predicted samples</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <p class="rubric">Methods</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>

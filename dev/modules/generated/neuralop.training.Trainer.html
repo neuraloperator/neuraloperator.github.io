@@ -178,8 +178,8 @@
 <dd><p>A general Trainer class to train neural-operators on given datasets.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Our Trainer expects datasets to provide batches as key-value dictionaries, ex.: 
-<code class="docutils literal notranslate"><span class="pre">{'x':</span> <span class="pre">x,</span> <span class="pre">'y':</span> <span class="pre">y}</span></code>, that are keyed to the arguments expected by models and losses. 
+<p>Our Trainer expects datasets to provide batches as key-value dictionaries, ex.:
+<code class="docutils literal notranslate"><span class="pre">{'x':</span> <span class="pre">x,</span> <span class="pre">'y':</span> <span class="pre">y}</span></code>, that are keyed to the arguments expected by models and losses.
 For specifics and an example, check <code class="docutils literal notranslate"><span class="pre">neuralop.data.datasets.DarcyDataset</span></code>.</p>
 </div>
 <dl class="field-list simple">
@@ -272,7 +272,7 @@ then after getting an output from the model, that is transformed with data_proce
 <li><p>if ‘autoregressive’, autoregressively predicts output using last step’s</p></li>
 </ul>
 <p>output as input for a number of steps defined by the temporal dimension of the batch.
-This requires specially batched data with a data processor whose <code class="docutils literal notranslate"><span class="pre">.preprocess</span></code> and 
+This requires specially batched data with a data processor whose <code class="docutils literal notranslate"><span class="pre">.preprocess</span></code> and
 <code class="docutils literal notranslate"><span class="pre">.postprocess</span></code> both take <code class="docutils literal notranslate"><span class="pre">idx</span></code> as an argument.</p>
 </dd>
 <dt><strong>save_every: int, optional, default is None</strong></dt><dd><p>if provided, interval at which to save checkpoints</p>
@@ -284,9 +284,8 @@ Overrides save_every and saves on eval_interval</p>
 <dt><strong>save_dir: str | Path, default “./ckpt”</strong></dt><dd><p>directory at which to save training states if
 save_every and/or save_best is provided</p>
 </dd>
-<dt><strong>resume_from_dir: str | Path, default None</strong></dt><dd><p>if provided, resumes training state (model, 
-optimizer, regularizer, scheduler) from state saved in
-<cite>resume_from_dir</cite></p>
+<dt><strong>resume_from_dir: str | Path, default None</strong></dt><dd><p>if provided, resumes training state (model, optimizer, regularizer, scheduler) 
+from state saved in <cite>resume_from_dir</cite></p>
 </dd>
 <dt><strong>max_autoregressive_steps</strong><span class="classifier">int, default None</span></dt><dd><p>if provided, and a dataloader is to be evaluated in autoregressive mode,
 limits the number of autoregressive in each rollout to be performed.</p>
@@ -339,13 +338,13 @@ to perform evaluation on the whole dataset stored in each one.</p>
 <dd class="field-odd"><dl>
 <dt><strong>epoch</strong><span class="classifier">int</span></dt><dd><p>current training epoch</p>
 </dd>
-<dt><strong>eval_losses</strong><span class="classifier">dict[Loss]</span></dt><dd><p>keyed <code class="docutils literal notranslate"><span class="pre">loss_name:</span> <span class="pre">loss_obj</span></code> for each pair. Full set of 
+<dt><strong>eval_losses</strong><span class="classifier">dict[Loss]</span></dt><dd><p>keyed <code class="docutils literal notranslate"><span class="pre">loss_name:</span> <span class="pre">loss_obj</span></code> for each pair. Full set of
 losses to use in evaluation for each test loader.</p>
 </dd>
 <dt><strong>test_loaders</strong><span class="classifier">dict[DataLoader]</span></dt><dd><p>keyed <code class="docutils literal notranslate"><span class="pre">loader_name:</span> <span class="pre">loader</span></code> for each test loader.</p>
 </dd>
 <dt><strong>eval_modes</strong><span class="classifier">dict[str], optional</span></dt><dd><p>keyed <code class="docutils literal notranslate"><span class="pre">loader_name:</span> <span class="pre">eval_mode</span></code> for each test loader.
-* If <code class="docutils literal notranslate"><span class="pre">eval_modes.get(loader_name)</span></code> does not return a value, 
+* If <code class="docutils literal notranslate"><span class="pre">eval_modes.get(loader_name)</span></code> does not return a value,
 the evaluation is automatically performed in <code class="docutils literal notranslate"><span class="pre">single_step</span></code> mode.</p>
 </dd>
 <dt><strong>max_autoregressive_steps</strong><span class="classifier"><code class="docutils literal notranslate"><span class="pre">int</span></code>, optional</span></dt><dd><p>if provided, and one of the test loaders has <code class="docutils literal notranslate"><span class="pre">eval_mode</span> <span class="pre">==</span> <span class="pre">&quot;autoregressive&quot;</span></code>,
@@ -381,7 +380,7 @@ default None</p>
 <dt><strong>mode</strong><span class="classifier">Literal {‘single_step’, ‘autoregression’}</span></dt><dd><p>if ‘single_step’, performs standard evaluation
 if ‘autoregression’ loops through <cite>max_steps</cite> steps</p>
 </dd>
-<dt><strong>max_steps</strong><span class="classifier">int, optional</span></dt><dd><p>max number of steps for autoregressive rollout. 
+<dt><strong>max_steps</strong><span class="classifier">int, optional</span></dt><dd><p>max number of steps for autoregressive rollout.
 If None, runs the full rollout.</p>
 </dd>
 <dt><strong>Returns</strong></dt><dd></dd>
@@ -552,8 +551,8 @@ keyed f”{test_loader_name}_{metric}” for each test_loader</p>
 <dt class="sig sig-object py" id="neuralop.training.Trainer.checkpoint">
 <span class="sig-name descname"><span class="pre">checkpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/training/trainer.html#Trainer.checkpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.training.Trainer.checkpoint" title="Link to this definition"></a></dt>
 <dd><p>checkpoint saves current training state
-to a directory for resuming later. Only saves 
-training state on the first GPU. 
+to a directory for resuming later. Only saves
+training state on the first GPU.
 See neuralop.training.training_state</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

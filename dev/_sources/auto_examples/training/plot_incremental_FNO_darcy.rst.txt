@@ -24,6 +24,7 @@ A demo of the Incremental FNO meta-learning algorithm on our small Darcy-Flow da
 
 This tutorial demonstrates incremental meta-learning for neural operators, which allows
 the model to gradually increase its complexity during training. This approach can lead to:
+
 - Better convergence properties
 - More stable training dynamics
 - Improved generalization
@@ -32,7 +33,7 @@ the model to gradually increase its complexity during training. This approach ca
 The incremental approach starts with a small number of Fourier modes and gradually
 increases the model capacity as training progresses.
 
-.. GENERATED FROM PYTHON SOURCE LINES 18-25
+.. GENERATED FROM PYTHON SOURCE LINES 19-26
 
 .. raw:: html
 
@@ -42,7 +43,7 @@ Import dependencies
 -------------------
 We import the necessary modules for incremental FNO training
 
-.. GENERATED FROM PYTHON SOURCE LINES 25-37
+.. GENERATED FROM PYTHON SOURCE LINES 26-38
 
 .. code-block:: Python
 
@@ -65,7 +66,7 @@ We import the necessary modules for incremental FNO training
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 38-45
+.. GENERATED FROM PYTHON SOURCE LINES 39-46
 
 .. raw:: html
 
@@ -75,7 +76,7 @@ Loading the Darcy-Flow dataset
 ------------------------------
 We load the Darcy-Flow dataset with multiple resolutions for incremental training.
 
-.. GENERATED FROM PYTHON SOURCE LINES 45-56
+.. GENERATED FROM PYTHON SOURCE LINES 46-57
 
 .. code-block:: Python
 
@@ -104,7 +105,7 @@ We load the Darcy-Flow dataset with multiple resolutions for incremental trainin
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 57-66
+.. GENERATED FROM PYTHON SOURCE LINES 58-67
 
 .. raw:: html
 
@@ -116,7 +117,7 @@ We set up the incremental FNO model with a small starting number of modes.
 The model will gradually increase its capacity during training.
 We choose to update the modes using the incremental gradient explained algorithm
 
-.. GENERATED FROM PYTHON SOURCE LINES 66-72
+.. GENERATED FROM PYTHON SOURCE LINES 67-73
 
 .. code-block:: Python
 
@@ -133,7 +134,7 @@ We choose to update the modes using the incremental gradient explained algorithm
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 73-81
+.. GENERATED FROM PYTHON SOURCE LINES 74-82
 
 .. raw:: html
 
@@ -144,7 +145,7 @@ Creating the incremental FNO model
 We create an FNO model with a maximum number of modes that can be reached
 during incremental training. The model starts with fewer modes and grows.
 
-.. GENERATED FROM PYTHON SOURCE LINES 81-91
+.. GENERATED FROM PYTHON SOURCE LINES 82-92
 
 .. code-block:: Python
 
@@ -165,7 +166,7 @@ during incremental training. The model starts with fewer modes and grows.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 92-99
+.. GENERATED FROM PYTHON SOURCE LINES 93-100
 
 .. raw:: html
 
@@ -175,7 +176,7 @@ Setting up the optimizer and scheduler
 -------------------------------------
 We use AdamW optimizer with weight decay for regularization
 
-.. GENERATED FROM PYTHON SOURCE LINES 99-102
+.. GENERATED FROM PYTHON SOURCE LINES 100-103
 
 .. code-block:: Python
 
@@ -189,7 +190,7 @@ We use AdamW optimizer with weight decay for regularization
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 103-121
+.. GENERATED FROM PYTHON SOURCE LINES 104-122
 
 .. raw:: html
 
@@ -201,8 +202,8 @@ If one wants to use Incremental Resolution, one should use the IncrementalDataPr
 When passed to the trainer, the trainer will automatically update the resolution.
 
 Key parameters for incremental resolution:
-- incremental_resolution: bool, default is False
-  if True, increase the resolution of the input incrementally
+
+- incremental_resolution: bool, default is False. If True, increase the resolution of the input incrementally
 - incremental_res_gap: parameter for resolution updates
 - subsampling_rates: a list of resolutions to use
 - dataset_indices: a list of indices of the dataset to slice to regularize the input resolution
@@ -210,7 +211,7 @@ Key parameters for incremental resolution:
 - epoch_gap: the number of epochs to wait before increasing the resolution
 - verbose: if True, print the resolution and the number of modes
 
-.. GENERATED FROM PYTHON SOURCE LINES 121-134
+.. GENERATED FROM PYTHON SOURCE LINES 122-135
 
 .. code-block:: Python
 
@@ -242,7 +243,7 @@ Key parameters for incremental resolution:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 135-142
+.. GENERATED FROM PYTHON SOURCE LINES 136-143
 
 .. raw:: html
 
@@ -252,7 +253,7 @@ Setting up loss functions
 -------------------------
 We use H1 loss for training and L2 loss for evaluation
 
-.. GENERATED FROM PYTHON SOURCE LINES 142-147
+.. GENERATED FROM PYTHON SOURCE LINES 143-148
 
 .. code-block:: Python
 
@@ -268,7 +269,7 @@ We use H1 loss for training and L2 loss for evaluation
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 148-156
+.. GENERATED FROM PYTHON SOURCE LINES 149-157
 
 .. raw:: html
 
@@ -279,7 +280,7 @@ Displaying training configuration
 We display the model parameters, optimizer, scheduler, and loss functions
 to verify our incremental training setup
 
-.. GENERATED FROM PYTHON SOURCE LINES 156-165
+.. GENERATED FROM PYTHON SOURCE LINES 157-166
 
 .. code-block:: Python
 
@@ -316,20 +317,20 @@ to verify our incremental training setup
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f186ea809d0>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f2ab5e848a0>
 
     ### LOSSES ###
 
     ### INCREMENTAL RESOLUTION + GRADIENT EXPLAINED ###
 
-     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7f1848bb0a50>
+     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7f2a95a847d0>
 
-     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7f1848bb0a50>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f186ea80d60>}
-
-
+     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7f2a95a847d0>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f2ab5e84c30>}
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 166-189
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 167-189
 
 .. raw:: html
 
@@ -345,15 +346,14 @@ When using incremental resolution, keep in mind that the number of modes
 initially set should be strictly less than the resolution.
 
 Key parameters for incremental training:
-- incremental_grad: bool, default is False
-  if True, use the base incremental algorithm based on gradient variance
-  - incremental_grad_eps: threshold for gradient variance
-  - incremental_buffer: number of buffer modes to calculate gradient variance
-  - incremental_max_iter: initial number of iterations
-  - incremental_grad_max_iter: maximum iterations to accumulate gradients
-- incremental_loss_gap: bool, default is False
-  if True, use the incremental algorithm based on loss gap
-  - incremental_loss_eps: threshold for loss gap
+
+- incremental_grad: bool, default is False. If True, use the base incremental algorithm based on gradient variance
+- incremental_grad_eps: threshold for gradient variance
+- incremental_buffer: number of buffer modes to calculate gradient variance
+- incremental_max_iter: initial number of iterations
+- incremental_grad_max_iter: maximum iterations to accumulate gradients
+- incremental_loss_gap: bool, default is False. If True, use the incremental algorithm based on loss gap
+- incremental_loss_eps: threshold for loss gap
 
 .. GENERATED FROM PYTHON SOURCE LINES 189-206
 
@@ -422,63 +422,63 @@ We train the model using incremental meta-learning. The trainer will:
 
     Training on 100 samples
     Testing on [50, 50] samples         on resolutions [16, 32].
-    /opt/hostedtoolcache/Python/3.13.8/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:668: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+    /opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:668: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
       warnings.warn(warn_msg)
-    /opt/hostedtoolcache/Python/3.13.8/x64/lib/python3.13/site-packages/torch/nn/modules/module.py:1786: UserWarning: FNO.forward() received unexpected keyword arguments: ['y']. These arguments will be ignored.
+    /opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/torch/nn/modules/module.py:1786: UserWarning: FNO.forward() received unexpected keyword arguments: ['y']. These arguments will be ignored.
       return forward_call(*args, **kwargs)
     Raw outputs of shape torch.Size([16, 1, 8, 8])
-    /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:507: UserWarning: H1Loss.__call__() received unexpected keyword arguments: ['x']. These arguments will be ignored.
+    /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:536: UserWarning: H1Loss.__call__() received unexpected keyword arguments: ['x']. These arguments will be ignored.
       loss += training_loss(out, **sample)
-    [0] time=0.33, avg_loss=0.9243, train_err=13.2048
-    /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:557: UserWarning: LpLoss.__call__() received unexpected keyword arguments: ['x']. These arguments will be ignored.
+    [0] time=0.33, avg_loss=0.9337, train_err=13.3383
+    /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:581: UserWarning: LpLoss.__call__() received unexpected keyword arguments: ['x']. These arguments will be ignored.
       val_loss = loss(out, **sample)
-    Eval: 16_h1=0.9534, 16_l2=0.8806, 32_h1=1.1958, 32_l2=0.9061
-    [1] time=0.31, avg_loss=0.7827, train_err=11.1808
-    Eval: 16_h1=0.8564, 16_l2=0.6700, 32_h1=0.8839, 32_l2=0.6700
-    [2] time=0.31, avg_loss=0.8049, train_err=11.4980
-    /home/runner/work/neuraloperator/neuraloperator/neuralop/training/incremental.py:160: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+    Eval: 16_h1=0.8689, 16_l2=0.5609, 32_h1=0.9570, 32_l2=0.5683
+    [1] time=0.32, avg_loss=0.7799, train_err=11.1408
+    Eval: 16_h1=0.8087, 16_l2=0.5303, 32_h1=0.9438, 32_l2=0.5383
+    [2] time=0.31, avg_loss=0.6955, train_err=9.9356
+    /home/runner/work/neuraloperator/neuraloperator/neuralop/training/incremental.py:244: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
     Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
-      incremental_modes - self.incremental_buffer, torch.Tensor(strength_vector))
-    Eval: 16_h1=0.9575, 16_l2=0.7642, 32_h1=1.2390, 32_l2=0.7657
-    [3] time=0.31, avg_loss=0.7089, train_err=10.1266
-    Eval: 16_h1=0.7859, 16_l2=0.6639, 32_h1=0.9917, 32_l2=0.6876
-    [4] time=0.31, avg_loss=0.6143, train_err=8.7757
-    Eval: 16_h1=0.8288, 16_l2=0.4462, 32_h1=1.1422, 32_l2=0.4906
-    [5] time=0.31, avg_loss=0.5798, train_err=8.2822
-    Eval: 16_h1=1.0814, 16_l2=0.6752, 32_h1=1.3831, 32_l2=0.6993
-    [6] time=0.32, avg_loss=0.6898, train_err=9.8549
-    Eval: 16_h1=0.7418, 16_l2=0.4494, 32_h1=0.8665, 32_l2=0.4705
-    [7] time=0.32, avg_loss=0.5636, train_err=8.0517
-    Eval: 16_h1=0.6759, 16_l2=0.3575, 32_h1=0.9154, 32_l2=0.3875
-    [8] time=0.32, avg_loss=0.4536, train_err=6.4801
-    Eval: 16_h1=0.7670, 16_l2=0.4425, 32_h1=1.0364, 32_l2=0.4801
-    [9] time=0.32, avg_loss=0.5155, train_err=7.3637
-    Eval: 16_h1=0.6233, 16_l2=0.3333, 32_h1=0.9005, 32_l2=0.3704
+      torch.Tensor(strength_vector),
+    Eval: 16_h1=0.8347, 16_l2=0.4971, 32_h1=1.0166, 32_l2=0.5265
+    [3] time=0.31, avg_loss=0.6339, train_err=9.0559
+    Eval: 16_h1=0.7357, 16_l2=0.3799, 32_h1=0.9571, 32_l2=0.4044
+    [4] time=0.31, avg_loss=0.5737, train_err=8.1957
+    Eval: 16_h1=0.7194, 16_l2=0.4070, 32_h1=0.9378, 32_l2=0.4368
+    [5] time=0.31, avg_loss=0.5283, train_err=7.5473
+    Eval: 16_h1=0.9164, 16_l2=0.5005, 32_h1=1.0924, 32_l2=0.5057
+    [6] time=0.32, avg_loss=0.6077, train_err=8.6811
+    Eval: 16_h1=0.9188, 16_l2=0.4762, 32_h1=1.3260, 32_l2=0.5157
+    [7] time=0.31, avg_loss=0.5472, train_err=7.8174
+    Eval: 16_h1=0.7178, 16_l2=0.3638, 32_h1=0.9637, 32_l2=0.3876
+    [8] time=0.32, avg_loss=0.4793, train_err=6.8474
+    Eval: 16_h1=0.7776, 16_l2=0.4669, 32_h1=0.9444, 32_l2=0.4953
+    [9] time=0.32, avg_loss=0.5457, train_err=7.7952
+    Eval: 16_h1=0.5953, 16_l2=0.3246, 32_h1=0.8545, 32_l2=0.3536
     Incre Res Update: change index to 1
     Incre Res Update: change sub to 1
     Incre Res Update: change res to 16
-    [10] time=0.41, avg_loss=0.5669, train_err=8.0993
-    Eval: 16_h1=0.5299, 16_l2=0.3396, 32_h1=0.6401, 32_l2=0.3353
-    [11] time=0.39, avg_loss=0.4987, train_err=7.1238
-    Eval: 16_h1=0.5249, 16_l2=0.3015, 32_h1=0.6580, 32_l2=0.3139
-    [12] time=0.40, avg_loss=0.4790, train_err=6.8430
-    Eval: 16_h1=0.4389, 16_l2=0.2627, 32_h1=0.5762, 32_l2=0.2702
-    [13] time=0.39, avg_loss=0.4104, train_err=5.8630
-    Eval: 16_h1=0.4197, 16_l2=0.2524, 32_h1=0.5390, 32_l2=0.2599
-    [14] time=0.39, avg_loss=0.3792, train_err=5.4168
-    Eval: 16_h1=0.4713, 16_l2=0.2681, 32_h1=0.5947, 32_l2=0.2830
-    [15] time=0.39, avg_loss=0.4189, train_err=5.9842
-    Eval: 16_h1=0.3960, 16_l2=0.2346, 32_h1=0.5202, 32_l2=0.2376
-    [16] time=0.43, avg_loss=0.3652, train_err=5.2176
-    Eval: 16_h1=0.3709, 16_l2=0.2278, 32_h1=0.5125, 32_l2=0.2413
-    [17] time=0.40, avg_loss=0.3380, train_err=4.8286
-    Eval: 16_h1=0.4387, 16_l2=0.2623, 32_h1=0.5748, 32_l2=0.2667
-    [18] time=0.39, avg_loss=0.3902, train_err=5.5743
-    Eval: 16_h1=0.3759, 16_l2=0.2355, 32_h1=0.5155, 32_l2=0.2516
-    [19] time=0.40, avg_loss=0.3373, train_err=4.8183
-    Eval: 16_h1=0.3395, 16_l2=0.2149, 32_h1=0.4755, 32_l2=0.2298
+    [10] time=0.40, avg_loss=0.5476, train_err=7.8234
+    Eval: 16_h1=0.5269, 16_l2=0.3000, 32_h1=0.6934, 32_l2=0.3037
+    [11] time=0.39, avg_loss=0.4689, train_err=6.6992
+    Eval: 16_h1=0.6750, 16_l2=0.4328, 32_h1=0.8936, 32_l2=0.4517
+    [12] time=0.39, avg_loss=0.5529, train_err=7.8985
+    Eval: 16_h1=0.4840, 16_l2=0.3221, 32_h1=0.5677, 32_l2=0.3250
+    [13] time=0.38, avg_loss=0.4424, train_err=6.3205
+    Eval: 16_h1=0.4035, 16_l2=0.2458, 32_h1=0.5175, 32_l2=0.2570
+    [14] time=0.38, avg_loss=0.3829, train_err=5.4700
+    Eval: 16_h1=0.4722, 16_l2=0.2668, 32_h1=0.5495, 32_l2=0.2607
+    [15] time=0.39, avg_loss=0.4168, train_err=5.9539
+    Eval: 16_h1=0.3833, 16_l2=0.2270, 32_h1=0.5445, 32_l2=0.2466
+    [16] time=0.39, avg_loss=0.3602, train_err=5.1457
+    Eval: 16_h1=0.3740, 16_l2=0.2308, 32_h1=0.4667, 32_l2=0.2302
+    [17] time=0.39, avg_loss=0.3320, train_err=4.7436
+    Eval: 16_h1=0.4300, 16_l2=0.2664, 32_h1=0.6119, 32_l2=0.2869
+    [18] time=0.39, avg_loss=0.3859, train_err=5.5122
+    Eval: 16_h1=0.3710, 16_l2=0.2348, 32_h1=0.4790, 32_l2=0.2393
+    [19] time=0.39, avg_loss=0.3316, train_err=4.7376
+    Eval: 16_h1=0.3490, 16_l2=0.2211, 32_h1=0.4717, 32_l2=0.2343
 
-    {'train_err': 4.818341153008597, 'avg_loss': 0.3372838807106018, 'avg_lasso_loss': None, 'epoch_train_time': 0.39638585199998033, '16_h1': tensor(0.3395), '16_l2': tensor(0.2149), '32_h1': tensor(0.4755), '32_l2': tensor(0.2298)}
+    {'train_err': 4.737564938408988, 'avg_loss': 0.3316295456886291, 'avg_lasso_loss': None, 'epoch_train_time': 0.38991948099999263, '16_h1': tensor(0.3490), '16_l2': tensor(0.2211), '32_h1': tensor(0.4717), '32_l2': tensor(0.2343)}
 
 
 
@@ -561,7 +561,7 @@ In practice we would train a Neural Operator on one or multiple GPUs
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 13.278 seconds)
+   **Total running time of the script:** (0 minutes 14.296 seconds)
 
 
 .. _sphx_glr_download_auto_examples_training_plot_incremental_FNO_darcy.py:

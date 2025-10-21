@@ -449,7 +449,7 @@ training a machine learning model to minimize a loss function on a dataset:</p>
 <td><p>A general Trainer class to train neural-operators on given datasets.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/neuralop.training.IncrementalFNOTrainer.html#neuralop.training.IncrementalFNOTrainer" title="neuralop.training.IncrementalFNOTrainer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IncrementalFNOTrainer</span></code></a>(model, n_epochs[, ...])</p></td>
-<td><p>IncrementalFNOTrainer subclasses the Trainer  to implement specific logic for the Incremental-FNO as described in <span id="id18">[Rb82b7576506a-1]</span>.</p></td>
+<td><p>Trainer for the Incremental Fourier Neural Operator (iFNO)</p></td>
 </tr>
 </tbody>
 </table>
@@ -503,7 +503,7 @@ training a machine learning model to minimize a loss function on a dataset:</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.data.datasets.car_cfd_dataset.CarCFDDataset.html#neuralop.data.datasets.car_cfd_dataset.CarCFDDataset" title="neuralop.data.datasets.car_cfd_dataset.CarCFDDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CarCFDDataset</span></code></a>(root_dir[, n_train, n_test, ...])</p></td>
-<td><p>CarCFDDataset is a processed version of the dataset introduced in <a class="reference internal" href="generated/neuralop.data.datasets.car_cfd_dataset.CarCFDDataset.html#rfaac2f8b9be8-1" id="id19"><span>[Rfaac2f8b9be8-1]</span></a>, which encodes a triangular mesh over the surface of a 3D model car and provides the air pressure at each centroid and vertex of the mesh when the car is placed in a simulated wind tunnel with a recorded inlet velocity.</p></td>
+<td><p>CarCFDDataset is a processed version of the dataset introduced in <a class="reference internal" href="generated/neuralop.data.datasets.car_cfd_dataset.CarCFDDataset.html#rfaac2f8b9be8-1" id="id18"><span>[Rfaac2f8b9be8-1]</span></a>, which encodes a triangular mesh over the surface of a 3D model car and provides the air pressure at each centroid and vertex of the mesh when the car is placed in a simulated wind tunnel with a recorded inlet velocity.</p></td>
 </tr>
 </tbody>
 </table>
@@ -527,7 +527,7 @@ loss functions:</p>
 <span class="target" id="module-neuralop.data.transforms.data_processors"></span><table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.data.transforms.data_processors.DefaultDataProcessor.html#neuralop.data.transforms.data_processors.DefaultDataProcessor" title="neuralop.data.transforms.data_processors.DefaultDataProcessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DefaultDataProcessor</span></code></a>([in_normalizer, ...])</p></td>
-<td><p>DefaultDataProcessor is a simple processor  to pre/post process data before training/inferencing a model.</p></td>
+<td><p>DefaultDataProcessor is a simple processor to pre/post process data before training/inferencing a model.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/neuralop.data.transforms.data_processors.MGPatchingDataProcessor.html#neuralop.data.transforms.data_processors.MGPatchingDataProcessor" title="neuralop.data.transforms.data_processors.MGPatchingDataProcessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MGPatchingDataProcessor</span></code></a>(model, levels, ...)</p></td>
 <td><p></p></td>

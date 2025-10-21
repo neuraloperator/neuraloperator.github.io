@@ -201,10 +201,12 @@ and global features in the data, making it particularly effective for complex PD
 <div style="margin-top: 3em;"></div></section>
 <section id="loading-the-darcy-flow-dataset">
 <h2>Loading the Darcy-Flow dataset<a class="headerlink" href="#loading-the-darcy-flow-dataset" title="Link to this heading"></a></h2>
-<p>We load the Darcy-Flow dataset with multiple resolutions for training and testing.</p>
+<p>We load the Darcy-Flow dataset for training and testing.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">train_loader</span><span class="p">,</span> <span class="n">test_loaders</span><span class="p">,</span> <span class="n">data_processor</span> <span class="o">=</span> <span class="n">load_darcy_flow_small</span><span class="p">(</span>
-        <span class="n">n_train</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
-        <span class="n">test_resolutions</span><span class="o">=</span><span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span> <span class="n">n_tests</span><span class="o">=</span><span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span>
+        <span class="n">n_train</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+        <span class="n">n_tests</span><span class="o">=</span><span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span>
+        <span class="n">test_resolutions</span><span class="o">=</span><span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span>
         <span class="n">test_batch_sizes</span><span class="o">=</span><span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span>
 <span class="p">)</span>
 </pre></div>
@@ -216,25 +218,25 @@ Loading test db for resolution 32 with 50 samples
 <div style="margin-top: 3em;"></div></section>
 <section id="creating-the-u-no-model">
 <h2>Creating the U-NO model<a class="headerlink" href="#creating-the-u-no-model" title="Link to this heading"></a></h2>
-<p>We create a U-shaped Neural Operator with the following architecture:
-- in_channels: Number of input channels
-- out_channels: Number of output channels
-- hidden_channels: Width of the hidden layers
-- uno_out_channels: Channel dimensions for each layer in the U-Net structure
-- uno_n_modes: Fourier modes for each layer (decreasing then increasing)
-- uno_scalings: Scaling factors for each layer
-- domain_padding: Padding to handle boundary effects</p>
+<p>We create a U-shaped Neural Operator with the following architecture:</p>
+<ul class="simple">
+<li><p>in_channels: Number of input channels</p></li>
+<li><p>out_channels: Number of output channels</p></li>
+<li><p>hidden_channels: Width of the hidden layers</p></li>
+<li><p>uno_out_channels: Channel dimensions for each layer in the U-Net structure</p></li>
+<li><p>uno_n_modes: Fourier modes for each layer (decreasing then increasing)</p></li>
+<li><p>uno_scalings: Scaling factors for each layer</p></li>
+</ul>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">UNO</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">hidden_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
             <span class="n">projection_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
             <span class="n">uno_out_channels</span><span class="o">=</span><span class="p">[</span><span class="mi">32</span><span class="p">,</span><span class="mi">64</span><span class="p">,</span><span class="mi">64</span><span class="p">,</span><span class="mi">64</span><span class="p">,</span><span class="mi">32</span><span class="p">],</span>
-            <span class="n">uno_n_modes</span><span class="o">=</span><span class="p">[[</span><span class="mi">16</span><span class="p">,</span><span class="mi">16</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">],[</span><span class="mi">16</span><span class="p">,</span><span class="mi">16</span><span class="p">]],</span>
+            <span class="n">uno_n_modes</span><span class="o">=</span><span class="p">[[</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">]],</span>
             <span class="n">uno_scalings</span><span class="o">=</span><span class="p">[[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">],[</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]],</span>
             <span class="n">horizontal_skips_map</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">channel_mlp_skip</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
-            <span class="n">n_layers</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
-            <span class="n">domain_padding</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+            <span class="n">n_layers</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
@@ -255,16 +257,14 @@ channel_mlp_skip=&#39;linear&#39;
 fno_skip=&#39;linear&#39;
 channel_mlp_skip=&#39;linear&#39;
 
-Our model has 2700097 parameters.
+Our model has 1405761 parameters.
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
 <section id="creating-the-optimizer-and-scheduler">
 <h2>Creating the optimizer and scheduler<a class="headerlink" href="#creating-the-optimizer-and-scheduler" title="Link to this heading"></a></h2>
 <p>We use AdamW optimizer with weight decay for regularization</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">AdamW</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span>
-                                <span class="n">lr</span><span class="o">=</span><span class="mf">8e-3</span><span class="p">,</span>
-                                <span class="n">weight_decay</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">AdamW</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">8e-3</span><span class="p">,</span> <span class="n">weight_decay</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">)</span>
 <span class="n">scheduler</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">lr_scheduler</span><span class="o">.</span><span class="n">CosineAnnealingLR</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">T_max</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -295,7 +295,6 @@ Our model has 2700097 parameters.
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>### MODEL ###
  UNO(
   (positional_embedding): GridEmbeddingND()
-  (domain_padding): DomainPadding()
   (lifting): ChannelMLP(
     (fcs): ModuleList(
       (0): Conv1d(3, 256, kernel_size=(1,), stride=(1,))
@@ -306,7 +305,7 @@ Our model has 2700097 parameters.
     (0): FNOBlocks(
       (convs): ModuleList(
         (0): SpectralConv(
-          (weight): DenseTensor(shape=torch.Size([64, 32, 16, 9]), rank=None)
+          (weight): DenseTensor(shape=torch.Size([64, 32, 8, 5]), rank=None)
         )
       )
       (fno_skips): ModuleList(
@@ -356,7 +355,7 @@ Our model has 2700097 parameters.
     (2): FNOBlocks(
       (convs): ModuleList(
         (0): SpectralConv(
-          (weight): DenseTensor(shape=torch.Size([64, 64, 8, 5]), rank=None)
+          (weight): DenseTensor(shape=torch.Size([64, 64, 4, 3]), rank=None)
         )
       )
       (fno_skips): ModuleList(
@@ -406,7 +405,7 @@ Our model has 2700097 parameters.
     (4): FNOBlocks(
       (convs): ModuleList(
         (0): SpectralConv(
-          (weight): DenseTensor(shape=torch.Size([96, 32, 16, 9]), rank=None)
+          (weight): DenseTensor(shape=torch.Size([96, 32, 8, 5]), rank=None)
         )
       )
       (fno_skips): ModuleList(
@@ -457,13 +456,13 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f185829b4d0&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f2a9f89e490&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f1853fce120&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f2a9f346510&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f1853fce120&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f1858817890&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f2a9f346510&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f2a9f89d6d0&gt;}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -471,23 +470,25 @@ Parameter Group 0
 <h2>Creating the trainer<a class="headerlink" href="#creating-the-trainer" title="Link to this heading"></a></h2>
 <p>We create a Trainer object that handles the training loop for the U-NO</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-                   <span class="n">n_epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                  <span class="n">n_epochs</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
                   <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
                   <span class="n">data_processor</span><span class="o">=</span><span class="n">data_processor</span><span class="p">,</span>
                   <span class="n">wandb_log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>        <span class="c1"># Disable Weights &amp; Biases logging</span>
-                  <span class="n">eval_interval</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>       <span class="c1"># Evaluate every 3 epochs</span>
+                  <span class="n">eval_interval</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>        <span class="c1"># Evaluate every 5 epochs</span>
                   <span class="n">use_distributed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># Single GPU/CPU training</span>
-                  <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>          <span class="c1"># Print training progress</span>
+                  <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>           <span class="c1"># Print training progress</span>
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
 <section id="training-the-u-no-model">
 <h2>Training the U-NO model<a class="headerlink" href="#training-the-u-no-model" title="Link to this heading"></a></h2>
-<p>We train the model on our Darcy-Flow dataset. The trainer will:
-1. Run the forward pass through the U-NO
-2. Compute the H1 loss
-3. Backpropagate and update weights
-4. Evaluate on test data every 3 epochs</p>
+<p>We train the model on our Darcy-Flow dataset. The trainer will:</p>
+<ol class="arabic simple">
+<li><p>Run the forward pass through the U-NO</p></li>
+<li><p>Compute the H1 loss</p></li>
+<li><p>Backpropagate and update weights</p></li>
+<li><p>Evaluate on test data every 5 epochs</p></li>
+</ol>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_loader</span><span class="o">=</span><span class="n">train_loader</span><span class="p">,</span>
               <span class="n">test_loaders</span><span class="o">=</span><span class="n">test_loaders</span><span class="p">,</span>
               <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
@@ -499,31 +500,29 @@ Parameter Group 0
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Training on 1000 samples
 Testing on [50, 50] samples         on resolutions [16, 32].
-/opt/hostedtoolcache/Python/3.13.8/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:668: UserWarning: &#39;pin_memory&#39; argument is set as true but no accelerator is found, then device pinned memory won&#39;t be used.
+/opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:668: UserWarning: &#39;pin_memory&#39; argument is set as true but no accelerator is found, then device pinned memory won&#39;t be used.
   warnings.warn(warn_msg)
-/opt/hostedtoolcache/Python/3.13.8/x64/lib/python3.13/site-packages/torch/nn/modules/module.py:1786: UserWarning: UNO.forward() received unexpected keyword arguments: [&#39;y&#39;]. These arguments will be ignored.
+/opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/torch/nn/modules/module.py:1786: UserWarning: UNO.forward() received unexpected keyword arguments: [&#39;y&#39;]. These arguments will be ignored.
   return forward_call(*args, **kwargs)
 Raw outputs of shape torch.Size([32, 1, 16, 16])
-/home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:507: UserWarning: H1Loss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
+/home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:536: UserWarning: H1Loss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
   loss += training_loss(out, **sample)
-[0] time=8.52, avg_loss=0.7192, train_err=22.4742
-/home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:557: UserWarning: LpLoss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
+[0] time=5.00, avg_loss=0.5837, train_err=18.2401
+/home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:581: UserWarning: LpLoss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
   val_loss = loss(out, **sample)
-Eval: 16_h1=0.4670, 16_l2=0.3055, 32_h1=0.7125, 32_l2=0.3924
-[3] time=8.29, avg_loss=0.2413, train_err=7.5420
-Eval: 16_h1=0.2711, 16_l2=0.1796, 32_h1=0.5284, 32_l2=0.3361
-[6] time=8.34, avg_loss=0.2083, train_err=6.5092
-Eval: 16_h1=0.3397, 16_l2=0.2732, 32_h1=0.5667, 32_l2=0.4138
-[9] time=8.21, avg_loss=0.1860, train_err=5.8128
-Eval: 16_h1=0.2224, 16_l2=0.1386, 32_h1=0.5346, 32_l2=0.3237
-[12] time=8.23, avg_loss=0.2075, train_err=6.4833
-Eval: 16_h1=0.2227, 16_l2=0.1353, 32_h1=0.4988, 32_l2=0.2996
-[15] time=8.30, avg_loss=0.1757, train_err=5.4895
-Eval: 16_h1=0.2521, 16_l2=0.1504, 32_h1=0.4995, 32_l2=0.3142
-[18] time=8.31, avg_loss=0.1341, train_err=4.1897
-Eval: 16_h1=0.2161, 16_l2=0.1299, 32_h1=0.5307, 32_l2=0.3298
+Eval: 16_h1=0.3871, 16_l2=0.2634, 32_h1=0.5145, 32_l2=0.2698
+[5] time=4.70, avg_loss=0.2300, train_err=7.1890
+Eval: 16_h1=0.2180, 16_l2=0.1410, 32_h1=0.4209, 32_l2=0.1763
+[10] time=4.72, avg_loss=0.2002, train_err=6.2565
+Eval: 16_h1=0.2410, 16_l2=0.1499, 32_h1=0.4443, 32_l2=0.1878
+[15] time=4.70, avg_loss=0.1635, train_err=5.1094
+Eval: 16_h1=0.2224, 16_l2=0.1339, 32_h1=0.4099, 32_l2=0.1710
+[20] time=4.72, avg_loss=0.1240, train_err=3.8741
+Eval: 16_h1=0.2167, 16_l2=0.1193, 32_h1=0.3913, 32_l2=0.1442
+[25] time=4.74, avg_loss=0.0958, train_err=2.9935
+Eval: 16_h1=0.2021, 16_l2=0.1118, 32_h1=0.3922, 32_l2=0.1481
 
-{&#39;train_err&#39;: 4.030218005180359, &#39;avg_loss&#39;: 0.1289669761657715, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 8.31089495499998}
+{&#39;train_err&#39;: 2.4195903670042753, &#39;avg_loss&#39;: 0.0774268917441368, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 4.653759402999981}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -578,7 +577,7 @@ ii) can be trained quickly on CPU</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_UNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_UNO_darcy_001.png" alt="U-NO predictions on 32x32 Darcy-Flow data, Input x, Ground-truth y, U-NO prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 52.550 seconds)</p>
+<img src="../../_images/sphx_glr_plot_UNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_UNO_darcy_001.png" alt="U-NO predictions on 32x32 Darcy-Flow data, Input x, Ground-truth y, U-NO prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 26.779 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-models-plot-uno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/fee630be9801a5d2d76c0b9e3091063c/plot_UNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_UNO_darcy.ipynb</span></code></a></p>

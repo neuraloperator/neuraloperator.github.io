@@ -168,13 +168,13 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">wrap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
         <span class="k">return</span> <span class="bp">self</span>
-    
+
     <span class="c1"># default train and eval methods</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
-    
+
     <span class="k">def</span><span class="w"> </span><span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -184,22 +184,25 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="k">pass</span>
 
+
 <div class="viewcode-block" id="DefaultDataProcessor">
 <a class="viewcode-back" href="../../../../modules/generated/neuralop.data.transforms.data_processors.DefaultDataProcessor.html#neuralop.data.transforms.data_processors.DefaultDataProcessor">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">DefaultDataProcessor</span><span class="p">(</span><span class="n">DataProcessor</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;DefaultDataProcessor is a simple processor </span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;DefaultDataProcessor is a simple processor</span>
 <span class="sd">    to pre/post process data before training/inferencing a model.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    in_normalizer : Transform, optional, default is None</span>
+<span class="sd">        normalizer (e.g. StandardScaler) for the input samples</span>
+<span class="sd">    out_normalizer : Transform, optional, default is None</span>
+<span class="sd">        normalizer (e.g. StandardScaler) for the target and predicted samples</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">in_normalizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">out_normalizer</span><span class="o">=</span><span class="kc">None</span>
-    <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        in_normalizer : Transform, optional, default is None</span>
-<span class="sd">            normalizer (e.g. StandardScaler) for the input samples</span>
-<span class="sd">        out_normalizer : Transform, optional, default is None</span>
-<span class="sd">            normalizer (e.g. StandardScaler) for the target and predicted samples</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_normalizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">out_normalizer</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the DefaultDataProcessor.</span>
+<span class="sd">        </span>
+<span class="sd">        See class docstring for detailed parameter descriptions.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">in_normalizer</span> <span class="o">=</span> <span class="n">in_normalizer</span>
@@ -299,16 +302,23 @@
         <span class="k">return</span> <span class="n">output</span><span class="p">,</span> <span class="n">data_dict</span></div>
 </div>
 
-        
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">IncrementalDataProcessor</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
-                 <span class="n">in_normalizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">out_normalizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span> <span class="o">=</span> <span class="s1">&#39;cpu&#39;</span><span class="p">,</span>
-                 <span class="n">subsampling_rates</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dataset_resolution</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">dataset_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="n">epoch_gap</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">in_normalizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">out_normalizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">device</span><span class="o">=</span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
+        <span class="n">subsampling_rates</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="n">dataset_resolution</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+        <span class="n">dataset_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+        <span class="n">epoch_gap</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;An incremental processor to pre/post process data before training/inferencing a model</span>
 <span class="sd">        In particular this processor first regularizes the input resolution based on the sub_list and dataset_indices</span>
-<span class="sd">        in the spatial domain based on a fixed number of epochs. We incrementally increase the resolution like done </span>
+<span class="sd">        in the spatial domain based on a fixed number of epochs. We incrementally increase the resolution like done</span>
 <span class="sd">        in curriculum learning to train the model. This is useful for training models on large datasets with high</span>
 <span class="sd">        resolution data.</span>
 
@@ -341,15 +351,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">epoch_gap</span> <span class="o">=</span> <span class="n">epoch_gap</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">epoch</span> <span class="o">=</span> <span class="mi">0</span>
-        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">current_index</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_logged_epoch</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_sub</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_to_sub_from_table</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_index</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">current_res</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_resolution</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sub</span><span class="p">)</span>   
-        
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Original Incre Res: change index to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">current_index</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Original Incre Res: change sub to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">current_sub</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Original Incre Res: change res to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">current_res</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_res</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_resolution</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sub</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Original Incre Res: change index to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">current_index</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Original Incre Res: change sub to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">current_sub</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Original Incre Res: change res to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">current_res</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_normalizer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -358,20 +368,23 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">out_normalizer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_normalizer</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
         <span class="k">return</span> <span class="bp">self</span>
-    
+
     <span class="k">def</span><span class="w"> </span><span class="nf">epoch_wise_res_increase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">):</span>
         <span class="c1"># Update the current_sub and current_res values based on the epoch</span>
-        <span class="k">if</span> <span class="n">epoch</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">epoch_gap</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">epoch</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">current_logged_epoch</span> <span class="o">!=</span> <span class="n">epoch</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">epoch</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">epoch_gap</span> <span class="o">==</span> <span class="mi">0</span>
+            <span class="ow">and</span> <span class="n">epoch</span> <span class="o">!=</span> <span class="mi">0</span>
+            <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_logged_epoch</span> <span class="o">!=</span> <span class="n">epoch</span><span class="p">)</span>
+        <span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">current_index</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">current_sub</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_to_sub_from_table</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_index</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">current_res</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_resolution</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_sub</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">current_logged_epoch</span> <span class="o">=</span> <span class="n">epoch</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Incre Res Update: change index to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">current_index</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Incre Res Update: change sub to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">current_sub</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Incre Res Update: change res to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">current_res</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Incre Res Update: change index to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">current_index</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Incre Res Update: change sub to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">current_sub</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Incre Res Update: change res to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">current_res</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">index_to_sub_from_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="c1"># Get the sub value from the sub_list based on the index</span>
@@ -387,43 +400,44 @@
             <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">index_select</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="n">idx</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">indexes</span><span class="p">)</span>
             <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">index_select</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="n">idx</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">indexes</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
-    
+
     <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">epoch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">epoch_wise_res_increase</span><span class="p">(</span><span class="n">epoch</span><span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">regularize_input_res</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-        
+
     <span class="k">def</span><span class="w"> </span><span class="nf">preprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dict</span><span class="p">,</span> <span class="n">batched</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_normalizer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_normalizer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_normalizer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">:</span>
             <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_normalizer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-        
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">training</span><span class="p">:</span>
             <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">epoch</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">epoch</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
-        
-        <span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
-        <span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
 
-        <span class="k">return</span> <span class="n">data_dict</span> 
+        <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
+
+        <span class="k">return</span> <span class="n">data_dict</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">postprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">data_dict</span><span class="p">):</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_normalizer</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">:</span>
             <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_normalizer</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
             <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_normalizer</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-        <span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
         <span class="k">return</span> <span class="n">output</span><span class="p">,</span> <span class="n">data_dict</span>
-    
+
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">data_dict</span><span class="p">):</span>
         <span class="n">data_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">data_dict</span><span class="p">)</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">])</span>
         <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">postprocess</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">output</span><span class="p">,</span> <span class="n">data_dict</span>
-    
+
+
 <div class="viewcode-block" id="MGPatchingDataProcessor">
 <a class="viewcode-back" href="../../../../modules/generated/neuralop.data.transforms.data_processors.MGPatchingDataProcessor.html#neuralop.data.transforms.data_processors.MGPatchingDataProcessor">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">MGPatchingDataProcessor</span><span class="p">(</span><span class="n">DataProcessor</span><span class="p">):</span>
@@ -434,7 +448,7 @@
         <span class="n">padding_fraction</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">stitching</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
-        <span class="n">use_distributed</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">use_distributed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">in_normalizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">out_normalizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
@@ -451,7 +465,7 @@
 <span class="sd">        padding_fraction : float</span>
 <span class="sd">            fraction by which to pad inputs in multigrid-patching</span>
 <span class="sd">        stitching : bool</span>
-<span class="sd">            whether to stitch back the output from the multi-grid patches </span>
+<span class="sd">            whether to stitch back the output from the multi-grid patches</span>
 <span class="sd">        in_normalizer : neuralop.datasets.transforms.Transform, optional</span>
 <span class="sd">            OutputEncoder to decode model inputs, by default None</span>
 <span class="sd">        in_normalizer : neuralop.datasets.transforms.Transform, optional</span>

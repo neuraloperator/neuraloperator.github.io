@@ -179,8 +179,42 @@
 Input is a coefficient function and outputs describe flow.</p>
 <p>Data source: <a class="reference external" href="https://zenodo.org/records/12784353">https://zenodo.org/records/12784353</a></p>
 <dl class="field-list simple">
-<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
+<dt><strong>root_dir</strong><span class="classifier">Union[Path, str]</span></dt><dd><p>root at which to download data files</p>
+</dd>
+<dt><strong>n_train</strong><span class="classifier">int</span></dt><dd><p>number of train instances</p>
+</dd>
+<dt><strong>n_tests</strong><span class="classifier">List[int]</span></dt><dd><p>number of test instances per test dataset</p>
+</dd>
+<dt><strong>batch_size</strong><span class="classifier">int</span></dt><dd><p>batch size of training set</p>
+</dd>
+<dt><strong>test_batch_sizes</strong><span class="classifier">List[int]</span></dt><dd><p>batch size of test sets</p>
+</dd>
+<dt><strong>train_resolution</strong><span class="classifier">int</span></dt><dd><p>resolution of data for training set</p>
+</dd>
+<dt><strong>test_resolutions</strong><span class="classifier">List[int], optional</span></dt><dd><p>resolution of data for testing sets, by default [16,32]</p>
+</dd>
+<dt><strong>encode_input</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to normalize inputs in provided DataProcessor,
+by default False</p>
+</dd>
+<dt><strong>encode_output</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to normalize outputs in provided DataProcessor,
+by default True</p>
+</dd>
+<dt><strong>encoding</strong><span class="classifier">str, optional</span></dt><dd><p>parameter for input/output normalization. Whether
+to normalize by channel (“channel-wise”) or
+by pixel (“pixel-wise”), default “channel-wise”</p>
+</dd>
+<dt><strong>channel_dim</strong><span class="classifier">int, optional</span></dt><dd><p>dimension of saved tensors to index data channels, by default 1</p>
+</dd>
+<dt><strong>subsampling_rate</strong><span class="classifier">int or List[int], optional</span></dt><dd><p>rate at which to subsample each input dimension, by default None</p>
+</dd>
+<dt><strong>download</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to download data if not present, by default True</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
 <dt><strong>train_db: torch.utils.data.Dataset of training examples</strong></dt><dd></dd>
 <dt><strong>test_db:  “”                       of test examples</strong></dt><dd></dd>
 <dt><strong>data_processor: neuralop.data.transforms.DataProcessor to process data examples</strong></dt><dd><p>optional, default is None</p>

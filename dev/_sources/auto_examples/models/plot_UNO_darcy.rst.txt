@@ -71,16 +71,18 @@ We import the necessary modules for working with the UNO model
 
 Loading the Darcy-Flow dataset
 ------------------------------
-We load the Darcy-Flow dataset with multiple resolutions for training and testing.
+We load the Darcy-Flow dataset for training and testing.
 
-.. GENERATED FROM PYTHON SOURCE LINES 44-51
+.. GENERATED FROM PYTHON SOURCE LINES 44-53
 
 .. code-block:: Python
 
 
     train_loader, test_loaders, data_processor = load_darcy_flow_small(
-            n_train=1000, batch_size=32, 
-            test_resolutions=[16, 32], n_tests=[100, 50],
+            n_train=1000, 
+            batch_size=32, 
+            n_tests=[100, 50],
+            test_resolutions=[16, 32], 
             test_batch_sizes=[32, 32],
     )
 
@@ -98,7 +100,7 @@ We load the Darcy-Flow dataset with multiple resolutions for training and testin
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 52-66
+.. GENERATED FROM PYTHON SOURCE LINES 54-68
 
 .. raw:: html
 
@@ -107,15 +109,15 @@ We load the Darcy-Flow dataset with multiple resolutions for training and testin
 Creating the U-NO model
 ------------------------
 We create a U-shaped Neural Operator with the following architecture:
+
 - in_channels: Number of input channels 
 - out_channels: Number of output channels 
 - hidden_channels: Width of the hidden layers
 - uno_out_channels: Channel dimensions for each layer in the U-Net structure
 - uno_n_modes: Fourier modes for each layer (decreasing then increasing)
 - uno_scalings: Scaling factors for each layer
-- domain_padding: Padding to handle boundary effects
 
-.. GENERATED FROM PYTHON SOURCE LINES 66-87
+.. GENERATED FROM PYTHON SOURCE LINES 68-88
 
 .. code-block:: Python
 
@@ -125,12 +127,11 @@ We create a U-shaped Neural Operator with the following architecture:
                 hidden_channels=64, 
                 projection_channels=64,
                 uno_out_channels=[32,64,64,64,32],
-                uno_n_modes=[[16,16],[8,8],[8,8],[8,8],[16,16]],
+                uno_n_modes=[[8,8],[8,8],[4,4],[8,8],[8,8]],
                 uno_scalings=[[1.0,1.0],[0.5,0.5],[1,1],[2,2],[1,1]],
                 horizontal_skips_map=None,
                 channel_mlp_skip="linear",
-                n_layers = 5,
-                domain_padding=0.2)
+                n_layers = 5)
 
     model = model.to(device)
 
@@ -159,12 +160,12 @@ We create a U-shaped Neural Operator with the following architecture:
     fno_skip='linear'
     channel_mlp_skip='linear'
 
-    Our model has 2700097 parameters.
+    Our model has 1405761 parameters.
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 88-95
+.. GENERATED FROM PYTHON SOURCE LINES 89-96
 
 .. raw:: html
 
@@ -174,13 +175,11 @@ Creating the optimizer and scheduler
 ------------------------------------
 We use AdamW optimizer with weight decay for regularization
 
-.. GENERATED FROM PYTHON SOURCE LINES 95-100
+.. GENERATED FROM PYTHON SOURCE LINES 96-99
 
 .. code-block:: Python
 
-    optimizer = AdamW(model.parameters(), 
-                                    lr=8e-3, 
-                                    weight_decay=1e-4)
+    optimizer = AdamW(model.parameters(), lr=8e-3, weight_decay=1e-4)
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=30)
 
 
@@ -190,7 +189,7 @@ We use AdamW optimizer with weight decay for regularization
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 101-108
+.. GENERATED FROM PYTHON SOURCE LINES 100-107
 
 .. raw:: html
 
@@ -200,7 +199,7 @@ Setting up loss functions
 -------------------------
 We use H1 loss for training and L2 loss for evaluation
 
-.. GENERATED FROM PYTHON SOURCE LINES 108-115
+.. GENERATED FROM PYTHON SOURCE LINES 107-114
 
 .. code-block:: Python
 
@@ -218,7 +217,7 @@ We use H1 loss for training and L2 loss for evaluation
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 116-123
+.. GENERATED FROM PYTHON SOURCE LINES 115-122
 
 .. raw:: html
 
@@ -228,7 +227,7 @@ Displaying configuration
 ------------------------
 We print the model architecture, optimizer, scheduler, and loss functions
 
-.. GENERATED FROM PYTHON SOURCE LINES 123-133
+.. GENERATED FROM PYTHON SOURCE LINES 122-132
 
 .. code-block:: Python
 
@@ -254,7 +253,6 @@ We print the model architecture, optimizer, scheduler, and loss functions
     ### MODEL ###
      UNO(
       (positional_embedding): GridEmbeddingND()
-      (domain_padding): DomainPadding()
       (lifting): ChannelMLP(
         (fcs): ModuleList(
           (0): Conv1d(3, 256, kernel_size=(1,), stride=(1,))
@@ -265,7 +263,7 @@ We print the model architecture, optimizer, scheduler, and loss functions
         (0): FNOBlocks(
           (convs): ModuleList(
             (0): SpectralConv(
-              (weight): DenseTensor(shape=torch.Size([64, 32, 16, 9]), rank=None)
+              (weight): DenseTensor(shape=torch.Size([64, 32, 8, 5]), rank=None)
             )
           )
           (fno_skips): ModuleList(
@@ -315,7 +313,7 @@ We print the model architecture, optimizer, scheduler, and loss functions
         (2): FNOBlocks(
           (convs): ModuleList(
             (0): SpectralConv(
-              (weight): DenseTensor(shape=torch.Size([64, 64, 8, 5]), rank=None)
+              (weight): DenseTensor(shape=torch.Size([64, 64, 4, 3]), rank=None)
             )
           )
           (fno_skips): ModuleList(
@@ -365,7 +363,7 @@ We print the model architecture, optimizer, scheduler, and loss functions
         (4): FNOBlocks(
           (convs): ModuleList(
             (0): SpectralConv(
-              (weight): DenseTensor(shape=torch.Size([96, 32, 16, 9]), rank=None)
+              (weight): DenseTensor(shape=torch.Size([96, 32, 8, 5]), rank=None)
             )
           )
           (fno_skips): ModuleList(
@@ -416,18 +414,18 @@ We print the model architecture, optimizer, scheduler, and loss functions
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f185829b4d0>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f2a9f89e490>
 
     ### LOSSES ###
 
-     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7f1853fce120>
+     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7f2a9f346510>
 
-     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7f1853fce120>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f1858817890>}
-
-
+     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7f2a9f346510>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f2a9f89d6d0>}
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 134-141
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 133-140
 
 .. raw:: html
 
@@ -437,18 +435,18 @@ Creating the trainer
 ---------------------
 We create a Trainer object that handles the training loop for the U-NO
 
-.. GENERATED FROM PYTHON SOURCE LINES 141-150
+.. GENERATED FROM PYTHON SOURCE LINES 140-149
 
 .. code-block:: Python
 
     trainer = Trainer(model=model,
-                       n_epochs=20,
+                      n_epochs=30,
                       device=device,
                       data_processor=data_processor,
                       wandb_log=False,        # Disable Weights & Biases logging
-                      eval_interval=3,       # Evaluate every 3 epochs
+                      eval_interval=5,        # Evaluate every 5 epochs
                       use_distributed=False,  # Single GPU/CPU training
-                      verbose=True)          # Print training progress
+                      verbose=True)           # Print training progress
 
 
 
@@ -457,7 +455,7 @@ We create a Trainer object that handles the training loop for the U-NO
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 151-162
+.. GENERATED FROM PYTHON SOURCE LINES 150-162
 
 .. raw:: html
 
@@ -466,14 +464,16 @@ We create a Trainer object that handles the training loop for the U-NO
 Training the U-NO model
 ------------------------
 We train the model on our Darcy-Flow dataset. The trainer will:
+
 1. Run the forward pass through the U-NO
 2. Compute the H1 loss
 3. Backpropagate and update weights
-4. Evaluate on test data every 3 epochs
+4. Evaluate on test data every 5 epochs
 
-.. GENERATED FROM PYTHON SOURCE LINES 162-172
+.. GENERATED FROM PYTHON SOURCE LINES 162-173
 
 .. code-block:: Python
+
 
 
     trainer.train(train_loader=train_loader,
@@ -495,35 +495,33 @@ We train the model on our Darcy-Flow dataset. The trainer will:
 
     Training on 1000 samples
     Testing on [50, 50] samples         on resolutions [16, 32].
-    /opt/hostedtoolcache/Python/3.13.8/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:668: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+    /opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:668: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
       warnings.warn(warn_msg)
-    /opt/hostedtoolcache/Python/3.13.8/x64/lib/python3.13/site-packages/torch/nn/modules/module.py:1786: UserWarning: UNO.forward() received unexpected keyword arguments: ['y']. These arguments will be ignored.
+    /opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/torch/nn/modules/module.py:1786: UserWarning: UNO.forward() received unexpected keyword arguments: ['y']. These arguments will be ignored.
       return forward_call(*args, **kwargs)
     Raw outputs of shape torch.Size([32, 1, 16, 16])
-    /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:507: UserWarning: H1Loss.__call__() received unexpected keyword arguments: ['x']. These arguments will be ignored.
+    /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:536: UserWarning: H1Loss.__call__() received unexpected keyword arguments: ['x']. These arguments will be ignored.
       loss += training_loss(out, **sample)
-    [0] time=8.52, avg_loss=0.7192, train_err=22.4742
-    /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:557: UserWarning: LpLoss.__call__() received unexpected keyword arguments: ['x']. These arguments will be ignored.
+    [0] time=5.00, avg_loss=0.5837, train_err=18.2401
+    /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:581: UserWarning: LpLoss.__call__() received unexpected keyword arguments: ['x']. These arguments will be ignored.
       val_loss = loss(out, **sample)
-    Eval: 16_h1=0.4670, 16_l2=0.3055, 32_h1=0.7125, 32_l2=0.3924
-    [3] time=8.29, avg_loss=0.2413, train_err=7.5420
-    Eval: 16_h1=0.2711, 16_l2=0.1796, 32_h1=0.5284, 32_l2=0.3361
-    [6] time=8.34, avg_loss=0.2083, train_err=6.5092
-    Eval: 16_h1=0.3397, 16_l2=0.2732, 32_h1=0.5667, 32_l2=0.4138
-    [9] time=8.21, avg_loss=0.1860, train_err=5.8128
-    Eval: 16_h1=0.2224, 16_l2=0.1386, 32_h1=0.5346, 32_l2=0.3237
-    [12] time=8.23, avg_loss=0.2075, train_err=6.4833
-    Eval: 16_h1=0.2227, 16_l2=0.1353, 32_h1=0.4988, 32_l2=0.2996
-    [15] time=8.30, avg_loss=0.1757, train_err=5.4895
-    Eval: 16_h1=0.2521, 16_l2=0.1504, 32_h1=0.4995, 32_l2=0.3142
-    [18] time=8.31, avg_loss=0.1341, train_err=4.1897
-    Eval: 16_h1=0.2161, 16_l2=0.1299, 32_h1=0.5307, 32_l2=0.3298
+    Eval: 16_h1=0.3871, 16_l2=0.2634, 32_h1=0.5145, 32_l2=0.2698
+    [5] time=4.70, avg_loss=0.2300, train_err=7.1890
+    Eval: 16_h1=0.2180, 16_l2=0.1410, 32_h1=0.4209, 32_l2=0.1763
+    [10] time=4.72, avg_loss=0.2002, train_err=6.2565
+    Eval: 16_h1=0.2410, 16_l2=0.1499, 32_h1=0.4443, 32_l2=0.1878
+    [15] time=4.70, avg_loss=0.1635, train_err=5.1094
+    Eval: 16_h1=0.2224, 16_l2=0.1339, 32_h1=0.4099, 32_l2=0.1710
+    [20] time=4.72, avg_loss=0.1240, train_err=3.8741
+    Eval: 16_h1=0.2167, 16_l2=0.1193, 32_h1=0.3913, 32_l2=0.1442
+    [25] time=4.74, avg_loss=0.0958, train_err=2.9935
+    Eval: 16_h1=0.2021, 16_l2=0.1118, 32_h1=0.3922, 32_l2=0.1481
 
-    {'train_err': 4.030218005180359, 'avg_loss': 0.1289669761657715, 'avg_lasso_loss': None, 'epoch_train_time': 8.31089495499998}
+    {'train_err': 2.4195903670042753, 'avg_loss': 0.0774268917441368, 'avg_lasso_loss': None, 'epoch_train_time': 4.653759402999981}
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 173-188
+.. GENERATED FROM PYTHON SOURCE LINES 174-189
 
 .. raw:: html
 
@@ -541,7 +539,7 @@ ii) can be trained quickly on CPU
 
 In practice we would train a Neural Operator on one or multiple GPUs
 
-.. GENERATED FROM PYTHON SOURCE LINES 188-229
+.. GENERATED FROM PYTHON SOURCE LINES 189-230
 
 .. code-block:: Python
 
@@ -601,7 +599,7 @@ In practice we would train a Neural Operator on one or multiple GPUs
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (2 minutes 52.550 seconds)
+   **Total running time of the script:** (2 minutes 26.779 seconds)
 
 
 .. _sphx_glr_download_auto_examples_models_plot_UNO_darcy.py:
