@@ -333,15 +333,15 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fa1f84908a0&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fdd7a0908a0&gt;
 
 ### LOSSES ###
 
 ### INCREMENTAL RESOLUTION + GRADIENT EXPLAINED ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fa1d3f44910&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fdd55c78910&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fa1d3f44910&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fa1f8490c30&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fdd55c78910&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fdd7a090c30&gt;}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -408,11 +408,11 @@ Testing on [50, 50] samples         on resolutions [16, 32].
 Raw outputs of shape torch.Size([16, 1, 8, 8])
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:536: UserWarning: H1Loss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
   loss += training_loss(out, **sample)
-[0] time=0.32, avg_loss=0.9337, train_err=13.3383
+[0] time=0.33, avg_loss=0.9337, train_err=13.3383
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:581: UserWarning: LpLoss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
   val_loss = loss(out, **sample)
 Eval: 16_h1=0.8689, 16_l2=0.5609, 32_h1=0.9570, 32_l2=0.5683
-[1] time=0.31, avg_loss=0.7799, train_err=11.1408
+[1] time=0.32, avg_loss=0.7799, train_err=11.1408
 Eval: 16_h1=0.8087, 16_l2=0.5303, 32_h1=0.9438, 32_l2=0.5383
 [2] time=0.31, avg_loss=0.6955, train_err=9.9356
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/incremental.py:244: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
@@ -421,7 +421,7 @@ Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/cs
 Eval: 16_h1=0.8347, 16_l2=0.4971, 32_h1=1.0166, 32_l2=0.5265
 [3] time=0.32, avg_loss=0.6339, train_err=9.0559
 Eval: 16_h1=0.7357, 16_l2=0.3799, 32_h1=0.9571, 32_l2=0.4044
-[4] time=0.31, avg_loss=0.5737, train_err=8.1957
+[4] time=0.32, avg_loss=0.5737, train_err=8.1957
 Eval: 16_h1=0.7194, 16_l2=0.4070, 32_h1=0.9378, 32_l2=0.4368
 [5] time=0.31, avg_loss=0.5283, train_err=7.5473
 Eval: 16_h1=0.9164, 16_l2=0.5005, 32_h1=1.0924, 32_l2=0.5057
@@ -429,35 +429,35 @@ Eval: 16_h1=0.9164, 16_l2=0.5005, 32_h1=1.0924, 32_l2=0.5057
 Eval: 16_h1=0.9188, 16_l2=0.4762, 32_h1=1.3260, 32_l2=0.5157
 [7] time=0.32, avg_loss=0.5472, train_err=7.8174
 Eval: 16_h1=0.7178, 16_l2=0.3638, 32_h1=0.9637, 32_l2=0.3876
-[8] time=0.35, avg_loss=0.4793, train_err=6.8474
+[8] time=0.32, avg_loss=0.4793, train_err=6.8474
 Eval: 16_h1=0.7776, 16_l2=0.4669, 32_h1=0.9444, 32_l2=0.4953
-[9] time=0.34, avg_loss=0.5457, train_err=7.7952
+[9] time=0.32, avg_loss=0.5457, train_err=7.7952
 Eval: 16_h1=0.5953, 16_l2=0.3246, 32_h1=0.8545, 32_l2=0.3536
 Incre Res Update: change index to 1
 Incre Res Update: change sub to 1
 Incre Res Update: change res to 16
-[10] time=0.40, avg_loss=0.5476, train_err=7.8234
+[10] time=0.41, avg_loss=0.5476, train_err=7.8234
 Eval: 16_h1=0.5269, 16_l2=0.3000, 32_h1=0.6934, 32_l2=0.3037
-[11] time=0.38, avg_loss=0.4689, train_err=6.6992
+[11] time=0.39, avg_loss=0.4689, train_err=6.6992
 Eval: 16_h1=0.6750, 16_l2=0.4328, 32_h1=0.8936, 32_l2=0.4517
 [12] time=0.39, avg_loss=0.5529, train_err=7.8985
 Eval: 16_h1=0.4840, 16_l2=0.3221, 32_h1=0.5677, 32_l2=0.3250
-[13] time=0.38, avg_loss=0.4424, train_err=6.3205
+[13] time=0.40, avg_loss=0.4424, train_err=6.3205
 Eval: 16_h1=0.4035, 16_l2=0.2458, 32_h1=0.5175, 32_l2=0.2570
-[14] time=0.38, avg_loss=0.3829, train_err=5.4700
+[14] time=0.39, avg_loss=0.3829, train_err=5.4700
 Eval: 16_h1=0.4722, 16_l2=0.2668, 32_h1=0.5495, 32_l2=0.2607
 [15] time=0.39, avg_loss=0.4168, train_err=5.9539
 Eval: 16_h1=0.3833, 16_l2=0.2270, 32_h1=0.5445, 32_l2=0.2466
-[16] time=0.39, avg_loss=0.3602, train_err=5.1457
+[16] time=0.40, avg_loss=0.3602, train_err=5.1457
 Eval: 16_h1=0.3740, 16_l2=0.2308, 32_h1=0.4667, 32_l2=0.2302
-[17] time=0.39, avg_loss=0.3320, train_err=4.7436
+[17] time=0.40, avg_loss=0.3320, train_err=4.7436
 Eval: 16_h1=0.4300, 16_l2=0.2664, 32_h1=0.6119, 32_l2=0.2869
-[18] time=0.39, avg_loss=0.3859, train_err=5.5122
+[18] time=0.40, avg_loss=0.3859, train_err=5.5122
 Eval: 16_h1=0.3710, 16_l2=0.2348, 32_h1=0.4790, 32_l2=0.2393
-[19] time=0.39, avg_loss=0.3316, train_err=4.7376
+[19] time=0.40, avg_loss=0.3316, train_err=4.7376
 Eval: 16_h1=0.3490, 16_l2=0.2211, 32_h1=0.4717, 32_l2=0.2343
 
-{&#39;train_err&#39;: 4.737565738814218, &#39;avg_loss&#39;: 0.33162960171699524, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 0.3881473640000195, &#39;16_h1&#39;: tensor(0.3490), &#39;16_l2&#39;: tensor(0.2211), &#39;32_h1&#39;: tensor(0.4717), &#39;32_l2&#39;: tensor(0.2343)}
+{&#39;train_err&#39;: 4.737565738814218, &#39;avg_loss&#39;: 0.33162960171699524, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 0.39837938000005124, &#39;16_h1&#39;: tensor(0.3490), &#39;16_l2&#39;: tensor(0.2211), &#39;32_h1&#39;: tensor(0.4717), &#39;32_l2&#39;: tensor(0.2343)}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -513,7 +513,7 @@ ii) can be trained quickly on CPU</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" alt="Incremental FNO predictions on Darcy-Flow data, Input x, Ground-truth y, Incremental FNO prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 15.268 seconds)</p>
+<img src="../../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" alt="Incremental FNO predictions on Darcy-Flow data, Input x, Ground-truth y, Incremental FNO prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 16.081 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-training-plot-incremental-fno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/cfa67f99f9c5464f9ef46d85700f3993/plot_incremental_FNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_incremental_FNO_darcy.ipynb</span></code></a></p>
