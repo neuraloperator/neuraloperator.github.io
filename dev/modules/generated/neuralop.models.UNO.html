@@ -33,7 +33,7 @@
  
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="neuralop.layers.spectral_convolution.SpectralConv" href="neuralop.layers.spectral_convolution.SpectralConv.html" />
+    <link rel="next" title="neuralop.models.UQNO" href="neuralop.models.UQNO.html" />
     <link rel="prev" title="neuralop.models.LocalNO" href="neuralop.models.LocalNO.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -141,7 +141,9 @@
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.layers">Layers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#model-dispatching">Model Dispatching</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#training">Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#loss-functions">Loss Functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.utils">Utility Functions</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
@@ -175,7 +177,8 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.models.UNO">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.models.</span></span><span class="sig-name descname"><span class="pre">UNO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lifting_channels=256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">projection_channels=256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positional_embedding='grid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_layers=4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uno_out_channels=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uno_n_modes=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uno_scalings=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">horizontal_skips_map=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_mlp_dropout=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_mlp_expansion=0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">non_linearity=&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preactivation=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fno_skip='linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">horizontal_skip='linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_mlp_skip='soft-gating'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separable=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factorization=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rank=1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_rank_modes=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">integral_operator=&lt;class</span> <span class="pre">'neuralop.layers.spectral_convolution.SpectralConv'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operator_block=&lt;class</span> <span class="pre">'neuralop.layers.fno_block.FNOBlocks'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implementation='factorized'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decomposition_kwargs={}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain_padding=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose=False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/models/uno.html#UNO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.models.UNO" title="Link to this definition"></a></dt>
-<dd><p>U-Shaped Neural Operator, as described in  <a class="reference internal" href="#ra5b933fe5a53-1" id="id1">[1]</a>.</p>
+<dd><p>U-Shaped Neural Operator</p>
+<p>The architecture is described in  <a class="reference internal" href="#ra5b933fe5a53-1" id="id1">[1]</a>.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
@@ -314,8 +317,8 @@ registered hooks while the latter silently ignores them.</p>
     </a>
     
     
-    <a class="button pagination-next" href="neuralop.layers.spectral_convolution.SpectralConv.html" title="next page" accesskey="n">
-        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.spectral_convolution</span></code>.SpectralConv </span>
+    <a class="button pagination-next" href="neuralop.models.UQNO.html" title="next page" accesskey="n">
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.models</span></code>.UQNO </span>
         <span class="icon">
             <i class="fa fa-arrow-circle-right"></i>
         </span>

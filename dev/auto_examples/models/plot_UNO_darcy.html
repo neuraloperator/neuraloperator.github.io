@@ -456,13 +456,13 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fdd63606350&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fbd5c7b1f90&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fdd634f3b60&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fbd5c0a6270&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fdd634f3b60&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fdd63605590&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fbd5c0a6270&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fbd5c7b0690&gt;}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -507,22 +507,22 @@ Testing on [50, 50] samples         on resolutions [16, 32].
 Raw outputs of shape torch.Size([32, 1, 16, 16])
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:536: UserWarning: H1Loss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
   loss += training_loss(out, **sample)
-[0] time=4.97, avg_loss=0.5837, train_err=18.2401
+[0] time=4.94, avg_loss=0.5837, train_err=18.2401
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:581: UserWarning: LpLoss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
   val_loss = loss(out, **sample)
 Eval: 16_h1=0.3871, 16_l2=0.2634, 32_h1=0.5145, 32_l2=0.2698
-[5] time=4.72, avg_loss=0.2231, train_err=6.9721
+[5] time=4.70, avg_loss=0.2231, train_err=6.9721
 Eval: 16_h1=0.2204, 16_l2=0.1435, 32_h1=0.4201, 32_l2=0.1808
-[10] time=4.91, avg_loss=0.1872, train_err=5.8502
+[10] time=4.72, avg_loss=0.1872, train_err=5.8502
 Eval: 16_h1=0.2414, 16_l2=0.1658, 32_h1=0.4034, 32_l2=0.1963
-[15] time=4.84, avg_loss=0.1469, train_err=4.5915
+[15] time=4.70, avg_loss=0.1469, train_err=4.5915
 Eval: 16_h1=0.2511, 16_l2=0.1484, 32_h1=0.4069, 32_l2=0.1726
-[20] time=4.70, avg_loss=0.1327, train_err=4.1461
+[20] time=4.67, avg_loss=0.1327, train_err=4.1461
 Eval: 16_h1=0.2102, 16_l2=0.1215, 32_h1=0.3797, 32_l2=0.1460
-[25] time=4.68, avg_loss=0.0919, train_err=2.8721
+[25] time=4.78, avg_loss=0.0919, train_err=2.8721
 Eval: 16_h1=0.1987, 16_l2=0.1089, 32_h1=0.4020, 32_l2=0.1527
 
-{&#39;train_err&#39;: 2.3962536472827196, &#39;avg_loss&#39;: 0.07668011671304703, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 4.673286023999935}
+{&#39;train_err&#39;: 2.3962536472827196, &#39;avg_loss&#39;: 0.07668011671304703, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 4.705317889000071}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -577,7 +577,7 @@ ii) can be trained quickly on CPU</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_UNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_UNO_darcy_001.png" alt="U-NO predictions on 32x32 Darcy-Flow data, Input x, Ground-truth y, U-NO prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 28.157 seconds)</p>
+<img src="../../_images/sphx_glr_plot_UNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_UNO_darcy_001.png" alt="U-NO predictions on 32x32 Darcy-Flow data, Input x, Ground-truth y, U-NO prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 25.267 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-models-plot-uno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/fee630be9801a5d2d76c0b9e3091063c/plot_UNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_UNO_darcy.ipynb</span></code></a></p>

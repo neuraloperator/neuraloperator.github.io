@@ -33,8 +33,8 @@
  
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="neuralop.layers.coda_layer.CODALayer" href="neuralop.layers.coda_layer.CODALayer.html" />
-    <link rel="prev" title="neuralop.layers.discrete_continuous_convolution.EquidistantDiscreteContinuousConvTranspose2d" href="neuralop.layers.discrete_continuous_convolution.EquidistantDiscreteContinuousConvTranspose2d.html" />
+    <link rel="next" title="neuralop.layers.differential_conv.FiniteDifferenceConvolution" href="neuralop.layers.differential_conv.FiniteDifferenceConvolution.html" />
+    <link rel="prev" title="neuralop.layers.integral_transform.IntegralTransform" href="neuralop.layers.integral_transform.IntegralTransform.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   </head>
@@ -141,7 +141,9 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../api.html#module-neuralop.layers">Layers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#model-dispatching">Model Dispatching</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#training">Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#loss-functions">Loss Functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.utils">Utility Functions</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
@@ -175,7 +177,8 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.layers.local_no_block.LocalNOBlocks">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.local_no_block.</span></span><span class="sig-name descname"><span class="pre">LocalNOBlocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">in_channels,</span> <span class="pre">out_channels,</span> <span class="pre">n_modes,</span> <span class="pre">default_in_shape,</span> <span class="pre">resolution_scaling_factor=None,</span> <span class="pre">n_layers=1,</span> <span class="pre">disco_layers=True,</span> <span class="pre">disco_kernel_shape=[2,</span> <span class="pre">4],</span> <span class="pre">radius_cutoff=None,</span> <span class="pre">domain_length=[2,</span> <span class="pre">2],</span> <span class="pre">disco_groups=1,</span> <span class="pre">disco_bias=True,</span> <span class="pre">diff_layers=True,</span> <span class="pre">conv_padding_mode='periodic',</span> <span class="pre">fin_diff_kernel_size=3,</span> <span class="pre">mix_derivatives=True,</span> <span class="pre">max_n_modes=None,</span> <span class="pre">local_no_block_precision='full',</span> <span class="pre">use_channel_mlp=False,</span> <span class="pre">channel_mlp_dropout=0,</span> <span class="pre">channel_mlp_expansion=0.5,</span> <span class="pre">non_linearity=&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;,</span> <span class="pre">stabilizer=None,</span> <span class="pre">norm=None,</span> <span class="pre">ada_in_features=None,</span> <span class="pre">preactivation=False,</span> <span class="pre">local_no_skip='linear',</span> <span class="pre">channel_mlp_skip='soft-gating',</span> <span class="pre">separable=False,</span> <span class="pre">factorization=None,</span> <span class="pre">rank=1.0,</span> <span class="pre">conv_module=&lt;class</span> <span class="pre">'neuralop.layers.spectral_convolution.SpectralConv'&gt;,</span> <span class="pre">fixed_rank_modes=False,</span> <span class="pre">implementation='factorized',</span> <span class="pre">decomposition_kwargs={},</span> <span class="pre">fft_norm='forward'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/local_no_block.html#LocalNOBlocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.local_no_block.LocalNOBlocks" title="Link to this definition"></a></dt>
-<dd><p>Local Neural Operator blocks with localized integral and differential kernels <a class="reference internal" href="#r367398f5802a-3" id="id1">[3]</a>.</p>
+<dd><p>Local Neural Operator blocks with localized integral and differential kernels.</p>
+<p>It is implemented as described in <a class="reference internal" href="#r367398f5802a-3" id="id1">[3]</a>.</p>
 <p>This class implements neural operator blocks that combine Fourier neural operators
 with localized integral and differential kernels to capture both global and local
 features in PDE solutions <a class="reference internal" href="#r367398f5802a-3" id="id2">[3]</a>. The architecture addresses the over-smoothing limitations
@@ -386,16 +389,16 @@ registered hooks while the latter silently ignores them.</p>
       
         <nav class="pagination" role="navigation" aria-label="pagination">
     
-    <a class="button pagination-previous" href="neuralop.layers.discrete_continuous_convolution.EquidistantDiscreteContinuousConvTranspose2d.html" title="previous page" accesskey="p">
+    <a class="button pagination-previous" href="neuralop.layers.integral_transform.IntegralTransform.html" title="previous page" accesskey="p">
         <span class="icon">
             <i class="fa fa-arrow-circle-left"></i>
         </span>
-        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.discrete_continuous_convolution</span></code>.EquidistantDiscreteContinuousConvTranspose2d</span>
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.integral_transform</span></code>.IntegralTransform</span>
     </a>
     
     
-    <a class="button pagination-next" href="neuralop.layers.coda_layer.CODALayer.html" title="next page" accesskey="n">
-        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.coda_layer</span></code>.CODALayer </span>
+    <a class="button pagination-next" href="neuralop.layers.differential_conv.FiniteDifferenceConvolution.html" title="next page" accesskey="n">
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.differential_conv</span></code>.FiniteDifferenceConvolution </span>
         <span class="icon">
             <i class="fa fa-arrow-circle-right"></i>
         </span>

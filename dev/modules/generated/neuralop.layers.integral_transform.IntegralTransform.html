@@ -33,7 +33,7 @@
  
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="neuralop.layers.differential_conv.FiniteDifferenceConvolution" href="neuralop.layers.differential_conv.FiniteDifferenceConvolution.html" />
+    <link rel="next" title="neuralop.layers.local_no_block.LocalNOBlocks" href="neuralop.layers.local_no_block.LocalNOBlocks.html" />
     <link rel="prev" title="neuralop.layers.gno_block.GNOBlock" href="neuralop.layers.gno_block.GNOBlock.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -141,7 +141,9 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../api.html#module-neuralop.layers">Layers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#model-dispatching">Model Dispatching</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#training">Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#loss-functions">Loss Functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.utils">Utility Functions</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
@@ -175,16 +177,16 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.layers.integral_transform.IntegralTransform">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.integral_transform.</span></span><span class="sig-name descname"><span class="pre">IntegralTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_mlp=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_mlp_layers=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_mlp_non_linearity=&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform_type='linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weighting_fn=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction='sum'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_torch_scatter=True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/integral_transform.html#IntegralTransform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.integral_transform.IntegralTransform" title="Link to this definition"></a></dt>
-<dd><p>Integral Kernel Transform (GNO)
-Computes one of the following:</p>
-<blockquote>
-<div><ol class="loweralpha simple">
+<dd><p>Integral Kernel Transform (GNO).</p>
+<dl class="simple">
+<dt>It computes one of the following:</dt><dd><ol class="loweralpha simple">
 <li><p>int_{A(x)} k(x, y) dy</p></li>
 <li><p>int_{A(x)} k(x, y) * f(y) dy</p></li>
 <li><p>int_{A(x)} k(x, y, f(y)) dy</p></li>
 <li><p>int_{A(x)} k(x, y, f(y)) * f(y) dy</p></li>
 </ol>
-</div></blockquote>
+</dd>
+</dl>
 <p>x : Points for which the output is defined</p>
 <p>y : Points for which the input is defined
 A(x) : A subset of all points y (depending on        each x) over which to integrate</p>
@@ -305,8 +307,8 @@ the weights are y_{j+1} - y_j. If None,
     </a>
     
     
-    <a class="button pagination-next" href="neuralop.layers.differential_conv.FiniteDifferenceConvolution.html" title="next page" accesskey="n">
-        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.differential_conv</span></code>.FiniteDifferenceConvolution </span>
+    <a class="button pagination-next" href="neuralop.layers.local_no_block.LocalNOBlocks.html" title="next page" accesskey="n">
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.local_no_block</span></code>.LocalNOBlocks </span>
         <span class="icon">
             <i class="fa fa-arrow-circle-right"></i>
         </span>

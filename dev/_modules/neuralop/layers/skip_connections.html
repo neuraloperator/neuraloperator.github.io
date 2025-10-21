@@ -176,10 +176,8 @@
 
 
 
-<div class="viewcode-block" id="SoftGating">
-<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.skip_connections.SoftGating.html#neuralop.layers.skip_connections.SoftGating">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SoftGating</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Applies soft-gating by weighting the channels of the given input</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Applies soft-gating by weighting the channels of the given input.</span>
 
 <span class="sd">    Given an input x of size `(batch-size, channels, height, width)`,</span>
 <span class="sd">    this returns `x * w `</span>
@@ -213,16 +211,12 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="SoftGating.forward">
-<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.skip_connections.SoftGating.html#neuralop.layers.skip_connections.SoftGating.forward">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Applies soft-gating to a batch of activations&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">*</span> <span class="n">x</span></div>
-</div>
-
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">*</span> <span class="n">x</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">Flattened1dConv</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>

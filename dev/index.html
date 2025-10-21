@@ -136,7 +136,7 @@ enable learning mapping between function spaces, and this library
 provides all of the tools to do so on your own data.</p>
 <p>NeuralOperators are also resolution invariant,
 so your trained operator can be applied on data of any resolution.</p>
-<section id="quickstart">
+<br/><section id="quickstart">
 <h1>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading"></a></h1>
 <p>This guide will walk you through the standard ML workflow of loading data, creating a neural operator,
 training it on the data and saving the trained model for later use. (Check out <a class="reference internal" href="auto_examples/index.html#gallery-examples"><span class="std std-ref">Examples</span></a> for more info)</p>
@@ -144,8 +144,12 @@ training it on the data and saving the trained model for later use. (Check out <
 <p>To create a Fourier Neural Operator model:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">FNO</span>
 
-<span class="n">operator</span> <span class="o">=</span> <span class="n">FNO</span><span class="p">(</span><span class="n">n_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="n">hidden_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
-                <span class="n">in_channels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">operator</span> <span class="o">=</span> <span class="n">FNO</span><span class="p">(</span>
+   <span class="n">n_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+   <span class="n">hidden_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+   <span class="n">in_channels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+   <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 <p>To save the weights of the trained model:</p>
@@ -163,8 +167,10 @@ training it on the data and saving the trained model for later use. (Check out <
 <span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.data.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_darcy_flow_small</span>
 
 <span class="n">train_loader</span><span class="p">,</span> <span class="n">test_loaders</span><span class="p">,</span> <span class="n">data_processor</span> <span class="o">=</span> <span class="n">load_darcy_flow_small</span><span class="p">(</span>
-     <span class="n">n_train</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
-     <span class="n">test_resolutions</span><span class="o">=</span><span class="p">[</span><span class="mi">32</span><span class="p">],</span> <span class="n">n_tests</span><span class="o">=</span><span class="p">[</span><span class="mi">100</span><span class="p">],</span>
+     <span class="n">n_train</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+     <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+     <span class="n">n_tests</span><span class="o">=</span><span class="p">[</span><span class="mi">100</span><span class="p">],</span>
+     <span class="n">test_resolutions</span><span class="o">=</span><span class="p">[</span><span class="mi">32</span><span class="p">],</span>
      <span class="n">test_batch_sizes</span><span class="o">=</span><span class="p">[</span><span class="mi">32</span><span class="p">],</span>
 <span class="p">)</span>
 </pre></div>
@@ -175,30 +181,37 @@ as well as a <code class="docutils literal notranslate"><span class="pre">prepro
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.training</span><span class="w"> </span><span class="kn">import</span> <span class="n">Trainer</span>
 
 <span class="c1"># Create the trainer</span>
-<span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">n_epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-                  <span class="n">data_processor</span><span class="o">=</span><span class="n">data_processor</span><span class="p">,</span>
-                  <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span>
+   <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+   <span class="n">n_epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+   <span class="n">data_processor</span><span class="o">=</span><span class="n">data_processor</span><span class="p">,</span>
+   <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># train the model</span>
-<span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_loader</span><span class="o">=</span><span class="n">train_loader</span><span class="p">,</span>
-           <span class="n">test_loaders</span><span class="o">=</span><span class="n">test_loaders</span><span class="p">,</span>
-           <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
-           <span class="n">scheduler</span><span class="o">=</span><span class="n">scheduler</span><span class="p">,</span>
-           <span class="n">regularizer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-           <span class="n">training_loss</span><span class="o">=</span><span class="n">train_loss</span><span class="p">,</span>
-           <span class="n">eval_losses</span><span class="o">=</span><span class="n">eval_losses</span><span class="p">)</span>
+<span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+   <span class="n">train_loader</span><span class="o">=</span><span class="n">train_loader</span><span class="p">,</span>
+   <span class="n">test_loaders</span><span class="o">=</span><span class="n">test_loaders</span><span class="p">,</span>
+   <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
+   <span class="n">scheduler</span><span class="o">=</span><span class="n">scheduler</span><span class="p">,</span>
+   <span class="n">regularizer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+   <span class="n">training_loss</span><span class="o">=</span><span class="n">train_loss</span><span class="p">,</span>
+   <span class="n">eval_losses</span><span class="o">=</span><span class="n">eval_losses</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 <p>Weight tensorization is also provided out of the box: you can improve the previous models
 by simply using a Tucker Tensorized FNO with just a few parameters:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">TFNO</span>
 
-<span class="n">operator</span> <span class="o">=</span> <span class="n">TFNO</span><span class="p">(</span><span class="n">n_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="n">hidden_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
-                <span class="n">in_channels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-                <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                <span class="n">factorization</span><span class="o">=</span><span class="s1">&#39;tucker&#39;</span><span class="p">,</span>
-                <span class="n">implementation</span><span class="o">=</span><span class="s1">&#39;factorized&#39;</span>
-                <span class="n">rank</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="n">operator</span> <span class="o">=</span> <span class="n">TFNO</span><span class="p">(</span>
+   <span class="n">n_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+   <span class="n">hidden_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+   <span class="n">in_channels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+   <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+   <span class="n">factorization</span><span class="o">=</span><span class="s1">&#39;tucker&#39;</span><span class="p">,</span>
+   <span class="n">implementation</span><span class="o">=</span><span class="s1">&#39;factorized&#39;</span><span class="p">,</span>
+   <span class="n">rank</span><span class="o">=</span><span class="mf">0.05</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 <p>This will use a Tucker factorization of the weights. The forward pass

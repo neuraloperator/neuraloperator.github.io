@@ -33,8 +33,8 @@
  
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="neuralop.layers.embeddings.GridEmbeddingND" href="neuralop.layers.embeddings.GridEmbeddingND.html" />
-    <link rel="prev" title="neuralop.layers.local_no_block.LocalNOBlocks" href="neuralop.layers.local_no_block.LocalNOBlocks.html" />
+    <link rel="next" title="neuralop.layers.channel_mlp.ChannelMLP" href="neuralop.layers.channel_mlp.ChannelMLP.html" />
+    <link rel="prev" title="neuralop.layers.discrete_continuous_convolution.EquidistantDiscreteContinuousConvTranspose2d" href="neuralop.layers.discrete_continuous_convolution.EquidistantDiscreteContinuousConvTranspose2d.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   </head>
@@ -141,7 +141,9 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../api.html#module-neuralop.layers">Layers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#model-dispatching">Model Dispatching</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#training">Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#loss-functions">Loss Functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.utils">Utility Functions</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
@@ -175,8 +177,8 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.layers.coda_layer.CODALayer">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.coda_layer.</span></span><span class="sig-name descname"><span class="pre">CODALayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_heads=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_codimension=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">head_codimension=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">codimension_size=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">per_channel_attention=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">permutation_eq=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm='instance_norm'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature=1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonlinear_attention=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution_scaling_factor=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incremental_n_modes=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">non_linearity=&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_channel_mlp=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_mlp_expansion=1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fno_skip='linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_mlp_skip='linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preactivation=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separable=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factorization='tucker'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rank=1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joint_factorization=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conv_module=&lt;class</span> <span class="pre">'neuralop.layers.spectral_convolution.SpectralConv'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_rank_modes=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implementation='factorized'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decomposition_kwargs=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/coda_layer.html#CODALayer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.coda_layer.CODALayer" title="Link to this definition"></a></dt>
-<dd><p>Co-domain Attention Blocks (CODALayer) implement the transformer
-architecture in the operator learning framework, as described in <span id="id1">[Re703e87ec801-1]</span>.</p>
+<dd><p>Co-domain Attention Blocks (CODALayer)</p>
+<p>It implements the transformer architecture in the operator learning framework, as described in <span id="id1">[Re703e87ec801-1]</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -302,16 +304,16 @@ b is the batch size, t is the number of tokens, and d is the token codimension.<
       
         <nav class="pagination" role="navigation" aria-label="pagination">
     
-    <a class="button pagination-previous" href="neuralop.layers.local_no_block.LocalNOBlocks.html" title="previous page" accesskey="p">
+    <a class="button pagination-previous" href="neuralop.layers.discrete_continuous_convolution.EquidistantDiscreteContinuousConvTranspose2d.html" title="previous page" accesskey="p">
         <span class="icon">
             <i class="fa fa-arrow-circle-left"></i>
         </span>
-        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.local_no_block</span></code>.LocalNOBlocks</span>
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.discrete_continuous_convolution</span></code>.EquidistantDiscreteContinuousConvTranspose2d</span>
     </a>
     
     
-    <a class="button pagination-next" href="neuralop.layers.embeddings.GridEmbeddingND.html" title="next page" accesskey="n">
-        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.embeddings</span></code>.GridEmbeddingND </span>
+    <a class="button pagination-next" href="neuralop.layers.channel_mlp.ChannelMLP.html" title="next page" accesskey="n">
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.channel_mlp</span></code>.ChannelMLP </span>
         <span class="icon">
             <i class="fa fa-arrow-circle-right"></i>
         </span>

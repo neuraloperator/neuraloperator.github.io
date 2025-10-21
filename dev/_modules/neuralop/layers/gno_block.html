@@ -136,12 +136,13 @@
 <div class="viewcode-block" id="GNOBlock">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.gno_block.GNOBlock.html#neuralop.layers.gno_block.GNOBlock">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">GNOBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;GNOBlock implements a Graph Neural Operator layer as described in [1]_.</span>
-
-<span class="sd">    A GNO layer is a resolution-invariant operator that maps a function defined</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Graph Neural Operator layer </span>
+<span class="sd">    </span>
+<span class="sd">    It is a resolution-invariant operator that maps a function defined</span>
 <span class="sd">    over one coordinate mesh to another defined over another coordinate mesh using</span>
 <span class="sd">    a pointwise kernel integral that takes contributions from neighbors of distance 1</span>
 <span class="sd">    within a graph constructed via neighbor search with a specified radius.</span>
+<span class="sd">    The exact implementation details of the GNO layer architecture are discussed in [1]_.</span>
 
 <span class="sd">    Optionally, if provided, the input and output queries can have a positional embedding</span>
 <span class="sd">    applied using the argument pos_embedding.</span>

@@ -35,7 +35,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="API reference" href="../modules/api.html" />
-    <link rel="prev" title="Examples of Neural Operator Applications" href="../theory_guide/applications.html" />
+    <link rel="prev" title="Neural Operator Applications" href="../theory_guide/applications.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   </head>
@@ -141,7 +141,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#available-neural-operator-models">Available Neural Operator Models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#data-loading-and-preprocessing">Data Loading and Preprocessing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#training-neural-operator-models">Training Neural Operator Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#cpu-offloading-for-high-resolution-training">CPU Offloading for High-Resolution Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cpu-offloading">CPU Offloading</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#interactive-examples-with-code">Interactive examples with code</a></li>
 </ul>
 </li>
@@ -202,7 +202,7 @@ and learn mapping between function spaces, in PyTorch.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="../modules/api.html#module-neuralop.training" title="neuralop.training"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.training</span></code></a></p></td>
 <td><p>Utilities to train neural operators end-to-end (Trainer, AdamW, etc.)</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/api.html#module-neuralop.losses" title="neuralop.losses"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.losses</span></code></a></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.losses</span></code></p></td>
 <td><p>Loss functions for neural operator training (LpLoss, H1Loss, etc.)</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.mpu</span></code></p></td>
@@ -210,12 +210,14 @@ and learn mapping between function spaces, in PyTorch.</p>
 </tr>
 </tbody>
 </table>
-<p>The main <code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop</span></code> module provides convenient imports for the most commonly used components:
-- <strong>Models</strong>: FNO, SFNO, UNO, UQNO, FNOGNO, GINO, LocalNO, CODANO, get_model, etc…
-- <strong>Training</strong>: Trainer
-- <strong>Losses</strong>: LpLoss, H1Loss, WeightedSumLoss, Relobralo, SoftAdapt, FourierDiff, non_uniform_fd, FiniteDiff
-- <strong>Data</strong>: datasets, transforms
-- <strong>Utilities</strong>: mpu</p>
+<p>The main <code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop</span></code> module provides convenient imports for the most commonly used components:</p>
+<ul class="simple">
+<li><p><strong>Models</strong>: FNO, SFNO, UNO, UQNO, FNOGNO, GINO, LocalNO, CODANO, get_model, etc…</p></li>
+<li><p><strong>Training</strong>: Trainer</p></li>
+<li><p><strong>Losses</strong>: LpLoss, H1Loss, WeightedSumLoss, Relobralo, SoftAdapt, FourierDiff, non_uniform_fd, FiniteDiff</p></li>
+<li><p><strong>Data</strong>: datasets, transforms</p></li>
+<li><p><strong>Utilities</strong>: mpu</p></li>
+</ul>
 <div style="margin-top: 4em;"></div></section>
 <section id="available-neural-operator-models">
 <h2>Available Neural Operator Models<a class="headerlink" href="#available-neural-operator-models" title="Link to this heading"></a></h2>
@@ -231,23 +233,27 @@ and learn mapping between function spaces, in PyTorch.</p>
 <li><p><strong>LocalNO</strong>: Local neural operator for efficient computation (requires torch_harmonics)</p></li>
 <li><p><strong>CODANO</strong>: Continuous-discrete neural operator</p></li>
 </ul>
-</section>
+<div style="margin-top: 4em;"></div></section>
 <section id="data-loading-and-preprocessing">
 <h2>Data Loading and Preprocessing<a class="headerlink" href="#data-loading-and-preprocessing" title="Link to this heading"></a></h2>
 <p>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data</span></code> module provides comprehensive data handling capabilities:</p>
-<p><strong>Datasets</strong> (<a class="reference internal" href="../modules/api.html#module-neuralop.data.datasets" title="neuralop.data.datasets"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.datasets</span></code></a>):
-- <strong>Darcy Flow</strong>: Standard benchmark for elliptic PDEs (load_darcy_flow_small, load_darcy_pt)
-- <strong>Burgers Equation</strong>: Nonlinear PDE benchmark (load_mini_burgers_1dtime)
-- <strong>Navier-Stokes</strong>: Fluid dynamics equations (load_navier_stokes_pt)
-- <strong>Spherical SWE</strong>: Shallow water equations on spherical domains (load_spherical_swe, requires torch_harmonics)
-- <strong>Car CFD</strong>: Computational fluid dynamics data (load_mini_car)
-- <strong>Nonlinear Poisson</strong>: Poisson equation with nonlinear terms (load_nonlinear_poisson_pt)
-- <strong>The Well</strong>: Active matter and MHD datasets (requires the_well package)</p>
-<p><strong>Transforms</strong> (<code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.transforms</span></code>):
-- <strong>Normalizers</strong>: UnitGaussianNormalizer, DictUnitGaussianNormalizer
-- <strong>Data Processors</strong>: DefaultDataProcessor, IncrementalDataProcessor, MGPatchingDataProcessor
-- <strong>Patching Transforms</strong>: For handling large-scale problems
-- <strong>Base Transforms</strong>: Extensible Transform and DictTransform framework</p>
+<p><strong>Datasets</strong> (<a class="reference internal" href="../modules/api.html#module-neuralop.data.datasets" title="neuralop.data.datasets"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.datasets</span></code></a>):</p>
+<ul class="simple">
+<li><p><strong>Darcy Flow</strong>: Standard benchmark for elliptic PDEs (load_darcy_flow_small, load_darcy_pt)</p></li>
+<li><p><strong>Burgers Equation</strong>: Nonlinear PDE benchmark (load_mini_burgers_1dtime)</p></li>
+<li><p><strong>Navier-Stokes</strong>: Fluid dynamics equations (load_navier_stokes_pt)</p></li>
+<li><p><strong>Spherical SWE</strong>: Shallow water equations on spherical domains (load_spherical_swe, requires torch_harmonics)</p></li>
+<li><p><strong>Car CFD</strong>: Computational fluid dynamics data (load_mini_car)</p></li>
+<li><p><strong>Nonlinear Poisson</strong>: Poisson equation with nonlinear terms (load_nonlinear_poisson_pt)</p></li>
+<li><p><strong>The Well</strong>: Active matter and MHD datasets (requires the_well package)</p></li>
+</ul>
+<p><strong>Transforms</strong> (<code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.transforms</span></code>):</p>
+<ul class="simple">
+<li><p><strong>Normalizers</strong>: UnitGaussianNormalizer, DictUnitGaussianNormalizer</p></li>
+<li><p><strong>Data Processors</strong>: DefaultDataProcessor, IncrementalDataProcessor, MGPatchingDataProcessor</p></li>
+<li><p><strong>Patching Transforms</strong>: For handling large-scale problems</p></li>
+<li><p><strong>Base Transforms</strong>: Extensible Transform and DictTransform framework</p></li>
+</ul>
 <div style="margin-top: 4em;"></div></section>
 <section id="training-neural-operator-models">
 <h2>Training Neural Operator Models<a class="headerlink" href="#training-neural-operator-models" title="Link to this heading"></a></h2>
@@ -281,7 +287,7 @@ documentation, check the <a class="reference internal" href="../modules/api.html
 <div style="margin-top: 2em;"></div></section>
 <section id="loss-functions">
 <h3>Loss Functions<a class="headerlink" href="#loss-functions" title="Link to this heading"></a></h3>
-<p>The <a class="reference internal" href="../modules/api.html#module-neuralop.losses" title="neuralop.losses"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.losses</span></code></a> module provides various loss functions:</p>
+<p>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.losses</span></code> module provides various loss functions:</p>
 <ul class="simple">
 <li><p><strong>Data Losses</strong>: LpLoss, H1Loss for standard regression tasks</p></li>
 <li><p><strong>Equation Losses</strong>: Various equation-specific loss functions for physics-informed training</p></li>
@@ -304,8 +310,8 @@ See the <a class="reference external" href="https://pytorch.org/docs/stable/elas
 for more details.</p>
 <div style="margin-top: 4em;"></div></section>
 </section>
-<section id="cpu-offloading-for-high-resolution-training">
-<h2>CPU Offloading for High-Resolution Training<a class="headerlink" href="#cpu-offloading-for-high-resolution-training" title="Link to this heading"></a></h2>
+<section id="cpu-offloading">
+<h2>CPU Offloading<a class="headerlink" href="#cpu-offloading" title="Link to this heading"></a></h2>
 <p>For training with high-resolution inputs that exceed GPU memory limits,
 NeuralOperator supports CPU offloading of activations.
 This technique allows training larger models or higher-resolution problems
@@ -500,7 +506,7 @@ in the <cite>scripts</cite> directory.</p>
         <span class="icon">
             <i class="fa fa-arrow-circle-left"></i>
         </span>
-        <span>Examples of Neural Operator Applications</span>
+        <span>Neural Operator Applications</span>
     </a>
     
     
@@ -552,7 +558,7 @@ in the <cite>scripts</cite> directory.</p>
 <li><a class="reference internal" href="#distributed-training">Distributed Training</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#cpu-offloading-for-high-resolution-training">CPU Offloading for High-Resolution Training</a><ul>
+<li><a class="reference internal" href="#cpu-offloading">CPU Offloading</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#example-usage">Example Usage</a><ul>
 <li><a class="reference internal" href="#setup-and-data-loading">1. Setup and Data Loading</a></li>

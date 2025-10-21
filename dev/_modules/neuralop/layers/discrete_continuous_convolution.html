@@ -308,10 +308,10 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">DiscreteContinuousConv</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Abstract base class for DISCO convolutions, reproduced with permission</span>
-<span class="sd">    from ``torch_harmonics.convolution``. If you use DISCO convs, please cite</span>
-<span class="sd">    [1]_ and [2]_.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Abstract base class for DISCO convolutions.</span>
+<span class="sd">    It is reproduced with permission from ``torch_harmonics.convolution``. </span>
+<span class="sd">    </span>
+<span class="sd">    If you use DISCO convs, please cite [1]_ and [2]_.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -394,13 +394,12 @@
 <div class="viewcode-block" id="DiscreteContinuousConv2d">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.discrete_continuous_convolution.DiscreteContinuousConv2d.html#neuralop.layers.discrete_continuous_convolution.DiscreteContinuousConv2d">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">DiscreteContinuousConv2d</span><span class="p">(</span><span class="n">DiscreteContinuousConv</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Discrete-continuous convolutions (DISCO) on arbitrary 2d grids</span>
-<span class="sd">    as implemented in [1]_. To evaluate continuous convolutions on a</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Discrete-continuous convolutions (DISCO) on arbitrary 2d grids.</span>
+<span class="sd">    It is implemented as described in [1]_. To evaluate continuous convolutions on a</span>
 <span class="sd">    computer, they can be evaluated semi-discretely, where the translation</span>
 <span class="sd">    operation is performed continuously, and the quadrature/projection is</span>
 <span class="sd">    performed discretely on a grid [2]_. They are the main building blocks</span>
-<span class="sd">    for local Neural Operators [1]_. Forward call expects an input of shape</span>
+<span class="sd">    for local Neural Operators [1]_. The forward call expects an input of shape</span>
 <span class="sd">    (batch_size, in_channels, n_in).</span>
 
 <span class="sd">    Parameters</span>
@@ -612,9 +611,8 @@
 <div class="viewcode-block" id="DiscreteContinuousConvTranspose2d">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.discrete_continuous_convolution.DiscreteContinuousConvTranspose2d.html#neuralop.layers.discrete_continuous_convolution.DiscreteContinuousConvTranspose2d">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">DiscreteContinuousConvTranspose2d</span><span class="p">(</span><span class="n">DiscreteContinuousConv</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Transpose variant of discrete-continuous convolutions on arbitrary</span>
-<span class="sd">    2d grids as implemented for [1]_. Forward call expects an input of shape</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transpose variant of discrete-continuous convolutions on arbitrary 2d grids. </span>
+<span class="sd">    It is implemented as described in [1]_. The forward call expects an input of shape</span>
 <span class="sd">    (batch_size, in_channels, n_in).</span>
 
 <span class="sd">    Parameters</span>
@@ -825,13 +823,12 @@
 <div class="viewcode-block" id="EquidistantDiscreteContinuousConv2d">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.discrete_continuous_convolution.EquidistantDiscreteContinuousConv2d.html#neuralop.layers.discrete_continuous_convolution.EquidistantDiscreteContinuousConv2d">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">EquidistantDiscreteContinuousConv2d</span><span class="p">(</span><span class="n">DiscreteContinuousConv</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Discrete-continuous convolutions (DISCO) on equidistant 2d grids</span>
-<span class="sd">    as implemented for [1]_. This implementation maps to 2d convolution</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Discrete-continuous convolutions (DISCO) on equidistant 2d grids.</span>
+<span class="sd">    It is implemented as described in [1]_. This implementation maps to 2d convolution</span>
 <span class="sd">    kernels which makes it more efficient than the unstructured implementation</span>
 <span class="sd">    above. Due to the mapping to an equidistant grid, the domain lengths need</span>
 <span class="sd">    to be specified in order to compute the effective resolution and the</span>
-<span class="sd">    corresponding cutoff radius. Forward call expects an input of shape</span>
+<span class="sd">    corresponding cutoff radius. The forward call expects an input of shape</span>
 <span class="sd">    (batch_size, in_channels, in_shape[0], in_shape[1]).</span>
 
 <span class="sd">    Parameters</span>
@@ -1011,13 +1008,12 @@
 <div class="viewcode-block" id="EquidistantDiscreteContinuousConvTranspose2d">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.discrete_continuous_convolution.EquidistantDiscreteContinuousConvTranspose2d.html#neuralop.layers.discrete_continuous_convolution.EquidistantDiscreteContinuousConvTranspose2d">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">EquidistantDiscreteContinuousConvTranspose2d</span><span class="p">(</span><span class="n">DiscreteContinuousConv</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Transpose Discrete-continuous convolutions (DISCO) on equidistant 2d grids</span>
-<span class="sd">    as implemented for [1]_. This implementation maps to 2d convolution kernels</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transpose Discrete-continuous convolutions (DISCO) on equidistant 2d grids.</span>
+<span class="sd">    It is implemented as described in [1]_. This implementation maps to 2d convolution kernels</span>
 <span class="sd">    which makes it more efficient than the unstructured implementation above.</span>
 <span class="sd">    Due to the mapping to an equidistant grid, the domain lengths need to be</span>
 <span class="sd">    specified in order to compute the effective resolution and the corresponding</span>
-<span class="sd">    cutoff radius. Forward call expects an input of shape</span>
+<span class="sd">    cutoff radius. The forward call expects an input of shape</span>
 <span class="sd">    (batch_size, in_channels, in_shape[0], in_shape[1]).</span>
 
 <span class="sd">    Parameters</span>

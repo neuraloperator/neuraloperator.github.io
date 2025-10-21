@@ -327,13 +327,13 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fdd77506d50&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fbd7042b9d0&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fdd77507b10&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fbd7042bb10&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fdd77507b10&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fdd77507390&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fbd7042bb10&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fbd7042bd90&gt;}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -379,20 +379,20 @@ Raw outputs of shape torch.Size([32, 1, 16, 16])
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:581: UserWarning: LpLoss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
   val_loss = loss(out, **sample)
 Eval: 16_h1=0.4499, 16_l2=0.2930, 32_h1=0.5270, 32_l2=0.3010
-[3] time=1.51, avg_loss=0.2391, train_err=7.4729
+[3] time=1.50, avg_loss=0.2391, train_err=7.4729
 Eval: 16_h1=0.2387, 16_l2=0.1591, 32_h1=0.3755, 32_l2=0.1767
 [6] time=1.50, avg_loss=0.1952, train_err=6.0990
 Eval: 16_h1=0.2325, 16_l2=0.1577, 32_h1=0.3526, 32_l2=0.1765
-[9] time=1.50, avg_loss=0.1784, train_err=5.5735
+[9] time=1.48, avg_loss=0.1784, train_err=5.5735
 Eval: 16_h1=0.1883, 16_l2=0.1127, 32_h1=0.3345, 32_l2=0.1466
-[12] time=1.54, avg_loss=0.1606, train_err=5.0201
+[12] time=1.50, avg_loss=0.1606, train_err=5.0201
 Eval: 16_h1=0.1828, 16_l2=0.1058, 32_h1=0.3339, 32_l2=0.1321
-[15] time=1.51, avg_loss=0.1578, train_err=4.9310
+[15] time=1.49, avg_loss=0.1578, train_err=4.9310
 Eval: 16_h1=0.1887, 16_l2=0.1100, 32_h1=0.3292, 32_l2=0.1341
 [18] time=1.52, avg_loss=0.1456, train_err=4.5506
 Eval: 16_h1=0.1774, 16_l2=0.0938, 32_h1=0.3155, 32_l2=0.1171
 
-{&#39;train_err&#39;: 4.338394977152348, &#39;avg_loss&#39;: 0.13882863926887512, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 1.529051332999984}
+{&#39;train_err&#39;: 4.338394977152348, &#39;avg_loss&#39;: 0.13882863926887512, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 1.5108935719999863}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -510,7 +510,7 @@ of <cite>test_resolutions</cite> to choose from.</p>
 at the same resolution at which it was trained. This is because the model hasn’t seen
 the higher-frequency patterns present in the 32x32 data during training. However, this
 demonstrates the fundamental resolution invariance of neural operators.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 34.367 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 32.802 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-models-plot-fno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/b4fadb168a06acc8c292c808f47f0e7f/plot_FNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_FNO_darcy.ipynb</span></code></a></p>

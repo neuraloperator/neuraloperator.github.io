@@ -33,7 +33,7 @@
  
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="neuralop.data.datasets.tensor_dataset.TensorDataset" href="neuralop.data.datasets.tensor_dataset.TensorDataset.html" />
+    <link rel="next" title="neuralop.data.datasets.burgers.Burgers1dTimeDataset" href="neuralop.data.datasets.burgers.Burgers1dTimeDataset.html" />
     <link rel="prev" title="neuralop.data.datasets.navier_stokes.NavierStokesDataset" href="neuralop.data.datasets.navier_stokes.NavierStokesDataset.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -141,7 +141,9 @@
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.layers">Layers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#model-dispatching">Model Dispatching</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#training">Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#loss-functions">Loss Functions</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../api.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.utils">Utility Functions</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
@@ -175,7 +177,8 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.data.datasets.car_cfd_dataset.CarCFDDataset">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.data.datasets.car_cfd_dataset.</span></span><span class="sig-name descname"><span class="pre">CarCFDDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_res</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[32,</span> <span class="pre">32,</span> <span class="pre">32]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/data/datasets/car_cfd_dataset.html#CarCFDDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.data.datasets.car_cfd_dataset.CarCFDDataset" title="Link to this definition"></a></dt>
-<dd><p>CarCFDDataset is a processed version of the dataset introduced in
+<dd><p>Processed version of the Car-CFD dataset.</p>
+<p>CarCFDDataset is a processed version of the dataset introduced in
 <a class="reference internal" href="#rfaac2f8b9be8-1" id="id1">[1]</a>, which encodes a triangular mesh over the surface of a 3D model car
 and provides the air pressure at each centroid and vertex of the mesh when
 the car is placed in a simulated wind tunnel with a recorded inlet velocity.
@@ -241,8 +244,8 @@ aerodynamic design”. ACM Transactions on Graphics, 2018.
     </a>
     
     
-    <a class="button pagination-next" href="neuralop.data.datasets.tensor_dataset.TensorDataset.html" title="next page" accesskey="n">
-        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.datasets.tensor_dataset</span></code>.TensorDataset </span>
+    <a class="button pagination-next" href="neuralop.data.datasets.burgers.Burgers1dTimeDataset.html" title="next page" accesskey="n">
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.datasets.burgers</span></code>.Burgers1dTimeDataset </span>
         <span class="icon">
             <i class="fa fa-arrow-circle-right"></i>
         </span>

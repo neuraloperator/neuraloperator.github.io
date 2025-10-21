@@ -177,7 +177,7 @@ to download the full example code.</p>
 </div>
 <section class="sphx-glr-example-title" id="visualizing-computational-fluid-dynamics-on-a-car">
 <span id="sphx-glr-auto-examples-data-plot-mini-car-cfd-py"></span><h1>Visualizing computational fluid dynamics on a car<a class="headerlink" href="#visualizing-computational-fluid-dynamics-on-a-car" title="Link to this heading"></a></h1>
-<p>In this example we visualize a mesh drawn from the <a class="reference internal" href="../../modules/api.html#car-cfd-dataset-api"><span class="std std-ref">CarCFDDataset</span></a>.</p>
+<p>In this example we visualize a mesh drawn from the <span class="xref std std-ref">CarCFDDataset</span>.</p>
 <p>This tutorial demonstrates how to work with unstructured mesh data from computational fluid dynamics (CFD)
 simulations. We will explore the 3D geometry of a car and understand how pressure fields are distributed
 over the surface, which is crucial for aerodynamic analysis and neural operator applications.</p>
@@ -211,7 +211,7 @@ Each sample includes the coordinates of all triangle vertices and the centroids 
 The 3D Navier-Stokes equations were simulated for a variety of inlet velocities over each surface using the
 <strong>OpenFOAM</strong> computational solver to predict pressure at every vertex on the mesh.
 Each sample here also has an inlet velocity scalar and a pressure field that maps 1-to-1 with the vertices on the mesh.
-The <a class="reference internal" href="../../modules/api.html#car-cfd-dataset-api"><span class="std std-ref">full CarCFDDataset</span></a> is stored in triangle mesh files for downstream processing.
+The <span class="xref std std-ref">full CarCFDDataset</span> is stored in triangle mesh files for downstream processing.
 For the sake of simplicity, we’ve packaged a few examples of the data after processing in tensor form to visualize here:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">data_list</span> <span class="o">=</span> <span class="n">load_mini_car</span><span class="p">()</span>
 <span class="n">sample</span> <span class="o">=</span> <span class="n">data_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -382,7 +382,7 @@ on a simple 2D point cloud. Let’s try that again with our 3D car surface point
 <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_mini_car_cfd_004.png" srcset="../../_images/sphx_glr_plot_mini_car_cfd_004.png" alt="One query point" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 4.477 seconds)</p>
+<img src="../../_images/sphx_glr_plot_mini_car_cfd_004.png" srcset="../../_images/sphx_glr_plot_mini_car_cfd_004.png" alt="One query point" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 4.333 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-data-plot-mini-car-cfd-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/d1e3f0356958f7433510304c5cfe45ce/plot_mini_car_cfd.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_mini_car_cfd.ipynb</span></code></a></p>

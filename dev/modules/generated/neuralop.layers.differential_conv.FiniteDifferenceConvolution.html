@@ -34,7 +34,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="neuralop.layers.discrete_continuous_convolution.DiscreteContinuousConv2d" href="neuralop.layers.discrete_continuous_convolution.DiscreteContinuousConv2d.html" />
-    <link rel="prev" title="neuralop.layers.integral_transform.IntegralTransform" href="neuralop.layers.integral_transform.IntegralTransform.html" />
+    <link rel="prev" title="neuralop.layers.local_no_block.LocalNOBlocks" href="neuralop.layers.local_no_block.LocalNOBlocks.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   </head>
@@ -141,7 +141,9 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../api.html#module-neuralop.layers">Layers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#model-dispatching">Model Dispatching</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#training">Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#loss-functions">Loss Functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.utils">Utility Functions</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
@@ -175,12 +177,9 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.layers.differential_conv.FiniteDifferenceConvolution">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.differential_conv.</span></span><span class="sig-name descname"><span class="pre">FiniteDifferenceConvolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'periodic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/differential_conv.html#FiniteDifferenceConvolution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.differential_conv.FiniteDifferenceConvolution" title="Link to this definition"></a></dt>
-<dd><p>Finite Difference Convolution Layer introduced in <a class="reference internal" href="#r2ffab17b35f8-1" id="id1">[1]</a>.
-“Neural Operators with Localized Integral and Differential Kernels” (ICML 2024)</p>
-<blockquote>
-<div><p><a class="reference external" href="https://arxiv.org/abs/2402.16845">https://arxiv.org/abs/2402.16845</a></p>
-</div></blockquote>
-<p>Computes a finite difference convolution on a regular grid,
+<dd><p>Finite Difference Convolution Layer</p>
+<p>This is the finite difference convolution layer introduced in <a class="reference internal" href="#r2ffab17b35f8-1" id="id1">[1]</a>.</p>
+<p>It computes a finite difference convolution on a regular grid,
 which converges to a directional derivative as the grid is refined.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -246,11 +245,11 @@ in the kernel: <code class="docutils literal notranslate"><span class="pre">conv
       
         <nav class="pagination" role="navigation" aria-label="pagination">
     
-    <a class="button pagination-previous" href="neuralop.layers.integral_transform.IntegralTransform.html" title="previous page" accesskey="p">
+    <a class="button pagination-previous" href="neuralop.layers.local_no_block.LocalNOBlocks.html" title="previous page" accesskey="p">
         <span class="icon">
             <i class="fa fa-arrow-circle-left"></i>
         </span>
-        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.integral_transform</span></code>.IntegralTransform</span>
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.local_no_block</span></code>.LocalNOBlocks</span>
     </a>
     
     

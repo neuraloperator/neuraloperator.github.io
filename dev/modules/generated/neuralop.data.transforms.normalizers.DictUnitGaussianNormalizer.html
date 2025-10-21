@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>neuralop.layers.skip_connections.SoftGating &#8212; neuraloperator 1.0.2 documentation</title> 
+    <title>neuralop.data.transforms.normalizers.DictUnitGaussianNormalizer &#8212; neuraloperator 1.0.2 documentation</title> 
 <link rel="stylesheet" href="../../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../_static/favicon/favicon-32x32.png">
@@ -33,8 +33,8 @@
  
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="neuralop.layers.skip_connections.skip_connection" href="neuralop.layers.skip_connections.skip_connection.html" />
-    <link rel="prev" title="neuralop.layers.padding.DomainPadding" href="neuralop.layers.padding.DomainPadding.html" />
+    <link rel="next" title="neuralop.utils.count_model_params" href="neuralop.utils.count_model_params.html" />
+    <link rel="prev" title="neuralop.data.transforms.normalizers.UnitGaussianNormalizer" href="neuralop.data.transforms.normalizers.UnitGaussianNormalizer.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   </head>
@@ -138,10 +138,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User Guide</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../api.html#models">Models</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../api.html#module-neuralop.layers">Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.layers">Layers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#model-dispatching">Model Dispatching</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#training">Training</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#loss-functions">Loss Functions</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.utils">Utility Functions</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
@@ -170,26 +172,23 @@
 
       <div class="container content main-content">
         
-  <section id="neuralop-layers-skip-connections-softgating">
-<h1><a class="reference internal" href="../api.html#module-neuralop.layers.skip_connections" title="neuralop.layers.skip_connections"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.skip_connections</span></code></a>.SoftGating<a class="headerlink" href="#neuralop-layers-skip-connections-softgating" title="Link to this heading"></a></h1>
+  <section id="neuralop-data-transforms-normalizers-dictunitgaussiannormalizer">
+<h1><a class="reference internal" href="../api.html#module-neuralop.data.transforms.normalizers" title="neuralop.data.transforms.normalizers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.transforms.normalizers</span></code></a>.DictUnitGaussianNormalizer<a class="headerlink" href="#neuralop-data-transforms-normalizers-dictunitgaussiannormalizer" title="Link to this heading"></a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="neuralop.layers.skip_connections.SoftGating">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.skip_connections.</span></span><span class="sig-name descname"><span class="pre">SoftGating</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/skip_connections.html#SoftGating"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.skip_connections.SoftGating" title="Link to this definition"></a></dt>
-<dd><p>Applies soft-gating by weighting the channels of the given input</p>
-<p>Given an input x of size <cite>(batch-size, channels, height, width)</cite>,
-this returns <cite>x * w `
-where w is of shape `(1, channels, 1, 1)</cite></p>
+<dt class="sig sig-object py" id="neuralop.data.transforms.normalizers.DictUnitGaussianNormalizer">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.data.transforms.normalizers.</span></span><span class="sig-name descname"><span class="pre">DictUnitGaussianNormalizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">normalizer_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="neuralop.data.transforms.normalizers.UnitGaussianNormalizer.html#neuralop.data.transforms.normalizers.UnitGaussianNormalizer" title="neuralop.data.transforms.normalizers.UnitGaussianNormalizer"><span class="pre">UnitGaussianNormalizer</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_mappings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">slice</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_mappings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">slice</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/data/transforms/normalizers.html#DictUnitGaussianNormalizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.data.transforms.normalizers.DictUnitGaussianNormalizer" title="Link to this definition"></a></dt>
+<dd><p>DictUnitGaussianNormalizer composes
+DictTransform and UnitGaussianNormalizer to normalize different
+fields of a model output tensor to Gaussian distributions w/
+mean 0 and unit variance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>in_features</strong><span class="classifier">int</span></dt><dd><p>Number of input features</p>
+<dt><strong>normalizer_dict</strong><span class="classifier">Dict[str, UnitGaussianNormalizer]</span></dt><dd><p>dictionary of normalizers, keyed to fields</p>
 </dd>
-<dt><strong>out_features</strong><span class="classifier">None</span></dt><dd><p>This is provided for API compatibility with nn.Linear only</p>
+<dt><strong>input_mappings</strong><span class="classifier">Dict[slice]</span></dt><dd><p>slices of input tensor to grab per field, must share keys with above</p>
 </dd>
-<dt><strong>n_dim</strong><span class="classifier">int, optional</span></dt><dd><p>Dimensionality of the input (excluding batch-size and channels).
-n_dim=2 corresponds to having Module2D, by default 2</p>
-</dd>
-<dt><strong>bias</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use a bias, by default False</p>
+<dt><strong>return_mappings</strong><span class="classifier">Dict[slice]</span></dt><dd><p>_description_</p>
 </dd>
 </dl>
 </dd>
@@ -197,15 +196,31 @@ n_dim=2 corresponds to having Module2D, by default 2</p>
 <p class="rubric">Methods</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.layers.skip_connections.SoftGating.forward" title="neuralop.layers.skip_connections.SoftGating.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>(x)</p></td>
-<td><p>Applies soft-gating to a batch of activations</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.data.transforms.normalizers.DictUnitGaussianNormalizer.from_dataset" title="neuralop.data.transforms.normalizers.DictUnitGaussianNormalizer.from_dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_dataset</span></code></a>(dataset[, dim, keys, mask])</p></td>
+<td><p>Return a dictionary of normalizer instances, fitted on the given dataset</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py method">
-<dt class="sig sig-object py" id="neuralop.layers.skip_connections.SoftGating.forward">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/skip_connections.html#SoftGating.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.skip_connections.SoftGating.forward" title="Link to this definition"></a></dt>
-<dd><p>Applies soft-gating to a batch of activations</p>
+<dt class="sig sig-object py" id="neuralop.data.transforms.normalizers.DictUnitGaussianNormalizer.from_dataset">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/data/transforms/normalizers.html#DictUnitGaussianNormalizer.from_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.data.transforms.normalizers.DictUnitGaussianNormalizer.from_dataset" title="Link to this definition"></a></dt>
+<dd><p>Return a dictionary of normalizer instances, fitted on the given dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>dataset</strong><span class="classifier">pytorch dataset</span></dt><dd><p>each element must be a dict {key: sample}
+e.g. {‘x’: input_samples, ‘y’: target_labels}</p>
+</dd>
+<dt><strong>dim</strong><span class="classifier">int list, default is None</span></dt><dd><ul class="simple">
+<li><p>If None, reduce over all dims (scalar mean and std)</p></li>
+<li><p>Otherwise, must include batch-dimensions and all over dims to reduce over</p></li>
+</ul>
+</dd>
+<dt><strong>keys</strong><span class="classifier">str list or None</span></dt><dd><p>if not None, a normalizer is instanciated only for the given keys</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -218,16 +233,16 @@ n_dim=2 corresponds to having Module2D, by default 2</p>
       
         <nav class="pagination" role="navigation" aria-label="pagination">
     
-    <a class="button pagination-previous" href="neuralop.layers.padding.DomainPadding.html" title="previous page" accesskey="p">
+    <a class="button pagination-previous" href="neuralop.data.transforms.normalizers.UnitGaussianNormalizer.html" title="previous page" accesskey="p">
         <span class="icon">
             <i class="fa fa-arrow-circle-left"></i>
         </span>
-        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.padding</span></code>.DomainPadding</span>
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.transforms.normalizers</span></code>.UnitGaussianNormalizer</span>
     </a>
     
     
-    <a class="button pagination-next" href="neuralop.layers.skip_connections.skip_connection.html" title="next page" accesskey="n">
-        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.skip_connections</span></code>.skip_connection </span>
+    <a class="button pagination-next" href="neuralop.utils.count_model_params.html" title="next page" accesskey="n">
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.utils</span></code>.count_model_params </span>
         <span class="icon">
             <i class="fa fa-arrow-circle-right"></i>
         </span>
@@ -263,9 +278,9 @@ n_dim=2 corresponds to having Module2D, by default 2</p>
 
         <div class="menu menu-list localtoc-list">
         <ul>
-<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.skip_connections</span></code>.SoftGating</a><ul>
-<li><a class="reference internal" href="#neuralop.layers.skip_connections.SoftGating"><code class="docutils literal notranslate"><span class="pre">SoftGating</span></code></a><ul>
-<li><a class="reference internal" href="#neuralop.layers.skip_connections.SoftGating.forward"><code class="docutils literal notranslate"><span class="pre">SoftGating.forward()</span></code></a></li>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.transforms.normalizers</span></code>.DictUnitGaussianNormalizer</a><ul>
+<li><a class="reference internal" href="#neuralop.data.transforms.normalizers.DictUnitGaussianNormalizer"><code class="docutils literal notranslate"><span class="pre">DictUnitGaussianNormalizer</span></code></a><ul>
+<li><a class="reference internal" href="#neuralop.data.transforms.normalizers.DictUnitGaussianNormalizer.from_dataset"><code class="docutils literal notranslate"><span class="pre">DictUnitGaussianNormalizer.from_dataset()</span></code></a></li>
 </ul>
 </li>
 </ul>

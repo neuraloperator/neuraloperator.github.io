@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>neuralop.data.datasets.tensor_dataset.TensorDataset &#8212; neuraloperator 1.0.2 documentation</title> 
+    <title>neuralop.data.datasets.burgers.load_mini_burgers_1dtime &#8212; neuraloperator 1.0.2 documentation</title> 
 <link rel="stylesheet" href="../../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../_static/favicon/favicon-32x32.png">
@@ -34,7 +34,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="neuralop.data.transforms.data_processors.DefaultDataProcessor" href="neuralop.data.transforms.data_processors.DefaultDataProcessor.html" />
-    <link rel="prev" title="neuralop.data.datasets.car_cfd_dataset.CarCFDDataset" href="neuralop.data.datasets.car_cfd_dataset.CarCFDDataset.html" />
+    <link rel="prev" title="neuralop.data.datasets.burgers.Burgers1dTimeDataset" href="neuralop.data.datasets.burgers.Burgers1dTimeDataset.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   </head>
@@ -141,7 +141,9 @@
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.layers">Layers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#model-dispatching">Model Dispatching</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#training">Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#loss-functions">Loss Functions</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../api.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.utils">Utility Functions</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
@@ -170,12 +172,33 @@
 
       <div class="container content main-content">
         
-  <section id="neuralop-data-datasets-tensor-dataset-tensordataset">
-<h1><a class="reference internal" href="../api.html#module-neuralop.data.datasets.tensor_dataset" title="neuralop.data.datasets.tensor_dataset"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.datasets.tensor_dataset</span></code></a>.TensorDataset<a class="headerlink" href="#neuralop-data-datasets-tensor-dataset-tensordataset" title="Link to this heading"></a></h1>
-<dl class="py class">
-<dt class="sig sig-object py" id="neuralop.data.datasets.tensor_dataset.TensorDataset">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.data.datasets.tensor_dataset.</span></span><span class="sig-name descname"><span class="pre">TensorDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform_x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/data/datasets/tensor_dataset.html#TensorDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.data.datasets.tensor_dataset.TensorDataset" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+  <section id="neuralop-data-datasets-burgers-load-mini-burgers-1dtime">
+<h1><a class="reference internal" href="../api.html#module-neuralop.data.datasets.burgers" title="neuralop.data.datasets.burgers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.datasets.burgers</span></code></a>.load_mini_burgers_1dtime<a class="headerlink" href="#neuralop-data-datasets-burgers-load-mini-burgers-1dtime" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="neuralop.data.datasets.burgers.load_mini_burgers_1dtime">
+<span class="sig-prename descclassname"><span class="pre">neuralop.data.datasets.burgers.</span></span><span class="sig-name descname"><span class="pre">load_mini_burgers_1dtime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temporal_subsample</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spatial_subsample</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/data/datasets/burgers.html#load_mini_burgers_1dtime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.data.datasets.burgers.load_mini_burgers_1dtime" title="Link to this definition"></a></dt>
+<dd><p>Legacy function to load mini Burger’s equation dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>root_dir</strong><span class="classifier">Union[Path, str]</span></dt><dd><p>root at which to download data files</p>
+</dd>
+<dt><strong>n_train</strong><span class="classifier">int</span></dt><dd><p>number of train instances</p>
+</dd>
+<dt><strong>n_test</strong><span class="classifier">int</span></dt><dd><p>number of test instances per test dataset</p>
+</dd>
+<dt><strong>batch_size</strong><span class="classifier">int</span></dt><dd><p>batch size of training set</p>
+</dd>
+<dt><strong>test_batch_size</strong><span class="classifier">int</span></dt><dd><p>batch size of test set</p>
+</dd>
+<dt><strong>temporal_subsample</strong><span class="classifier">int, optional</span></dt><dd><p>rate at which to subsample the temporal dimension, by default None</p>
+</dd>
+<dt><strong>spatial_subsample</strong><span class="classifier">int, optional</span></dt><dd><p>rate at which to subsample along the spatial dimension, by default None</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 <div class="clearer"></div></section>
 
@@ -185,11 +208,11 @@
       
         <nav class="pagination" role="navigation" aria-label="pagination">
     
-    <a class="button pagination-previous" href="neuralop.data.datasets.car_cfd_dataset.CarCFDDataset.html" title="previous page" accesskey="p">
+    <a class="button pagination-previous" href="neuralop.data.datasets.burgers.Burgers1dTimeDataset.html" title="previous page" accesskey="p">
         <span class="icon">
             <i class="fa fa-arrow-circle-left"></i>
         </span>
-        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.datasets.car_cfd_dataset</span></code>.CarCFDDataset</span>
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.datasets.burgers</span></code>.Burgers1dTimeDataset</span>
     </a>
     
     
@@ -230,8 +253,8 @@
 
         <div class="menu menu-list localtoc-list">
         <ul>
-<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.datasets.tensor_dataset</span></code>.TensorDataset</a><ul>
-<li><a class="reference internal" href="#neuralop.data.datasets.tensor_dataset.TensorDataset"><code class="docutils literal notranslate"><span class="pre">TensorDataset</span></code></a></li>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.datasets.burgers</span></code>.load_mini_burgers_1dtime</a><ul>
+<li><a class="reference internal" href="#neuralop.data.datasets.burgers.load_mini_burgers_1dtime"><code class="docutils literal notranslate"><span class="pre">load_mini_burgers_1dtime()</span></code></a></li>
 </ul>
 </li>
 </ul>
