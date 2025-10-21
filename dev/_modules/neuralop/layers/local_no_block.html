@@ -144,114 +144,131 @@
 <div class="viewcode-block" id="LocalNOBlocks">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.local_no_block.LocalNOBlocks.html#neuralop.layers.local_no_block.LocalNOBlocks">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">LocalNOBlocks</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;LocalNOBlocks implements a sequence of Fourier layers, the operations of which </span>
-<span class="sd">    are first described in [1]_. The exact implementation details of the Fourier </span>
-<span class="sd">    layer architecture are discussed in [2]_. The Fourier layers are placed in parallel </span>
-<span class="sd">    with differential kernel layers and local integral layers, as described in [3]_.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Local Neural Operator blocks with localized integral and differential kernels [3]_.</span>
+
+<span class="sd">    This class implements neural operator blocks that combine Fourier neural operators</span>
+<span class="sd">    with localized integral and differential kernels to capture both global and local</span>
+<span class="sd">    features in PDE solutions [3]_. The architecture addresses the over-smoothing limitations</span>
+<span class="sd">    of purely global FNOs while maintaining resolution-independence through principled</span>
+<span class="sd">    local operations.</span>
+
+<span class="sd">    The key innovation is the integration of two types of local operations:</span>
+<span class="sd">    1. Differential kernels: Learn finite difference stencils that converge to</span>
+<span class="sd">       differential operators under appropriate scaling.</span>
+<span class="sd">    2. Local integral kernels: Use discrete-continuous convolutions with locally</span>
+<span class="sd">       supported kernels to capture local interactions.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    in_channels : int</span>
-<span class="sd">        input channels to Fourier layers</span>
+<span class="sd">        Number of input channels to Fourier layers</span>
 <span class="sd">    out_channels : int</span>
-<span class="sd">        output channels after Fourier layers</span>
+<span class="sd">        Number of output channels after Fourier layers</span>
 <span class="sd">    n_modes : int, List[int]</span>
-<span class="sd">        number of modes to keep along each dimension </span>
-<span class="sd">        in frequency space. Can either be specified as</span>
-<span class="sd">        an int (for all dimensions) or an iterable with one</span>
-<span class="sd">        number per dimension</span>
+<span class="sd">        Number of modes to keep along each dimension in frequency space.</span>
+<span class="sd">        Can either be specified as an int (for all dimensions)</span>
+<span class="sd">        or an iterable with one number per dimension</span>
 <span class="sd">    default_in_shape : Tuple[int]</span>
-<span class="sd">        Default input shape on spatiotemporal dimensions.</span>
+<span class="sd">        Default input shape for spatiotemporal dimensions</span>
 <span class="sd">    resolution_scaling_factor : Optional[Union[Number, List[Number]]], optional</span>
-<span class="sd">        factor by which to scale outputs for super-resolution, by default None</span>
+<span class="sd">        Factor by which to scale outputs for super-resolution, by default None</span>
 <span class="sd">    n_layers : int, optional</span>
-<span class="sd">        number of Fourier layers to apply in sequence, by default 1</span>
-<span class="sd">    disco_layers : bool or bool list, optional</span>
-<span class="sd">        Must be same length as n_layers, dictates whether to include a</span>
-<span class="sd">        local integral kernel parallel connection at each layer. If a single</span>
-<span class="sd">        bool, shared for all layers.</span>
-<span class="sd">    disco_kernel_shape: Union[int, List[int]]</span>
-<span class="sd">        kernel shape for local integral. Expects either a single integer for isotropic kernels or two integers for anisotropic kernels</span>
-<span class="sd">    domain_length: torch.Tensor, optional</span>
-<span class="sd">        extent/length of the physical domain. Assumes square domain [-1, 1]^2 by default</span>
-<span class="sd">    disco_groups: int, optional</span>
-<span class="sd">        number of groups in the local integral convolution, by default 1</span>
-<span class="sd">    disco_bias: bool, optional</span>
-<span class="sd">        whether to use a bias for the integral kernel, by default True</span>
-<span class="sd">    radius_cutoff: float, optional</span>
-<span class="sd">        cutoff radius (with respect to domain_length) for the local integral kernel, by default None</span>
-<span class="sd">    diff_layers : bool or bool list, optional</span>
-<span class="sd">        Must be same length as n_layers, dictates whether to include a</span>
-<span class="sd">        differential kernel parallel connection at each layer. If a single</span>
-<span class="sd">        bool, shared for all layers.</span>
-<span class="sd">    conv_padding_mode : str in [&#39;periodic&#39;, &#39;circular&#39;, &#39;replicate&#39;, &#39;reflect&#39;, &#39;zeros&#39;], optional</span>
+<span class="sd">        Number of neural operator layers to apply in sequence, by default 1</span>
+<span class="sd">    disco_layers : bool or List[bool], optional</span>
+<span class="sd">        Whether to include local integral kernel connections at each layer.</span>
+<span class="sd">        If a single bool, applies to all layers. If a list, must match n_layers.</span>
+<span class="sd">    disco_kernel_shape : Union[int, List[int]], optional</span>
+<span class="sd">        Kernel shape for local integral operations. Single int for isotropic kernels,</span>
+<span class="sd">        two ints for anisotropic kernels, by default [2,4]</span>
+<span class="sd">    domain_length : torch.Tensor, optional</span>
+<span class="sd">        Physical domain extent/length. Assumes square domain [-1, 1]^2 by default</span>
+<span class="sd">    disco_groups : int, optional</span>
+<span class="sd">        Number of groups in local integral convolution, by default 1</span>
+<span class="sd">    disco_bias : bool, optional</span>
+<span class="sd">        Whether to use bias for integral kernel, by default True</span>
+<span class="sd">    radius_cutoff : float, optional</span>
+<span class="sd">        Cutoff radius (relative to domain_length) for local integral kernel, by default None</span>
+<span class="sd">    diff_layers : bool or List[bool], optional</span>
+<span class="sd">        Whether to include differential kernel connections at each layer.</span>
+<span class="sd">        If a single bool, applies to all layers. If a list, must match n_layers.</span>
+<span class="sd">    conv_padding_mode : str, optional</span>
 <span class="sd">        Padding mode for spatial convolution kernels.</span>
-<span class="sd">    fin_diff_kernel_size : odd int, optional</span>
-<span class="sd">        Conv kernel size for finite difference convolution.</span>
+<span class="sd">        Options: &#39;periodic&#39;, &#39;circular&#39;, &#39;replicate&#39;, &#39;reflect&#39;, &#39;zeros&#39;. By default &#39;periodic&#39;</span>
+<span class="sd">    fin_diff_kernel_size : int, optional</span>
+<span class="sd">        Kernel size for finite difference convolution (must be odd), by default 3</span>
 <span class="sd">    mix_derivatives : bool, optional</span>
-<span class="sd">        Whether to mix derivatives across channels.</span>
-<span class="sd">    max_n_modes : int, List[int], optional</span>
-<span class="sd">        maximum number of modes to keep along each dimension, by default None</span>
+<span class="sd">        Whether to mix derivatives across channels, by default True</span>
+<span class="sd">    max_n_modes : int or List[int], optional</span>
+<span class="sd">        Maximum number of modes to keep along each dimension, by default None</span>
 <span class="sd">    local_no_block_precision : str, optional</span>
-<span class="sd">        floating point precision to use for computations, by default &quot;full&quot;</span>
+<span class="sd">        Floating point precision for computations, by default &quot;full&quot;</span>
 <span class="sd">    use_channel_mlp : bool, optional</span>
-<span class="sd">        Whether to use an MLP layer after each block, by default True</span>
+<span class="sd">        Whether to use MLP layer after each block, by default False</span>
 <span class="sd">    channel_mlp_dropout : int, optional</span>
-<span class="sd">        dropout parameter for self.channel_mlp, by default 0</span>
+<span class="sd">        Dropout parameter for channel MLP, by default 0</span>
 <span class="sd">    channel_mlp_expansion : float, optional</span>
-<span class="sd">        expansion parameter for self.channel_mlp, by default 0.5</span>
+<span class="sd">        Expansion factor for channel MLP, by default 0.5</span>
 <span class="sd">    non_linearity : torch.nn.F module, optional</span>
-<span class="sd">        nonlinear activation function to use between layers, by default F.gelu</span>
+<span class="sd">        Nonlinear activation function between layers, by default F.gelu</span>
 <span class="sd">    stabilizer : Literal[&quot;tanh&quot;], optional</span>
-<span class="sd">        stabilizing module to use between certain layers, by default None</span>
-<span class="sd">        if &quot;tanh&quot;, use tanh</span>
+<span class="sd">        Stabilizing module between layers. Options: &quot;tanh&quot;. By default None</span>
 <span class="sd">    norm : Literal[&quot;ada_in&quot;, &quot;group_norm&quot;, &quot;instance_norm&quot;], optional</span>
 <span class="sd">        Normalization layer to use, by default None</span>
 <span class="sd">    ada_in_features : int, optional</span>
-<span class="sd">        number of features for adaptive instance norm above, by default None</span>
+<span class="sd">        Number of features for adaptive instance normalization, by default None</span>
 <span class="sd">    preactivation : bool, optional</span>
-<span class="sd">        whether to call forward pass with pre-activation, by default False</span>
+<span class="sd">        Whether to call forward pass with pre-activation, by default False</span>
 <span class="sd">        if True, call nonlinear activation and norm before Fourier convolution</span>
 <span class="sd">        if False, call activation and norms after Fourier convolutions</span>
 <span class="sd">    local_no_skip : str, optional</span>
-<span class="sd">        module to use for Local NO skip connections, by default &quot;linear&quot;</span>
-<span class="sd">        see layers.skip_connections for more details</span>
+<span class="sd">        Module to use for Local NO skip connections, by default &quot;linear&quot;</span>
+<span class="sd">        Options: &quot;linear&quot;, &quot;identity&quot;, &quot;soft-gating&quot;, None.</span>
+<span class="sd">        If None, no skip connection is added. See layers.skip_connections for more details</span>
 <span class="sd">    channel_mlp_skip : str, optional</span>
-<span class="sd">        module to use for ChannelMLP skip connections, by default &quot;soft-gating&quot;</span>
-<span class="sd">        see layers.skip_connections for more details</span>
+<span class="sd">        Module to use for ChannelMLP skip connections, by default &quot;soft-gating&quot;</span>
+<span class="sd">        Options: &quot;linear&quot;, &quot;identity&quot;, &quot;soft-gating&quot;, None.</span>
+<span class="sd">        If None, no skip connection is added. See layers.skip_connections for more details</span>
 
 <span class="sd">    Other Parameters</span>
-<span class="sd">    -------------------</span>
+<span class="sd">    ---------------</span>
 <span class="sd">    complex_data : bool, optional</span>
-<span class="sd">        whether the Local NO&#39;s data takes on complex values in space, by default False</span>
+<span class="sd">        Whether the data takes complex values in space, by default False</span>
 <span class="sd">    separable : bool, optional</span>
-<span class="sd">        separable parameter for SpectralConv, by default False</span>
+<span class="sd">        Separable parameter for SpectralConv, by default False</span>
 <span class="sd">    factorization : str, optional</span>
-<span class="sd">        factorization parameter for SpectralConv, by default None</span>
+<span class="sd">        Factorization method for SpectralConv, by default None</span>
+<span class="sd">        Options: &quot;factorized&quot;, &quot;reconstructed&quot;.</span>
 <span class="sd">    rank : float, optional</span>
-<span class="sd">        rank parameter for SpectralConv, by default 1.0</span>
+<span class="sd">        Rank parameter for SpectralConv, by default 1.0</span>
 <span class="sd">    conv_module : BaseConv, optional</span>
-<span class="sd">        module to use for convolutions in Local NO block, by default SpectralConv</span>
+<span class="sd">        Convolution module for Local NO block, by default SpectralConv</span>
 <span class="sd">    joint_factorization : bool, optional</span>
-<span class="sd">        whether to factorize all spectralConv weights as one tensor, by default False</span>
+<span class="sd">        Whether to factorize all SpectralConv weights as one tensor, by default False</span>
 <span class="sd">    fixed_rank_modes : bool, optional</span>
-<span class="sd">        fixed_rank_modes parameter for SpectralConv, by default False</span>
+<span class="sd">        Fixed rank modes parameter for SpectralConv, by default False</span>
 <span class="sd">    implementation : str, optional</span>
-<span class="sd">        implementation parameter for SpectralConv, by default &quot;factorized&quot;</span>
-<span class="sd">    decomposition_kwargs : _type_, optional</span>
-<span class="sd">        kwargs for tensor decomposition in SpectralConv, by default dict()</span>
-<span class="sd">    </span>
+<span class="sd">        Implementation method for SpectralConv, by default &quot;factorized&quot;</span>
+<span class="sd">    decomposition_kwargs : dict, optional</span>
+<span class="sd">        Keyword arguments for tensor decomposition in SpectralConv, by default dict()</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - Differential kernels are only implemented for dimensions ≤ 3</span>
+<span class="sd">    - Local integral kernels are only implemented for 2D domains</span>
+
 <span class="sd">    References</span>
-<span class="sd">    -----------</span>
-<span class="sd">    .. [1] Li, Z. et al. &quot;Fourier Neural Operator for Parametric Partial Differential </span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Li, Z. et al. &quot;Fourier Neural Operator for Parametric Partial Differential</span>
 <span class="sd">           Equations&quot; (2021). ICLR 2021, https://arxiv.org/pdf/2010.08895.</span>
 <span class="sd">    .. [2] Kossaifi, J., Kovachki, N., Azizzadenesheli, K., Anandkumar, A. &quot;Multi-Grid</span>
-<span class="sd">           Tensorized Fourier Neural Operator for High-Resolution PDEs&quot; (2024). </span>
+<span class="sd">           Tensorized Fourier Neural Operator for High-Resolution PDEs&quot; (2024).</span>
 <span class="sd">           TMLR 2024, https://openreview.net/pdf?id=AWiDlO63bH.</span>
 <span class="sd">    .. [3] Liu-Schiaffini M., Berner J., Bonev B., Kurth T., Azizzadenesheli K., Anandkumar A.;</span>
-<span class="sd">           &quot;Neural Operators with Localized Integral and Differential Kernels&quot; (2024).  </span>
+<span class="sd">           &quot;Neural Operators with Localized Integral and Differential Kernels&quot; (2024).</span>
 <span class="sd">           ICML 2024, https://arxiv.org/pdf/2402.16845.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">in_channels</span><span class="p">,</span>
@@ -261,13 +278,13 @@
         <span class="n">resolution_scaling_factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">n_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">disco_layers</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">disco_kernel_shape</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span>
+        <span class="n">disco_kernel_shape</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
         <span class="n">radius_cutoff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">domain_length</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">domain_length</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
         <span class="n">disco_groups</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">disco_bias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">diff_layers</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">conv_padding_mode</span><span class="o">=</span><span class="s1">&#39;periodic&#39;</span><span class="p">,</span>
+        <span class="n">conv_padding_mode</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span>
         <span class="n">fin_diff_kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
         <span class="n">mix_derivatives</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">max_n_modes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -303,7 +320,7 @@
             <span class="n">disco_layers</span> <span class="o">=</span> <span class="p">[</span><span class="n">disco_layers</span><span class="p">]</span> <span class="o">*</span> <span class="n">n_layers</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">diff_layers</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
             <span class="n">diff_layers</span> <span class="o">=</span> <span class="p">[</span><span class="n">diff_layers</span><span class="p">]</span> <span class="o">*</span> <span class="n">n_layers</span>
-        
+
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_modes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="ow">and</span> <span class="kc">True</span> <span class="ow">in</span> <span class="n">diff_layers</span><span class="p">:</span>
             <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Differential convs not implemented for dimensions higher than 3.&quot;</span><span class="p">)</span>
 
@@ -353,13 +370,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">domain_length</span> <span class="o">=</span> <span class="n">domain_length</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">disco_groups</span> <span class="o">=</span> <span class="n">disco_groups</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">disco_bias</span> <span class="o">=</span> <span class="n">disco_bias</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">periodic</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv_padding_mode</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;circular&#39;</span><span class="p">,</span> <span class="s1">&#39;periodic&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">periodic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv_padding_mode</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;circular&quot;</span><span class="p">,</span> <span class="s2">&quot;periodic&quot;</span><span class="p">]</span>
 
-        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">diff_layers</span><span class="p">)</span> <span class="o">==</span> <span class="n">n_layers</span><span class="p">,</span>\
-            <span class="sa">f</span><span class="s2">&quot;diff_layers must either provide a single bool value or a list of booleans of length n_layers,</span><span class="se">\</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">diff_layers</span><span class="p">)</span> <span class="o">==</span> <span class="n">n_layers</span>
+        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;diff_layers must either provide a single bool value or a list of booleans of length n_layers,</span><span class="se">\</span>
 <span class="s2">                got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">diff_layers</span><span class="p">)</span><span class="si">=}</span><span class="s2">&quot;</span>
-        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">disco_layers</span><span class="p">)</span> <span class="o">==</span> <span class="n">n_layers</span><span class="p">,</span>\
-            <span class="sa">f</span><span class="s2">&quot;disco_layers must either provide a single bool value or a list of booleans of length n_layers,</span><span class="se">\</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">disco_layers</span><span class="p">)</span> <span class="o">==</span> <span class="n">n_layers</span>
+        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;disco_layers must either provide a single bool value or a list of booleans of length n_layers,</span><span class="se">\</span>
 <span class="s2">                    got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">disco_layers</span><span class="p">)</span><span class="si">=}</span><span class="s2">&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">convs</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
@@ -376,37 +395,55 @@
                     <span class="n">separable</span><span class="o">=</span><span class="n">separable</span><span class="p">,</span>
                     <span class="n">factorization</span><span class="o">=</span><span class="n">factorization</span><span class="p">,</span>
                     <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="n">decomposition_kwargs</span><span class="p">,</span>
-                <span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span><span class="p">)</span>
             <span class="p">]</span>
         <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">local_no_skips</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
-            <span class="p">[</span>
-                <span class="n">skip_connection</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span><span class="p">,</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span><span class="p">,</span>
-                    <span class="n">skip_type</span><span class="o">=</span><span class="n">local_no_skip</span><span class="p">,</span>
-                    <span class="n">n_dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">,</span>
-                <span class="p">)</span>
-                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span><span class="p">)</span>
-            <span class="p">]</span>
-        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">local_no_skip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">local_no_skips</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">skip_connection</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span><span class="p">,</span>
+                        <span class="n">skip_type</span><span class="o">=</span><span class="n">local_no_skip</span><span class="p">,</span>
+                        <span class="n">n_dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span><span class="p">)</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">local_no_skips</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">diff_groups</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">mix_derivatives</span> <span class="k">else</span> <span class="n">in_channels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">differential</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
             <span class="p">[</span>
-                <span class="n">FiniteDifferenceConvolution</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span><span class="p">,</span>
-                                            <span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fin_diff_kernel_size</span><span class="p">,</span> 
-                                            <span class="bp">self</span><span class="o">.</span><span class="n">diff_groups</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv_padding_mode</span><span class="p">)</span>
+                <span class="n">FiniteDifferenceConvolution</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">fin_diff_kernel_size</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">diff_groups</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">conv_padding_mode</span><span class="p">,</span>
+                <span class="p">)</span>
                 <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diff_layers</span><span class="p">))</span>
             <span class="p">]</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">local_convs</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
             <span class="p">[</span>
-                <span class="n">EquidistantDiscreteContinuousConv2d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span><span class="p">,</span> <span class="n">in_shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">default_in_shape</span><span class="p">,</span> <span class="n">out_shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">default_in_shape</span><span class="p">,</span>
-                                                    <span class="n">kernel_shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">disco_kernel_shape</span><span class="p">,</span> <span class="n">domain_length</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">domain_length</span><span class="p">,</span>
-                                                    <span class="n">radius_cutoff</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">radius_cutoff</span><span class="p">,</span> <span class="n">periodic</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">periodic</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">disco_groups</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">disco_bias</span><span class="p">)</span>
+                <span class="n">EquidistantDiscreteContinuousConv2d</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span><span class="p">,</span>
+                    <span class="n">in_shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">default_in_shape</span><span class="p">,</span>
+                    <span class="n">out_shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">default_in_shape</span><span class="p">,</span>
+                    <span class="n">kernel_shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">disco_kernel_shape</span><span class="p">,</span>
+                    <span class="n">domain_length</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">domain_length</span><span class="p">,</span>
+                    <span class="n">radius_cutoff</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">radius_cutoff</span><span class="p">,</span>
+                    <span class="n">periodic</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">periodic</span><span class="p">,</span>
+                    <span class="n">groups</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">disco_groups</span><span class="p">,</span>
+                    <span class="n">bias</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">disco_bias</span><span class="p">,</span>
+                <span class="p">)</span>
                 <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">disco_layers</span><span class="p">))</span>
             <span class="p">]</span>
         <span class="p">)</span>
@@ -447,17 +484,20 @@
                     <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span><span class="p">)</span>
                 <span class="p">]</span>
             <span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">channel_mlp_skips</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
-                <span class="p">[</span>
-                    <span class="n">skip_connection</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span><span class="p">,</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span><span class="p">,</span>
-                        <span class="n">skip_type</span><span class="o">=</span><span class="n">channel_mlp_skip</span><span class="p">,</span>
-                        <span class="n">n_dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">,</span>
-                    <span class="p">)</span>
-                    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span><span class="p">)</span>
-                <span class="p">]</span>
-            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">channel_mlp_skip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">channel_mlp_skips</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="n">skip_connection</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span><span class="p">,</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span><span class="p">,</span>
+                            <span class="n">skip_type</span><span class="o">=</span><span class="n">channel_mlp_skip</span><span class="p">,</span>
+                            <span class="n">n_dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span><span class="p">)</span>
+                    <span class="p">]</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">channel_mlp_skips</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mlp</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -467,11 +507,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">elif</span> <span class="n">norm</span> <span class="o">==</span> <span class="s2">&quot;instance_norm&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
-                    <span class="p">[</span>
-                        <span class="n">InstanceNorm</span><span class="p">()</span>
-                        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_norms</span><span class="p">)</span>
-                    <span class="p">]</span>
-                <span class="p">)</span>
+                <span class="p">[</span><span class="n">InstanceNorm</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_norms</span><span class="p">)]</span>
+            <span class="p">)</span>
         <span class="k">elif</span> <span class="n">norm</span> <span class="o">==</span> <span class="s2">&quot;group_norm&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
                 <span class="p">[</span>
@@ -521,10 +558,11 @@
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">forward_with_postactivation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">x_skip_local_no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_no_skips</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">)</span>
-        <span class="n">x_skip_local_no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convs</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x_skip_local_no</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_no_skips</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x_skip_local_no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_no_skips</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">x_skip_local_no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convs</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x_skip_local_no</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mlp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mlp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_mlp_skips</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">x_skip_mlp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_mlp_skips</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">)</span>
             <span class="n">x_skip_mlp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convs</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x_skip_mlp</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
 
@@ -551,13 +589,20 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">x_local_no_diff_disco</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">n_norms</span> <span class="o">*</span> <span class="n">index</span><span class="p">](</span><span class="n">x_local_no_diff_disco</span><span class="p">)</span>
 
-        <span class="n">x</span> <span class="o">=</span> <span class="n">x_local_no_diff_disco</span> <span class="o">+</span> <span class="n">x_skip_local_no</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">x_local_no_diff_disco</span> <span class="o">+</span> <span class="n">x_skip_local_no</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_no_skips</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">else</span> <span class="n">x_local_no_diff_disco</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mlp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">index</span> <span class="o">&lt;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_layers</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)):</span>
             <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">non_linearity</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mlp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mlp</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">x_skip_mlp</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_mlp_skips</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mlp</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">x_skip_mlp</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mlp</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">n_norms</span> <span class="o">*</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">](</span><span class="n">x</span><span class="p">)</span>
@@ -586,19 +631,27 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">x_localconv</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="n">x_skip_local_no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_no_skips</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">)</span>
-        <span class="n">x_skip_local_local_no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convs</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x_skip_local_no</span> <span class="o">+</span> <span class="n">x_differential</span> <span class="o">+</span> <span class="n">x_localconv</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_no_skips</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x_skip_local_no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_no_skips</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">x_skip_local_local_no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convs</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x_skip_local_no</span> <span class="o">+</span> <span class="n">x_differential</span> <span class="o">+</span> <span class="n">x_localconv</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">x_skip_local_local_no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convs</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x_differential</span> <span class="o">+</span> <span class="n">x_localconv</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mlp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">x_skip_mlp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_mlp_skips</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">)</span>
-            <span class="n">x_skip_mlp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convs</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x_skip_mlp</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_mlp_skips</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">x_skip_mlp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_mlp_skips</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">)</span>
+                <span class="n">x_skip_mlp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convs</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x_skip_mlp</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stabilizer</span> <span class="o">==</span> <span class="s2">&quot;tanh&quot;</span><span class="p">:</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
         <span class="n">x_local_no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convs</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
 
-        <span class="n">x</span> <span class="o">=</span> <span class="n">x_local_no</span> <span class="o">+</span> <span class="n">x_skip_local_local_no</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">x_local_no</span> <span class="o">+</span> <span class="n">x_skip_local_local_no</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_no_skips</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">else</span> <span class="n">x_local_no</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mlp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_layers</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
@@ -607,7 +660,10 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">n_norms</span> <span class="o">*</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">](</span><span class="n">x</span><span class="p">)</span>
 
-            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mlp</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">x_skip_mlp</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_mlp_skips</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mlp</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">x_skip_mlp</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mlp</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">x</span>
 

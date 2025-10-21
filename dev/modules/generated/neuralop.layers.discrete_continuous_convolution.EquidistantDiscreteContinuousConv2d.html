@@ -180,7 +180,7 @@ as implemented for <a class="reference internal" href="#r9a510dbeca5b-1" id="id1
 kernels which makes it more efficient than the unstructured implementation
 above. Due to the mapping to an equidistant grid, the domain lengths need
 to be specified in order to compute the effective resolution and the
-corresponding cutoff radius. Forward call expects an input of shape 
+corresponding cutoff radius. Forward call expects an input of shape
 (batch_size, in_channels, in_shape[0], in_shape[1]).</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -197,7 +197,7 @@ of in_shape, and must be integer divisions of the corresponding
 in_shape side lengths.</p>
 </dd>
 <dt><strong>kernel_shape</strong><span class="classifier"><code class="docutils literal notranslate"><span class="pre">Union[int,</span> <span class="pre">List[int]]</span></code></span></dt><dd><p>Dimensions of the convolution kernel, either one int or a two-int tuple.
-* If one int k, the kernel will be a square of shape (k,k), meaning the convolution 
+* If one int k, the kernel will be a square of shape (k,k), meaning the convolution
 will be ‘isotropic’: both directions are equally scaled in feature space.</p>
 <ul class="simple">
 <li><p>If two ints (k1,k2), the kernel will be a rectangle of shape (k1,k2), meaning the convolution</p></li>
@@ -216,7 +216,7 @@ will be ‘isotropic’: both directions are equally scaled in feature space.</p
 </dd>
 <dt><strong>radius_cutoff: float, optional</strong></dt><dd><p>cutoff radius for the kernel. For a point <code class="docutils literal notranslate"><span class="pre">x</span></code> on the input grid,
 every point <code class="docutils literal notranslate"><span class="pre">y</span></code> on the output grid with <code class="docutils literal notranslate"><span class="pre">||x</span> <span class="pre">-</span> <span class="pre">y||</span> <span class="pre">&lt;=</span> <span class="pre">radius_cutoff</span></code>
-will be affected by the value at <code class="docutils literal notranslate"><span class="pre">x</span></code>. 
+will be affected by the value at <code class="docutils literal notranslate"><span class="pre">x</span></code>.
 By default, set to 2 / sqrt(# of output points)</p>
 </dd>
 </dl>
@@ -245,7 +245,7 @@ Neural Operators with Localized Integral and Differential Kernels;  arxiv:2402.1
 <dt class="sig sig-object py" id="neuralop.layers.discrete_continuous_convolution.EquidistantDiscreteContinuousConv2d.get_local_filter_matrix">
 <span class="sig-name descname"><span class="pre">get_local_filter_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/discrete_continuous_convolution.html#EquidistantDiscreteContinuousConv2d.get_local_filter_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.discrete_continuous_convolution.EquidistantDiscreteContinuousConv2d.get_local_filter_matrix" title="Link to this definition"></a></dt>
 <dd><p>Returns the precomputed local convolution filter matrix Psi.
-Psi parameterizes the kernel function as triangular basis functions 
+Psi parameterizes the kernel function as triangular basis functions
 evaluated on pairs of points on the convolution’s input and output grids,
 such that Psi[l, i, j] is the l-th basis function evaluated on point i in
 the output grid and point j in the input grid.</p>

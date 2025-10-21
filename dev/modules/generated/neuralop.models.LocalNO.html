@@ -178,47 +178,136 @@
 <dd><p>N-Dimensional Local Fourier Neural Operator. The LocalNO shares
 its forward pass and architecture with the standard FNO, with the key difference
 that its Fourier convolution layers are replaced with LocalNOBlocks that place
-differential kernel layers and local integral layers in parallel to its 
+differential kernel layers and local integral layers in parallel to its
 Fourier layers as detailed in <a class="reference internal" href="#r3cfd1ccbee5f-1" id="id1">[1]</a>.</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>n_modes</strong><span class="classifier">Tuple[int]</span></dt><dd><p>number of modes to keep in Fourier Layer, along each dimension
-The dimensionality of the Local NO is inferred from <code class="docutils literal notranslate"><span class="pre">len(n_modes)</span></code></p>
+<dd class="field-odd"><dl>
+<dt><strong>n_modes</strong><span class="classifier">Tuple[int]</span></dt><dd><p>Number of modes to keep in Fourier Layer, along each dimension.
+The dimensionality of the Local NO is inferred from len(n_modes).
+No default value (required parameter).</p>
 </dd>
-<dt><strong>in_channels</strong><span class="classifier">int</span></dt><dd><p>Number of channels in input function</p>
+<dt><strong>in_channels</strong><span class="classifier">int</span></dt><dd><p>Number of channels in input function. Determined by the problem.</p>
 </dd>
-<dt><strong>out_channels</strong><span class="classifier">int</span></dt><dd><p>Number of channels in output function</p>
+<dt><strong>out_channels</strong><span class="classifier">int</span></dt><dd><p>Number of channels in output function. Determined by the problem.</p>
 </dd>
-<dt><strong>hidden_channels</strong><span class="classifier">int</span></dt><dd><p>width of the Local NO (i.e. number of channels)</p>
+<dt><strong>hidden_channels</strong><span class="classifier">int</span></dt><dd><p>Width of the Local NO (i.e. number of channels).
+This significantly affects the number of parameters of the LocalNO.
+Good starting point can be 64, and then increased if more expressivity is needed.
+Update lifting_channel_ratio and projection_channel_ratio accordingly since they are proportional to hidden_channels.</p>
 </dd>
-<dt><strong>default_in_shape</strong><span class="classifier">Tuple[int]</span></dt><dd><p>Default input shape on spatiotemporal dimensions for structured DISCO convolutions</p>
+<dt><strong>default_in_shape</strong><span class="classifier">Tuple[int]</span></dt><dd><p>Default input shape on spatiotemporal dimensions for structured DISCO convolutions.
+No default value (required parameter).</p>
 </dd>
-<dt><strong>n_layers</strong><span class="classifier">int, optional</span></dt><dd><p>Number of Local NO block Layers, by default 4</p>
+<dt><strong>n_layers</strong><span class="classifier">int, optional</span></dt><dd><p>Number of Local NO block layers. Default: 4</p>
 </dd>
-<dt><strong>disco_layers</strong><span class="classifier">bool or bool list, optional</span></dt><dd><p>Must be same length as n_layers, dictates whether to include a
+<dt><strong>disco_layers</strong><span class="classifier">Union[bool, List[bool]], optional</span></dt><dd><p>Must be same length as n_layers, dictates whether to include a
 local integral kernel parallel connection at each layer. If a single
-bool, shared for all layers.</p>
+bool, shared for all layers. Default: True</p>
 </dd>
-<dt><strong>disco_kernel_shape: Union[int, List[int]], optional</strong></dt><dd><p>kernel shape for local integral. Expects either a single integer for isotropic kernels or two integers for anisotropic kernels</p>
+<dt><strong>disco_kernel_shape</strong><span class="classifier">Union[int, List[int]], optional</span></dt><dd><p>Kernel shape for local integral. Expects either a single integer for isotropic kernels
+or two integers for anisotropic kernels. Default: [2, 4]</p>
 </dd>
-<dt><strong>domain_length: torch.Tensor, optional</strong></dt><dd><p>extent/length of the physical domain. Assumes square domain [-1, 1]^2 by default</p>
+<dt><strong>domain_length</strong><span class="classifier">List[int], optional</span></dt><dd><p>Extent/length of the physical domain. Assumes square domain [-1, 1]^2 by default. Default: [2, 2]</p>
 </dd>
-<dt><strong>disco_groups: int, optional</strong></dt><dd><p>number of groups in the local integral convolution, by default 1</p>
+<dt><strong>disco_groups</strong><span class="classifier">int, optional</span></dt><dd><p>Number of groups in the local integral convolution. Default: 1</p>
 </dd>
-<dt><strong>disco_bias: bool, optional</strong></dt><dd><p>whether to use a bias for the integral kernel, by default True</p>
+<dt><strong>disco_bias</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use a bias for the integral kernel. Default: True</p>
 </dd>
-<dt><strong>radius_cutoff: float, optional</strong></dt><dd><p>cutoff radius (with respect to domain_length) for the local integral kernel, by default None</p>
+<dt><strong>radius_cutoff</strong><span class="classifier">float, optional</span></dt><dd><p>Cutoff radius (with respect to domain_length) for the local integral kernel. Default: None</p>
 </dd>
-<dt><strong>diff_layers</strong><span class="classifier">bool or bool list, optional</span></dt><dd><p>Must be same length as n_layers, dictates whether to include a
+<dt><strong>diff_layers</strong><span class="classifier">Union[bool, List[bool]], optional</span></dt><dd><p>Must be same length as n_layers, dictates whether to include a
 differential kernel parallel connection at each layer. If a single
-bool, shared for all layers.</p>
+bool, shared for all layers. Default: True</p>
 </dd>
-<dt><strong>conv_padding_mode</strong><span class="classifier">str in [‘periodic’, ‘circular’, ‘replicate’, ‘reflect’, ‘zeros’], optional</span></dt><dd><p>Padding mode for spatial convolution kernels.</p>
+<dt><strong>conv_padding_mode</strong><span class="classifier">str, optional</span></dt><dd><p>Padding mode for spatial convolution kernels. Options: “periodic”, “circular”, “replicate”, “reflect”, “zeros”.
+Default: “periodic”</p>
 </dd>
-<dt><strong>fin_diff_kernel_size</strong><span class="classifier">odd int, optional</span></dt><dd><p>Conv kernel size for finite difference convolution.</p>
+<dt><strong>fin_diff_kernel_size</strong><span class="classifier">int, optional</span></dt><dd><p>Conv kernel size for finite difference convolution. Default: 3</p>
 </dd>
-<dt><strong>mix_derivatives</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to mix derivatives across channels.</p>
+<dt><strong>mix_derivatives</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to mix derivatives across channels. Default: True</p>
+</dd>
+<dt><strong>lifting_channel_ratio</strong><span class="classifier">Number, optional</span></dt><dd><p>Ratio of lifting channels to hidden_channels.
+The number of lifting channels in the lifting block of the Local NO is
+lifting_channel_ratio * hidden_channels (e.g. default 2 * hidden_channels). Default: 2</p>
+</dd>
+<dt><strong>projection_channel_ratio</strong><span class="classifier">Number, optional</span></dt><dd><p>Ratio of projection channels to hidden_channels.
+The number of projection channels in the projection block of the Local NO is
+projection_channel_ratio * hidden_channels (e.g. default 2 * hidden_channels). Default: 2</p>
+</dd>
+<dt><strong>positional_embedding</strong><span class="classifier">Union[str, nn.Module], optional</span></dt><dd><p>Positional embedding to apply to last channels of raw input before being passed through the Local FNO.</p>
+<p>Options:
+- “grid”: Appends a grid positional embedding with default settings to the last channels of raw input.</p>
+<blockquote>
+<div><p>Assumes the inputs are discretized over a grid with entry [0,0,…] at the origin and side lengths of 1.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>GridEmbedding2D: Uses this module directly for 2D cases.</p></li>
+<li><p>GridEmbeddingND: Uses this module directly (see neuralop.embeddings.GridEmbeddingND for details).</p></li>
+<li><p>None: Does nothing.</p></li>
+</ul>
+<p>Default: “grid”</p>
+</dd>
+<dt><strong>non_linearity</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>Non-linear activation function module to use. Default: F.gelu</p>
+</dd>
+<dt><strong>norm</strong><span class="classifier">str, optional</span></dt><dd><p>Normalization layer to use. Options: “ada_in”, “group_norm”, “instance_norm”, None. Default: None</p>
+</dd>
+<dt><strong>complex_data</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether data is complex-valued. If True, initializes complex-valued modules. Default: False</p>
+</dd>
+<dt><strong>use_channel_mlp</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use an MLP layer after each LocalNO block. Default: False</p>
+</dd>
+<dt><strong>channel_mlp_dropout</strong><span class="classifier">float, optional</span></dt><dd><p>Dropout parameter for ChannelMLP in LocalNO Block. Default: 0</p>
+</dd>
+<dt><strong>channel_mlp_expansion</strong><span class="classifier">float, optional</span></dt><dd><p>Expansion parameter for ChannelMLP in LocalNO Block. Default: 0.5</p>
+</dd>
+<dt><strong>channel_mlp_skip</strong><span class="classifier">str, optional</span></dt><dd><p>Type of skip connection to use in channel-mixing MLP. Options: “linear”, “identity”, “soft-gating”, None.
+Default: “soft-gating”</p>
+</dd>
+<dt><strong>local_no_skip</strong><span class="classifier">str, optional</span></dt><dd><p>Type of skip connection to use in LocalNO layers. Options: “linear”, “identity”, “soft-gating”, None.
+Default: “linear”</p>
+</dd>
+<dt><strong>resolution_scaling_factor</strong><span class="classifier">Union[Number, List[Number]], optional</span></dt><dd><p>Layer-wise factor by which to scale the domain resolution of function.
+Options:
+- None: No scaling
+- Single number n: Scales resolution by n at each layer
+- List of numbers [n_0, n_1,…]: Scales layer i’s resolution by n_i
+Default: None</p>
+</dd>
+<dt><strong>domain_padding</strong><span class="classifier">Union[Number, List[Number]], optional</span></dt><dd><p>Percentage of padding to use. If not None, percentage of padding to use.
+To vary the percentage of padding used along each input dimension,
+pass in a list of percentages e.g. [p1, p2, …, pN] such that
+p1 corresponds to the percentage of padding along dim 1, etc. Default: None</p>
+</dd>
+<dt><strong>local_no_block_precision</strong><span class="classifier">str, optional</span></dt><dd><p>Precision mode in which to perform spectral convolution. Options: “full”, “half”, “mixed”. Default: “full”</p>
+</dd>
+<dt><strong>stabilizer</strong><span class="classifier">str, optional</span></dt><dd><p>Whether to use a stabilizer in LocalNO block. Options: “tanh”, None. Default: None
+Note: stabilizer greatly improves performance in the case local_no_block_precision=’mixed’.</p>
+</dd>
+<dt><strong>max_n_modes</strong><span class="classifier">Tuple[int], optional</span></dt><dd><p>Maximum number of modes to use in Fourier domain during training.
+None means that all the n_modes are used.
+Tuple of integers: Incrementally increase the number of modes during training.
+This can be updated dynamically during training. Default: None</p>
+</dd>
+<dt><strong>factorization</strong><span class="classifier">str, optional</span></dt><dd><p>Tensor factorization of the Local NO layer weights to use.
+Options: “None”, “Tucker”, “CP”, “TT”
+Other factorization methods supported by tltorch. Default: None</p>
+</dd>
+<dt><strong>rank</strong><span class="classifier">float, optional</span></dt><dd><p>Tensor rank to use in factorization. Default: 1.0
+Set to float &lt;1.0 when using TFNO (i.e. when factorization is not None).
+A TFNO with rank 0.1 has roughly 10% of the parameters of a dense FNO.</p>
+</dd>
+<dt><strong>fixed_rank_modes</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to not factorize certain modes. Default: False</p>
+</dd>
+<dt><strong>implementation</strong><span class="classifier">str, optional</span></dt><dd><p>Implementation method for factorized tensors.
+Options: “factorized”, “reconstructed”. Default: “factorized”</p>
+</dd>
+<dt><strong>decomposition_kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>Extra kwargs for tensor decomposition (see tltorch.FactorizedTensor). Default: {}</p>
+</dd>
+<dt><strong>separable</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use a separable spectral convolution. Default: False</p>
+</dd>
+<dt><strong>preactivation</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to compute LocalNO forward pass with ResNet-style preactivation. Default: False</p>
+</dd>
+<dt><strong>conv_module</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>Module to use for LocalNOBlock’s convolutions. Default: SpectralConv</p>
 </dd>
 </dl>
 </dd>
@@ -236,104 +325,12 @@ bool, shared for all layers.</p>
 </tr>
 </tbody>
 </table>
-<dl class="field-list">
-<dt class="field-odd">Other Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl>
-<dt><strong>lifting_channel_ratio</strong><span class="classifier">int, optional</span></dt><dd><p>ratio of lifting channels to hidden_channels, by default 2
-The number of liting channels in the lifting block of the Local FNO is
-lifting_channel_ratio * hidden_channels (e.g. default 2 * hidden_channels )</p>
-</dd>
-<dt><strong>projection_channel_ratio</strong><span class="classifier">int, optional</span></dt><dd><p>ratio of projection channels to hidden_channels, by default 2
-The number of projection channels in the projection block of the Local FNO is
-projection_channel_ratio * hidden_channels (e.g. default 2 * hidden_channels )</p>
-</dd>
-<dt><strong>positional_embedding</strong><span class="classifier">Union[str, nn.Module], optional</span></dt><dd><p>Positional embedding to apply to last channels of raw input
-before being passed through the Local FNO. Defaults to “grid”</p>
-<ul class="simple">
-<li><p>If “grid”, appends a grid positional embedding with default settings to</p></li>
-</ul>
-<p>the last channels of raw input. Assumes the inputs are discretized
-over a grid with entry [0,0,…] at the origin and side lengths of 1.</p>
-<ul class="simple">
-<li><p>If an initialized GridEmbedding module, uses this module directly</p></li>
-</ul>
-<p>See <code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.embeddings.GridEmbeddingND</span></code> for details.</p>
-<ul class="simple">
-<li><p>If None, does nothing</p></li>
-</ul>
-</dd>
-<dt><strong>non_linearity</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>Non-Linear activation function module to use, by default F.gelu</p>
-</dd>
-<dt><strong>norm</strong><span class="classifier">str {“ada_in”, “group_norm”, “instance_norm”}, optional</span></dt><dd><p>Normalization layer to use, by default None</p>
-</dd>
-<dt><strong>complex_data</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether data is complex-valued (default False)
-if True, initializes complex-valued modules.</p>
-</dd>
-<dt><strong>use_channel_mlp</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use an MLP layer after each LocalNO block, by default False</p>
-</dd>
-<dt><strong>channel_mlp_dropout</strong><span class="classifier">float, optional</span></dt><dd><p>dropout parameter for ChannelMLP in LocalNO Block, by default 0</p>
-</dd>
-<dt><strong>channel_mlp_expansion</strong><span class="classifier">float, optional</span></dt><dd><p>expansion parameter for ChannelMLP in LocalNO Block, by default 0.5</p>
-</dd>
-<dt><strong>channel_mlp_skip</strong><span class="classifier">str {‘linear’, ‘identity’, ‘soft-gating’}, optional</span></dt><dd><p>Type of skip connection to use in channel-mixing mlp, by default ‘soft-gating’</p>
-</dd>
-<dt><strong>local_no_skip</strong><span class="classifier">str {‘linear’, ‘identity’, ‘soft-gating’}, optional</span></dt><dd><p>Type of skip connection to use in LocalNO layers, by default ‘linear’</p>
-</dd>
-<dt><strong>resolution_scaling_factor</strong><span class="classifier">Union[Number, List[Number]], optional</span></dt><dd><p>layer-wise factor by which to scale the domain resolution of function, by default None</p>
-<ul class="simple">
-<li><p>If a single number n, scales resolution by n at each layer</p></li>
-<li><p>if a list of numbers [n_0, n_1,…] scales layer i’s resolution by n_i.</p></li>
-</ul>
-</dd>
-<dt><strong>domain_padding</strong><span class="classifier">Union[Number, List[Number]], optional</span></dt><dd><p>If not None, percentage of padding to use, by default None
-To vary the percentage of padding used along each input dimension,
-pass in a list of percentages e.g. [p1, p2, …, pN] such that
-p1 corresponds to the percentage of padding along dim 1, etc.</p>
-</dd>
-<dt><strong>local_no_block_precision</strong><span class="classifier">str {‘full’, ‘half’, ‘mixed’}, optional</span></dt><dd><p>precision mode in which to perform spectral convolution, by default “full”</p>
-</dd>
-<dt><strong>stabilizer</strong><span class="classifier">str {‘tanh’} | None, optional</span></dt><dd><p>whether to use a tanh stabilizer in FNO block, by default None</p>
-<p>Note: stabilizer greatly improves performance in the case
-<cite>local_no_block_precision=’mixed’</cite>.</p>
-</dd>
-<dt><strong>max_n_modes</strong><span class="classifier">Tuple[int] | None, optional</span></dt><dd><ul class="simple">
-<li><p>If not None, this allows to incrementally increase the number of</p></li>
-</ul>
-<p>modes in Fourier domain during training. Has to verify n &lt;= N
-for (n, m) in zip(max_n_modes, n_modes).</p>
-<ul class="simple">
-<li><p>If None, all the n_modes are used.</p></li>
-</ul>
-<p>This can be updated dynamically during training.</p>
-</dd>
-<dt><strong>factorization</strong><span class="classifier">str, optional</span></dt><dd><p>Tensor factorization of the Local FNO layer weights to use, by default None.</p>
-<ul class="simple">
-<li><p>If None, a dense tensor parametrizes the Spectral convolutions</p></li>
-<li><p>Otherwise, the specified tensor factorization is used.</p></li>
-</ul>
-</dd>
-<dt><strong>rank</strong><span class="classifier">float, optional</span></dt><dd><p>tensor rank to use in above factorization, by default 1.0</p>
-</dd>
-<dt><strong>fixed_rank_modes</strong><span class="classifier">bool, optional</span></dt><dd><p>Modes to not factorize, by default False</p>
-</dd>
-<dt><strong>implementation</strong><span class="classifier">str {‘factorized’, ‘reconstructed’}, optional</span></dt><dd><ul class="simple">
-<li><p>If ‘factorized’, implements tensor contraction with the individual factors of the decomposition</p></li>
-<li><p>If ‘reconstructed’, implements with the reconstructed full tensorized weight.</p></li>
-</ul>
-</dd>
-<dt><strong>decomposition_kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>extra kwargs for tensor decomposition (see <cite>tltorch.FactorizedTensor</cite>), by default dict()</p>
-</dd>
-<dt><strong>conv_module</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>module to use for FNOBlock’s convolutions, by default SpectralConv</p>
-</dd>
-</dl>
-</dd>
-</dl>
 <p class="rubric">References</p>
 <div role="list" class="citation-list">
 <div class="citation" id="r3cfd1ccbee5f-1" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
 <p>Liu-Schiaffini M., Berner J., Bonev B., Kurth T., Azizzadenesheli K., Anandkumar A.;
-“Neural Operators with Localized Integral and Differential Kernels” (2024).  
+“Neural Operators with Localized Integral and Differential Kernels” (2024).
 ICML 2024, <a class="reference external" href="https://arxiv.org/pdf/2402.16845">https://arxiv.org/pdf/2402.16845</a>.</p>
 </div>
 </div>

@@ -175,80 +175,112 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.layers.local_no_block.LocalNOBlocks">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.local_no_block.</span></span><span class="sig-name descname"><span class="pre">LocalNOBlocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">in_channels,</span> <span class="pre">out_channels,</span> <span class="pre">n_modes,</span> <span class="pre">default_in_shape,</span> <span class="pre">resolution_scaling_factor=None,</span> <span class="pre">n_layers=1,</span> <span class="pre">disco_layers=True,</span> <span class="pre">disco_kernel_shape=[2,</span> <span class="pre">4],</span> <span class="pre">radius_cutoff=None,</span> <span class="pre">domain_length=[2,</span> <span class="pre">2],</span> <span class="pre">disco_groups=1,</span> <span class="pre">disco_bias=True,</span> <span class="pre">diff_layers=True,</span> <span class="pre">conv_padding_mode='periodic',</span> <span class="pre">fin_diff_kernel_size=3,</span> <span class="pre">mix_derivatives=True,</span> <span class="pre">max_n_modes=None,</span> <span class="pre">local_no_block_precision='full',</span> <span class="pre">use_channel_mlp=False,</span> <span class="pre">channel_mlp_dropout=0,</span> <span class="pre">channel_mlp_expansion=0.5,</span> <span class="pre">non_linearity=&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;,</span> <span class="pre">stabilizer=None,</span> <span class="pre">norm=None,</span> <span class="pre">ada_in_features=None,</span> <span class="pre">preactivation=False,</span> <span class="pre">local_no_skip='linear',</span> <span class="pre">channel_mlp_skip='soft-gating',</span> <span class="pre">separable=False,</span> <span class="pre">factorization=None,</span> <span class="pre">rank=1.0,</span> <span class="pre">conv_module=&lt;class</span> <span class="pre">'neuralop.layers.spectral_convolution.SpectralConv'&gt;,</span> <span class="pre">fixed_rank_modes=False,</span> <span class="pre">implementation='factorized',</span> <span class="pre">decomposition_kwargs={},</span> <span class="pre">fft_norm='forward'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/local_no_block.html#LocalNOBlocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.local_no_block.LocalNOBlocks" title="Link to this definition"></a></dt>
-<dd><p>LocalNOBlocks implements a sequence of Fourier layers, the operations of which 
-are first described in <a class="reference internal" href="#r367398f5802a-1" id="id1">[1]</a>. The exact implementation details of the Fourier 
-layer architecture are discussed in <a class="reference internal" href="#r367398f5802a-2" id="id2">[2]</a>. The Fourier layers are placed in parallel 
-with differential kernel layers and local integral layers, as described in <a class="reference internal" href="#r367398f5802a-3" id="id3">[3]</a>.</p>
+<dd><p>Local Neural Operator blocks with localized integral and differential kernels <a class="reference internal" href="#r367398f5802a-3" id="id1">[3]</a>.</p>
+<p>This class implements neural operator blocks that combine Fourier neural operators
+with localized integral and differential kernels to capture both global and local
+features in PDE solutions <a class="reference internal" href="#r367398f5802a-3" id="id2">[3]</a>. The architecture addresses the over-smoothing limitations
+of purely global FNOs while maintaining resolution-independence through principled
+local operations.</p>
+<p>The key innovation is the integration of two types of local operations:
+1. Differential kernels: Learn finite difference stencils that converge to</p>
+<blockquote>
+<div><p>differential operators under appropriate scaling.</p>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Local integral kernels: Use discrete-continuous convolutions with locally
+supported kernels to capture local interactions.</p></li>
+</ol>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>in_channels</strong><span class="classifier">int</span></dt><dd><p>input channels to Fourier layers</p>
+<dt><strong>in_channels</strong><span class="classifier">int</span></dt><dd><p>Number of input channels to Fourier layers</p>
 </dd>
-<dt><strong>out_channels</strong><span class="classifier">int</span></dt><dd><p>output channels after Fourier layers</p>
+<dt><strong>out_channels</strong><span class="classifier">int</span></dt><dd><p>Number of output channels after Fourier layers</p>
 </dd>
-<dt><strong>n_modes</strong><span class="classifier">int, List[int]</span></dt><dd><p>number of modes to keep along each dimension 
-in frequency space. Can either be specified as
-an int (for all dimensions) or an iterable with one
-number per dimension</p>
+<dt><strong>n_modes</strong><span class="classifier">int, List[int]</span></dt><dd><p>Number of modes to keep along each dimension in frequency space.
+Can either be specified as an int (for all dimensions)
+or an iterable with one number per dimension</p>
 </dd>
-<dt><strong>default_in_shape</strong><span class="classifier">Tuple[int]</span></dt><dd><p>Default input shape on spatiotemporal dimensions.</p>
+<dt><strong>default_in_shape</strong><span class="classifier">Tuple[int]</span></dt><dd><p>Default input shape for spatiotemporal dimensions</p>
 </dd>
-<dt><strong>resolution_scaling_factor</strong><span class="classifier">Optional[Union[Number, List[Number]]], optional</span></dt><dd><p>factor by which to scale outputs for super-resolution, by default None</p>
+<dt><strong>resolution_scaling_factor</strong><span class="classifier">Optional[Union[Number, List[Number]]], optional</span></dt><dd><p>Factor by which to scale outputs for super-resolution, by default None</p>
 </dd>
-<dt><strong>n_layers</strong><span class="classifier">int, optional</span></dt><dd><p>number of Fourier layers to apply in sequence, by default 1</p>
+<dt><strong>n_layers</strong><span class="classifier">int, optional</span></dt><dd><p>Number of neural operator layers to apply in sequence, by default 1</p>
 </dd>
-<dt><strong>disco_layers</strong><span class="classifier">bool or bool list, optional</span></dt><dd><p>Must be same length as n_layers, dictates whether to include a
-local integral kernel parallel connection at each layer. If a single
-bool, shared for all layers.</p>
+<dt><strong>disco_layers</strong><span class="classifier">bool or List[bool], optional</span></dt><dd><p>Whether to include local integral kernel connections at each layer.
+If a single bool, applies to all layers. If a list, must match n_layers.</p>
 </dd>
-<dt><strong>disco_kernel_shape: Union[int, List[int]]</strong></dt><dd><p>kernel shape for local integral. Expects either a single integer for isotropic kernels or two integers for anisotropic kernels</p>
+<dt><strong>disco_kernel_shape</strong><span class="classifier">Union[int, List[int]], optional</span></dt><dd><p>Kernel shape for local integral operations. Single int for isotropic kernels,
+two ints for anisotropic kernels, by default [2,4]</p>
 </dd>
-<dt><strong>domain_length: torch.Tensor, optional</strong></dt><dd><p>extent/length of the physical domain. Assumes square domain [-1, 1]^2 by default</p>
+<dt><strong>domain_length</strong><span class="classifier">torch.Tensor, optional</span></dt><dd><p>Physical domain extent/length. Assumes square domain [-1, 1]^2 by default</p>
 </dd>
-<dt><strong>disco_groups: int, optional</strong></dt><dd><p>number of groups in the local integral convolution, by default 1</p>
+<dt><strong>disco_groups</strong><span class="classifier">int, optional</span></dt><dd><p>Number of groups in local integral convolution, by default 1</p>
 </dd>
-<dt><strong>disco_bias: bool, optional</strong></dt><dd><p>whether to use a bias for the integral kernel, by default True</p>
+<dt><strong>disco_bias</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use bias for integral kernel, by default True</p>
 </dd>
-<dt><strong>radius_cutoff: float, optional</strong></dt><dd><p>cutoff radius (with respect to domain_length) for the local integral kernel, by default None</p>
+<dt><strong>radius_cutoff</strong><span class="classifier">float, optional</span></dt><dd><p>Cutoff radius (relative to domain_length) for local integral kernel, by default None</p>
 </dd>
-<dt><strong>diff_layers</strong><span class="classifier">bool or bool list, optional</span></dt><dd><p>Must be same length as n_layers, dictates whether to include a
-differential kernel parallel connection at each layer. If a single
-bool, shared for all layers.</p>
+<dt><strong>diff_layers</strong><span class="classifier">bool or List[bool], optional</span></dt><dd><p>Whether to include differential kernel connections at each layer.
+If a single bool, applies to all layers. If a list, must match n_layers.</p>
 </dd>
-<dt><strong>conv_padding_mode</strong><span class="classifier">str in [‘periodic’, ‘circular’, ‘replicate’, ‘reflect’, ‘zeros’], optional</span></dt><dd><p>Padding mode for spatial convolution kernels.</p>
+<dt><strong>conv_padding_mode</strong><span class="classifier">str, optional</span></dt><dd><p>Padding mode for spatial convolution kernels.
+Options: ‘periodic’, ‘circular’, ‘replicate’, ‘reflect’, ‘zeros’. By default ‘periodic’</p>
 </dd>
-<dt><strong>fin_diff_kernel_size</strong><span class="classifier">odd int, optional</span></dt><dd><p>Conv kernel size for finite difference convolution.</p>
+<dt><strong>fin_diff_kernel_size</strong><span class="classifier">int, optional</span></dt><dd><p>Kernel size for finite difference convolution (must be odd), by default 3</p>
 </dd>
-<dt><strong>mix_derivatives</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to mix derivatives across channels.</p>
+<dt><strong>mix_derivatives</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to mix derivatives across channels, by default True</p>
 </dd>
-<dt><strong>max_n_modes</strong><span class="classifier">int, List[int], optional</span></dt><dd><p>maximum number of modes to keep along each dimension, by default None</p>
+<dt><strong>max_n_modes</strong><span class="classifier">int or List[int], optional</span></dt><dd><p>Maximum number of modes to keep along each dimension, by default None</p>
 </dd>
-<dt><strong>local_no_block_precision</strong><span class="classifier">str, optional</span></dt><dd><p>floating point precision to use for computations, by default “full”</p>
+<dt><strong>local_no_block_precision</strong><span class="classifier">str, optional</span></dt><dd><p>Floating point precision for computations, by default “full”</p>
 </dd>
-<dt><strong>use_channel_mlp</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use an MLP layer after each block, by default True</p>
+<dt><strong>use_channel_mlp</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use MLP layer after each block, by default False</p>
 </dd>
-<dt><strong>channel_mlp_dropout</strong><span class="classifier">int, optional</span></dt><dd><p>dropout parameter for self.channel_mlp, by default 0</p>
+<dt><strong>channel_mlp_dropout</strong><span class="classifier">int, optional</span></dt><dd><p>Dropout parameter for channel MLP, by default 0</p>
 </dd>
-<dt><strong>channel_mlp_expansion</strong><span class="classifier">float, optional</span></dt><dd><p>expansion parameter for self.channel_mlp, by default 0.5</p>
+<dt><strong>channel_mlp_expansion</strong><span class="classifier">float, optional</span></dt><dd><p>Expansion factor for channel MLP, by default 0.5</p>
 </dd>
-<dt><strong>non_linearity</strong><span class="classifier">torch.nn.F module, optional</span></dt><dd><p>nonlinear activation function to use between layers, by default F.gelu</p>
+<dt><strong>non_linearity</strong><span class="classifier">torch.nn.F module, optional</span></dt><dd><p>Nonlinear activation function between layers, by default F.gelu</p>
 </dd>
-<dt><strong>stabilizer</strong><span class="classifier">Literal[“tanh”], optional</span></dt><dd><p>stabilizing module to use between certain layers, by default None
-if “tanh”, use tanh</p>
+<dt><strong>stabilizer</strong><span class="classifier">Literal[“tanh”], optional</span></dt><dd><p>Stabilizing module between layers. Options: “tanh”. By default None</p>
 </dd>
 <dt><strong>norm</strong><span class="classifier">Literal[“ada_in”, “group_norm”, “instance_norm”], optional</span></dt><dd><p>Normalization layer to use, by default None</p>
 </dd>
-<dt><strong>ada_in_features</strong><span class="classifier">int, optional</span></dt><dd><p>number of features for adaptive instance norm above, by default None</p>
+<dt><strong>ada_in_features</strong><span class="classifier">int, optional</span></dt><dd><p>Number of features for adaptive instance normalization, by default None</p>
 </dd>
-<dt><strong>preactivation</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to call forward pass with pre-activation, by default False
+<dt><strong>preactivation</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to call forward pass with pre-activation, by default False
 if True, call nonlinear activation and norm before Fourier convolution
 if False, call activation and norms after Fourier convolutions</p>
 </dd>
-<dt><strong>local_no_skip</strong><span class="classifier">str, optional</span></dt><dd><p>module to use for Local NO skip connections, by default “linear”
-see layers.skip_connections for more details</p>
+<dt><strong>local_no_skip</strong><span class="classifier">str, optional</span></dt><dd><p>Module to use for Local NO skip connections, by default “linear”
+Options: “linear”, “identity”, “soft-gating”, None.
+If None, no skip connection is added. See layers.skip_connections for more details</p>
 </dd>
-<dt><strong>channel_mlp_skip</strong><span class="classifier">str, optional</span></dt><dd><p>module to use for ChannelMLP skip connections, by default “soft-gating”
-see layers.skip_connections for more details</p>
+<dt><strong>channel_mlp_skip</strong><span class="classifier">str, optional</span></dt><dd><p>Module to use for ChannelMLP skip connections, by default “soft-gating”
+Options: “linear”, “identity”, “soft-gating”, None.
+If None, no skip connection is added. See layers.skip_connections for more details</p>
+</dd>
+<dt><strong>Other Parameters</strong></dt><dd></dd>
+<dt><strong>—————</strong></dt><dd></dd>
+<dt><strong>complex_data</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether the data takes complex values in space, by default False</p>
+</dd>
+<dt><strong>separable</strong><span class="classifier">bool, optional</span></dt><dd><p>Separable parameter for SpectralConv, by default False</p>
+</dd>
+<dt><strong>factorization</strong><span class="classifier">str, optional</span></dt><dd><p>Factorization method for SpectralConv, by default None
+Options: “factorized”, “reconstructed”.</p>
+</dd>
+<dt><strong>rank</strong><span class="classifier">float, optional</span></dt><dd><p>Rank parameter for SpectralConv, by default 1.0</p>
+</dd>
+<dt><strong>conv_module</strong><span class="classifier">BaseConv, optional</span></dt><dd><p>Convolution module for Local NO block, by default SpectralConv</p>
+</dd>
+<dt><strong>joint_factorization</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to factorize all SpectralConv weights as one tensor, by default False</p>
+</dd>
+<dt><strong>fixed_rank_modes</strong><span class="classifier">bool, optional</span></dt><dd><p>Fixed rank modes parameter for SpectralConv, by default False</p>
+</dd>
+<dt><strong>implementation</strong><span class="classifier">str, optional</span></dt><dd><p>Implementation method for SpectralConv, by default “factorized”</p>
+</dd>
+<dt><strong>decomposition_kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>Keyword arguments for tensor decomposition in SpectralConv, by default dict()</p>
 </dd>
 </dl>
 </dd>
@@ -282,47 +314,29 @@ see layers.skip_connections for more details</p>
 </tr>
 </tbody>
 </table>
-<dl class="field-list simple">
-<dt class="field-odd">Other Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>complex_data</strong><span class="classifier">bool, optional</span></dt><dd><p>whether the Local NO’s data takes on complex values in space, by default False</p>
-</dd>
-<dt><strong>separable</strong><span class="classifier">bool, optional</span></dt><dd><p>separable parameter for SpectralConv, by default False</p>
-</dd>
-<dt><strong>factorization</strong><span class="classifier">str, optional</span></dt><dd><p>factorization parameter for SpectralConv, by default None</p>
-</dd>
-<dt><strong>rank</strong><span class="classifier">float, optional</span></dt><dd><p>rank parameter for SpectralConv, by default 1.0</p>
-</dd>
-<dt><strong>conv_module</strong><span class="classifier">BaseConv, optional</span></dt><dd><p>module to use for convolutions in Local NO block, by default SpectralConv</p>
-</dd>
-<dt><strong>joint_factorization</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to factorize all spectralConv weights as one tensor, by default False</p>
-</dd>
-<dt><strong>fixed_rank_modes</strong><span class="classifier">bool, optional</span></dt><dd><p>fixed_rank_modes parameter for SpectralConv, by default False</p>
-</dd>
-<dt><strong>implementation</strong><span class="classifier">str, optional</span></dt><dd><p>implementation parameter for SpectralConv, by default “factorized”</p>
-</dd>
-<dt><strong>decomposition_kwargs</strong><span class="classifier">_type_, optional</span></dt><dd><p>kwargs for tensor decomposition in SpectralConv, by default dict()</p>
-</dd>
-</dl>
-</dd>
-</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Differential kernels are only implemented for dimensions ≤ 3</p></li>
+<li><p>Local integral kernels are only implemented for 2D domains</p></li>
+</ul>
 <p class="rubric">References</p>
 <div role="list" class="citation-list">
 <div class="citation" id="r367398f5802a-1" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
-<p>Li, Z. et al. “Fourier Neural Operator for Parametric Partial Differential 
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Li, Z. et al. “Fourier Neural Operator for Parametric Partial Differential
 Equations” (2021). ICLR 2021, <a class="reference external" href="https://arxiv.org/pdf/2010.08895">https://arxiv.org/pdf/2010.08895</a>.</p>
 </div>
 <div class="citation" id="r367398f5802a-2" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
 <p>Kossaifi, J., Kovachki, N., Azizzadenesheli, K., Anandkumar, A. “Multi-Grid
-Tensorized Fourier Neural Operator for High-Resolution PDEs” (2024). 
+Tensorized Fourier Neural Operator for High-Resolution PDEs” (2024).
 TMLR 2024, <a class="reference external" href="https://openreview.net/pdf?id=AWiDlO63bH">https://openreview.net/pdf?id=AWiDlO63bH</a>.</p>
 </div>
 <div class="citation" id="r367398f5802a-3" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>)</span>
 <p>Liu-Schiaffini M., Berner J., Bonev B., Kurth T., Azizzadenesheli K., Anandkumar A.;
-“Neural Operators with Localized Integral and Differential Kernels” (2024).  
+“Neural Operators with Localized Integral and Differential Kernels” (2024).
 ICML 2024, <a class="reference external" href="https://arxiv.org/pdf/2402.16845">https://arxiv.org/pdf/2402.16845</a>.</p>
 </div>
 </div>

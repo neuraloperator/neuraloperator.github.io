@@ -183,57 +183,126 @@ GNO for use in a Mollified Graph Neural Operator scheme, as introduced in <a cla
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt><strong>in_channels</strong><span class="classifier">int</span></dt><dd><p>feature dimension of input points</p>
+<dt><strong>in_channels</strong><span class="classifier">int</span></dt><dd><p>Feature dimension of input points. Determined by the problem.</p>
 </dd>
-<dt><strong>out_channels</strong><span class="classifier">int</span></dt><dd><p>feature dimension of output points</p>
+<dt><strong>out_channels</strong><span class="classifier">int</span></dt><dd><p>Feature dimension of output points. Determined by the problem.</p>
 </dd>
-<dt><strong>latent_feature_channels</strong><span class="classifier">int, optional</span></dt><dd><p>number of channels in optional latent feature map
-to concatenate onto latent embeddings before 
-the FNO’s forward pass, default None</p>
+<dt><strong>fno_n_modes</strong><span class="classifier">tuple, optional</span></dt><dd><p>Number of modes along each dimension to use in FNO. Default: (16, 16, 16)
+Must be larger enough but smaller than max_resolution//2 (Nyquist frequency) on the latent grid</p>
 </dd>
-<dt><strong>projection_channel_ratio</strong><span class="classifier">int, optional</span></dt><dd><p>ratio of pointwise projection channels in the final <code class="docutils literal notranslate"><span class="pre">ChannelMLP</span></code> 
-to <code class="docutils literal notranslate"><span class="pre">fno_hidden_channels</span></code>, by default 4. The number of projection channels 
-in the final <code class="docutils literal notranslate"><span class="pre">ChannelMLP</span></code> is computed by 
-<code class="docutils literal notranslate"><span class="pre">projection_channel_ratio</span> <span class="pre">*</span> <span class="pre">fno_hidden_channels</span></code> (i.e. default 256)</p>
+<dt><strong>fno_hidden_channels</strong><span class="classifier">int, optional</span></dt><dd><p>Hidden channels for use in FNO. Default: 64</p>
 </dd>
-<dt><strong>gno_coord_dim</strong><span class="classifier">int, optional</span></dt><dd><p>geometric dimension of input/output queries, by default 3</p>
+<dt><strong>fno_n_layers</strong><span class="classifier">int, optional</span></dt><dd><p>Number of layers in FNO. Default: 4</p>
 </dd>
-<dt><strong>in_gno_radius</strong><span class="classifier">float, optional</span></dt><dd><p>radius in input space for GNO neighbor search, by default 0.033</p>
+<dt><strong>latent_feature_channels</strong><span class="classifier">int, optional</span></dt><dd><p>Number of channels in optional latent feature map to concatenate onto latent embeddings
+before the FNO’s forward pass. Default: None</p>
 </dd>
-<dt><strong>out_gno_radius</strong><span class="classifier">float, optional</span></dt><dd><p>radius in output space for GNO neighbor search, by default 0.033</p>
+<dt><strong>projection_channel_ratio</strong><span class="classifier">int, optional</span></dt><dd><p>Ratio of pointwise projection channels in the final ChannelMLP to fno_hidden_channels.
+The number of projection channels in the final ChannelMLP is computed by
+projection_channel_ratio * fno_hidden_channels (i.e. default 256). Default: 4</p>
 </dd>
-<dt><strong>gno_weighting_function</strong><span class="classifier">Literal{‘half_cos’, ‘bump’, ‘quartic’, ‘quadr’, ‘octic’}, optional</span></dt><dd><p>Choice of weighting function to use in the output GNO for 
-Mollified Graph Neural Operator-based models.
-See <code class="docutils literal notranslate"><span class="pre">neuralop.layers.gno_weighting_functions</span></code> for more details.</p>
+<dt><strong>gno_coord_dim</strong><span class="classifier">int, optional</span></dt><dd><p>Geometric dimension of input/output queries. Determined by the problem. Default: 3</p>
 </dd>
-<dt><strong>gno_weight_function_scale</strong><span class="classifier">float, optional</span></dt><dd><p>Factor by which to scale weights from GNO weighting function
-by default 1. 
-If <code class="docutils literal notranslate"><span class="pre">gno_weighting_function</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, this is not used.</p>
+<dt><strong>in_gno_radius</strong><span class="classifier">float, optional</span></dt><dd><p>Radius in input space for GNO neighbor search. Default: 0.033
+Larger radius means more neighboors so more global interactions, but larger computational cost.</p>
 </dd>
-<dt><strong>in_gno_transform_type</strong><span class="classifier">str, optional</span></dt><dd><p>transform type parameter for input GNO, by default ‘linear’
-see neuralop.layers.gno_block for more details</p>
+<dt><strong>out_gno_radius</strong><span class="classifier">float, optional</span></dt><dd><p>Radius in output space for GNO neighbor search. Default: 0.033
+Larger radius means more neighboors so more global interactions, but larger computational cost.</p>
 </dd>
-<dt><strong>out_gno_transform_type</strong><span class="classifier">str, optional</span></dt><dd><p>transform type parameter for output GNO, by default ‘linear’
-see neuralop.layers.gno_block for more details</p>
+<dt><strong>gno_weighting_function</strong><span class="classifier">Literal[“half_cos”, “bump”, “quartic”, “quadr”, “octic”], optional</span></dt><dd><p>Choice of weighting function to use in the output GNO for Mollified Graph Neural Operator-based models.
+See neuralop.layers.gno_weighting_functions for more details. Default: None</p>
 </dd>
-<dt><strong>in_gno_pos_embed_type</strong><span class="classifier">literal <cite>{‘transformer’, ‘nerf’}</cite> | None</span></dt><dd><p>type of optional sinusoidal positional embedding to use in input GNOBlock,
-by default <cite>‘transformer’</cite></p>
+<dt><strong>gno_weight_function_scale</strong><span class="classifier">float, optional</span></dt><dd><p>Factor by which to scale weights from GNO weighting function.
+If gno_weighting_function is None, this is not used. Default: 1</p>
 </dd>
-<dt><strong>out_gno_pos_embed_type</strong><span class="classifier">literal <cite>{‘transformer’, ‘nerf’}</cite> | None</span></dt><dd><p>type of optional sinusoidal positional embedding to use in output GNOBlock,
-by default <cite>‘transformer’</cite></p>
+<dt><strong>in_gno_transform_type</strong><span class="classifier">str, optional</span></dt><dd><p>Transform type parameter for input GNO. Default: “linear”
+See neuralop.layers.gno_block for more details.
+See neuralop.layers.gno_block for more details.</p>
 </dd>
-<dt><strong>fno_in_channels</strong><span class="classifier">int, optional</span></dt><dd><p>number of input channels for FNO, by default 3</p>
+<dt><strong>out_gno_transform_type</strong><span class="classifier">str, optional</span></dt><dd><p>Transform type parameter for output GNO.
+Options: “linear”, “nonlinear”, “nonlinear_kernelonly”. Default: “linear”
+See neuralop.layers.gno_block for more details.
+Type of optional sinusoidal positional embedding to use in input GNOBlock. Default: “transformer”
+Type of optional sinusoidal positional embedding to use in input GNOBlock.
+Options: “transformer”, “nerf”. Default: “transformer”
+Type of optional sinusoidal positional embedding to use in output GNOBlock. Default: “transformer”</p>
 </dd>
-<dt><strong>fno_n_modes</strong><span class="classifier">tuple, optional</span></dt><dd><p>number of modes along each dimension 
-to use in FNO, by default (16, 16, 16)</p>
+<dt><strong>fno_in_channels</strong><span class="classifier">int, optional</span></dt><dd><p>Number of input channels for FNO. Default: 3</p>
 </dd>
-<dt><strong>fno_hidden_channels</strong><span class="classifier">int, optional</span></dt><dd><p>hidden channels for use in FNO, by default 64</p>
+<dt><strong>fno_lifting_channel_ratio</strong><span class="classifier">int, optional</span></dt><dd><p>Ratio of lifting channels to fno_hidden_channels.
+The number of lifting channels in the lifting block of the FNO is
+fno_lifting_channel_ratio * hidden_channels (i.e. default 128). Default: 2</p>
 </dd>
-<dt><strong>fno_lifting_channel_ratio</strong><span class="classifier">int, optional</span></dt><dd><p>ratio of lifting channels to <code class="docutils literal notranslate"><span class="pre">fno_hidden_channels</span></code>, by default 2
-The number of liting channels in the lifting block of the FNO is
-fno_lifting_channel_ratio * hidden_channels (i.e. default 128)</p>
+<dt><strong>gno_embed_channels</strong><span class="classifier">int, optional</span></dt><dd><p>Dimension of optional per-channel embedding to use in GNOBlock. Default: 32</p>
 </dd>
-<dt><strong>fno_n_layers</strong><span class="classifier">int, optional</span></dt><dd><p>number of layers in FNO, by default 4</p>
+<dt><strong>gno_embed_max_positions</strong><span class="classifier">int, optional</span></dt><dd><p>Max positions of optional per-channel embedding to use in GNOBlock.
+If gno_pos_embed_type != ‘transformer’, this is not used. Default: 10000</p>
+</dd>
+<dt><strong>in_gno_channel_mlp_hidden_layers</strong><span class="classifier">list, optional</span></dt><dd><p>Widths of hidden layers in input GNO. Default: [80, 80, 80]</p>
+</dd>
+<dt><strong>out_gno_channel_mlp_hidden_layers</strong><span class="classifier">list, optional</span></dt><dd><p>Widths of hidden layers in output GNO. Default: [512, 256]</p>
+</dd>
+<dt><strong>gno_channel_mlp_non_linearity</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>Nonlinearity to use in GNO ChannelMLP. Default: F.gelu</p>
+</dd>
+<dt><strong>gno_use_open3d</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use Open3D neighbor search.
+If False, uses pure-PyTorch fallback neighbor search. Default: True</p>
+</dd>
+<dt><strong>gno_use_torch_scatter</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use torch-scatter to perform grouped reductions in the IntegralTransform.
+If False, uses native Python reduction in neuralop.layers.segment_csr. Default: True</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>torch-scatter is an optional dependency that conflicts with the newest versions of PyTorch,
+so you must handle the conflict explicitly in your environment. See <a class="reference internal" href="../../install.html#torch-scatter-dependency"><span class="std std-ref">Sparse computations with PyTorch-Scatter</span></a>
+for more information.</p>
+</div>
+</dd>
+<dt><strong>out_gno_tanh</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use tanh to stabilize outputs of the output GNO. Default: False</p>
+</dd>
+<dt><strong>fno_resolution_scaling_factor</strong><span class="classifier">float, optional</span></dt><dd><p>Factor by which to scale output of FNO. Default: None</p>
+</dd>
+<dt><strong>fno_block_precision</strong><span class="classifier">str, optional</span></dt><dd><p>Data precision to compute within FNO block. Options: “full”, “half”, “mixed”. Default: “full”</p>
+</dd>
+<dt><strong>fno_use_channel_mlp</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use a ChannelMLP layer after each FNO block. Default: True</p>
+</dd>
+<dt><strong>fno_channel_mlp_dropout</strong><span class="classifier">float, optional</span></dt><dd><p>Dropout parameter of above ChannelMLP. Default: 0</p>
+</dd>
+<dt><strong>fno_channel_mlp_expansion</strong><span class="classifier">float, optional</span></dt><dd><p>Expansion parameter of above ChannelMLP. Default: 0.5</p>
+</dd>
+<dt><strong>fno_non_linearity</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>Nonlinear activation function between each FNO layer. Default: F.gelu</p>
+</dd>
+<dt><strong>fno_stabilizer</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>By default None, otherwise tanh is used before FFT in the FNO block. Default: None</p>
+</dd>
+<dt><strong>fno_norm</strong><span class="classifier">str, optional</span></dt><dd><p>Normalization layer to use in FNO. Options: “ada_in”, “group_norm”, “instance_norm”, None. Default: None</p>
+</dd>
+<dt><strong>fno_ada_in_features</strong><span class="classifier">int, optional</span></dt><dd><p>If an adaptive mesh is used, number of channels of its positional embedding.
+If None, adaptive mesh embedding is not used. Default: 4</p>
+</dd>
+<dt><strong>fno_ada_in_dim</strong><span class="classifier">int, optional</span></dt><dd><p>Dimensions of above FNO adaptive mesh. Default: 1</p>
+</dd>
+<dt><strong>fno_preactivation</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use ResNet-style preactivation. Default: False</p>
+</dd>
+<dt><strong>fno_skip</strong><span class="classifier">str, optional</span></dt><dd><p>Type of skip connection to use. Options: “linear”, “identity”, “soft-gating”, None. Default: “linear”</p>
+</dd>
+<dt><strong>fno_channel_mlp_skip</strong><span class="classifier">str, optional</span></dt><dd><p>Type of skip connection to use in the FNO.
+Options: “linear”, “identity”, “soft-gating”, None. Default: “soft-gating”</p>
+</dd>
+<dt><strong>fno_separable</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use a separable spectral convolution. Default: False</p>
+</dd>
+<dt><strong>fno_factorization</strong><span class="classifier">str, optional</span></dt><dd><p>Tensor factorization of the parameters weight to use.
+Options: “tucker”, “tt”, “cp”, None. Default: None</p>
+</dd>
+<dt><strong>fno_rank</strong><span class="classifier">float, optional</span></dt><dd><p>Rank of the tensor factorization of the Fourier weights. Default: 1.0
+Set to float &lt;1.0 when using TFNO (i.e. when factorization is not None).
+A TFNO with rank 0.1 has roughly 10% of the parameters of a dense FNO.</p>
+</dd>
+<dt><strong>fno_fixed_rank_modes</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to not factorize certain modes. Default: False</p>
+</dd>
+<dt><strong>fno_implementation</strong><span class="classifier">str, optional</span></dt><dd><p>If factorization is not None, forward mode to use.
+Options: “reconstructed”, “factorized”. Default: “factorized”</p>
+</dd>
+<dt><strong>fno_decomposition_kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>Additional parameters to pass to the tensor decomposition. Default: {}</p>
+</dd>
+<dt><strong>fno_conv_module</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>Spectral convolution module to use. Default: SpectralConv</p>
 </dd>
 </dl>
 </dd>
@@ -249,89 +318,11 @@ fno_lifting_channel_ratio * hidden_channels (i.e. default 128)</p>
 </tr>
 </tbody>
 </table>
-<dl class="field-list">
-<dt class="field-odd">Other Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl>
-<dt><strong>gno_embed_channels: int</strong></dt><dd><p>dimension of optional per-channel embedding to use in GNOBlock,
-by default 32</p>
-</dd>
-<dt><strong>gno_embed_max_positions: int</strong></dt><dd><p>max positions of optional per-channel embedding to use in GNOBlock,
-by default 10000. If <cite>gno_pos_embed_type != ‘transformer’</cite>, value is unused.</p>
-</dd>
-<dt><strong>in_gno_channel_mlp_hidden_layers</strong><span class="classifier">list, optional</span></dt><dd><p>widths of hidden layers in input GNO, by default [80, 80, 80]</p>
-</dd>
-<dt><strong>out_gno_channel_mlp_hidden_layers</strong><span class="classifier">list, optional</span></dt><dd><p>widths of hidden layers in output GNO, by default [512, 256]</p>
-</dd>
-<dt><strong>gno_channel_mlp_non_linearity</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>nonlinearity to use in gno ChannelMLP, by default F.gelu</p>
-</dd>
-<dt><strong>gno_use_open3d</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to use open3d neighbor search, by default True
-if False, uses pure-PyTorch fallback neighbor search</p>
-</dd>
-<dt><strong>gno_use_torch_scatter</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to use <code class="docutils literal notranslate"><span class="pre">torch-scatter</span></code> to perform grouped reductions in the <code class="docutils literal notranslate"><span class="pre">IntegralTransform</span></code>. 
-If False, uses native Python reduction in <code class="docutils literal notranslate"><span class="pre">neuralop.layers.segment_csr</span></code>, by default True</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p><code class="docutils literal notranslate"><span class="pre">torch-scatter</span></code> is an optional dependency that conflicts with the newest versions of PyTorch,
-so you must handle the conflict explicitly in your environment. See <a class="reference internal" href="../../install.html#torch-scatter-dependency"><span class="std std-ref">Sparse computations with PyTorch-Scatter</span></a> 
-for more information.</p>
-</div>
-</dd>
-<dt><strong>out_gno_tanh</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to use tanh to stabilize outputs of the output GNO, by default False</p>
-</dd>
-<dt><strong>fno_resolution_scaling_factor</strong><span class="classifier">float | None, optional</span></dt><dd><p>factor by which to scale output of FNO, by default None</p>
-</dd>
-<dt><strong>fno_block_precision</strong><span class="classifier">str, defaults to ‘full’</span></dt><dd><p>data precision to compute within fno block</p>
-</dd>
-<dt><strong>fno_use_channel_mlp</strong><span class="classifier">bool, defaults to True</span></dt><dd><p>Whether to use a ChannelMLP layer after each FNO block.</p>
-</dd>
-<dt><strong>fno_channel_mlp_dropout</strong><span class="classifier">float, defaults to 0</span></dt><dd><p>dropout parameter of above ChannelMLP.</p>
-</dd>
-<dt><strong>fno_channel_mlp_expansion</strong><span class="classifier">float, defaults to 0.5</span></dt><dd><p>expansion parameter of above ChannelMLP.</p>
-</dd>
-<dt><strong>fno_non_linearity</strong><span class="classifier">nn.Module, defaults to F.gelu</span></dt><dd><p>nonlinear activation function between each FNO layer.</p>
-</dd>
-<dt><strong>fno_stabilizer</strong><span class="classifier">nn.Module | None, defaults to None</span></dt><dd><p>By default None, otherwise tanh is used before FFT in the FNO block.</p>
-</dd>
-<dt><strong>fno_norm</strong><span class="classifier">nn.Module | None, defaults to None</span></dt><dd><p>normalization layer to use in FNO.</p>
-</dd>
-<dt><strong>fno_ada_in_features</strong><span class="classifier">int | None, defaults to 4</span></dt><dd><p>if an adaptive mesh is used, number of channels of its positional embedding.
-If None, adaptive mesh embedding is not used.</p>
-</dd>
-<dt><strong>fno_ada_in_dim</strong><span class="classifier">int, defaults to 1</span></dt><dd><p>dimensions of above FNO adaptive mesh.</p>
-</dd>
-<dt><strong>fno_preactivation</strong><span class="classifier">bool, defaults to False</span></dt><dd><p>whether to use Resnet-style preactivation.</p>
-</dd>
-<dt><strong>fno_skip</strong><span class="classifier">str, defaults to ‘linear’</span></dt><dd><p>type of skip connection to use.</p>
-</dd>
-<dt><strong>fno_channel_mlp_skip</strong><span class="classifier">str, defaults to ‘soft-gating’</span></dt><dd><p>type of skip connection to use in the FNO
-‘linear’: conv layer
-‘soft-gating’: weights the channels of the input
-‘identity’: nn.Identity</p>
-</dd>
-<dt><strong>fno_separable</strong><span class="classifier">bool, defaults to False</span></dt><dd><p>if True, use a depthwise separable spectral convolution.</p>
-</dd>
-<dt><strong>fno_factorization</strong><span class="classifier">str {‘tucker’, ‘tt’, ‘cp’} |  None, defaults to None</span></dt><dd><p>Tensor factorization of the parameters weight to use</p>
-</dd>
-<dt><strong>fno_rank</strong><span class="classifier">float, defaults to 1.0</span></dt><dd><p>Rank of the tensor factorization of the Fourier weights.</p>
-</dd>
-<dt><strong>fno_fixed_rank_modes</strong><span class="classifier">bool, defaults to False</span></dt><dd><p>Modes to not factorize.</p>
-</dd>
-<dt><strong>fno_implementation</strong><span class="classifier">str {‘factorized’, ‘reconstructed’} | None, defaults to ‘factorized’</span></dt><dd><p>If factorization is not None, forward mode to use::
-* <cite>reconstructed</cite> : the full weight tensor is reconstructed from the factorization and used for the forward pass
-* <cite>factorized</cite> : the input is directly contracted with the factors of the decomposition</p>
-</dd>
-<dt><strong>fno_decomposition_kwargs</strong><span class="classifier">dict, defaults to dict()</span></dt><dd><p>Optionaly additional parameters to pass to the tensor decomposition.</p>
-</dd>
-<dt><strong>fno_conv_module</strong><span class="classifier">nn.Module, defaults to SpectralConv</span></dt><dd><p>Spectral Convolution module to use.</p>
-</dd>
-</dl>
-</dd>
-</dl>
 <p class="rubric">References</p>
 <div role="list" class="citation-list">
 <div class="citation" id="rf1a08f23c851-1" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
-<p>: Li, Z., Kovachki, N., Choy, C., Li, B., Kossaifi, J., Otta, S., 
+<p>: Li, Z., Kovachki, N., Choy, C., Li, B., Kossaifi, J., Otta, S.,
 Nabian, M., Stadler, M., Hundt, C., Azizzadenesheli, K., Anandkumar, A. (2023)
 Geometry-Informed Neural Operator for Large-Scale 3D PDEs. NeurIPS 2023,
 <a class="reference external" href="https://proceedings.neurips.cc/paper_files/paper/2023/hash/70518ea42831f02afc3a2828993935ad-Abstract-Conference.html">https://proceedings.neurips.cc/paper_files/paper/2023/hash/70518ea42831f02afc3a2828993935ad-Abstract-Conference.html</a></p>

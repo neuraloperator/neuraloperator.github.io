@@ -183,24 +183,8 @@ as described in <a class="reference internal" href="#ra1828dcd7949-1" id="id1">[
 conv layer but operates in the frequency domain.</p>
 <p>For a deeper dive into the FNO architecture, refer to <a class="reference internal" href="../../theory_guide/fno.html#fno-intro"><span class="std std-ref">Fourier Neural Operators</span></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>n_modes</strong><span class="classifier">Tuple[int, …]</span></dt><dd><p>number of modes to keep in Fourier Layer, along each dimension
-The dimensionality of the FNO is inferred from <code class="docutils literal notranslate"><span class="pre">len(n_modes)</span></code></p>
-</dd>
-<dt><strong>in_channels</strong><span class="classifier">int</span></dt><dd><p>Number of channels in input function</p>
-</dd>
-<dt><strong>out_channels</strong><span class="classifier">int</span></dt><dd><p>Number of channels in output function</p>
-</dd>
-<dt><strong>hidden_channels</strong><span class="classifier">int</span></dt><dd><p>width of the FNO (i.e. number of channels)</p>
-</dd>
-<dt><strong>n_layers</strong><span class="classifier">int, optional</span></dt><dd><p>Number of Fourier Layers, by default 4</p>
-</dd>
-<dt><strong>Documentation for more advanced parameters is below.</strong></dt><dd></dd>
-</dl>
-</dd>
-<dt class="field-even">Attributes<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
 <dt><strong>n_modes</strong></dt><dd></dd>
 </dl>
 </dd>
@@ -213,102 +197,6 @@ The dimensionality of the FNO is inferred from <code class="docutils literal not
 </tr>
 </tbody>
 </table>
-<dl class="field-list">
-<dt class="field-odd">Other Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl>
-<dt><strong>lifting_channel_ratio</strong><span class="classifier">int, optional</span></dt><dd><p>ratio of lifting channels to hidden_channels, by default 2
-The number of lifting channels in the lifting block of the FNO is
-lifting_channel_ratio * hidden_channels (e.g. default 2 * hidden_channels)</p>
-</dd>
-<dt><strong>projection_channel_ratio</strong><span class="classifier">int, optional</span></dt><dd><p>ratio of projection channels to hidden_channels, by default 2
-The number of projection channels in the projection block of the FNO is
-projection_channel_ratio * hidden_channels (e.g. default 2 * hidden_channels)</p>
-</dd>
-<dt><strong>positional_embedding</strong><span class="classifier">Union[str, nn.Module], optional</span></dt><dd><p>Positional embedding to apply to last channels of raw input
-before being passed through the FNO. Defaults to “grid”</p>
-<ul class="simple">
-<li><p>If “grid”, appends a grid positional embedding with default settings to</p></li>
-</ul>
-<p>the last channels of raw input. Assumes the inputs are discretized
-over a grid with entry [0,0,…] at the origin and side lengths of 1.</p>
-<ul class="simple">
-<li><p>If an initialized GridEmbedding module, uses this module directly</p></li>
-</ul>
-<p>See <code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.embeddings.GridEmbeddingND</span></code> for details.</p>
-<ul class="simple">
-<li><p>If None, does nothing</p></li>
-</ul>
-</dd>
-<dt><strong>non_linearity</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>Non-Linear activation function module to use, by default F.gelu</p>
-</dd>
-<dt><strong>norm</strong><span class="classifier">Literal [“ada_in”, “group_norm”, “instance_norm”], optional</span></dt><dd><p>Normalization layer to use, by default None</p>
-</dd>
-<dt><strong>complex_data</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether data is complex-valued (default False)
-if True, initializes complex-valued modules.</p>
-</dd>
-<dt><strong>use_channel_mlp</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use an MLP layer after each FNO block, by default True</p>
-</dd>
-<dt><strong>channel_mlp_dropout</strong><span class="classifier">float, optional</span></dt><dd><p>dropout parameter for ChannelMLP in FNO Block, by default 0</p>
-</dd>
-<dt><strong>channel_mlp_expansion</strong><span class="classifier">float, optional</span></dt><dd><p>expansion parameter for ChannelMLP in FNO Block, by default 0.5</p>
-</dd>
-<dt><strong>channel_mlp_skip</strong><span class="classifier">Literal[‘linear’, ‘identity’, ‘soft-gating’], optional</span></dt><dd><p>Type of skip connection to use in channel-mixing mlp, by default ‘soft-gating’</p>
-</dd>
-<dt><strong>fno_skip</strong><span class="classifier">Literal[‘linear’, ‘identity’, ‘soft-gating’], optional</span></dt><dd><p>Type of skip connection to use in FNO layers, by default ‘linear’</p>
-</dd>
-<dt><strong>resolution_scaling_factor</strong><span class="classifier">Union[Number, List[Number]], optional</span></dt><dd><p>layer-wise factor by which to scale the domain resolution of function, by default None</p>
-<ul class="simple">
-<li><p>If a single number n, scales resolution by n at each layer</p></li>
-<li><p>if a list of numbers [n_0, n_1,…] scales layer i’s resolution by n_i.</p></li>
-</ul>
-</dd>
-<dt><strong>domain_padding</strong><span class="classifier">Union[Number, List[Number]], optional</span></dt><dd><p>If not None, percentage of padding to use, by default None
-To vary the percentage of padding used along each input dimension,
-pass in a list of percentages e.g. [p1, p2, …, pN] such that
-p1 corresponds to the percentage of padding along dim 1, etc.</p>
-</dd>
-<dt><strong>fno_block_precision</strong><span class="classifier">str {‘full’, ‘half’, ‘mixed’}, optional</span></dt><dd><p>precision mode in which to perform spectral convolution, by default “full”</p>
-</dd>
-<dt><strong>stabilizer</strong><span class="classifier">str {‘tanh’} | None, optional</span></dt><dd><p>whether to use a tanh stabilizer in FNO block, by default None</p>
-<p>Note: stabilizer greatly improves performance in the case
-<cite>fno_block_precision=’mixed’</cite>.</p>
-</dd>
-<dt><strong>max_n_modes</strong><span class="classifier">Tuple[int, …] | None, optional</span></dt><dd><ul class="simple">
-<li><p>If not None, this allows to incrementally increase the number of</p></li>
-</ul>
-<p>modes in Fourier domain during training. Has to verify n &lt;= N
-for (n, m) in zip(max_n_modes, n_modes).</p>
-<ul class="simple">
-<li><p>If None, all the n_modes are used.</p></li>
-</ul>
-<p>This can be updated dynamically during training.</p>
-</dd>
-<dt><strong>factorization</strong><span class="classifier">str, optional</span></dt><dd><p>Tensor factorization of the FNO layer weights to use, by default None.</p>
-<ul class="simple">
-<li><p>If None, a dense tensor parametrizes the Spectral convolutions</p></li>
-<li><p>Otherwise, the specified tensor factorization is used.</p></li>
-</ul>
-</dd>
-<dt><strong>rank</strong><span class="classifier">float, optional</span></dt><dd><p>tensor rank to use in above factorization, by default 1.0</p>
-</dd>
-<dt><strong>fixed_rank_modes</strong><span class="classifier">bool, optional</span></dt><dd><p>Modes to not factorize, by default False</p>
-</dd>
-<dt><strong>implementation</strong><span class="classifier">str {‘factorized’, ‘reconstructed’}, optional</span></dt><dd><ul class="simple">
-<li><p>If ‘factorized’, implements tensor contraction with the individual factors of the decomposition</p></li>
-<li><p>If ‘reconstructed’, implements with the reconstructed full tensorized weight.</p></li>
-</ul>
-</dd>
-<dt><strong>decomposition_kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>extra kwargs for tensor decomposition (see <cite>tltorch.FactorizedTensor</cite>), by default {}</p>
-</dd>
-<dt><strong>separable</strong><span class="classifier">bool, optional</span></dt><dd><p>if True, use a depthwise separable spectral convolution, by default False</p>
-</dd>
-<dt><strong>preactivation</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to compute FNO forward pass with resnet-style preactivation, by default False</p>
-</dd>
-<dt><strong>conv_module</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>module to use for FNOBlock’s convolutions, by default SpectralConv</p>
-</dd>
-</dl>
-</dd>
-</dl>
 <p class="rubric">References</p>
 <div role="list" class="citation-list">
 <div class="citation" id="ra1828dcd7949-1" role="doc-biblioentry">

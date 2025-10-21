@@ -125,47 +125,50 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn.functional</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">F</span>
 
+
 <div class="viewcode-block" id="FiniteDifferenceConvolution">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.differential_conv.FiniteDifferenceConvolution.html#neuralop.layers.differential_conv.FiniteDifferenceConvolution">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">FiniteDifferenceConvolution</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Finite Difference Convolution Layer introduced in [1]_.</span>
-<span class="sd">        &quot;Neural Operators with Localized Integral and Differential Kernels&quot; (ICML 2024)</span>
-<span class="sd">            https://arxiv.org/abs/2402.16845 </span>
+<span class="sd">    &quot;Neural Operators with Localized Integral and Differential Kernels&quot; (ICML 2024)</span>
+<span class="sd">        https://arxiv.org/abs/2402.16845</span>
 
-<span class="sd">        Computes a finite difference convolution on a regular grid, </span>
-<span class="sd">        which converges to a directional derivative as the grid is refined.</span>
+<span class="sd">    Computes a finite difference convolution on a regular grid,</span>
+<span class="sd">    which converges to a directional derivative as the grid is refined.</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        in_channels : int</span>
-<span class="sd">            number of in_channels</span>
-<span class="sd">        out_channels : int</span>
-<span class="sd">            number of out_channels</span>
-<span class="sd">        n_dim : int</span>
-<span class="sd">            number of dimensions in the input domain</span>
-<span class="sd">        kernel_size : int</span>
-<span class="sd">            odd kernel size used for convolutional finite difference stencil</span>
-<span class="sd">        groups : int</span>
-<span class="sd">            splitting number of channels</span>
-<span class="sd">        padding : literal {&#39;periodic&#39;, &#39;replicate&#39;, &#39;reflect&#39;, &#39;zeros&#39;}</span>
-<span class="sd">            mode of padding to use on input. </span>
-<span class="sd">            See `torch.nn.functional.padding`. </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    in_channels : int</span>
+<span class="sd">        Number of in_channels</span>
+<span class="sd">    out_channels : int</span>
+<span class="sd">        Number of out_channels</span>
+<span class="sd">    n_dim : int</span>
+<span class="sd">        Number of dimensions in the input domain</span>
+<span class="sd">    kernel_size : int, optional</span>
+<span class="sd">        Odd kernel size used for convolutional finite difference stencil, by default 3</span>
+<span class="sd">    groups : int, optional</span>
+<span class="sd">        Splitting number of channels, by default 1</span>
+<span class="sd">    padding : literal {&#39;periodic&#39;, &#39;replicate&#39;, &#39;reflect&#39;, &#39;zeros&#39;}, optional</span>
+<span class="sd">        Mode of padding to use on input. Options: &#39;periodic&#39;, &#39;replicate&#39;, &#39;reflect&#39;, &#39;zeros&#39;, by default &#39;periodic&#39;</span>
+<span class="sd">        See `torch.nn.functional.padding`.</span>
 
-<span class="sd">        References</span>
-<span class="sd">        ----------</span>
-<span class="sd">        .. [1] : Liu-Schiaffini, M., et al. (2024). &quot;Neural Operators with </span>
-<span class="sd">            Localized Integral and Differential Kernels&quot;. </span>
-<span class="sd">            ICML 2024, https://arxiv.org/abs/2402.16845. </span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] : Liu-Schiaffini, M., et al. (2024). &quot;Neural Operators with</span>
+<span class="sd">        Localized Integral and Differential Kernels&quot;.</span>
+<span class="sd">        ICML 2024, https://arxiv.org/abs/2402.16845.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span> 
-            <span class="n">in_channels</span><span class="p">,</span> 
-            <span class="n">out_channels</span><span class="p">,</span> 
-            <span class="n">n_dim</span><span class="p">,</span> 
-            <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> 
-            <span class="n">groups</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
-            <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;periodic&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">in_channels</span><span class="p">,</span>
+        <span class="n">out_channels</span><span class="p">,</span>
+        <span class="n">n_dim</span><span class="p">,</span>
+        <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">groups</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="n">conv_module</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">nn</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Conv</span><span class="si">{</span><span class="n">n_dim</span><span class="si">}</span><span class="s2">d&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">F_conv_module</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;conv</span><span class="si">{</span><span class="n">n_dim</span><span class="si">}</span><span class="s2">d&quot;</span><span class="p">)</span>
@@ -178,21 +181,27 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">groups</span> <span class="o">=</span> <span class="n">groups</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span> <span class="o">=</span> <span class="n">n_dim</span>
 
-        <span class="k">if</span> <span class="n">padding</span> <span class="o">==</span> <span class="s1">&#39;periodic&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">padding_mode</span> <span class="o">=</span> <span class="s1">&#39;circular&#39;</span>
-        <span class="k">elif</span> <span class="n">padding</span> <span class="o">==</span> <span class="s1">&#39;replicate&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">padding_mode</span> <span class="o">=</span> <span class="s1">&#39;replicate&#39;</span>
-        <span class="k">elif</span> <span class="n">padding</span> <span class="o">==</span> <span class="s1">&#39;reflect&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">padding_mode</span> <span class="o">=</span> <span class="s1">&#39;reflect&#39;</span>
-        <span class="k">elif</span> <span class="n">padding</span> <span class="o">==</span> <span class="s1">&#39;zeros&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">padding_mode</span> <span class="o">=</span> <span class="s1">&#39;zeros&#39;</span>
+        <span class="k">if</span> <span class="n">padding</span> <span class="o">==</span> <span class="s2">&quot;periodic&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">padding_mode</span> <span class="o">=</span> <span class="s2">&quot;circular&quot;</span>
+        <span class="k">elif</span> <span class="n">padding</span> <span class="o">==</span> <span class="s2">&quot;replicate&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">padding_mode</span> <span class="o">=</span> <span class="s2">&quot;replicate&quot;</span>
+        <span class="k">elif</span> <span class="n">padding</span> <span class="o">==</span> <span class="s2">&quot;reflect&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">padding_mode</span> <span class="o">=</span> <span class="s2">&quot;reflect&quot;</span>
+        <span class="k">elif</span> <span class="n">padding</span> <span class="o">==</span> <span class="s2">&quot;zeros&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">padding_mode</span> <span class="o">=</span> <span class="s2">&quot;zeros&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Desired padding mode is not currently supported&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pad_size</span> <span class="o">=</span> <span class="n">kernel_size</span> <span class="o">//</span> <span class="mi">2</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">conv</span> <span class="o">=</span> <span class="n">conv_module</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="n">kernel_size</span><span class="p">,</span> 
-                                <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">,</span> <span class="n">padding_mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">padding_mode</span><span class="p">,</span>
-                                <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="n">groups</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv</span> <span class="o">=</span> <span class="n">conv_module</span><span class="p">(</span>
+            <span class="n">in_channels</span><span class="p">,</span>
+            <span class="n">out_channels</span><span class="p">,</span>
+            <span class="n">kernel_size</span><span class="o">=</span><span class="n">kernel_size</span><span class="p">,</span>
+            <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">,</span>
+            <span class="n">padding_mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">padding_mode</span><span class="p">,</span>
+            <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">groups</span><span class="o">=</span><span class="n">groups</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv</span><span class="o">.</span><span class="n">weight</span>
 
 <div class="viewcode-block" id="FiniteDifferenceConvolution.forward">
@@ -210,7 +219,11 @@
 <span class="sd">            discretization size of input grid</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">conv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="n">conv_sum</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="nb">tuple</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">)]),</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">conv_sum</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conv</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span>
+            <span class="n">dim</span><span class="o">=</span><span class="nb">tuple</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">)]),</span>
+            <span class="n">keepdim</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="n">conv_sum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv_function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">conv_sum</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">conv</span> <span class="o">-</span> <span class="n">conv_sum</span><span class="p">)</span> <span class="o">/</span> <span class="n">grid_width</span></div>
 </div>

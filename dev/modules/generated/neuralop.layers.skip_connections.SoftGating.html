@@ -182,13 +182,15 @@ where w is of shape `(1, channels, 1, 1)</cite></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>in_features</strong><span class="classifier">int</span></dt><dd></dd>
-<dt><strong>out_features</strong><span class="classifier">None</span></dt><dd><p>this is provided for API compatibility with nn.Linear only</p>
+<dt><strong>in_features</strong><span class="classifier">int</span></dt><dd><p>Number of input features</p>
 </dd>
-<dt><strong>n_dim</strong><span class="classifier">int, default is 2</span></dt><dd><p>Dimensionality of the input (excluding batch-size and channels).
-<code class="docutils literal notranslate"><span class="pre">n_dim=2</span></code> corresponds to having Module2D.</p>
+<dt><strong>out_features</strong><span class="classifier">None</span></dt><dd><p>This is provided for API compatibility with nn.Linear only</p>
 </dd>
-<dt><strong>bias</strong><span class="classifier">bool, default is False</span></dt><dd></dd>
+<dt><strong>n_dim</strong><span class="classifier">int, optional</span></dt><dd><p>Dimensionality of the input (excluding batch-size and channels).
+n_dim=2 corresponds to having Module2D, by default 2</p>
+</dd>
+<dt><strong>bias</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use a bias, by default False</p>
+</dd>
 </dl>
 </dd>
 </dl>

@@ -180,16 +180,16 @@ Returns an nn.Module skip connections, one of  {‘identity’, ‘linear’, so
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>in_features</strong><span class="classifier">int</span></dt><dd><p>number of input features</p>
+<dt><strong>in_features</strong><span class="classifier">int</span></dt><dd><p>Number of input features</p>
 </dd>
-<dt><strong>out_features</strong><span class="classifier">int</span></dt><dd><p>number of output features</p>
+<dt><strong>out_features</strong><span class="classifier">int</span></dt><dd><p>Number of output features</p>
 </dd>
-<dt><strong>n_dim</strong><span class="classifier">int, default is 2</span></dt><dd><p>Dimensionality of the input (excluding batch-size and channels).
-<code class="docutils literal notranslate"><span class="pre">n_dim=2</span></code> corresponds to having Module2D.</p>
+<dt><strong>n_dim</strong><span class="classifier">int, optional</span></dt><dd><p>Dimensionality of the input (excluding batch-size and channels).
+n_dim=2 corresponds to having Module2D, by default 2</p>
 </dd>
-<dt><strong>bias</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to use a bias, by default False</p>
+<dt><strong>bias</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use a bias, by default False</p>
 </dd>
-<dt><strong>skip_type</strong><span class="classifier">{‘identity’, ‘linear’, soft-gating’}</span></dt><dd><p>kind of skip connection to use, by default “soft-gating”</p>
+<dt><strong>skip_type</strong><span class="classifier">{‘identity’, ‘linear’, ‘soft-gating’}, optional</span></dt><dd><p>Kind of skip connection to use. Options: ‘identity’, ‘linear’, ‘soft-gating’, by default “soft-gating”</p>
 </dd>
 </dl>
 </dd>

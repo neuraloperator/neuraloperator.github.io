@@ -176,13 +176,14 @@
 <dt class="sig sig-object py" id="neuralop.layers.padding.DomainPadding">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.padding.</span></span><span class="sig-name descname"><span class="pre">DomainPadding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">domain_padding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution_scaling_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/padding.html#DomainPadding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.padding.DomainPadding" title="Link to this definition"></a></dt>
 <dd><p>Applies domain padding scaled automatically to the input’s resolution</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl>
-<dt><strong>domain_padding</strong><span class="classifier"><code class="docutils literal notranslate"><span class="pre">float</span></code> or <code class="docutils literal notranslate"><span class="pre">list</span></code></span></dt><dd><p>typically, between zero and one, percentage of padding to use
+<dd class="field-odd"><dl class="simple">
+<dt><strong>domain_padding</strong><span class="classifier">float or list</span></dt><dd><p>Typically, between zero and one, percentage of padding to use
 if a list, make sure if matches the dim of (d1, …, dN)</p>
 </dd>
-<dt><strong>resolution_scaling_factor</strong><span class="classifier"><code class="docutils literal notranslate"><span class="pre">int</span></code> ; default is 1</span></dt><dd></dd>
+<dt><strong>resolution_scaling_factor</strong><span class="classifier">int, optional</span></dt><dd><p>Resolution scaling factor, by default 1</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -200,7 +201,9 @@ if a list, make sure if matches the dim of (d1, …, dN)</p>
 </tr>
 </tbody>
 </table>
-<p>` <cite>(batch-size, channels, d1, …., dN)`</cite></p>
+<p class="rubric">Notes</p>
+<p>This class works for any input resolution. Expects inputs of shape
+(batch-size, channels, d1, …., dN)</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="neuralop.layers.padding.DomainPadding.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/padding.html#DomainPadding.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.padding.DomainPadding.forward" title="Link to this definition"></a></dt>

@@ -180,22 +180,22 @@
 <blockquote>
 <div><p><a class="reference external" href="https://arxiv.org/abs/2402.16845">https://arxiv.org/abs/2402.16845</a></p>
 </div></blockquote>
-<p>Computes a finite difference convolution on a regular grid, 
+<p>Computes a finite difference convolution on a regular grid,
 which converges to a directional derivative as the grid is refined.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>in_channels</strong><span class="classifier">int</span></dt><dd><p>number of in_channels</p>
+<dt><strong>in_channels</strong><span class="classifier">int</span></dt><dd><p>Number of in_channels</p>
 </dd>
-<dt><strong>out_channels</strong><span class="classifier">int</span></dt><dd><p>number of out_channels</p>
+<dt><strong>out_channels</strong><span class="classifier">int</span></dt><dd><p>Number of out_channels</p>
 </dd>
-<dt><strong>n_dim</strong><span class="classifier">int</span></dt><dd><p>number of dimensions in the input domain</p>
+<dt><strong>n_dim</strong><span class="classifier">int</span></dt><dd><p>Number of dimensions in the input domain</p>
 </dd>
-<dt><strong>kernel_size</strong><span class="classifier">int</span></dt><dd><p>odd kernel size used for convolutional finite difference stencil</p>
+<dt><strong>kernel_size</strong><span class="classifier">int, optional</span></dt><dd><p>Odd kernel size used for convolutional finite difference stencil, by default 3</p>
 </dd>
-<dt><strong>groups</strong><span class="classifier">int</span></dt><dd><p>splitting number of channels</p>
+<dt><strong>groups</strong><span class="classifier">int, optional</span></dt><dd><p>Splitting number of channels, by default 1</p>
 </dd>
-<dt><strong>padding</strong><span class="classifier">literal {‘periodic’, ‘replicate’, ‘reflect’, ‘zeros’}</span></dt><dd><p>mode of padding to use on input. 
+<dt><strong>padding</strong><span class="classifier">literal {‘periodic’, ‘replicate’, ‘reflect’, ‘zeros’}, optional</span></dt><dd><p>Mode of padding to use on input. Options: ‘periodic’, ‘replicate’, ‘reflect’, ‘zeros’, by default ‘periodic’
 See <cite>torch.nn.functional.padding</cite>.</p>
 </dd>
 </dl>
@@ -213,8 +213,8 @@ See <cite>torch.nn.functional.padding</cite>.</p>
 <div role="list" class="citation-list">
 <div class="citation" id="r2ffab17b35f8-1" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
-<p>: Liu-Schiaffini, M., et al. (2024). “Neural Operators with 
-Localized Integral and Differential Kernels”. 
+<p>: Liu-Schiaffini, M., et al. (2024). “Neural Operators with
+Localized Integral and Differential Kernels”.
 ICML 2024, <a class="reference external" href="https://arxiv.org/abs/2402.16845">https://arxiv.org/abs/2402.16845</a>.</p>
 </div>
 </div>

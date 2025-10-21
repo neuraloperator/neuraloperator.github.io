@@ -128,6 +128,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">validate_scaling_factor</span>
 
+
 <div class="viewcode-block" id="DomainPadding">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.padding.DomainPadding.html#neuralop.layers.padding.DomainPadding">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">DomainPadding</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -135,21 +136,22 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    domain_padding : ``float`` or ``list``</span>
-<span class="sd">        typically, between zero and one, percentage of padding to use</span>
+<span class="sd">    domain_padding : float or list</span>
+<span class="sd">        Typically, between zero and one, percentage of padding to use</span>
 <span class="sd">        if a list, make sure if matches the dim of (d1, ..., dN)</span>
-<span class="sd">    resolution_scaling_factor : ``int`` ; default is 1</span>
+<span class="sd">    resolution_scaling_factor : int, optional</span>
+<span class="sd">        Resolution scaling factor, by default 1</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    This class works for any input resolution. Expects inputs of shape</span>
-<span class="sd">   ` `(batch-size, channels, d1, ...., dN)``</span>
+<span class="sd">    (batch-size, channels, d1, ...., dN)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">domain_padding</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">list</span><span class="p">],</span>
-        <span class="n">resolution_scaling_factor</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">resolution_scaling_factor</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">domain_padding</span> <span class="o">=</span> <span class="n">domain_padding</span>

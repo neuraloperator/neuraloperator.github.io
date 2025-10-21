@@ -127,6 +127,7 @@
 
 <span class="c1"># Set warning filter to show each warning only once</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;once&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..layers.channel_mlp</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChannelMLP</span>
@@ -145,81 +146,89 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    in_channels : int, optional</span>
-<span class="sd">        Number of input channels, by default 3</span>
-<span class="sd">    out_channels : int, optional</span>
-<span class="sd">        Number of output channels, by default 1</span>
+<span class="sd">    in_channels : int</span>
+<span class="sd">        Number of input channels. Determined by the problem.</span>
+<span class="sd">    out_channels : int</span>
+<span class="sd">        Number of output channels. Determined by the problem.</span>
 <span class="sd">    hidden_channels : int</span>
-<span class="sd">        initial width of the UNO (i.e. number of channels)</span>
-<span class="sd">    lifting_channels : int, optional</span>
-<span class="sd">        number of hidden channels of the lifting block of the FNO, by default 256</span>
-<span class="sd">    projection_channels : int, optional</span>
-<span class="sd">        number of hidden channels of the projection block of the FNO, by default 256</span>
-<span class="sd">    positional_embedding : str literal | GridEmbedding2D | GridEmbeddingND | None</span>
-<span class="sd">        if &quot;grid&quot;, appends a grid positional embedding with default settings to </span>
-<span class="sd">        the last channels of raw input. Assumes the inputs are discretized</span>
-<span class="sd">        over a grid with entry [0,0,...] at the origin and side lengths of 1.</span>
-<span class="sd">        If an initialized GridEmbedding, uses this module directly</span>
-<span class="sd">        See `neuralop.embeddings.GridEmbeddingND` for details</span>
-<span class="sd">        if None, does nothing</span>
-<span class="sd">    n_layers : int, optional</span>
-<span class="sd">        Number of Fourier Layers, by default 4</span>
-<span class="sd">    uno_out_channels: list</span>
-<span class="sd">        Number of output channel of each Fourier Layers.</span>
-<span class="sd">        Eaxmple: For a Five layer UNO uno_out_channels can be [32,64,64,64,32]</span>
-<span class="sd">    uno_n_modes: list</span>
-<span class="sd">        Number of Fourier Modes to use in integral operation of each Fourier Layers (along each dimension).</span>
+<span class="sd">        Initial width of the UNO. This significantly affects the number of parameters of the UNO.</span>
+<span class="sd">        Good starting point can be 64, and then increased if more expressivity is needed.</span>
+<span class="sd">        Update lifting_channels and projection_channels accordingly since they are proportional to hidden_channels.</span>
+<span class="sd">    uno_out_channels : list</span>
+<span class="sd">        Number of output channels of each Fourier layer.</span>
+<span class="sd">        Example: For a five layer UNO uno_out_channels can be [32,64,64,64,32]</span>
+<span class="sd">    uno_n_modes : list</span>
+<span class="sd">        Number of Fourier modes to use in integral operation of each Fourier layer (along each dimension).</span>
 <span class="sd">        Example: For a five layer UNO with 2D input the uno_n_modes can be: [[5,5],[5,5],[5,5],[5,5],[5,5]]</span>
-<span class="sd">    uno_scalings: list</span>
-<span class="sd">        Scaling Factors for each Fourier Layers</span>
-<span class="sd">        Example: For a five layer UNO with 2D input, the uno_scalings can be : [[1.0,1.0],[0.5,0.5],[1,1],[1,1],[2,2]]</span>
-<span class="sd">    horizontal_skips_map: Dict, optional</span>
-<span class="sd">                    a map {...., b: a, ....} denoting horizontal skip connection from a-th layer to</span>
-<span class="sd">                    b-th layer. If None default skip connection is applied.</span>
-<span class="sd">                    Example: For a 5 layer UNO architecture, the skip connections can be</span>
-<span class="sd">                    horizontal_skips_map ={4:0,3:1}</span>
-
-<span class="sd">    channel_mlp_dropout: float, optional</span>
-<span class="sd">        dropout parameter for channelMLP after each FNO Block</span>
-<span class="sd">    channel_mlp_expansions: float, optional</span>
-<span class="sd">        expansion parameter for channelMLP after each FNO block</span>
+<span class="sd">    uno_scalings : list</span>
+<span class="sd">        Scaling factors for each Fourier layer.</span>
+<span class="sd">        Example: For a five layer UNO with 2D input, the uno_scalings can be: [[1.0,1.0],[0.5,0.5],[1,1],[1,1],[2,2]]</span>
+<span class="sd">    n_layers : int, optional</span>
+<span class="sd">        Number of Fourier layers. Default: 4</span>
+<span class="sd">    lifting_channels : int, optional</span>
+<span class="sd">        Number of hidden channels of the lifting block of the FNO. Default: 256</span>
+<span class="sd">    projection_channels : int, optional</span>
+<span class="sd">        Number of hidden channels of the projection block of the FNO. Default: 256</span>
+<span class="sd">    positional_embedding : Union[str, GridEmbedding2D, GridEmbeddingND, None], optional</span>
+<span class="sd">        Positional embedding to apply to last channels of raw input before being passed through the UNO.</span>
+<span class="sd">        Options:</span>
+<span class="sd">        - &quot;grid&quot;: Appends a grid positional embedding with default settings to the last channels of raw input.</span>
+<span class="sd">          Assumes the inputs are discretized over a grid with entry [0,0,...] at the origin and side lengths of 1.</span>
+<span class="sd">        - GridEmbedding2D: Uses this module directly for 2D cases.</span>
+<span class="sd">        - GridEmbeddingND: Uses this module directly (see `neuralop.embeddings.GridEmbeddingND` for details).</span>
+<span class="sd">        - None: Does nothing.</span>
+<span class="sd">        Default: &quot;grid&quot;</span>
+<span class="sd">    horizontal_skips_map : Dict, optional</span>
+<span class="sd">        A dictionary {b: a, ...} denoting horizontal skip connection from a-th layer to b-th layer.</span>
+<span class="sd">        If None, default skip connection is applied.</span>
+<span class="sd">        Example: For a 5 layer UNO architecture, the skip connections can be horizontal_skips_map = {4:0,3:1}</span>
+<span class="sd">        Default: None</span>
+<span class="sd">    channel_mlp_dropout : float, optional</span>
+<span class="sd">        Dropout parameter for ChannelMLP after each FNO block. Default: 0</span>
+<span class="sd">    channel_mlp_expansion : float, optional</span>
+<span class="sd">        Expansion parameter for ChannelMLP after each FNO block. Default: 0.5</span>
 <span class="sd">    non_linearity : nn.Module, optional</span>
-<span class="sd">        Non-Linearity module to use, by default F.gelu</span>
-<span class="sd">    norm : F.module, optional</span>
-<span class="sd">        Normalization layer to use, by default None</span>
-<span class="sd">    preactivation : bool, default is False</span>
-<span class="sd">        if True, use resnet-style preactivation</span>
-<span class="sd">    skip : {&#39;linear&#39;, &#39;identity&#39;, &#39;soft-gating&#39;}, optional</span>
-<span class="sd">        Type of skip connection to use, by default &#39;soft-gating&#39;</span>
-<span class="sd">    separable : bool, default is False</span>
-<span class="sd">        if True, use a depthwise separable spectral convolution</span>
-<span class="sd">    factorization : str or None, {&#39;tucker&#39;, &#39;cp&#39;, &#39;tt&#39;}</span>
-<span class="sd">        Tensor factorization of the parameters weight to use, by default None.</span>
-<span class="sd">        * If None, a dense tensor parametrizes the Spectral convolutions</span>
-<span class="sd">        * Otherwise, the specified tensor factorization is used.</span>
-<span class="sd">    joint_factorization : bool, optional</span>
-<span class="sd">        Whether all the Fourier Layers should be parametrized by a single tensor (vs one per layer), by default False</span>
-<span class="sd">    rank : float or rank, optional</span>
-<span class="sd">        Rank of the tensor factorization of the Fourier weights, by default 1.0</span>
+<span class="sd">        Non-linearity module to use. Default: F.gelu</span>
+<span class="sd">    norm : str, optional</span>
+<span class="sd">        Normalization layer to use. Options: &quot;ada_in&quot;, &quot;group_norm&quot;, &quot;instance_norm&quot;, None. Default: None</span>
+<span class="sd">    preactivation : bool, optional</span>
+<span class="sd">        Whether to use ResNet-style preactivation. Default: False</span>
+<span class="sd">    fno_skip : str, optional</span>
+<span class="sd">        Type of skip connection to use in FNO layers. Options: &quot;linear&quot;, &quot;identity&quot;, &quot;soft-gating&quot;, None.</span>
+<span class="sd">        Default: &quot;linear&quot;</span>
+<span class="sd">    horizontal_skip : str, optional</span>
+<span class="sd">        Type of skip connection to use in horizontal connections. Options: &quot;linear&quot;, &quot;identity&quot;, &quot;soft-gating&quot;, None.</span>
+<span class="sd">        Default: &quot;linear&quot;</span>
+<span class="sd">    channel_mlp_skip : str, optional</span>
+<span class="sd">        Type of skip connection to use in channel-mixing MLP. Options: &quot;linear&quot;, &quot;identity&quot;, &quot;soft-gating&quot;, None.</span>
+<span class="sd">        Default: &quot;soft-gating&quot;</span>
+<span class="sd">    separable : bool, optional</span>
+<span class="sd">        Whether to use a separable spectral convolution. Default: False</span>
+<span class="sd">    factorization : str, optional</span>
+<span class="sd">        Tensor factorization of the parameters weight to use.</span>
+<span class="sd">        Options: &quot;None&quot;, &quot;Tucker&quot;, &quot;CP&quot;, &quot;TT&quot;</span>
+<span class="sd">        Other factorization methods supported by tltorch. Default: None</span>
+<span class="sd">    rank : float, optional</span>
+<span class="sd">        Rank of the tensor factorization of the Fourier weights. Default: 1.0.</span>
+<span class="sd">        Set to float &lt;1.0 when using TFNO (i.e. when factorization is not None).</span>
+<span class="sd">        A TFNO with rank 0.1 has roughly 10% of the parameters of a dense FNO.</span>
 <span class="sd">    fixed_rank_modes : bool, optional</span>
-<span class="sd">        Modes to not factorize, by default False</span>
-<span class="sd">    implementation : {&#39;factorized&#39;, &#39;reconstructed&#39;}, optional, default is &#39;factorized&#39;</span>
-<span class="sd">        If factorization is not None, forward mode to use::</span>
-<span class="sd">        * `reconstructed` : the full weight tensor is reconstructed from the factorization and used for the forward pass</span>
-<span class="sd">        * `factorized` : the input is directly contracted with the factors of the decomposition</span>
-<span class="sd">    decomposition_kwargs : dict, optional, default is {}</span>
-<span class="sd">        Optionaly additional parameters to pass to the tensor decomposition</span>
-<span class="sd">    domain_padding : None or float, optional</span>
-<span class="sd">        If not None, percentage of padding to use, by default None</span>
-
+<span class="sd">        Whether to not factorize certain modes. Default: False</span>
+<span class="sd">    implementation : str, optional</span>
+<span class="sd">        If factorization is not None, forward mode to use.</span>
+<span class="sd">        Options: &quot;reconstructed&quot;, &quot;factorized&quot;. Default: &quot;factorized&quot;</span>
+<span class="sd">    decomposition_kwargs : dict, optional</span>
+<span class="sd">        Additional parameters to pass to the tensor decomposition. Default: {}</span>
+<span class="sd">    domain_padding : Union[float, List[float], None], optional</span>
+<span class="sd">        Percentage of padding to use. If not None, percentage of padding to use. Default: None</span>
 <span class="sd">    fft_norm : str, optional</span>
-<span class="sd">        by default &#39;forward&#39;</span>
+<span class="sd">        FFT normalization mode. Default: &quot;forward&quot;</span>
 
 <span class="sd">    References</span>
 <span class="sd">    -----------</span>
 <span class="sd">    .. [1] :</span>
 
-<span class="sd">    Rahman, M.A., Ross, Z., Azizzadenesheli, K. &quot;U-NO: U-shaped </span>
+<span class="sd">    Rahman, M.A., Ross, Z., Azizzadenesheli, K. &quot;U-NO: U-shaped</span>
 <span class="sd">        Neural Operators&quot; (2022). TMLR 2022, https://arxiv.org/pdf/2204.11127.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -296,10 +305,12 @@
 
         <span class="c1"># create positional embedding at the beginning of the model</span>
         <span class="k">if</span> <span class="n">positional_embedding</span> <span class="o">==</span> <span class="s2">&quot;grid&quot;</span><span class="p">:</span>
-            <span class="n">spatial_grid_boundaries</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">]]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">positional_embedding</span> <span class="o">=</span> <span class="n">GridEmbeddingND</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span><span class="p">,</span>
-                                                        <span class="n">dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">,</span>
-                                                        <span class="n">grid_boundaries</span><span class="o">=</span><span class="n">spatial_grid_boundaries</span><span class="p">)</span>
+            <span class="n">spatial_grid_boundaries</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">positional_embedding</span> <span class="o">=</span> <span class="n">GridEmbeddingND</span><span class="p">(</span>
+                <span class="n">in_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span><span class="p">,</span>
+                <span class="n">dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">,</span>
+                <span class="n">grid_boundaries</span><span class="o">=</span><span class="n">spatial_grid_boundaries</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">positional_embedding</span><span class="p">,</span> <span class="n">GridEmbedding2D</span><span class="p">):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">positional_embedding</span> <span class="o">=</span> <span class="n">positional_embedding</span>
@@ -310,9 +321,11 @@
         <span class="k">elif</span> <span class="n">positional_embedding</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">positional_embedding</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: tried to instantiate FNO positional embedding with </span><span class="si">{</span><span class="n">positional_embedding</span><span class="si">}</span><span class="s2">,</span><span class="se">\</span>
-<span class="s2">                              expected one of </span><span class="se">\&#39;</span><span class="s2">grid</span><span class="se">\&#39;</span><span class="s2">, GridEmbeddingND&quot;</span><span class="p">)</span>
-        
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Error: tried to instantiate FNO positional embedding with </span><span class="si">{</span><span class="n">positional_embedding</span><span class="si">}</span><span class="s2">,</span><span class="se">\</span>
+<span class="s2">                              expected one of &#39;grid&#39;, GridEmbeddingND&quot;</span>
+            <span class="p">)</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">positional_embedding</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">in_channels</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span>
 
@@ -322,7 +335,7 @@
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span>
                 <span class="mi">0</span><span class="p">,</span>
                 <span class="n">n_layers</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span>
-            <span class="p">):</span>  
+            <span class="p">):</span>
                 <span class="c1"># example, if n_layers = 5, then 4:0, 3:1</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">horizontal_skips_map</span><span class="p">[</span><span class="n">n_layers</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
         <span class="c1"># self.uno_scalings may be a 1d list specifying uniform scaling factor at each layer</span>
@@ -359,7 +372,6 @@
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">domain_padding</span> <span class="o">=</span> <span class="kc">None</span>
-
 
         <span class="bp">self</span><span class="o">.</span><span class="n">lifting</span> <span class="o">=</span> <span class="n">ChannelMLP</span><span class="p">(</span>
             <span class="n">in_channels</span><span class="o">=</span><span class="n">in_channels</span><span class="p">,</span>
@@ -429,12 +441,12 @@
                 <span class="sa">f</span><span class="s2">&quot;UNO.forward() received unexpected keyword arguments: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">. &quot;</span>
                 <span class="s2">&quot;These arguments will be ignored.&quot;</span><span class="p">,</span>
                 <span class="ne">UserWarning</span><span class="p">,</span>
-                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span>
+                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
             <span class="p">)</span>
-        
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">positional_embedding</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">positional_embedding</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        
+
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lifting</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain_padding</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -447,7 +459,6 @@
         <span class="n">skip_outputs</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">cur_output</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">for</span> <span class="n">layer_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_layers</span><span class="p">):</span>
-            
             <span class="k">if</span> <span class="n">layer_idx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">horizontal_skips_map</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">skip_val</span> <span class="o">=</span> <span class="n">skip_outputs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">horizontal_skips_map</span><span class="p">[</span><span class="n">layer_idx</span><span class="p">]]</span>
                 <span class="n">resolution_scaling_factors</span> <span class="o">=</span> <span class="p">[</span>
@@ -466,10 +477,8 @@
             <span class="k">if</span> <span class="n">layer_idx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">horizontal_skips_map</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
                 <span class="n">skip_outputs</span><span class="p">[</span><span class="n">layer_idx</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">horizontal_skips</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">layer_idx</span><span class="p">)](</span><span class="n">x</span><span class="p">)</span>
 
-
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain_padding</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain_padding</span><span class="o">.</span><span class="n">unpad</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        
 
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">x</span></div>
