@@ -317,15 +317,15 @@ to verify our incremental training setup
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fbd72f8c8a0>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f3d7aa948a0>
 
     ### LOSSES ###
 
     ### INCREMENTAL RESOLUTION + GRADIENT EXPLAINED ###
 
-     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7fbd4e9c4b90>
+     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7f3d564c4b90>
 
-     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7fbd4e9c4b90>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7fbd72f8cc30>}
+     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7f3d564c4b90>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f3d7aa94c30>}
 
 
 
@@ -429,7 +429,7 @@ We train the model using incremental meta-learning. The trainer will:
     Raw outputs of shape torch.Size([16, 1, 8, 8])
     /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:536: UserWarning: H1Loss.__call__() received unexpected keyword arguments: ['x']. These arguments will be ignored.
       loss += training_loss(out, **sample)
-    [0] time=0.33, avg_loss=0.9337, train_err=13.3383
+    [0] time=0.32, avg_loss=0.9337, train_err=13.3383
     /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:581: UserWarning: LpLoss.__call__() received unexpected keyword arguments: ['x']. These arguments will be ignored.
       val_loss = loss(out, **sample)
     Eval: 16_h1=0.8689, 16_l2=0.5609, 32_h1=0.9570, 32_l2=0.5683
@@ -440,7 +440,7 @@ We train the model using incremental meta-learning. The trainer will:
     Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
       torch.Tensor(strength_vector),
     Eval: 16_h1=0.8347, 16_l2=0.4971, 32_h1=1.0166, 32_l2=0.5265
-    [3] time=0.32, avg_loss=0.6339, train_err=9.0559
+    [3] time=0.31, avg_loss=0.6339, train_err=9.0559
     Eval: 16_h1=0.7357, 16_l2=0.3799, 32_h1=0.9571, 32_l2=0.4044
     [4] time=0.31, avg_loss=0.5737, train_err=8.1957
     Eval: 16_h1=0.7194, 16_l2=0.4070, 32_h1=0.9378, 32_l2=0.4368
@@ -448,11 +448,11 @@ We train the model using incremental meta-learning. The trainer will:
     Eval: 16_h1=0.9164, 16_l2=0.5005, 32_h1=1.0924, 32_l2=0.5057
     [6] time=0.32, avg_loss=0.6077, train_err=8.6811
     Eval: 16_h1=0.9188, 16_l2=0.4762, 32_h1=1.3260, 32_l2=0.5157
-    [7] time=0.32, avg_loss=0.5472, train_err=7.8174
+    [7] time=0.31, avg_loss=0.5472, train_err=7.8174
     Eval: 16_h1=0.7178, 16_l2=0.3638, 32_h1=0.9637, 32_l2=0.3876
-    [8] time=0.31, avg_loss=0.4793, train_err=6.8474
+    [8] time=0.32, avg_loss=0.4793, train_err=6.8474
     Eval: 16_h1=0.7776, 16_l2=0.4669, 32_h1=0.9444, 32_l2=0.4953
-    [9] time=0.31, avg_loss=0.5457, train_err=7.7952
+    [9] time=0.32, avg_loss=0.5457, train_err=7.7952
     Eval: 16_h1=0.5953, 16_l2=0.3246, 32_h1=0.8545, 32_l2=0.3536
     Incre Res Update: change index to 1
     Incre Res Update: change sub to 1
@@ -465,9 +465,9 @@ We train the model using incremental meta-learning. The trainer will:
     Eval: 16_h1=0.4840, 16_l2=0.3221, 32_h1=0.5677, 32_l2=0.3250
     [13] time=0.39, avg_loss=0.4424, train_err=6.3205
     Eval: 16_h1=0.4035, 16_l2=0.2458, 32_h1=0.5175, 32_l2=0.2570
-    [14] time=0.39, avg_loss=0.3829, train_err=5.4700
+    [14] time=0.38, avg_loss=0.3829, train_err=5.4700
     Eval: 16_h1=0.4722, 16_l2=0.2668, 32_h1=0.5495, 32_l2=0.2607
-    [15] time=0.39, avg_loss=0.4168, train_err=5.9539
+    [15] time=0.38, avg_loss=0.4168, train_err=5.9539
     Eval: 16_h1=0.3833, 16_l2=0.2270, 32_h1=0.5445, 32_l2=0.2466
     [16] time=0.39, avg_loss=0.3602, train_err=5.1457
     Eval: 16_h1=0.3740, 16_l2=0.2308, 32_h1=0.4667, 32_l2=0.2302
@@ -475,10 +475,10 @@ We train the model using incremental meta-learning. The trainer will:
     Eval: 16_h1=0.4300, 16_l2=0.2664, 32_h1=0.6119, 32_l2=0.2869
     [18] time=0.39, avg_loss=0.3859, train_err=5.5122
     Eval: 16_h1=0.3710, 16_l2=0.2348, 32_h1=0.4790, 32_l2=0.2393
-    [19] time=0.41, avg_loss=0.3316, train_err=4.7376
+    [19] time=0.39, avg_loss=0.3316, train_err=4.7376
     Eval: 16_h1=0.3490, 16_l2=0.2211, 32_h1=0.4717, 32_l2=0.2343
 
-    {'train_err': 4.737565738814218, 'avg_loss': 0.33162960171699524, 'avg_lasso_loss': None, 'epoch_train_time': 0.41112436499997784, '16_h1': tensor(0.3490), '16_l2': tensor(0.2211), '32_h1': tensor(0.4717), '32_l2': tensor(0.2343)}
+    {'train_err': 4.737565738814218, 'avg_loss': 0.33162960171699524, 'avg_lasso_loss': None, 'epoch_train_time': 0.3920367709999937, '16_h1': tensor(0.3490), '16_l2': tensor(0.2211), '32_h1': tensor(0.4717), '32_l2': tensor(0.2343)}
 
 
 
@@ -561,7 +561,7 @@ In practice we would train a Neural Operator on one or multiple GPUs
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 13.887 seconds)
+   **Total running time of the script:** (0 minutes 12.973 seconds)
 
 
 .. _sphx_glr_download_auto_examples_training_plot_incremental_FNO_darcy.py:
