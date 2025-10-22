@@ -323,13 +323,13 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f0ef66fcec0&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7ff9d5740ec0&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f0ef66fd010&gt;
+ * Train: &lt;neuralop.losses.data_losses.LpLoss object at 0x7ff9d5741010&gt;
 
- * Test: {&#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f0ef66fd010&gt;}
+ * Test: {&#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7ff9d5741010&gt;}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -366,22 +366,22 @@ Testing on [50, 50] samples         on resolutions [(32, 64), (64, 128)].
 Raw outputs of shape torch.Size([4, 3, 32, 64])
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:536: UserWarning: LpLoss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
   loss += training_loss(out, **sample)
-[0] time=3.40, avg_loss=2.6477, train_err=10.5908
+[0] time=3.43, avg_loss=2.6477, train_err=10.5908
 Eval: (32, 64)_l2=2.0991, (64, 128)_l2=2.4930
 [3] time=3.34, avg_loss=0.4356, train_err=1.7426
 Eval: (32, 64)_l2=0.4196, (64, 128)_l2=2.4630
-[6] time=3.34, avg_loss=0.2665, train_err=1.0659
+[6] time=3.40, avg_loss=0.2665, train_err=1.0659
 Eval: (32, 64)_l2=0.3350, (64, 128)_l2=2.4235
-[9] time=3.33, avg_loss=0.2154, train_err=0.8617
+[9] time=3.34, avg_loss=0.2154, train_err=0.8617
 Eval: (32, 64)_l2=0.2543, (64, 128)_l2=2.3731
-[12] time=3.33, avg_loss=0.1783, train_err=0.7130
+[12] time=3.30, avg_loss=0.1783, train_err=0.7130
 Eval: (32, 64)_l2=0.2299, (64, 128)_l2=2.3361
-[15] time=3.36, avg_loss=0.1543, train_err=0.6170
+[15] time=3.34, avg_loss=0.1543, train_err=0.6170
 Eval: (32, 64)_l2=0.2103, (64, 128)_l2=2.3057
-[18] time=3.36, avg_loss=0.1417, train_err=0.5668
+[18] time=3.33, avg_loss=0.1417, train_err=0.5668
 Eval: (32, 64)_l2=0.2001, (64, 128)_l2=2.3058
 
-{&#39;train_err&#39;: 0.5598851031064987, &#39;avg_loss&#39;: 0.1399712757766247, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 3.3246560499999873}
+{&#39;train_err&#39;: 0.5598851031064987, &#39;avg_loss&#39;: 0.1399712757766247, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 3.3420963339999616}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -433,7 +433,7 @@ ii) can be trained quickly on CPU</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_SFNO_swe_001.png" srcset="../../_images/sphx_glr_plot_SFNO_swe_001.png" alt="SFNO predictions on spherical shallow water equations, Input x (32, 64), Ground-truth y, SFNO prediction, Input x (64, 128), Ground-truth y, SFNO prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 23.280 seconds)</p>
+<img src="../../_images/sphx_glr_plot_SFNO_swe_001.png" srcset="../../_images/sphx_glr_plot_SFNO_swe_001.png" alt="SFNO predictions on spherical shallow water equations, Input x (32, 64), Ground-truth y, SFNO prediction, Input x (64, 128), Ground-truth y, SFNO prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 23.894 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-models-plot-sfno-swe-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/513ad9091cd6d9b455b9ddd3c807b97f/plot_SFNO_swe.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_SFNO_swe.ipynb</span></code></a></p>
