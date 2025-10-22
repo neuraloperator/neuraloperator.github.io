@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>neuralop.layers.normalization_layers &#8212; neuraloperator 2.0.0 documentation</title> 
+<link rel="stylesheet" href="../../../_static/tensorly_style.css">
+<link rel="apple-touch-icon" sizes="180x180" href="../../../_static/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../../_static/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../../_static/favicon/favicon-16x16.png">
+<link rel="manifest" href="../../../_static/favicon/site.webmanifest">
+<link rel="mask-icon" href="../../../_static/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="../../../_static/favicon/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=5126dfd5" />
+
+  
+    <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+ <script src="../../../_static/navbar_burger.js"></script>
+ <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+ 
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  </head>
+<body  class="has-navbar-fixed-top">
+
+  <header>
+    <navbar>
+      <nav class="navbar top-navbar is-fixed-top has-shadow is-flex-wrap-wrap" role="navigation" aria-label="main top navigation">
+        <div class="navbar-brand">
+        
+
+          <a class="navbar-item" href="../../../index.html">
+            <img src="../../../_static/neuraloperator_logo.png" height="28">
+          </a>
+          <a class="navbar-item is-hidden-desktop" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon"><i class="fab fa-github"></i></span>
+          </a>
+
+          <a role="button" class="navbar-burger" data-target="top-nav-menu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+
+        </div>
+        
+        <div class="navbar-menu" id="top-nav-menu">
+        
+
+          <div class="navbar-start">
+            
+              <a class="navbar-item" href="../../../install.html">
+              Install
+            </a>
+              <a class="navbar-item" href="../../../theory_guide/index.html">
+              Theory Guide
+            </a>
+              <a class="navbar-item" href="../../../user_guide/index.html">
+              User Guide
+            </a>
+              <a class="navbar-item" href="../../../modules/api.html">
+              API
+            </a>
+              <a class="navbar-item" href="../../../auto_examples/index.html">
+              Examples
+            </a>
+              <a class="navbar-item" href="../../../dev_guide/index.html">
+              Developer's Guide
+            </a>
+          </div>
+        
+          <div class="navbar-end">
+            <div class="navbar-item">
+            
+            <a class="button is-hidden-touch is-dark" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon-text">
+                <span class="icon is-large">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Github</span>
+              </span>
+            </a>
+
+            </div> 
+          </div> 
+        </div> 
+
+      </nav>
+      
+    </navbar>
+  </header>
+
+
+  <div id="column-container">
+  <div class="columns is-mobile is-centered">
+	
+  
+
+  <div class="column main-column">
+
+    
+    <div class="main-section">
+
+      
+      
+
+      <div class="container content main-content">
+        
+  <h1>Source code for neuralop.layers.normalization_layers</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+
+
+<div class="viewcode-block" id="AdaIN">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.normalization_layers.AdaIN.html#neuralop.layers.normalization_layers.AdaIN">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AdaIN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Adaptive Instance Normalization (AdaIN) layer for style transfer in neural operators.</span>
+
+<span class="sd">    AdaIN performs instance normalization followed by adaptive scaling and shifting</span>
+<span class="sd">    based on an external embedding vector. This allows for style transfer by</span>
+<span class="sd">    modulating the output characteristics based on a conditioning signal.</span>
+
+<span class="sd">    The layer first normalizes the input using instance normalization, then applies</span>
+<span class="sd">    learned scaling (weight) and shifting (bias) parameters derived from an embedding</span>
+<span class="sd">    vector through a multi-layer perceptron.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    embed_dim : int</span>
+<span class="sd">        Dimension of the embedding vector used for style conditioning</span>
+<span class="sd">    in_channels : int</span>
+<span class="sd">        Number of input channels to normalize</span>
+<span class="sd">    mlp : nn.Module, optional</span>
+<span class="sd">        Multi-layer perceptron that maps embedding to (weight, bias) parameters.</span>
+<span class="sd">        Should output 2*in_channels values. If None, a default MLP is created</span>
+<span class="sd">        with architecture: Linear(embed_dim, 512) -&gt; GELU -&gt; Linear(512, 2*in_channels)</span>
+<span class="sd">    eps : float, optional</span>
+<span class="sd">        Small value added to the denominator for numerical stability in normalization.</span>
+<span class="sd">        Default is 1e-5.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">mlp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span> <span class="o">=</span> <span class="n">in_channels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span> <span class="o">=</span> <span class="n">embed_dim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eps</span> <span class="o">=</span> <span class="n">eps</span>
+
+        <span class="k">if</span> <span class="n">mlp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">mlp</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+                <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">embed_dim</span><span class="p">,</span> <span class="mi">512</span><span class="p">),</span>
+                <span class="n">nn</span><span class="o">.</span><span class="n">GELU</span><span class="p">(),</span>
+                <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">in_channels</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mlp</span> <span class="o">=</span> <span class="n">mlp</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">embedding</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="AdaIN.set_embedding">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.normalization_layers.AdaIN.html#neuralop.layers.normalization_layers.AdaIN.set_embedding">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the embedding vector for style conditioning.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embedding</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span><span class="p">,)</span></div>
+
+
+<div class="viewcode-block" id="AdaIN.forward">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.normalization_layers.AdaIN.html#neuralop.layers.normalization_layers.AdaIN.forward">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply adaptive instance normalization to the input tensor.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">embedding</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;AdaIN: update embeddding before running forward&quot;</span>
+
+        <span class="n">weight</span><span class="p">,</span> <span class="n">bias</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mlp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">embedding</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">group_norm</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">bias</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="InstanceNorm">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.normalization_layers.InstanceNorm.html#neuralop.layers.normalization_layers.InstanceNorm">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">InstanceNorm</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dimension-agnostic instance normalization layer for neural operators.</span>
+
+<span class="sd">    InstanceNorm normalizes each sample in the batch independently, computing</span>
+<span class="sd">    mean and variance across spatial dimensions for each sample and channel</span>
+<span class="sd">    separately. This is useful when the statistical properties of each sample</span>
+<span class="sd">    are distinct and should be treated separately.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    **kwargs : dict, optional</span>
+<span class="sd">        Additional parameters to pass to torch.nn.functional.instance_norm().</span>
+<span class="sd">        Common parameters include:</span>
+<span class="sd">        - eps : float, optional</span>
+<span class="sd">            Small value added to the denominator for numerical stability.</span>
+<span class="sd">            Default is 1e-5.</span>
+<span class="sd">        - momentum : float, optional</span>
+<span class="sd">            Value used for the running_mean and running_var computation.</span>
+<span class="sd">            Default is 0.1.</span>
+<span class="sd">        - use_input_stats : bool, optional</span>
+<span class="sd">            If True, use input statistics. Default is True.</span>
+<span class="sd">        - weight : torch.Tensor, optional</span>
+<span class="sd">            Weight tensor for affine transformation. If None, no scaling applied.</span>
+<span class="sd">        - bias : torch.Tensor, optional</span>
+<span class="sd">            Bias tensor for affine transformation. If None, no bias applied.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+
+<div class="viewcode-block" id="InstanceNorm.forward">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.normalization_layers.InstanceNorm.html#neuralop.layers.normalization_layers.InstanceNorm.forward">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply instance normalization to the input tensor.&quot;&quot;&quot;</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">instance_norm</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">size</span>
+        <span class="k">return</span> <span class="n">x</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="BatchNorm">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.normalization_layers.BatchNorm.html#neuralop.layers.normalization_layers.BatchNorm">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BatchNorm</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dimension-agnostic batch normalization layer for neural operators.</span>
+
+<span class="sd">    BatchNorm normalizes data across the entire batch, computing a single mean</span>
+<span class="sd">    and standard deviation for all samples combined. This is the most common</span>
+<span class="sd">    form of normalization and is effective when batch statistics are a good</span>
+<span class="sd">    approximation of the overall data distribution.</span>
+
+<span class="sd">    For dimensions &gt; 3, the layer automatically flattens spatial dimensions</span>
+<span class="sd">    and uses BatchNorm1d, as PyTorch doesn&#39;t implement batch norm for 4D+ tensors.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n_dim : int</span>
+<span class="sd">        Spatial dimension of input data (e.g., 1 for 1D, 2 for 2D, 3 for 3D).</span>
+<span class="sd">        Determined by FNOBlocks.n_dim. If n_dim &gt; 3, spatial dimensions are</span>
+<span class="sd">        flattened and BatchNorm1d is used.</span>
+<span class="sd">    num_features : int</span>
+<span class="sd">        Number of channels in the input tensor to be normalized</span>
+<span class="sd">    **kwargs : dict, optional</span>
+<span class="sd">        Additional parameters to pass to the underlying batch normalization layer.</span>
+<span class="sd">        Common parameters include:</span>
+<span class="sd">        - eps : float, optional</span>
+<span class="sd">            Small value added to the denominator for numerical stability.</span>
+<span class="sd">            Default is 1e-5.</span>
+<span class="sd">        - momentum : float, optional</span>
+<span class="sd">            Value used for the running_mean and running_var computation.</span>
+<span class="sd">            Default is 0.1.</span>
+<span class="sd">        - affine : bool, optional</span>
+<span class="sd">            If True, apply learnable affine transformation. Default is True.</span>
+<span class="sd">        - track_running_stats : bool, optional</span>
+<span class="sd">            If True, track running statistics. Default is True.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_features</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span> <span class="o">=</span> <span class="n">n_dim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_features</span> <span class="o">=</span> <span class="n">num_features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;BatchNorm</span><span class="si">{</span><span class="n">n_dim</span><span class="si">}</span><span class="s2">d&quot;</span><span class="p">)(</span>
+                <span class="n">num_features</span><span class="o">=</span><span class="n">num_features</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Warning: torch does not implement batch norm for dimensions higher than 3.</span><span class="se">\</span>
+<span class="s2">                  We manually flatten the spatial dimension of 4+D tensors to apply batch norm. &quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm1d</span><span class="p">(</span><span class="n">num_features</span><span class="o">=</span><span class="n">num_features</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BatchNorm.forward">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.normalization_layers.BatchNorm.html#neuralop.layers.normalization_layers.BatchNorm.forward">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply batch normalization to the input tensor.&quot;&quot;&quot;</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">num_channels</span> <span class="o">=</span> <span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># in 4+D, we flatten and use batchnorm1d.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="c1"># if flattening occurred, unflatten</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">size</span>
+        <span class="k">return</span> <span class="n">x</span></div>
+</div>
+
+</pre></div>
+
+      </div>
+
+      
+
+        <footer class="footer">
+    <div class="content has-text-centered">
+        <div class="block">
+          &copy; Copyright 2025, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+        </div>
+    </div>
+  </footer>
+
+    </div>
+
+  </div>  
+
+	
+
+  </div>  
+  </div> 
+
+  
+  <script>
+    function toggle_sidebar() {
+        var element = document.getElementById("sidebar");
+        var container = document.getElementById("column-container");
+        var localtoccolumn = document.getElementById("localtoc-column");
+        element.classList.toggle("hide-tablet");
+        element.classList.toggle("is-hidden-mobile");
+        container.classList.toggle("sidemenu-hidden");
+        localtoccolumn.classList.toggle("is-one-fifth-widescreen");
+        localtoccolumn.classList.toggle("is-2-desktop");
+        localtoccolumn.classList.toggle("is-3-desktop");
+    }
+  </script> 
+
+
+
+  </body>
+</html>

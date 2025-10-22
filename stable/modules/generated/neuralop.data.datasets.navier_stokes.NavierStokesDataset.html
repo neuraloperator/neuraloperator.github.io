@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>neuralop.data.datasets.navier_stokes.NavierStokesDataset &#8212; neuraloperator 1.0.2 documentation</title> 
+    <title>neuralop.data.datasets.navier_stokes.NavierStokesDataset &#8212; neuraloperator 2.0.0 documentation</title> 
 <link rel="stylesheet" href="../../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../_static/favicon/favicon-32x32.png">
@@ -15,17 +15,20 @@
 <link rel="shortcut icon" href="../../_static/favicon/favicon.ico">
 <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/tensorly_style.css?v=a02e9698" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=5126dfd5" />
 
   
-    <script src="../../_static/documentation_options.js?v=1ed6394b"></script>
+    <script src="../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
  
@@ -67,6 +70,9 @@
               <a class="navbar-item" href="../../install.html">
               Install
             </a>
+              <a class="navbar-item" href="../../theory_guide/index.html">
+              Theory Guide
+            </a>
               <a class="navbar-item" href="../../user_guide/index.html">
               User Guide
             </a>
@@ -75,6 +81,9 @@
             </a>
               <a class="navbar-item" href="../../auto_examples/index.html">
               Examples
+            </a>
+              <a class="navbar-item" href="../../dev_guide/index.html">
+              Developer's Guide
             </a>
           </div>
         
@@ -126,16 +135,20 @@
       <div class="sidebar-menu-toc">
       <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing NeuralOperator</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">NeuralOperator User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory_guide/index.html">Theory Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User Guide</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../api.html#models">Models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.layers">Layers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#model-dispatching">Model Dispatching</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#training">Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#loss-functions">Loss Functions</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../api.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.utils">Utility Functions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Gallery of examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Development guide</a></li>
 </ul>
  
       </div>
@@ -164,14 +177,48 @@
 <h1><a class="reference internal" href="../api.html#module-neuralop.data.datasets.navier_stokes" title="neuralop.data.datasets.navier_stokes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.datasets.navier_stokes</span></code></a>.NavierStokesDataset<a class="headerlink" href="#neuralop-data-datasets-navier-stokes-navierstokesdataset" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.data.datasets.navier_stokes.NavierStokesDataset">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.data.datasets.navier_stokes.</span></span><span class="sig-name descname"><span class="pre">NavierStokesDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_tests</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_batch_sizes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_resolution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_resolutions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[16,</span> <span class="pre">32]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encode_input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encode_output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'channel-wise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/data/datasets/navier_stokes.html#NavierStokesDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.data.datasets.navier_stokes.NavierStokesDataset" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.data.datasets.navier_stokes.</span></span><span class="sig-name descname"><span class="pre">NavierStokesDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_tests</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_batch_sizes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_resolution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_resolutions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[16,</span> <span class="pre">32]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encode_input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encode_output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'channel-wise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/data/datasets/navier_stokes.html#NavierStokesDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.data.datasets.navier_stokes.NavierStokesDataset" title="Link to this definition"></a></dt>
 <dd><p>NavierStokesDataset stores data generated according to the 2d
 incompressible Navier-Stokes equations. Input and output are both
 2d fields with one channel of data which describes the vorticity at each point.</p>
 <p>Data source: <a class="reference external" href="https://zenodo.org/records/12825163">https://zenodo.org/records/12825163</a></p>
 <dl class="field-list simple">
-<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
+<dt><strong>root_dir</strong><span class="classifier">Union[Path, str]</span></dt><dd><p>root at which to download data files</p>
+</dd>
+<dt><strong>n_train</strong><span class="classifier">int</span></dt><dd><p>number of train instances</p>
+</dd>
+<dt><strong>n_tests</strong><span class="classifier">List[int]</span></dt><dd><p>number of test instances per test dataset</p>
+</dd>
+<dt><strong>batch_size</strong><span class="classifier">int</span></dt><dd><p>batch size of training set</p>
+</dd>
+<dt><strong>test_batch_sizes</strong><span class="classifier">List[int]</span></dt><dd><p>batch size of test sets</p>
+</dd>
+<dt><strong>train_resolution</strong><span class="classifier">int</span></dt><dd><p>resolution of data for training set</p>
+</dd>
+<dt><strong>test_resolutions</strong><span class="classifier">List[int], optional</span></dt><dd><p>resolution of data for testing sets, by default [16,32]</p>
+</dd>
+<dt><strong>encode_input</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to normalize inputs in provided DataProcessor,
+by default False</p>
+</dd>
+<dt><strong>encode_output</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to normalize outputs in provided DataProcessor,
+by default True</p>
+</dd>
+<dt><strong>encoding</strong><span class="classifier">str, optional</span></dt><dd><p>parameter for input/output normalization. Whether
+to normalize by channel (“channel-wise”) or
+by pixel (“pixel-wise”), default “channel-wise”</p>
+</dd>
+<dt><strong>channel_dim</strong><span class="classifier">int, optional</span></dt><dd><p>dimension of saved tensors to index data channels, by default 1</p>
+</dd>
+<dt><strong>subsampling_rate</strong><span class="classifier">int or List[int], optional</span></dt><dd><p>rate at which to subsample each input dimension, by default None</p>
+</dd>
+<dt><strong>download</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to download data if not present, by default True</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
 <dt><strong>train_db: torch.utils.data.Dataset of training examples</strong></dt><dd></dd>
 <dt><strong>test_db:  “”                       of test examples</strong></dt><dd></dd>
 <dt><strong>data_processor: neuralop.data.transforms.DataProcessor to process data examples</strong></dt><dd><p>optional, default is None</p>
@@ -211,7 +258,7 @@ incompressible Navier-Stokes equations. Input and output are both
         <footer class="footer">
     <div class="content has-text-centered">
         <div class="block">
-          &copy; Copyright 2024, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+          &copy; Copyright 2025, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
         </div>
     </div>
   </footer>

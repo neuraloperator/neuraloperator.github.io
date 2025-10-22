@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>neuralop.models.uqno &#8212; neuraloperator 2.0.0 documentation</title> 
+<link rel="stylesheet" href="../../../_static/tensorly_style.css">
+<link rel="apple-touch-icon" sizes="180x180" href="../../../_static/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../../_static/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../../_static/favicon/favicon-16x16.png">
+<link rel="manifest" href="../../../_static/favicon/site.webmanifest">
+<link rel="mask-icon" href="../../../_static/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="../../../_static/favicon/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=5126dfd5" />
+
+  
+    <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+ <script src="../../../_static/navbar_burger.js"></script>
+ <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+ 
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  </head>
+<body  class="has-navbar-fixed-top">
+
+  <header>
+    <navbar>
+      <nav class="navbar top-navbar is-fixed-top has-shadow is-flex-wrap-wrap" role="navigation" aria-label="main top navigation">
+        <div class="navbar-brand">
+        
+
+          <a class="navbar-item" href="../../../index.html">
+            <img src="../../../_static/neuraloperator_logo.png" height="28">
+          </a>
+          <a class="navbar-item is-hidden-desktop" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon"><i class="fab fa-github"></i></span>
+          </a>
+
+          <a role="button" class="navbar-burger" data-target="top-nav-menu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+
+        </div>
+        
+        <div class="navbar-menu" id="top-nav-menu">
+        
+
+          <div class="navbar-start">
+            
+              <a class="navbar-item" href="../../../install.html">
+              Install
+            </a>
+              <a class="navbar-item" href="../../../theory_guide/index.html">
+              Theory Guide
+            </a>
+              <a class="navbar-item" href="../../../user_guide/index.html">
+              User Guide
+            </a>
+              <a class="navbar-item" href="../../../modules/api.html">
+              API
+            </a>
+              <a class="navbar-item" href="../../../auto_examples/index.html">
+              Examples
+            </a>
+              <a class="navbar-item" href="../../../dev_guide/index.html">
+              Developer's Guide
+            </a>
+          </div>
+        
+          <div class="navbar-end">
+            <div class="navbar-item">
+            
+            <a class="button is-hidden-touch is-dark" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon-text">
+                <span class="icon is-large">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Github</span>
+              </span>
+            </a>
+
+            </div> 
+          </div> 
+        </div> 
+
+      </nav>
+      
+    </navbar>
+  </header>
+
+
+  <div id="column-container">
+  <div class="columns is-mobile is-centered">
+	
+  
+
+  <div class="column main-column">
+
+    
+    <div class="main-section">
+
+      
+      
+
+      <div class="container content main-content">
+        
+  <h1>Source code for neuralop.models.uqno</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.base_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+
+
+<div class="viewcode-block" id="UQNO">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.models.UQNO.html#neuralop.models.UQNO">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">UQNO</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;UQNO&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Uncertainty Quantification Neural Operator</span>
+<span class="sd">    </span>
+<span class="sd">    General N-dim (alpha, delta) Risk-Controlling Neural Operator, as described in [1]_.</span>
+
+<span class="sd">    The UQNO is trained to map input functions to a residual function</span>
+<span class="sd">    E(a, x) that describes the predicted error between the ground truth</span>
+<span class="sd">    and the outputs of a trained model. E(a, x) is then used in combination</span>
+<span class="sd">    with a calibrated scaling factor to predict calibrated uncertainty bands</span>
+<span class="sd">    around the predictions of the trained model.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    base_model : nn.Module</span>
+<span class="sd">        Pre-trained solution operator. Determined by the problem.</span>
+<span class="sd">    residual_model : nn.Module, optional</span>
+<span class="sd">        Architecture to train as the UQNO&#39;s quantile model.</span>
+<span class="sd">        If None, a deep copy of base_model is used. Default: None</span>
+
+<span class="sd">    References</span>
+<span class="sd">    -----------</span>
+<span class="sd">    .. [1] :</span>
+
+<span class="sd">    Ma, Z., Pitt, D., Azizzadenesheli, K., and Anandkumar, A. (2024).</span>
+<span class="sd">        &quot;Calibrated Uncertainty Quantification for Operator Learning</span>
+<span class="sd">        via Conformal Prediction&quot;. TMLR, https://openreview.net/pdf?id=cGpegxy12T.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">base_model</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">residual_model</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_model</span> <span class="o">=</span> <span class="n">base_model</span>
+        <span class="k">if</span> <span class="n">residual_model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">residual_model</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">base_model</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">residual_model</span> <span class="o">=</span> <span class="n">residual_model</span>
+
+<div class="viewcode-block" id="UQNO.forward">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.models.UQNO.html#neuralop.models.UQNO.forward">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Forward pass returns the solution u(a,x)</span>
+<span class="sd">        and the uncertainty ball E(a,x) as a pair</span>
+<span class="sd">        for pointwise quantile loss</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>  <span class="c1"># base-model weights are frozen</span>
+        <span class="c1"># another way to handle this would be to use LoRA, or similar</span>
+        <span class="c1"># ie freeze the  weights, and train a low-rank matrix of weight perturbations</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">solution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_model</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">quantile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">residual_model</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="n">quantile</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+      </div>
+
+      
+
+        <footer class="footer">
+    <div class="content has-text-centered">
+        <div class="block">
+          &copy; Copyright 2025, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+        </div>
+    </div>
+  </footer>
+
+    </div>
+
+  </div>  
+
+	
+
+  </div>  
+  </div> 
+
+  
+  <script>
+    function toggle_sidebar() {
+        var element = document.getElementById("sidebar");
+        var container = document.getElementById("column-container");
+        var localtoccolumn = document.getElementById("localtoc-column");
+        element.classList.toggle("hide-tablet");
+        element.classList.toggle("is-hidden-mobile");
+        container.classList.toggle("sidemenu-hidden");
+        localtoccolumn.classList.toggle("is-one-fifth-widescreen");
+        localtoccolumn.classList.toggle("is-2-desktop");
+        localtoccolumn.classList.toggle("is-3-desktop");
+    }
+  </script> 
+
+
+
+  </body>
+</html>

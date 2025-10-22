@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>neuralop.training.patching &#8212; neuraloperator 2.0.0 documentation</title> 
+<link rel="stylesheet" href="../../../_static/tensorly_style.css">
+<link rel="apple-touch-icon" sizes="180x180" href="../../../_static/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../../_static/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../../_static/favicon/favicon-16x16.png">
+<link rel="manifest" href="../../../_static/favicon/site.webmanifest">
+<link rel="mask-icon" href="../../../_static/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="../../../_static/favicon/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=5126dfd5" />
+
+  
+    <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+ <script src="../../../_static/navbar_burger.js"></script>
+ <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+ 
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  </head>
+<body  class="has-navbar-fixed-top">
+
+  <header>
+    <navbar>
+      <nav class="navbar top-navbar is-fixed-top has-shadow is-flex-wrap-wrap" role="navigation" aria-label="main top navigation">
+        <div class="navbar-brand">
+        
+
+          <a class="navbar-item" href="../../../index.html">
+            <img src="../../../_static/neuraloperator_logo.png" height="28">
+          </a>
+          <a class="navbar-item is-hidden-desktop" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon"><i class="fab fa-github"></i></span>
+          </a>
+
+          <a role="button" class="navbar-burger" data-target="top-nav-menu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+
+        </div>
+        
+        <div class="navbar-menu" id="top-nav-menu">
+        
+
+          <div class="navbar-start">
+            
+              <a class="navbar-item" href="../../../install.html">
+              Install
+            </a>
+              <a class="navbar-item" href="../../../theory_guide/index.html">
+              Theory Guide
+            </a>
+              <a class="navbar-item" href="../../../user_guide/index.html">
+              User Guide
+            </a>
+              <a class="navbar-item" href="../../../modules/api.html">
+              API
+            </a>
+              <a class="navbar-item" href="../../../auto_examples/index.html">
+              Examples
+            </a>
+              <a class="navbar-item" href="../../../dev_guide/index.html">
+              Developer's Guide
+            </a>
+          </div>
+        
+          <div class="navbar-end">
+            <div class="navbar-item">
+            
+            <a class="button is-hidden-touch is-dark" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon-text">
+                <span class="icon is-large">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Github</span>
+              </span>
+            </a>
+
+            </div> 
+          </div> 
+        </div> 
+
+      </nav>
+      
+    </navbar>
+  </header>
+
+
+  <div id="column-container">
+  <div class="columns is-mobile is-centered">
+	
+  
+
+  <div class="column main-column">
+
+    
+    <div class="main-section">
+
+      
+      
+
+      <div class="container content main-content">
+        
+  <h1>Source code for neuralop.training.patching</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">neuralop.mpu.comm</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">comm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.mpu.mappings</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">gather_from_model_parallel_region</span><span class="p">,</span>
+    <span class="n">scatter_to_model_parallel_region</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="MultigridPatching2D">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.training.patching.MultigridPatching2D.html#neuralop.training.patching.MultigridPatching2D">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MultigridPatching2D</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    MultigridPatching2D wraps a model in multi-grid domain decomposition and patching.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : nn.Module</span>
+<span class="sd">        model to wrap</span>
+<span class="sd">    levels : int, optional</span>
+<span class="sd">        number of levels of patching to use, by default 0</span>
+<span class="sd">    padding_fraction : float, optional</span>
+<span class="sd">        fraction of input size to add as padding around patches, by default 0</span>
+<span class="sd">    use_distributed : bool, optional</span>
+<span class="sd">        whether patching is performed in distributed mode, by default False</span>
+<span class="sd">    stitching : bool, optional</span>
+<span class="sd">        whether patches are to be stitched back together</span>
+<span class="sd">        in spatial dimensions during training, by default True.</span>
+<span class="sd">        Stitching is always performed during evaluation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">model</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+        <span class="n">levels</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">padding_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">use_distributed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">stitching</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize MultigridPatching2D.</span>
+
+<span class="sd">        If computation is split into distributed data or model parallel, adds parameter </span>
+<span class="sd">        hooks to account for scattering patches across multiple processes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">=</span> <span class="n">levels</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">padding_fraction</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+            <span class="n">padding_fraction</span> <span class="o">=</span> <span class="p">[</span><span class="n">padding_fraction</span><span class="p">,</span> <span class="n">padding_fraction</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">padding_fraction</span> <span class="o">=</span> <span class="n">padding_fraction</span>
+
+        <span class="n">n_patches</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="n">levels</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_patches</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">n_patches</span> <span class="o">=</span> <span class="p">[</span><span class="n">n_patches</span><span class="p">,</span> <span class="n">n_patches</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_patches</span> <span class="o">=</span> <span class="n">n_patches</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_distributed</span> <span class="o">=</span> <span class="n">use_distributed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stitching</span> <span class="o">=</span> <span class="n">stitching</span>
+
+        <span class="k">if</span> <span class="n">levels</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;MGPatching(&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;n_patches=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_patches</span><span class="si">}</span><span class="s2">, &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;padding_fraction=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">padding_fraction</span><span class="si">}</span><span class="s2">, &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;levels=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">levels</span><span class="si">}</span><span class="s2">, &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;use_distributed=</span><span class="si">{</span><span class="n">use_distributed</span><span class="si">}</span><span class="s2">, &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;stitching=</span><span class="si">{</span><span class="n">stitching</span><span class="si">}</span><span class="s2">)&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># If distributed patches are stiched, re-scale gradients to revert DDP averaging</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_distributed</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">stitching</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">():</span>
+                <span class="n">param</span><span class="o">.</span><span class="n">register_hook</span><span class="p">(</span>
+                    <span class="k">lambda</span> <span class="n">grad</span><span class="p">:</span> <span class="n">grad</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="n">comm</span><span class="o">.</span><span class="n">get_model_parallel_size</span><span class="p">())</span>
+                <span class="p">)</span>
+
+<div class="viewcode-block" id="MultigridPatching2D.patch">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.training.patching.MultigridPatching2D.html#neuralop.training.patching.MultigridPatching2D.patch">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">patch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;use multi-grid domain decomposition to split `x` and `y` into patches.</span>
+<span class="sd">        If in a distributed scheme, scatters patches across processes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : torch.tensor</span>
+<span class="sd">            model input function</span>
+<span class="sd">        y : _type_</span>
+<span class="sd">            model output function</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># if not stitching in single-device, create patches for y</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">stitching</span><span class="p">:</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">make_patches</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_patches</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># If not stitching, scatter truth, otherwise keep on every GPU</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_distributed</span><span class="p">:</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">scatter_to_model_parallel_region</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Create padded patches in batch dimension (identity if levels=0)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_mg_patches</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="c1"># Split data across processes</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_distributed</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">scatter_to_model_parallel_region</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span></div>
+
+
+<div class="viewcode-block" id="MultigridPatching2D.unpatch">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.training.patching.MultigridPatching2D.html#neuralop.training.patching.MultigridPatching2D.unpatch">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">unpatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">evaluation</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;unpatch tensors created by `self.patch`. Stitch patches together if in</span>
+<span class="sd">        evaluation mode, or if stitching is applied.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : torch.tensor</span>
+<span class="sd">            tensor with patching structure created patching input `x`. May be</span>
+<span class="sd">            either inputs `x` or raw model outputs (same shape/patching structure)</span>
+<span class="sd">            Shape (b * n^2, c, h / n + 2 * pad_h, w / n + 2 * pad_w)</span>
+<span class="sd">        y : torch.tensor</span>
+<span class="sd">            tensor of patched ground-truth `y`.</span>
+<span class="sd">            Shape (b * n^2, c, h / n, w / n) or (b, c, h, w) when not stitched</span>
+<span class="sd">        evaluation : bool, optional</span>
+<span class="sd">            whether in evaluation mode, by default False.</span>
+<span class="sd">            If True, `x` and `y` are both evaluated after stitching,</span>
+<span class="sd">            regardless of other settings.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Remove padding in the output</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">padding_height</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">padding_width</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unpad</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="c1"># Gather patches if they are to be stitched back together</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_distributed</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">stitching</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">gather_from_model_parallel_region</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Stich patches or patch the truth if output left unstitched</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stitching</span> <span class="ow">or</span> <span class="n">evaluation</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stitch</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="c1"># if x is not stitched during training, y is patched</span>
+        <span class="c1"># re-stitch y during evaluation only</span>
+        <span class="k">if</span> <span class="n">evaluation</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">stitching</span><span class="p">:</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stitch</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_stitch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Stitch back together multi-grid patches created by `self._make_mg_patches`.</span>
+
+<span class="sd">        Small patches are collated along the batch dimension as different inputs. Unroll</span>
+<span class="sd">        the batch dimension and stick all patches from the same input back together in their</span>
+<span class="sd">        proper locations.</span>
+
+<span class="sd">        For an input shape (n * n * n, c, h / n, w / n),</span>
+<span class="sd">        produces an output tensor of shape (b, c, h, w)</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : torch.tensor</span>
+<span class="sd">            input tensor, split into patches and collated along batch dim</span>
+<span class="sd">            shape (batch * n^2, c, h / n, w / n)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Only 1D and 2D supported</span>
+        <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">4</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Only 2D patch supported but got input with </span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2"> dims.&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_patches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_patches</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">x</span>
+
+        <span class="c1"># Size with padding removed</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+
+        <span class="c1"># if self.mode == &quot;batch-wise&quot;:</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_patches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_patches</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">size</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_patches</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">C</span> <span class="o">=</span> <span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="n">size</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_patches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Reshape</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_patches</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_patches</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">size</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">size</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">C</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">W</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">x</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_make_mg_patches</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Split a tensor `x` into multi-grid patches. The number of</span>
+<span class="sd">        patches into which `x` is split is determined by `2 ** self.levels`.</span>
+
+<span class="sd">        Steps:</span>
+
+<span class="sd">        1. Optionally apply padding if self.padding_fraction &gt; 0</span>
+
+<span class="sd">        2. Split each element in the batch into `2**self.levels` patches of equal size</span>
+
+<span class="sd">        3. For each level L in `self.levels`, subsample all patches by a factor of `2**L`</span>
+
+<span class="sd">        4. Pad the subsampled patches so all level tensors are the same size</span>
+
+<span class="sd">        5. Concatenate the patches along the channel dim and return</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : torch.tensor</span>
+<span class="sd">            input tensor to split into patches</span>
+<span class="sd">            shape (batch, c, h, w)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">levels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">levels</span>
+        <span class="k">if</span> <span class="n">levels</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">x</span>
+
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">padding</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">[</span>
+                <span class="n">height</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">padding_fraction</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">width</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">padding_fraction</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="p">]</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">padding_height</span> <span class="o">=</span> <span class="n">padding</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">padding_width</span> <span class="o">=</span> <span class="n">padding</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">patched</span> <span class="o">=</span> <span class="n">make_patches</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">levels</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">padding</span><span class="p">)</span>
+        <span class="n">s1_patched</span> <span class="o">=</span> <span class="n">patched</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">padding</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">s2_patched</span> <span class="o">=</span> <span class="n">patched</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">padding</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">levels</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">sub_sample</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="n">level</span>
+            <span class="n">s1_stride</span> <span class="o">=</span> <span class="n">s1_patched</span> <span class="o">//</span> <span class="n">sub_sample</span>
+            <span class="n">s2_stride</span> <span class="o">=</span> <span class="n">s2_patched</span> <span class="o">//</span> <span class="n">sub_sample</span>
+
+            <span class="n">x_sub</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">::</span><span class="n">sub_sample</span><span class="p">,</span> <span class="p">::</span><span class="n">sub_sample</span><span class="p">]</span>
+
+            <span class="n">s2_pad</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">s2_patched</span> <span class="o">+</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">levels</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">s2_stride</span> <span class="o">-</span> <span class="n">x_sub</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="mf">2.0</span>
+                <span class="p">)</span>
+                <span class="o">+</span> <span class="n">padding</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">s1_pad</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">s1_patched</span> <span class="o">+</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">levels</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">s1_stride</span> <span class="o">-</span> <span class="n">x_sub</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">))</span> <span class="o">/</span> <span class="mf">2.0</span>
+                <span class="p">)</span>
+                <span class="o">+</span> <span class="n">padding</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">s2_pad</span> <span class="o">&gt;</span> <span class="n">x_sub</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">diff</span> <span class="o">=</span> <span class="n">s2_pad</span> <span class="o">-</span> <span class="n">x_sub</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">x_sub</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span>
+                    <span class="n">x_sub</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="p">[</span><span class="n">x_sub</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">x_sub</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;circular&quot;</span>
+                <span class="p">)</span>
+                <span class="n">x_sub</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span>
+                    <span class="n">x_sub</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="p">[</span><span class="n">diff</span><span class="p">,</span> <span class="n">diff</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;circular&quot;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">x_sub</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span>
+                    <span class="n">x_sub</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="p">[</span><span class="n">s2_pad</span><span class="p">,</span> <span class="n">s2_pad</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;circular&quot;</span>
+                <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">s1_pad</span> <span class="o">&gt;</span> <span class="n">x_sub</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">):</span>
+                <span class="n">diff</span> <span class="o">=</span> <span class="n">s1_pad</span> <span class="o">-</span> <span class="n">x_sub</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">x_sub</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span>
+                    <span class="n">x_sub</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">x_sub</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">),</span> <span class="n">x_sub</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)],</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;circular&quot;</span>
+                <span class="p">)</span>
+                <span class="n">x_sub</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span>
+                    <span class="n">x_sub</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">diff</span><span class="p">,</span> <span class="n">diff</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;circular&quot;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">x_sub</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span>
+                    <span class="n">x_sub</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s1_pad</span><span class="p">,</span> <span class="n">s1_pad</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;circular&quot;</span>
+                <span class="p">)</span>
+
+            <span class="n">x_sub</span> <span class="o">=</span> <span class="n">x_sub</span><span class="o">.</span><span class="n">unfold</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">s2_patched</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">padding</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">s2_stride</span><span class="p">)</span>
+            <span class="n">x_sub</span> <span class="o">=</span> <span class="n">x_sub</span><span class="o">.</span><span class="n">unfold</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="n">s1_patched</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">padding</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">s1_stride</span><span class="p">)</span>
+
+            <span class="n">x_sub</span> <span class="o">=</span> <span class="n">x_sub</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">x_sub</span> <span class="o">=</span> <span class="n">x_sub</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+                <span class="n">patched</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+                <span class="n">s2_patched</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">padding</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">s1_patched</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">padding</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">x_sub</span> <span class="o">=</span> <span class="n">x_sub</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="n">patched</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">patched</span><span class="p">,</span> <span class="n">x_sub</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">patched</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_unpad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove padding around the edges (`mode=circular`) of tensor `x`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : torch.tensor</span>
+<span class="sd">            padded input tensor, shape (b, c, h + self.padding_height * 2, w + self.padding_width * 2)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        x : torch.tensor</span>
+<span class="sd">            unpadded tensor, shape (b, c, h, w)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">[</span>
+            <span class="o">...</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">padding_height</span> <span class="p">:</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">padding_height</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">padding_width</span> <span class="p">:</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">padding_width</span><span class="p">,</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">make_patches</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;make_patches splits `x` into `n` equally-sized patches</span>
+<span class="sd">    with padding fraction `p`. Stacks patches along the batch dimension.</span>
+
+<span class="sd">    Starting with an input tensor of shape (batch, C, s) or (batch, C, h, w),</span>
+<span class="sd">    returns a corresponding patched output tensor of shape (n * batch, C, s / n + 2p)</span>
+<span class="sd">    or (n1 * n2 * batch, C, h / n1 + 2 * p1, w / n2 + 2 * p2)</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : torch.tensor</span>
+<span class="sd">        input tensor, before patching</span>
+<span class="sd">    n : int</span>
+<span class="sd">        number of patches into which to split each example in `x`</span>
+<span class="sd">    p : int, optional</span>
+<span class="sd">        number of pixels to use when padding `x`, by default 0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">size</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+
+    <span class="c1"># Only 1D and 2D supported</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">size</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">size</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">size</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="mi">2</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="p">,</span> <span class="n">p</span><span class="p">]</span>
+
+    <span class="c1"># Pad</span>
+    <span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">d</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;circular&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;circular&quot;</span>
+            <span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">n</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span>
+
+    <span class="c1"># Patches must be equally sized</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">size</span><span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">%</span> <span class="n">n</span><span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">==</span> <span class="mi">0</span>
+
+    <span class="c1"># Patch</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+        <span class="n">patch_size</span> <span class="o">=</span> <span class="n">size</span><span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">//</span> <span class="n">n</span><span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">unfold</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">patch_size</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)],</span> <span class="n">patch_size</span><span class="p">)</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+        <span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">size</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="n">n</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">size</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">//</span> <span class="n">n</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">x</span>
+</pre></div>
+
+      </div>
+
+      
+
+        <footer class="footer">
+    <div class="content has-text-centered">
+        <div class="block">
+          &copy; Copyright 2025, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+        </div>
+    </div>
+  </footer>
+
+    </div>
+
+  </div>  
+
+	
+
+  </div>  
+  </div> 
+
+  
+  <script>
+    function toggle_sidebar() {
+        var element = document.getElementById("sidebar");
+        var container = document.getElementById("column-container");
+        var localtoccolumn = document.getElementById("localtoc-column");
+        element.classList.toggle("hide-tablet");
+        element.classList.toggle("is-hidden-mobile");
+        container.classList.toggle("sidemenu-hidden");
+        localtoccolumn.classList.toggle("is-one-fifth-widescreen");
+        localtoccolumn.classList.toggle("is-2-desktop");
+        localtoccolumn.classList.toggle("is-3-desktop");
+    }
+  </script> 
+
+
+
+  </body>
+</html>

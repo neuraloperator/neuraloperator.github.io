@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Overview: module code &#8212; neuraloperator 1.0.2 documentation</title> 
+    <title>Overview: module code &#8212; neuraloperator 2.0.0 documentation</title> 
 <link rel="stylesheet" href="../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../_static/favicon/favicon-32x32.png">
@@ -14,17 +14,20 @@
 <link rel="shortcut icon" href="../_static/favicon/favicon.ico">
 <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/tensorly_style.css?v=a02e9698" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=5126dfd5" />
 
   
-    <script src="../_static/documentation_options.js?v=1ed6394b"></script>
+    <script src="../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
  
@@ -64,6 +67,9 @@
               <a class="navbar-item" href="../install.html">
               Install
             </a>
+              <a class="navbar-item" href="../theory_guide/index.html">
+              Theory Guide
+            </a>
               <a class="navbar-item" href="../user_guide/index.html">
               User Guide
             </a>
@@ -72,6 +78,9 @@
             </a>
               <a class="navbar-item" href="../auto_examples/index.html">
               Examples
+            </a>
+              <a class="navbar-item" href="../dev_guide/index.html">
+              Developer's Guide
             </a>
           </div>
         
@@ -113,29 +122,46 @@
       <div class="container content main-content">
         
   <h1>All modules for which code is available</h1>
-<ul><li><a href="neuralop/data/datasets/car_cfd_dataset.html">neuralop.data.datasets.car_cfd_dataset</a></li>
+<ul><li><a href="neuralop/data/datasets/burgers.html">neuralop.data.datasets.burgers</a></li>
+<li><a href="neuralop/data/datasets/car_cfd_dataset.html">neuralop.data.datasets.car_cfd_dataset</a></li>
 <li><a href="neuralop/data/datasets/darcy.html">neuralop.data.datasets.darcy</a></li>
 <li><a href="neuralop/data/datasets/navier_stokes.html">neuralop.data.datasets.navier_stokes</a></li>
 <li><a href="neuralop/data/transforms/data_processors.html">neuralop.data.transforms.data_processors</a></li>
-<li><a href="neuralop/layers/coda_blocks.html">neuralop.layers.coda_blocks</a></li>
+<li><a href="neuralop/data/transforms/normalizers.html">neuralop.data.transforms.normalizers</a></li>
+<li><a href="neuralop/layers/channel_mlp.html">neuralop.layers.channel_mlp</a></li>
+<li><a href="neuralop/layers/coda_layer.html">neuralop.layers.coda_layer</a></li>
+<li><a href="neuralop/layers/complex.html">neuralop.layers.complex</a></li>
 <li><a href="neuralop/layers/differential_conv.html">neuralop.layers.differential_conv</a></li>
 <li><a href="neuralop/layers/discrete_continuous_convolution.html">neuralop.layers.discrete_continuous_convolution</a></li>
 <li><a href="neuralop/layers/embeddings.html">neuralop.layers.embeddings</a></li>
+<li><a href="neuralop/layers/fno_block.html">neuralop.layers.fno_block</a></li>
 <li><a href="neuralop/layers/gno_block.html">neuralop.layers.gno_block</a></li>
 <li><a href="neuralop/layers/integral_transform.html">neuralop.layers.integral_transform</a></li>
-<li><a href="neuralop/layers/local_fno_block.html">neuralop.layers.local_fno_block</a></li>
+<li><a href="neuralop/layers/local_no_block.html">neuralop.layers.local_no_block</a></li>
 <li><a href="neuralop/layers/neighbor_search.html">neuralop.layers.neighbor_search</a></li>
+<li><a href="neuralop/layers/normalization_layers.html">neuralop.layers.normalization_layers</a></li>
 <li><a href="neuralop/layers/padding.html">neuralop.layers.padding</a></li>
 <li><a href="neuralop/layers/skip_connections.html">neuralop.layers.skip_connections</a></li>
 <li><a href="neuralop/layers/spectral_convolution.html">neuralop.layers.spectral_convolution</a></li>
+<li><a href="neuralop/layers/spectral_projection.html">neuralop.layers.spectral_projection</a></li>
 <li><a href="neuralop/layers/spherical_convolution.html">neuralop.layers.spherical_convolution</a></li>
 <li><a href="neuralop/losses/data_losses.html">neuralop.losses.data_losses</a></li>
+<li><a href="neuralop/losses/differentiation.html">neuralop.losses.differentiation</a></li>
+<li><a href="neuralop/losses/equation_losses.html">neuralop.losses.equation_losses</a></li>
+<li><a href="neuralop/losses/meta_losses.html">neuralop.losses.meta_losses</a></li>
 <li><a href="neuralop/models/base_model.html">neuralop.models.base_model</a></li>
+<li><a href="neuralop/models/codano.html">neuralop.models.codano</a></li>
 <li><a href="neuralop/models/fno.html">neuralop.models.fno</a></li>
+<li><a href="neuralop/models/fnogno.html">neuralop.models.fnogno</a></li>
 <li><a href="neuralop/models/gino.html">neuralop.models.gino</a></li>
+<li><a href="neuralop/models/local_no.html">neuralop.models.local_no</a></li>
 <li><a href="neuralop/models/uno.html">neuralop.models.uno</a></li>
+<li><a href="neuralop/models/uqno.html">neuralop.models.uqno</a></li>
 <li><a href="neuralop/training/incremental.html">neuralop.training.incremental</a></li>
+<li><a href="neuralop/training/patching.html">neuralop.training.patching</a></li>
+<li><a href="neuralop/training/torch_setup.html">neuralop.training.torch_setup</a></li>
 <li><a href="neuralop/training/trainer.html">neuralop.training.trainer</a></li>
+<li><a href="neuralop/utils.html">neuralop.utils</a></li>
 </ul>
 
       </div>
@@ -145,7 +171,7 @@
         <footer class="footer">
     <div class="content has-text-centered">
         <div class="block">
-          &copy; Copyright 2024, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+          &copy; Copyright 2025, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
         </div>
     </div>
   </footer>

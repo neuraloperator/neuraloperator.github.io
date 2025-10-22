@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>neuralop.layers.differential_conv.FiniteDifferenceConvolution &#8212; neuraloperator 1.0.2 documentation</title> 
+    <title>neuralop.layers.differential_conv.FiniteDifferenceConvolution &#8212; neuraloperator 2.0.0 documentation</title> 
 <link rel="stylesheet" href="../../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../_static/favicon/favicon-32x32.png">
@@ -15,24 +15,27 @@
 <link rel="shortcut icon" href="../../_static/favicon/favicon.ico">
 <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/tensorly_style.css?v=a02e9698" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=5126dfd5" />
 
   
-    <script src="../../_static/documentation_options.js?v=1ed6394b"></script>
+    <script src="../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
  
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="neuralop.layers.discrete_continuous_convolution.DiscreteContinuousConv2d" href="neuralop.layers.discrete_continuous_convolution.DiscreteContinuousConv2d.html" />
-    <link rel="prev" title="neuralop.layers.integral_transform.IntegralTransform" href="neuralop.layers.integral_transform.IntegralTransform.html" />
+    <link rel="prev" title="neuralop.layers.local_no_block.LocalNOBlocks" href="neuralop.layers.local_no_block.LocalNOBlocks.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   </head>
@@ -67,6 +70,9 @@
               <a class="navbar-item" href="../../install.html">
               Install
             </a>
+              <a class="navbar-item" href="../../theory_guide/index.html">
+              Theory Guide
+            </a>
               <a class="navbar-item" href="../../user_guide/index.html">
               User Guide
             </a>
@@ -75,6 +81,9 @@
             </a>
               <a class="navbar-item" href="../../auto_examples/index.html">
               Examples
+            </a>
+              <a class="navbar-item" href="../../dev_guide/index.html">
+              Developer's Guide
             </a>
           </div>
         
@@ -126,16 +135,20 @@
       <div class="sidebar-menu-toc">
       <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing NeuralOperator</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">NeuralOperator User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory_guide/index.html">Theory Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User Guide</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../api.html#models">Models</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../api.html#module-neuralop.layers">Layers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#model-dispatching">Model Dispatching</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#training">Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#loss-functions">Loss Functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.utils">Utility Functions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Gallery of examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Development guide</a></li>
 </ul>
  
       </div>
@@ -164,28 +177,25 @@
 <h1><a class="reference internal" href="../api.html#module-neuralop.layers.differential_conv" title="neuralop.layers.differential_conv"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.differential_conv</span></code></a>.FiniteDifferenceConvolution<a class="headerlink" href="#neuralop-layers-differential-conv-finitedifferenceconvolution" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.layers.differential_conv.FiniteDifferenceConvolution">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.differential_conv.</span></span><span class="sig-name descname"><span class="pre">FiniteDifferenceConvolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'periodic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/differential_conv.html#FiniteDifferenceConvolution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.differential_conv.FiniteDifferenceConvolution" title="Link to this definition"></a></dt>
-<dd><p>Finite Difference Convolution Layer introduced in <a class="reference internal" href="#r2ffab17b35f8-1" id="id1">[1]</a>.
-“Neural Operators with Localized Integral and Differential Kernels” (ICML 2024)</p>
-<blockquote>
-<div><p><a class="reference external" href="https://arxiv.org/abs/2402.16845">https://arxiv.org/abs/2402.16845</a></p>
-</div></blockquote>
-<p>Computes a finite difference convolution on a regular grid, 
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.differential_conv.</span></span><span class="sig-name descname"><span class="pre">FiniteDifferenceConvolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'periodic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/differential_conv.html#FiniteDifferenceConvolution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.differential_conv.FiniteDifferenceConvolution" title="Link to this definition"></a></dt>
+<dd><p>Finite Difference Convolution Layer</p>
+<p>This is the finite difference convolution layer introduced in <a class="reference internal" href="#r2ffab17b35f8-1" id="id1">[1]</a>.</p>
+<p>It computes a finite difference convolution on a regular grid,
 which converges to a directional derivative as the grid is refined.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>in_channels</strong><span class="classifier">int</span></dt><dd><p>number of in_channels</p>
+<dt><strong>in_channels</strong><span class="classifier">int</span></dt><dd><p>Number of in_channels</p>
 </dd>
-<dt><strong>out_channels</strong><span class="classifier">int</span></dt><dd><p>number of out_channels</p>
+<dt><strong>out_channels</strong><span class="classifier">int</span></dt><dd><p>Number of out_channels</p>
 </dd>
-<dt><strong>n_dim</strong><span class="classifier">int</span></dt><dd><p>number of dimensions in the input domain</p>
+<dt><strong>n_dim</strong><span class="classifier">int</span></dt><dd><p>Number of dimensions in the input domain</p>
 </dd>
-<dt><strong>kernel_size</strong><span class="classifier">int</span></dt><dd><p>odd kernel size used for convolutional finite difference stencil</p>
+<dt><strong>kernel_size</strong><span class="classifier">int, optional</span></dt><dd><p>Odd kernel size used for convolutional finite difference stencil, by default 3</p>
 </dd>
-<dt><strong>groups</strong><span class="classifier">int</span></dt><dd><p>splitting number of channels</p>
+<dt><strong>groups</strong><span class="classifier">int, optional</span></dt><dd><p>Splitting number of channels, by default 1</p>
 </dd>
-<dt><strong>padding</strong><span class="classifier">literal {‘periodic’, ‘replicate’, ‘reflect’, ‘zeros’}</span></dt><dd><p>mode of padding to use on input. 
+<dt><strong>padding</strong><span class="classifier">literal {‘periodic’, ‘replicate’, ‘reflect’, ‘zeros’}, optional</span></dt><dd><p>Mode of padding to use on input. Options: ‘periodic’, ‘replicate’, ‘reflect’, ‘zeros’, by default ‘periodic’
 See <cite>torch.nn.functional.padding</cite>.</p>
 </dd>
 </dl>
@@ -203,8 +213,8 @@ See <cite>torch.nn.functional.padding</cite>.</p>
 <div role="list" class="citation-list">
 <div class="citation" id="r2ffab17b35f8-1" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
-<p>: Liu-Schiaffini, M., et al. (2024). “Neural Operators with 
-Localized Integral and Differential Kernels”. 
+<p>: Liu-Schiaffini, M., et al. (2024). “Neural Operators with
+Localized Integral and Differential Kernels”.
 ICML 2024, <a class="reference external" href="https://arxiv.org/abs/2402.16845">https://arxiv.org/abs/2402.16845</a>.</p>
 </div>
 </div>
@@ -236,11 +246,11 @@ in the kernel: <code class="docutils literal notranslate"><span class="pre">conv
       
         <nav class="pagination" role="navigation" aria-label="pagination">
     
-    <a class="button pagination-previous" href="neuralop.layers.integral_transform.IntegralTransform.html" title="previous page" accesskey="p">
+    <a class="button pagination-previous" href="neuralop.layers.local_no_block.LocalNOBlocks.html" title="previous page" accesskey="p">
         <span class="icon">
             <i class="fa fa-arrow-circle-left"></i>
         </span>
-        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.integral_transform</span></code>.IntegralTransform</span>
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.local_no_block</span></code>.LocalNOBlocks</span>
     </a>
     
     
@@ -258,7 +268,7 @@ in the kernel: <code class="docutils literal notranslate"><span class="pre">conv
         <footer class="footer">
     <div class="content has-text-centered">
         <div class="block">
-          &copy; Copyright 2024, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+          &copy; Copyright 2025, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
         </div>
     </div>
   </footer>

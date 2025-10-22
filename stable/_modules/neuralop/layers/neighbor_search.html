@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>neuralop.layers.neighbor_search &#8212; neuraloperator 1.0.2 documentation</title> 
+    <title>neuralop.layers.neighbor_search &#8212; neuraloperator 2.0.0 documentation</title> 
 <link rel="stylesheet" href="../../../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../../../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../../_static/favicon/favicon-32x32.png">
@@ -14,17 +14,20 @@
 <link rel="shortcut icon" href="../../../_static/favicon/favicon.ico">
 <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=5126dfd5" />
 
   
-    <script src="../../../_static/documentation_options.js?v=1ed6394b"></script>
+    <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
  
@@ -64,6 +67,9 @@
               <a class="navbar-item" href="../../../install.html">
               Install
             </a>
+              <a class="navbar-item" href="../../../theory_guide/index.html">
+              Theory Guide
+            </a>
               <a class="navbar-item" href="../../../user_guide/index.html">
               User Guide
             </a>
@@ -72,6 +78,9 @@
             </a>
               <a class="navbar-item" href="../../../auto_examples/index.html">
               Examples
+            </a>
+              <a class="navbar-item" href="../../../dev_guide/index.html">
+              Developer's Guide
             </a>
           </div>
         
@@ -113,45 +122,50 @@
       <div class="container content main-content">
         
   <h1>Source code for neuralop.layers.neighbor_search</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
 
 <span class="c1"># only import open3d if built</span>
 <span class="n">open3d_built</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">open3d.ml.torch.layers</span> <span class="kn">import</span> <span class="n">FixedRadiusSearch</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">open3d.ml.torch.layers</span><span class="w"> </span><span class="kn">import</span> <span class="n">FixedRadiusSearch</span>
+
     <span class="n">open3d_built</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span><span class="p">:</span>
     <span class="k">pass</span>
 
+
 <span class="c1"># Uses open3d by default which, as of October 2024, requires torch 2.0 and cuda11.*</span>
 <div class="viewcode-block" id="NeighborSearch">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.neighbor_search.NeighborSearch.html#neuralop.layers.neighbor_search.NeighborSearch">[docs]</a>
-<span class="k">class</span> <span class="nc">NeighborSearch</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Neighborhood search between two arbitrary coordinate meshes.</span>
-<span class="sd">    For each point `x` in `queries`, returns a set of the indices of all points `y` in `data` </span>
+<span class="k">class</span><span class="w"> </span><span class="nc">NeighborSearch</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Neighborhood search between two arbitrary coordinate meshes.</span>
+<span class="sd">    </span>
+<span class="sd">    For each point `x` in `queries`, returns a set of the indices of all points `y` in `data`</span>
 <span class="sd">    within the ball of radius r `B_r(x)`</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    use_open3d : bool</span>
-<span class="sd">        Whether to use open3d or native PyTorch implementation</span>
+<span class="sd">    use_open3d : bool, optional</span>
+<span class="sd">        Whether to use open3d or native PyTorch implementation, by default True</span>
 <span class="sd">        NOTE: open3d implementation requires 3d data</span>
+<span class="sd">    return_norm : bool, optional</span>
+<span class="sd">        Whether to return normalized distances, by default False</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">use_open3d</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">use_open3d</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_norm</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">use_open3d</span> <span class="ow">and</span> <span class="n">open3d_built</span><span class="p">:</span> <span class="c1"># slightly faster, works on GPU in 3d only</span>
+        <span class="k">if</span> <span class="n">use_open3d</span> <span class="ow">and</span> <span class="n">open3d_built</span><span class="p">:</span>  <span class="c1"># slightly faster, works on GPU in 3d only</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">search_fn</span> <span class="o">=</span> <span class="n">FixedRadiusSearch</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">use_open3d</span> <span class="o">=</span> <span class="n">use_open3d</span>
-        <span class="k">else</span><span class="p">:</span> <span class="c1"># slower fallback, works on GPU and CPU</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># slower fallback, works on GPU and CPU</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">search_fn</span> <span class="o">=</span> <span class="n">native_neighbor_search</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">use_open3d</span> <span class="o">=</span> <span class="kc">False</span>
-        
-        
+        <span class="bp">self</span><span class="o">.</span><span class="n">return_norm</span> <span class="o">=</span> <span class="n">return_norm</span>
+
 <div class="viewcode-block" id="NeighborSearch.forward">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.neighbor_search.NeighborSearch.html#neuralop.layers.neighbor_search.NeighborSearch.forward">[docs]</a>
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">queries</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">queries</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Find the neighbors, in data, of each point in queries</span>
 <span class="sd">        within a ball of radius. Returns in CRS format.</span>
@@ -166,7 +180,7 @@
 <span class="sd">            NOTE: open3d requires d=3</span>
 <span class="sd">        radius : float</span>
 <span class="sd">            Radius of each ball: B(queries[j], radius)</span>
-<span class="sd">        </span>
+
 <span class="sd">        Output</span>
 <span class="sd">        ----------</span>
 <span class="sd">        return_dict : dict</span>
@@ -175,7 +189,7 @@
 <span class="sd">                    Index of each neighbor in data for every point</span>
 <span class="sd">                    in queries. Neighbors are ordered in the same orderings</span>
 <span class="sd">                    as the points in queries. Open3d and torch_cluster</span>
-<span class="sd">                    implementations can differ by a permutation of the </span>
+<span class="sd">                    implementations can differ by a permutation of the</span>
 <span class="sd">                    neighbors for every point.</span>
 <span class="sd">                neighbors_row_splits: torch.Tensor of shape [m+1] with dtype=torch.int64</span>
 <span class="sd">                    The value at index j is the sum of the number of</span>
@@ -186,23 +200,26 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_open3d</span><span class="p">:</span>
             <span class="n">search_return</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_fn</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">queries</span><span class="p">,</span> <span class="n">radius</span><span class="p">)</span>
-            <span class="n">return_dict</span><span class="p">[</span><span class="s1">&#39;neighbors_index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">search_return</span><span class="o">.</span><span class="n">neighbors_index</span><span class="o">.</span><span class="n">long</span><span class="p">()</span>
-            <span class="n">return_dict</span><span class="p">[</span><span class="s1">&#39;neighbors_row_splits&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">search_return</span><span class="o">.</span><span class="n">neighbors_row_splits</span><span class="o">.</span><span class="n">long</span><span class="p">()</span>
+            <span class="n">return_dict</span><span class="p">[</span><span class="s2">&quot;neighbors_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">search_return</span><span class="o">.</span><span class="n">neighbors_index</span><span class="o">.</span><span class="n">long</span><span class="p">()</span>
+            <span class="n">return_dict</span><span class="p">[</span><span class="s2">&quot;neighbors_row_splits&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">search_return</span><span class="o">.</span><span class="n">neighbors_row_splits</span><span class="o">.</span><span class="n">long</span><span class="p">()</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">return_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_fn</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">queries</span><span class="p">,</span> <span class="n">radius</span><span class="p">)</span>
-        
+            <span class="n">return_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_fn</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">queries</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_norm</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="n">return_dict</span></div>
 </div>
 
 
+
 <div class="viewcode-block" id="native_neighbor_search">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.neighbor_search.native_neighbor_search.html#neuralop.layers.neighbor_search.native_neighbor_search">[docs]</a>
-<span class="k">def</span> <span class="nf">native_neighbor_search</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">queries</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">native_neighbor_search</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">queries</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">return_norm</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Native PyTorch implementation of a neighborhood search</span>
 <span class="sd">    between two arbitrary coordinate meshes.</span>
-<span class="sd">     </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    -----------</span>
 
@@ -213,16 +230,25 @@
 <span class="sd">    radius : float</span>
 <span class="sd">        size of each neighborhood</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nbr_dict</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="c1"># compute pairwise distances</span>
-    <span class="n">dists</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cdist</span><span class="p">(</span><span class="n">queries</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">queries</span><span class="o">.</span><span class="n">device</span><span class="p">)</span> <span class="c1"># shaped num query points x num data points</span>
-    <span class="n">in_nbr</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">dists</span> <span class="o">&lt;=</span> <span class="n">radius</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span> <span class="c1"># i,j is one if j is i&#39;s neighbor</span>
-    <span class="n">nbr_indices</span> <span class="o">=</span> <span class="n">in_nbr</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()[:,</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,)</span> <span class="c1"># only keep the column indices</span>
+    <span class="n">all_dists</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cdist</span><span class="p">(</span><span class="n">queries</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">queries</span><span class="o">.</span><span class="n">device</span><span class="p">)</span> <span class="c1"># shaped num query points x num data points</span>
+    <span class="c1"># keep zero-distance points</span>
+    <span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-7</span>
+    <span class="n">all_dists</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">all_dists</span> <span class="o">==</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="n">all_dists</span><span class="p">)</span>
+    <span class="n">dists</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">all_dists</span> <span class="o">&lt;=</span> <span class="n">radius</span><span class="p">,</span> <span class="n">all_dists</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span> <span class="c1"># i,j is 1 if j is i&#39;s neighbor </span>
+    <span class="n">nbr_indices</span> <span class="o">=</span> <span class="n">dists</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()[:,</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,)</span> <span class="c1"># only keep the column indices</span>
+    <span class="k">if</span> <span class="n">return_norm</span><span class="p">:</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">dists</span><span class="p">[</span><span class="n">dists</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">as_tuple</span><span class="o">=</span><span class="kc">True</span><span class="p">)]</span>
+        <span class="n">nbr_dict</span><span class="p">[</span><span class="s2">&quot;weights&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">weights</span> <span class="o">**</span><span class="mi">2</span> <span class="c1"># weighting function computed on squared norms</span>
+    <span class="n">in_nbr</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">dists</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,)</span>
     <span class="n">nbrhd_sizes</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">in_nbr</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># num points in each neighborhood, summed cumulatively</span>
     <span class="n">splits</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">queries</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">nbrhd_sizes</span><span class="p">))</span>
-    <span class="n">nbr_dict</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">nbr_dict</span><span class="p">[</span><span class="s1">&#39;neighbors_index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nbr_indices</span><span class="o">.</span><span class="n">long</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">queries</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
-    <span class="n">nbr_dict</span><span class="p">[</span><span class="s1">&#39;neighbors_row_splits&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">splits</span><span class="o">.</span><span class="n">long</span><span class="p">()</span>
+    
+    <span class="n">nbr_dict</span><span class="p">[</span><span class="s2">&quot;neighbors_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nbr_indices</span><span class="o">.</span><span class="n">long</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">queries</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">nbr_dict</span><span class="p">[</span><span class="s2">&quot;neighbors_row_splits&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">splits</span><span class="o">.</span><span class="n">long</span><span class="p">()</span>
+
     <span class="k">return</span> <span class="n">nbr_dict</span></div>
 
 </pre></div>
@@ -234,7 +260,7 @@
         <footer class="footer">
     <div class="content has-text-centered">
         <div class="block">
-          &copy; Copyright 2024, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+          &copy; Copyright 2025, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
         </div>
     </div>
   </footer>

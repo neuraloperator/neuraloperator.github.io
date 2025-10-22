@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>neuralop.layers.embeddings.SinusoidalEmbedding &#8212; neuraloperator 1.0.2 documentation</title> 
+    <title>neuralop.layers.embeddings.SinusoidalEmbedding &#8212; neuraloperator 2.0.0 documentation</title> 
 <link rel="stylesheet" href="../../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../_static/favicon/favicon-32x32.png">
@@ -15,17 +15,20 @@
 <link rel="shortcut icon" href="../../_static/favicon/favicon.ico">
 <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/tensorly_style.css?v=a02e9698" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=5126dfd5" />
 
   
-    <script src="../../_static/documentation_options.js?v=1ed6394b"></script>
+    <script src="../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
  
@@ -67,6 +70,9 @@
               <a class="navbar-item" href="../../install.html">
               Install
             </a>
+              <a class="navbar-item" href="../../theory_guide/index.html">
+              Theory Guide
+            </a>
               <a class="navbar-item" href="../../user_guide/index.html">
               User Guide
             </a>
@@ -75,6 +81,9 @@
             </a>
               <a class="navbar-item" href="../../auto_examples/index.html">
               Examples
+            </a>
+              <a class="navbar-item" href="../../dev_guide/index.html">
+              Developer's Guide
             </a>
           </div>
         
@@ -126,16 +135,20 @@
       <div class="sidebar-menu-toc">
       <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing NeuralOperator</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">NeuralOperator User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory_guide/index.html">Theory Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User Guide</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../api.html#models">Models</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../api.html#module-neuralop.layers">Layers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#model-dispatching">Model Dispatching</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#training">Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#loss-functions">Loss Functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.utils">Utility Functions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Gallery of examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Development guide</a></li>
 </ul>
  
       </div>
@@ -161,46 +174,43 @@
       <div class="container content main-content">
         
   <section id="neuralop-layers-embeddings-sinusoidalembedding">
-<h1><a class="reference internal" href="../api.html#module-0" title="neuralop.layers.embeddings"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.embeddings</span></code></a>.SinusoidalEmbedding<a class="headerlink" href="#neuralop-layers-embeddings-sinusoidalembedding" title="Link to this heading"></a></h1>
+<h1><a class="reference internal" href="../api.html#module-neuralop.layers.embeddings" title="neuralop.layers.embeddings"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.embeddings</span></code></a>.SinusoidalEmbedding<a class="headerlink" href="#neuralop-layers-embeddings-sinusoidalembedding" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.layers.embeddings.SinusoidalEmbedding">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.embeddings.</span></span><span class="sig-name descname"><span class="pre">SinusoidalEmbedding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_frequencies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'transformer'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_positions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/embeddings.html#SinusoidalEmbedding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.embeddings.SinusoidalEmbedding" title="Link to this definition"></a></dt>
-<dd><p>SinusoidalEmbedding provides a unified sinusoidal positional embedding
-in the styles of Transformers <a class="reference internal" href="#r2f544174e18d-1" id="id1">[1]</a> and Neural Radiance Fields (NERFs) <a class="reference internal" href="#r2f544174e18d-2" id="id2">[2]</a>.</p>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.embeddings.</span></span><span class="sig-name descname"><span class="pre">SinusoidalEmbedding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_frequencies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'transformer'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_positions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/embeddings.html#SinusoidalEmbedding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.embeddings.SinusoidalEmbedding" title="Link to this definition"></a></dt>
+<dd><p>Sinusoidal positional embedding for enriching coordinate inputs with spectral information.</p>
+<p>This class provides sinusoidal positional embeddings in two styles: Transformer-style
+and NeRF-style. It lifts low-dimensional coordinates into a richer spectral representation
+by encoding them as periodic functions (sines and cosines) at multiple frequencies.</p>
+<p>The embedding enhances a model’s ability to capture fine-scale variations and high-frequency
+dynamics by providing a hierarchy of frequency components alongside the original coordinates.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt><strong>in_channels</strong><span class="classifier">int</span></dt><dd><p>Number of input channels to embed</p>
+<dt><strong>in_channels</strong><span class="classifier">int</span></dt><dd><p>Number of input channels to embed (dimensionality of input coordinates)</p>
 </dd>
-<dt><strong>num_freqs</strong><span class="classifier">int, optional</span></dt><dd><p>Number of frequencies in positional embedding.
-By default, set to the number of input channels</p>
+<dt><strong>num_freqs</strong><span class="classifier">int, optional</span></dt><dd><p>Number of frequency levels L in the embedding. Each level contributes
+a sine and cosine pair, resulting in 2L output channels per input channel.
+By default, set to the number of input channels.</p>
 </dd>
-<dt><strong>embedding</strong><span class="classifier">{‘transformer’, ‘nerf’}</span></dt><dd><p>Type of embedding to apply. For a function with N input channels, 
-each channel value p is embedded via a function g with 2L channels 
-such that g(p) is a 2L-dim vector. For 0 &lt;= k &lt; L:</p>
-<ul>
-<li><p>‘transformer’ for transformer-style encoding.</p>
-<blockquote>
-<div><p>g(p)_k = sin((p / max_positions) ^ {k / N})</p>
-<p>g(p)_{k+1} = cos((p / max_positions) ^ {k / N})</p>
-</div></blockquote>
-</li>
-<li><p>‘nerf’ : NERF-style encoding.</p>
-<blockquote>
-<div><p>g(p)_k = sin(2^(k) * Pi * p)</p>
-<p>g(p)_{k+1} = cos(2^(k) * Pi * p)</p>
-</div></blockquote>
-</li>
-</ul>
+<dt><strong>embedding_type</strong><span class="classifier">{‘transformer’, ‘nerf’}, optional</span></dt><dd><p>Type of embedding to apply, by default ‘transformer’</p>
+<p>Transformer-style <a class="reference internal" href="#r2f544174e18d-1" id="id1">[1]</a>:
+For each input coordinate p and frequency level k (0 ≤ k &lt; L):
+- g(p)_{2k} = sin(p / max_positions^{k/L})
+- g(p)_{2k+1} = cos(p / max_positions^{k/L})</p>
+<p>NeRF-style <a class="reference internal" href="#r2f544174e18d-2" id="id2">[2]</a>:
+For each input coordinate p and frequency level k (0 ≤ k &lt; L):
+- g(p)_{2k} = sin(2^k * π * p)
+- g(p)_{2k+1} = cos(2^k * π * p)</p>
 </dd>
-<dt><strong>max_positions</strong><span class="classifier">int, optional</span></dt><dd><p>Maximum number of positions for the encoding, default 10000
-Only used if <cite>embedding == transformer</cite>.</p>
+<dt><strong>max_positions</strong><span class="classifier">int, optional</span></dt><dd><p>Maximum number of positions for transformer-style encoding, by default 10000.
+Only used when embedding_type=’transformer’.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Attributes<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><a class="reference internal" href="#neuralop.layers.embeddings.SinusoidalEmbedding.out_channels" title="neuralop.layers.embeddings.SinusoidalEmbedding.out_channels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">out_channels</span></code></a></dt><dd><p>out_channels: required property for linking/composing model layers</p>
+<dt><a class="reference internal" href="#neuralop.layers.embeddings.SinusoidalEmbedding.out_channels" title="neuralop.layers.embeddings.SinusoidalEmbedding.out_channels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">out_channels</span></code></a></dt><dd><p>required property for linking/composing model layers</p>
 </dd>
 </dl>
 </dd>
@@ -213,33 +223,33 @@ Only used if <cite>embedding == transformer</cite>.</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Input shape: (batch, n_in, in_channels) or (n_in, in_channels)</p></li>
+<li><p>Output shape: (batch, n_in, 2*num_freqs*in_channels) or (n_in, 2*num_freqs*in_channels)</p></li>
+<li><p>Ensure the highest frequency satisfies the Nyquist criterion:
+- Transformer: f_max &lt; N/2 where N is the number of sampling points
+- NeRF: 2^{L-1} &lt; N/2, i.e., L &lt; 1 + log₂(N/2)</p></li>
+</ul>
 <p class="rubric">References</p>
 <div role="list" class="citation-list">
 <div class="citation" id="r2f544174e18d-1" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
-<p>:</p>
+<p>Vaswani, A. et al. “Attention Is All You Need”.
+NeurIPS 2017, <a class="reference external" href="https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf">https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf</a></p>
 </div>
-</div>
-<dl class="simple">
-<dt>Vaswani, A. et al (2017)</dt><dd><p>“Attention Is All You Need”. 
-NeurIPS 2017, <a class="reference external" href="https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf">https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf</a>.</p>
-</dd>
-</dl>
-<div role="list" class="citation-list">
 <div class="citation" id="r2f544174e18d-2" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
-<p>:</p>
+<p>Mildenhall, B. et al. “NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis”.
+ArXiv 2020, <a class="reference external" href="https://arxiv.org/pdf/2003.08934">https://arxiv.org/pdf/2003.08934</a></p>
 </div>
 </div>
-<dl class="simple">
-<dt>Mildenhall, B. et al (2020)</dt><dd><p>“NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis”.
-ArXiv, <a class="reference external" href="https://arxiv.org/pdf/2003.08934">https://arxiv.org/pdf/2003.08934</a>.</p>
-</dd>
-</dl>
+<p class="rubric">Examples</p>
+<p>See <cite>examples/layers/plot_sinusoidal_embeddings.py</cite> for comprehensive visualizations</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="neuralop.layers.embeddings.SinusoidalEmbedding.out_channels">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">out_channels</span></span><a class="headerlink" href="#neuralop.layers.embeddings.SinusoidalEmbedding.out_channels" title="Link to this definition"></a></dt>
-<dd><p>out_channels: required property for linking/composing model layers</p>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">out_channels</span></span><a class="headerlink" href="#neuralop.layers.embeddings.SinusoidalEmbedding.out_channels" title="Link to this definition"></a></dt>
+<dd><p>required property for linking/composing model layers</p>
 </dd></dl>
 
 <dl class="py method">
@@ -248,7 +258,8 @@ ArXiv, <a class="reference external" href="https://arxiv.org/pdf/2003.08934">htt
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>x: torch.Tensor, shape (n_in, self.in_channels) or (batch, n_in, self.in_channels)</strong></dt><dd></dd>
+<dt><strong>x: torch.Tensor</strong></dt><dd><p>shape (n_in, self.in_channels) or (batch, n_in, self.in_channels)</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -286,7 +297,7 @@ ArXiv, <a class="reference external" href="https://arxiv.org/pdf/2003.08934">htt
         <footer class="footer">
     <div class="content has-text-centered">
         <div class="block">
-          &copy; Copyright 2024, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+          &copy; Copyright 2025, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
         </div>
     </div>
   </footer>

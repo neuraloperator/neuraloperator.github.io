@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>neuralop.layers.discrete_continuous_convolution &#8212; neuraloperator 1.0.2 documentation</title> 
+    <title>neuralop.layers.discrete_continuous_convolution &#8212; neuraloperator 2.0.0 documentation</title> 
 <link rel="stylesheet" href="../../../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../../../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../../_static/favicon/favicon-32x32.png">
@@ -14,17 +14,20 @@
 <link rel="shortcut icon" href="../../../_static/favicon/favicon.ico">
 <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=5126dfd5" />
 
   
-    <script src="../../../_static/documentation_options.js?v=1ed6394b"></script>
+    <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
  
@@ -64,6 +67,9 @@
               <a class="navbar-item" href="../../../install.html">
               Install
             </a>
+              <a class="navbar-item" href="../../../theory_guide/index.html">
+              Theory Guide
+            </a>
               <a class="navbar-item" href="../../../user_guide/index.html">
               User Guide
             </a>
@@ -72,6 +78,9 @@
             </a>
               <a class="navbar-item" href="../../../auto_examples/index.html">
               Examples
+            </a>
+              <a class="navbar-item" href="../../../dev_guide/index.html">
+              Developer's Guide
             </a>
           </div>
         
@@ -113,30 +122,46 @@
       <div class="container content main-content">
         
   <h1>Source code for neuralop.layers.discrete_continuous_convolution</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">abc</span>
-<span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">import</span> <span class="nn">numpy</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">abc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
 
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Literal</span>
 
 <span class="c1"># import the base class from torch-harmonics</span>
-<span class="kn">from</span> <span class="nn">torch_harmonics.quadrature</span> <span class="kn">import</span> <span class="n">_precompute_grid</span>
-<span class="kn">from</span> <span class="nn">torch_harmonics.convolution</span> <span class="kn">import</span> <span class="n">_compute_support_vals_isotropic</span><span class="p">,</span> <span class="n">_compute_support_vals_anisotropic</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">torch_harmonics.quadrature</span><span class="w"> </span><span class="kn">import</span> <span class="n">_precompute_grid</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">torch_harmonics.filter_basis</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+        <span class="n">PiecewiseLinearFilterBasis</span><span class="p">,</span>
+        <span class="n">MorletFilterBasis</span><span class="p">,</span>
+        <span class="n">ZernikeFilterBasis</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="s2">&quot;Error: trying to import DISCO convolutions without optional dependency torch-harmonics. &quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Please install with `pip install torch-harmonics` and retry.&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
 
-<span class="c1">#def _compute_kernel_basis_isotropic()</span>
+<span class="n">basis_type_classes</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;piecewise_linear&quot;</span><span class="p">:</span> <span class="n">PiecewiseLinearFilterBasis</span><span class="p">,</span>
+    <span class="s2">&quot;morlet&quot;</span><span class="p">:</span> <span class="n">MorletFilterBasis</span><span class="p">,</span>
+    <span class="s2">&quot;zernike&quot;</span><span class="p">:</span> <span class="n">ZernikeFilterBasis</span><span class="p">,</span>
+<span class="p">}</span>
 
-<span class="k">def</span> <span class="nf">_normalize_convolution_filter_matrix</span><span class="p">(</span><span class="n">psi_idx</span><span class="p">,</span>
-                                     <span class="n">psi_vals</span><span class="p">,</span>
-                                     <span class="n">grid_in</span><span class="p">,</span>
-                                     <span class="n">grid_out</span><span class="p">,</span>
-                                     <span class="n">kernel_shape</span><span class="p">,</span>
-                                     <span class="n">quadrature_weights</span><span class="p">,</span>
-                                     <span class="n">transpose_normalization</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                                     <span class="n">eps</span><span class="o">=</span><span class="mf">1e-9</span><span class="p">):</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_normalize_convolution_filter_matrix</span><span class="p">(</span>
+    <span class="n">psi_idx</span><span class="p">,</span>
+    <span class="n">psi_vals</span><span class="p">,</span>
+    <span class="n">grid_in</span><span class="p">,</span>
+    <span class="n">grid_out</span><span class="p">,</span>
+    <span class="n">kernel_shape</span><span class="p">,</span>
+    <span class="n">quadrature_weights</span><span class="p">,</span>
+    <span class="n">transpose_normalization</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">eps</span><span class="o">=</span><span class="mf">1e-9</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Discretely normalizes the convolution tensor.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -181,51 +206,73 @@
     <span class="k">return</span> <span class="n">psi_vals</span>
 
 
-<span class="k">def</span> <span class="nf">_precompute_convolution_filter_matrix</span><span class="p">(</span><span class="n">grid_in</span><span class="p">,</span>
-                                      <span class="n">grid_out</span><span class="p">,</span>
-                                      <span class="n">kernel_shape</span><span class="p">,</span>
-                                      <span class="n">quadrature_weights</span><span class="p">,</span>
-                                      <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                      <span class="n">radius_cutoff</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
-                                      <span class="n">periodic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                                      <span class="n">transpose_normalization</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_precompute_convolution_filter_matrix</span><span class="p">(</span>
+    <span class="n">grid_in</span><span class="p">,</span>
+    <span class="n">grid_out</span><span class="p">,</span>
+    <span class="n">kernel_shape</span><span class="p">,</span>
+    <span class="n">quadrature_weights</span><span class="p">,</span>
+    <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">basis_type</span><span class="o">=</span><span class="s2">&quot;piecewise_linear&quot;</span><span class="p">,</span>
+    <span class="n">radius_cutoff</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+    <span class="n">periodic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">transpose_normalization</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Precomputes the values stored in Psi, the local convolution filter matrix. </span>
-<span class="sd">    The values are the results of a set of kernel basis &quot;hat&quot; functions applied to </span>
+<span class="sd">    Precomputes the values stored in Psi, the local convolution filter matrix.</span>
+<span class="sd">    The values are the results of a set of kernel basis &quot;hat&quot; functions applied to</span>
 <span class="sd">    pairwise distances between each points on the input and output grids.</span>
 
 <span class="sd">    The hat functions are the absolute differences between a squared distance and a</span>
-<span class="sd">    multiple of the radius scaled by the kernel size. </span>
+<span class="sd">    multiple of the radius scaled by the kernel size.</span>
 
 <span class="sd">    Assume the kernel is an array of shape ``(k0, k1)``. Then:</span>
 
 <span class="sd">    If the kernel is isotropic (``k0 == k1``), the basis functions are a series of</span>
 <span class="sd">    ``k0`` distances re-centered around multiples of the discretization size of the</span>
 <span class="sd">    convolution&#39;s radius. If the kernel is anisotropic, the outputs of these hat</span>
-<span class="sd">    functions are then multiplied by the outputs of another series of ``k1`` hat </span>
-<span class="sd">    functions evaluated on the arctangents of these pairwise distances. </span>
+<span class="sd">    functions are then multiplied by the outputs of another series of ``k1`` hat</span>
+<span class="sd">    functions evaluated on the arctangents of these pairwise distances.</span>
 
 <span class="sd">    Compared to the ``torch_harmonics`` routine for spherical support values, this</span>
-<span class="sd">    function also returns the translated filters at positions </span>
+<span class="sd">    function also returns the translated filters at positions</span>
 <span class="sd">    $T^{-1}_j \omega_i = T^{-1}_j T_i \nu$, but assumes a non-periodic subset of the</span>
 <span class="sd">    euclidean plane.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    grid_in : ``torch.Tensor``</span>
+<span class="sd">        coordinate grid on which input function is provided</span>
+<span class="sd">    grid_out : ``torch.Tensor``</span>
+<span class="sd">        coordinate grid on which output function is queried</span>
+<span class="sd">    kernel_shape: ``Union[int, List[int]]``</span>
+<span class="sd">        Dimensions of the convolution kernel, either one int or a two-int tuple.</span>
+<span class="sd">        If one int k, the kernel will be a square of shape (k,k), meaning the convolution</span>
+<span class="sd">        will be &#39;isotropic&#39;: both directions are equally scaled in feature space</span>
+<span class="sd">        If two ints (k1,k2), the kernel will be a rectangle of shape (k1,k2), meaning the convolution</span>
+<span class="sd">        will  be &#39;anisotropic&#39;: one direction will be compressed or stretched in feature space.</span>
+<span class="sd">    quadrature_weights : torch.Tensor</span>
+<span class="sd">        tensor of weights for each grid point in the input</span>
+<span class="sd">    normalize : bool, optional</span>
+<span class="sd">        whether to normalize the precomputed filter tensor, by default True</span>
+<span class="sd">    basis_type: str literal {&#39;piecewise_linear&#39;, &#39;morlet&#39;, &#39;zernike&#39;}</span>
+<span class="sd">        choice of basis functions to use for convolution filter tensor.</span>
+<span class="sd">    radius_cutoff : float, optional</span>
+<span class="sd">        radius cutoff parameter for computing basis functions, by default 0.01</span>
+<span class="sd">    periodic : bool, optional</span>
+<span class="sd">        whether the domain is assumed to be periodic, by default False</span>
+<span class="sd">    transpose_normalization : bool, optional</span>
+<span class="sd">        whether to transpose the normalized filter tensor, by default False</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># check that input arrays are valid point clouds in 2D</span>
-    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid_in</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
-    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid_out</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
-    <span class="k">assert</span> <span class="n">grid_in</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span>
-    <span class="k">assert</span> <span class="n">grid_out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid_in</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;grid_in must be a 2d tensor.&quot;</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid_out</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;grid_out must be a 2d tensor.&quot;</span>
+    <span class="k">assert</span> <span class="n">grid_in</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;grid_in must be a 2d tensor.&quot;</span>
+    <span class="k">assert</span> <span class="n">grid_out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;grid_out must be a 2d tensor.&quot;</span>
 
     <span class="n">n_in</span> <span class="o">=</span> <span class="n">grid_in</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">n_out</span> <span class="o">=</span> <span class="n">grid_out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kernel_shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">kernel_handle</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">_compute_support_vals_isotropic</span><span class="p">,</span> <span class="n">nr</span><span class="o">=</span><span class="n">kernel_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">r_cutoff</span><span class="o">=</span><span class="n">radius_cutoff</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">kernel_shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">kernel_handle</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">_compute_support_vals_anisotropic</span><span class="p">,</span> <span class="n">nr</span><span class="o">=</span><span class="n">kernel_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nphi</span><span class="o">=</span><span class="n">kernel_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">r_cutoff</span><span class="o">=</span><span class="n">radius_cutoff</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;kernel_shape should be either one- or two-dimensional.&quot;</span><span class="p">)</span>
 
     <span class="n">grid_in</span> <span class="o">=</span> <span class="n">grid_in</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_in</span><span class="p">)</span>
     <span class="n">grid_out</span> <span class="o">=</span> <span class="n">grid_out</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_out</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -238,26 +285,34 @@
     <span class="n">r</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">diffs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">diffs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">phi</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">diffs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">diffs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">pi</span>
 
-    <span class="n">idx</span><span class="p">,</span> <span class="n">vals</span> <span class="o">=</span> <span class="n">kernel_handle</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">phi</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">basis_type</span> <span class="ow">in</span> <span class="n">basis_type_classes</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="sa">f</span><span class="s2">&quot;Error: expected one of &quot;</span>
+    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basis_type_classes</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">basis_type</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="c1"># if a basis name is provided, instantiate it with the provided kernel shape</span>
+    <span class="n">basis_type</span> <span class="o">=</span> <span class="n">basis_type_classes</span><span class="p">[</span><span class="n">basis_type</span><span class="p">](</span><span class="n">kernel_shape</span><span class="p">)</span>
+    <span class="n">idx</span><span class="p">,</span> <span class="n">vals</span> <span class="o">=</span> <span class="n">basis_type</span><span class="o">.</span><span class="n">compute_support_vals</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">r_cutoff</span><span class="o">=</span><span class="n">radius_cutoff</span><span class="p">)</span>
 
     <span class="n">idx</span> <span class="o">=</span> <span class="n">idx</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
-        <span class="n">vals</span> <span class="o">=</span> <span class="n">_normalize_convolution_filter_matrix</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span>
-                                                <span class="n">vals</span><span class="p">,</span>
-                                                <span class="n">grid_in</span><span class="p">,</span>
-                                                <span class="n">grid_out</span><span class="p">,</span>
-                                                <span class="n">kernel_shape</span><span class="p">,</span>
-                                                <span class="n">quadrature_weights</span><span class="p">,</span>
-                                                <span class="n">transpose_normalization</span><span class="o">=</span><span class="n">transpose_normalization</span><span class="p">)</span>
+        <span class="n">vals</span> <span class="o">=</span> <span class="n">_normalize_convolution_filter_matrix</span><span class="p">(</span>
+            <span class="n">idx</span><span class="p">,</span>
+            <span class="n">vals</span><span class="p">,</span>
+            <span class="n">grid_in</span><span class="p">,</span>
+            <span class="n">grid_out</span><span class="p">,</span>
+            <span class="n">kernel_shape</span><span class="p">,</span>
+            <span class="n">quadrature_weights</span><span class="p">,</span>
+            <span class="n">transpose_normalization</span><span class="o">=</span><span class="n">transpose_normalization</span><span class="p">,</span>
+        <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">idx</span><span class="p">,</span> <span class="n">vals</span>
 
-<span class="k">class</span> <span class="nc">DiscreteContinuousConv</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Abstract base class for DISCO convolutions, reproduced with permission</span>
-<span class="sd">    from ``torch_harmonics.convolution``. If you use DISCO convs, please cite</span>
-<span class="sd">    [1]_ and [2]_.</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DiscreteContinuousConv</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Abstract base class for DISCO convolutions.</span>
+<span class="sd">    It is reproduced with permission from ``torch_harmonics.convolution``. </span>
+<span class="sd">    </span>
+<span class="sd">    If you use DISCO convs, please cite [1]_ and [2]_.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -265,12 +320,13 @@
 <span class="sd">        number of input channels</span>
 <span class="sd">    out_channels : int</span>
 <span class="sd">        number of output channels</span>
-<span class="sd">    kernel_shape : int or [int, int]</span>
-<span class="sd">        shape of convolution kernel</span>
-<span class="sd">        </span>
-<span class="sd">        * If a single int is passed, kernel will isotropic</span>
+<span class="sd">    kernel_shape : ``Union[int, List[int]]``</span>
+<span class="sd">        Dimensions of the convolution kernel, either one int or a two-int tuple.</span>
+<span class="sd">        * If one int k, the kernel will be a square of shape (k,k), meaning the convolution</span>
+<span class="sd">        will be &#39;isotropic&#39;: both directions are equally scaled in feature space.</span>
 
-<span class="sd">        * If a list of two nonequal ints are passed, kernel will be anisotropic.</span>
+<span class="sd">        * If two ints (k1,k2), the kernel will be a rectangle of shape (k1,k2), meaning the convolution</span>
+<span class="sd">        will  be &#39;anisotropic&#39;: one direction will be compressed or stretched in feature space.</span>
 <span class="sd">    groups : int, optional</span>
 <span class="sd">        number of groups in the convolution, default 1</span>
 <span class="sd">    bias : bool, optional</span>
@@ -286,27 +342,28 @@
 <span class="sd">        Neural Operators with Localized Integral and Differential Kernels;  arxiv:2402.16845</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">out_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">kernel_shape</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
+        <span class="n">basis_type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span>
+            <span class="s2">&quot;piecewise_linear&quot;</span><span class="p">,</span> <span class="s2">&quot;morlet&quot;</span><span class="p">,</span> <span class="s2">&quot;zernike&quot;</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;piecewise_linear&quot;</span><span class="p">,</span>
         <span class="n">groups</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
         <span class="n">bias</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kernel_shape</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">kernel_shape</span> <span class="o">=</span> <span class="p">[</span><span class="n">kernel_shape</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kernel_shape</span> <span class="o">=</span> <span class="p">[</span><span class="n">kernel_shape</span><span class="p">,</span> <span class="n">kernel_shape</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">kernel_shape</span> <span class="o">=</span> <span class="n">kernel_shape</span>
 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kernel_shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">kernel_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kernel_shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">kernel_size</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kernel_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">basis_type</span> <span class="o">==</span> <span class="s2">&quot;morlet&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kernel_size</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kernel_shape</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;kernel_shape should be either one- or two-dimensional.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kernel_size</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kernel_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
 
         <span class="c1"># groups</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">groups</span> <span class="o">=</span> <span class="n">groups</span>
@@ -318,10 +375,12 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Error, the number of output channels has to be an integer multiple of the group size&quot;</span><span class="p">)</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">groupsize</span> <span class="o">=</span> <span class="n">in_channels</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">groups</span>
-        
+
         <span class="n">scale</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">groupsize</span><span class="p">)</span>
-        
-        <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">scale</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">out_channels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">groupsize</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_size</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
+            <span class="n">scale</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">out_channels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">groupsize</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_size</span><span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">bias</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">out_channels</span><span class="p">))</span>
@@ -329,19 +388,19 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
 
 <div class="viewcode-block" id="DiscreteContinuousConv2d">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.discrete_continuous_convolution.DiscreteContinuousConv2d.html#neuralop.layers.discrete_continuous_convolution.DiscreteContinuousConv2d">[docs]</a>
-<span class="k">class</span> <span class="nc">DiscreteContinuousConv2d</span><span class="p">(</span><span class="n">DiscreteContinuousConv</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Discrete-continuous convolutions (DISCO) on arbitrary 2d grids </span>
-<span class="sd">    as implemented in [1]_. To evaluate continuous convolutions on a</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DiscreteContinuousConv2d</span><span class="p">(</span><span class="n">DiscreteContinuousConv</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Discrete-continuous convolutions (DISCO) on arbitrary 2d grids.</span>
+<span class="sd">    It is implemented as described in [1]_. To evaluate continuous convolutions on a</span>
 <span class="sd">    computer, they can be evaluated semi-discretely, where the translation</span>
 <span class="sd">    operation is performed continuously, and the quadrature/projection is</span>
 <span class="sd">    performed discretely on a grid [2]_. They are the main building blocks</span>
-<span class="sd">    for local Neural Operators [1]_. Forward call expects an input of shape</span>
+<span class="sd">    for local Neural Operators [1]_. The forward call expects an input of shape</span>
 <span class="sd">    (batch_size, in_channels, n_in).</span>
 
 <span class="sd">    Parameters</span>
@@ -358,9 +417,15 @@
 <span class="sd">        output grid in the form of a point cloud (n_out, 2).</span>
 <span class="sd">        Can also pass a string to generate a regular (tensor) grid.</span>
 <span class="sd">        For exact options see ``torch_harmonics.quadrature``.</span>
-<span class="sd">    kernel_shape: Union[int, List[int]]</span>
-<span class="sd">        kernel shape. Expects either a single integer for isotropic</span>
-<span class="sd">        kernels or two integers for anisotropic kernels</span>
+<span class="sd">    kernel_shape : ``Union[int, List[int]]``</span>
+<span class="sd">        Dimensions of the convolution kernel, either one int or a two-int tuple.</span>
+<span class="sd">        * If one int k, the kernel will be a square of shape (k,k), meaning the convolution</span>
+<span class="sd">        will be &#39;isotropic&#39;: both directions are equally scaled in feature space.</span>
+
+<span class="sd">        * If two ints (k1,k2), the kernel will be a rectangle of shape (k1,k2), meaning the convolution</span>
+<span class="sd">        will  be &#39;anisotropic&#39;: one direction will be compressed or stretched in feature space.</span>
+<span class="sd">    basis_type: str literal ``{&#39;piecewise_linear&#39;, &#39;morlet&#39;, &#39;zernike&#39;}``</span>
+<span class="sd">        choice of basis functions to use for convolution filter tensor.</span>
 <span class="sd">    n_in: Tuple[int], optional</span>
 <span class="sd">        number of input points along each dimension. Only used</span>
 <span class="sd">        if grid_in is passed as a str. See ``torch_harmonics.quadrature``.</span>
@@ -379,7 +444,7 @@
 <span class="sd">    radius_cutoff: float, optional</span>
 <span class="sd">        cutoff radius for the kernel. For a point ``x`` on the input grid,</span>
 <span class="sd">        every point ``y`` on the output grid with ``||x - y|| &lt;= radius_cutoff``</span>
-<span class="sd">        will be affected by the value at ``x``. </span>
+<span class="sd">        will be affected by the value at ``x``.</span>
 <span class="sd">        By default, set to 2 / sqrt(# of output points)</span>
 
 <span class="sd">    References</span>
@@ -391,13 +456,14 @@
 <span class="sd">        discrete-continuous (DISCO) convolutions, ICLR (2023), arXiv:2209.13603</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">out_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">grid_in</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
         <span class="n">grid_out</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
         <span class="n">kernel_shape</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
+        <span class="n">basis_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;piecewise_linear&quot;</span><span class="p">,</span>
         <span class="n">n_in</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">n_out</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">quadrature_weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -406,7 +472,14 @@
         <span class="n">bias</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">radius_cutoff</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">kernel_shape</span><span class="p">,</span> <span class="n">groups</span><span class="p">,</span> <span class="n">bias</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">in_channels</span><span class="o">=</span><span class="n">in_channels</span><span class="p">,</span>
+            <span class="n">out_channels</span><span class="o">=</span><span class="n">out_channels</span><span class="p">,</span>
+            <span class="n">kernel_shape</span><span class="o">=</span><span class="n">kernel_shape</span><span class="p">,</span>
+            <span class="n">basis_type</span><span class="o">=</span><span class="n">basis_type</span><span class="p">,</span>
+            <span class="n">groups</span><span class="o">=</span><span class="n">groups</span><span class="p">,</span>
+            <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="c1"># the instantiator supports convenience constructors for the input and output grids</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">grid_in</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
@@ -417,8 +490,12 @@
             <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_in</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
             <span class="n">x</span><span class="p">,</span> <span class="n">wx</span> <span class="o">=</span> <span class="n">_precompute_grid</span><span class="p">(</span><span class="n">n_in</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">grid</span><span class="o">=</span><span class="n">grid_in</span><span class="p">,</span> <span class="n">periodic</span><span class="o">=</span><span class="n">periodic</span><span class="p">)</span>
             <span class="n">y</span><span class="p">,</span> <span class="n">wy</span> <span class="o">=</span> <span class="n">_precompute_grid</span><span class="p">(</span><span class="n">n_in</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">grid</span><span class="o">=</span><span class="n">grid_in</span><span class="p">,</span> <span class="n">periodic</span><span class="o">=</span><span class="n">periodic</span><span class="p">)</span>
-            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
-            <span class="n">wx</span><span class="p">,</span> <span class="n">wy</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">wx</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">wy</span><span class="p">))</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span>
+            <span class="p">)</span>
+            <span class="n">wx</span><span class="p">,</span> <span class="n">wy</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">wx</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">wy</span><span class="p">),</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span>
+            <span class="p">)</span>
             <span class="n">grid_in</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)])</span>
             <span class="n">quadrature_weights</span> <span class="o">=</span> <span class="p">(</span><span class="n">wx</span> <span class="o">*</span> <span class="n">wy</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -431,7 +508,9 @@
             <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_out</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
             <span class="n">x</span><span class="p">,</span> <span class="n">wx</span> <span class="o">=</span> <span class="n">_precompute_grid</span><span class="p">(</span><span class="n">n_out</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">grid</span><span class="o">=</span><span class="n">grid_out</span><span class="p">,</span> <span class="n">periodic</span><span class="o">=</span><span class="n">periodic</span><span class="p">)</span>
             <span class="n">y</span><span class="p">,</span> <span class="n">wy</span> <span class="o">=</span> <span class="n">_precompute_grid</span><span class="p">(</span><span class="n">n_out</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">grid</span><span class="o">=</span><span class="n">grid_out</span><span class="p">,</span> <span class="n">periodic</span><span class="o">=</span><span class="n">periodic</span><span class="p">)</span>
-            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span>
+            <span class="p">)</span>
             <span class="n">grid_out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown grid output type of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">grid_out</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -457,12 +536,15 @@
         <span class="c1"># integration weights</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">&quot;quadrature_weights&quot;</span><span class="p">,</span> <span class="n">quadrature_weights</span><span class="p">,</span> <span class="n">persistent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-        <span class="n">idx</span><span class="p">,</span> <span class="n">vals</span> <span class="o">=</span> <span class="n">_precompute_convolution_filter_matrix</span><span class="p">(</span><span class="n">grid_in</span><span class="p">,</span>
-                                                      <span class="n">grid_out</span><span class="p">,</span>
-                                                      <span class="bp">self</span><span class="o">.</span><span class="n">kernel_shape</span><span class="p">,</span>
-                                                      <span class="n">quadrature_weights</span><span class="p">,</span>
-                                                      <span class="n">radius_cutoff</span><span class="o">=</span><span class="n">radius_cutoff</span><span class="p">,</span>
-                                                      <span class="n">periodic</span><span class="o">=</span><span class="n">periodic</span><span class="p">)</span>
+        <span class="n">idx</span><span class="p">,</span> <span class="n">vals</span> <span class="o">=</span> <span class="n">_precompute_convolution_filter_matrix</span><span class="p">(</span>
+            <span class="n">grid_in</span><span class="p">,</span>
+            <span class="n">grid_out</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kernel_shape</span><span class="p">,</span>
+            <span class="n">quadrature_weights</span><span class="p">,</span>
+            <span class="n">basis_type</span><span class="o">=</span><span class="n">basis_type</span><span class="p">,</span>
+            <span class="n">radius_cutoff</span><span class="o">=</span><span class="n">radius_cutoff</span><span class="p">,</span>
+            <span class="n">periodic</span><span class="o">=</span><span class="n">periodic</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="c1"># to improve performance, we make psi a matrix by merging the first two dimensions</span>
         <span class="c1"># This has to be accounted for in the forward pass</span>
@@ -473,22 +555,24 @@
 
 <div class="viewcode-block" id="DiscreteContinuousConv2d.get_local_filter_matrix">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.discrete_continuous_convolution.DiscreteContinuousConv2d.html#neuralop.layers.discrete_continuous_convolution.DiscreteContinuousConv2d.get_local_filter_matrix">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_local_filter_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_local_filter_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the precomputed local convolution filter matrix Psi.</span>
-<span class="sd">        Psi parameterizes the kernel function as triangular basis functions </span>
+<span class="sd">        Psi parameterizes the kernel function as triangular basis functions</span>
 <span class="sd">        evaluated on pairs of points on the convolution&#39;s input and output grids,</span>
 <span class="sd">        such that Psi[l, i, j] is the l-th basis function evaluated on point i in</span>
 <span class="sd">        the output grid and point j in the input grid.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">psi</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sparse_coo_tensor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi_idx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_vals</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kernel_size</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_out</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_in</span><span class="p">))</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sparse_coo_tensor</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">psi_idx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_vals</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kernel_size</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_out</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_in</span><span class="p">)</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="n">psi</span></div>
 
 
 <div class="viewcode-block" id="DiscreteContinuousConv2d.forward">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.discrete_continuous_convolution.DiscreteContinuousConv2d.html#neuralop.layers.discrete_continuous_convolution.DiscreteContinuousConv2d.forward">[docs]</a>
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Forward call. Expects an input of shape batch_size x in_channels x n_in.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -508,7 +592,13 @@
         <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">groupsize</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_out</span><span class="p">)</span>
 
         <span class="c1"># do weight multiplication</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;bgckx,gock-&gt;bgox&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
+            <span class="s2">&quot;bgckx,gock-&gt;bgox&quot;</span><span class="p">,</span>
+            <span class="n">x</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
         <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -521,10 +611,9 @@
 
 <div class="viewcode-block" id="DiscreteContinuousConvTranspose2d">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.discrete_continuous_convolution.DiscreteContinuousConvTranspose2d.html#neuralop.layers.discrete_continuous_convolution.DiscreteContinuousConvTranspose2d">[docs]</a>
-<span class="k">class</span> <span class="nc">DiscreteContinuousConvTranspose2d</span><span class="p">(</span><span class="n">DiscreteContinuousConv</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Transpose variant of discrete-continuous convolutions on arbitrary</span>
-<span class="sd">    2d grids as implemented for [1]_. Forward call expects an input of shape</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DiscreteContinuousConvTranspose2d</span><span class="p">(</span><span class="n">DiscreteContinuousConv</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transpose variant of discrete-continuous convolutions on arbitrary 2d grids. </span>
+<span class="sd">    It is implemented as described in [1]_. The forward call expects an input of shape</span>
 <span class="sd">    (batch_size, in_channels, n_in).</span>
 
 <span class="sd">    Parameters</span>
@@ -541,8 +630,15 @@
 <span class="sd">        output grid in the form of a point cloud (n_out, 2).</span>
 <span class="sd">        Can also pass a string to generate a regular (tensor) grid.</span>
 <span class="sd">        For exact options see ``torch_harmonics.quadrature``.</span>
-<span class="sd">    kernel_shape: Union[int, List[int]]</span>
-<span class="sd">        kernel shape. Expects either a single integer for isotropic kernels or two integers for anisotropic kernels</span>
+<span class="sd">    kernel_shape : ``Union[int, List[int]]``</span>
+<span class="sd">        Dimensions of the convolution kernel, either one int or a two-int tuple.</span>
+<span class="sd">        * If one int k, the kernel will be a square of shape (k,k), meaning the convolution</span>
+<span class="sd">        will be &#39;isotropic&#39;: both directions are equally scaled in feature space.</span>
+
+<span class="sd">        * If two ints (k1,k2), the kernel will be a rectangle of shape (k1,k2), meaning the convolution</span>
+<span class="sd">        will  be &#39;anisotropic&#39;: one direction will be compressed or stretched in feature space.</span>
+<span class="sd">    basis_type: str literal ``{&#39;piecewise_linear&#39;, &#39;morlet&#39;, &#39;zernike&#39;}``</span>
+<span class="sd">        choice of basis functions to use for convolution filter tensor.</span>
 <span class="sd">    n_in: Tuple[int], optional</span>
 <span class="sd">        number of input points along each dimension. Only used</span>
 <span class="sd">        if grid_in is passed as a str. See ``torch_harmonics.quadrature``.</span>
@@ -561,7 +657,7 @@
 <span class="sd">    radius_cutoff: float, optional</span>
 <span class="sd">        cutoff radius for the kernel. For a point ``x`` on the input grid,</span>
 <span class="sd">        every point ``y`` on the output grid with ``||x - y|| &lt;= radius_cutoff``</span>
-<span class="sd">        will be affected by the value at ``x``. </span>
+<span class="sd">        will be affected by the value at ``x``.</span>
 <span class="sd">        By default, set to 2 / sqrt(# of output points)</span>
 
 <span class="sd">    References</span>
@@ -570,13 +666,14 @@
 <span class="sd">        Neural Operators with Localized Integral and Differential Kernels;  arxiv:2402.16845</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">out_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">grid_in</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
         <span class="n">grid_out</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
         <span class="n">kernel_shape</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
+        <span class="n">basis_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;piecewise_linear&quot;</span><span class="p">,</span>
         <span class="n">n_in</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">n_out</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">quadrature_weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -585,8 +682,14 @@
         <span class="n">bias</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">radius_cutoff</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">kernel_shape</span><span class="p">,</span> <span class="n">groups</span><span class="p">,</span> <span class="n">bias</span><span class="p">)</span>
-
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">in_channels</span><span class="o">=</span><span class="n">in_channels</span><span class="p">,</span>
+            <span class="n">out_channels</span><span class="o">=</span><span class="n">out_channels</span><span class="p">,</span>
+            <span class="n">kernel_shape</span><span class="o">=</span><span class="n">kernel_shape</span><span class="p">,</span>
+            <span class="n">basis_type</span><span class="o">=</span><span class="n">basis_type</span><span class="p">,</span>
+            <span class="n">groups</span><span class="o">=</span><span class="n">groups</span><span class="p">,</span>
+            <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="c1"># the instantiator supports convenience constructors for the input and output grids</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">grid_in</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
             <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">quadrature_weights</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span>
@@ -596,8 +699,12 @@
             <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_in</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
             <span class="n">x</span><span class="p">,</span> <span class="n">wx</span> <span class="o">=</span> <span class="n">_precompute_grid</span><span class="p">(</span><span class="n">n_in</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">grid</span><span class="o">=</span><span class="n">grid_in</span><span class="p">,</span> <span class="n">periodic</span><span class="o">=</span><span class="n">periodic</span><span class="p">)</span>
             <span class="n">y</span><span class="p">,</span> <span class="n">wy</span> <span class="o">=</span> <span class="n">_precompute_grid</span><span class="p">(</span><span class="n">n_in</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">grid</span><span class="o">=</span><span class="n">grid_in</span><span class="p">,</span> <span class="n">periodic</span><span class="o">=</span><span class="n">periodic</span><span class="p">)</span>
-            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
-            <span class="n">wx</span><span class="p">,</span> <span class="n">wy</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">wx</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">wy</span><span class="p">))</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span>
+            <span class="p">)</span>
+            <span class="n">wx</span><span class="p">,</span> <span class="n">wy</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">wx</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">wy</span><span class="p">),</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span>
+            <span class="p">)</span>
             <span class="n">grid_in</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)])</span>
             <span class="n">quadrature_weights</span> <span class="o">=</span> <span class="p">(</span><span class="n">wx</span> <span class="o">*</span> <span class="n">wy</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -610,7 +717,9 @@
             <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_out</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
             <span class="n">x</span><span class="p">,</span> <span class="n">wx</span> <span class="o">=</span> <span class="n">_precompute_grid</span><span class="p">(</span><span class="n">n_out</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">grid</span><span class="o">=</span><span class="n">grid_out</span><span class="p">,</span> <span class="n">periodic</span><span class="o">=</span><span class="n">periodic</span><span class="p">)</span>
             <span class="n">y</span><span class="p">,</span> <span class="n">wy</span> <span class="o">=</span> <span class="n">_precompute_grid</span><span class="p">(</span><span class="n">n_out</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">grid</span><span class="o">=</span><span class="n">grid_out</span><span class="p">,</span> <span class="n">periodic</span><span class="o">=</span><span class="n">periodic</span><span class="p">)</span>
-            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span>
+            <span class="p">)</span>
             <span class="n">grid_out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown grid output type of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">grid_out</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -638,8 +747,14 @@
 
         <span class="c1"># precompute the transposed tensor</span>
         <span class="n">idx</span><span class="p">,</span> <span class="n">vals</span> <span class="o">=</span> <span class="n">_precompute_convolution_filter_matrix</span><span class="p">(</span>
-            <span class="n">grid_out</span><span class="p">,</span> <span class="n">grid_in</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_shape</span><span class="p">,</span> <span class="n">quadrature_weights</span><span class="p">,</span> 
-            <span class="n">radius_cutoff</span><span class="o">=</span><span class="n">radius_cutoff</span><span class="p">,</span> <span class="n">periodic</span><span class="o">=</span><span class="n">periodic</span><span class="p">,</span> <span class="n">transpose_normalization</span><span class="o">=</span><span class="kc">True</span>
+            <span class="n">grid_out</span><span class="p">,</span>
+            <span class="n">grid_in</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kernel_shape</span><span class="p">,</span>
+            <span class="n">quadrature_weights</span><span class="p">,</span>
+            <span class="n">basis_type</span><span class="o">=</span><span class="n">basis_type</span><span class="p">,</span>
+            <span class="n">radius_cutoff</span><span class="o">=</span><span class="n">radius_cutoff</span><span class="p">,</span>
+            <span class="n">periodic</span><span class="o">=</span><span class="n">periodic</span><span class="p">,</span>
+            <span class="n">transpose_normalization</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="c1"># to improve performance, we make psi a matrix by merging the first two dimensions</span>
@@ -651,22 +766,24 @@
 
 <div class="viewcode-block" id="DiscreteContinuousConvTranspose2d.get_local_filter_matrix">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.discrete_continuous_convolution.DiscreteContinuousConvTranspose2d.html#neuralop.layers.discrete_continuous_convolution.DiscreteContinuousConvTranspose2d.get_local_filter_matrix">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_local_filter_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_local_filter_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the precomputed local convolution filter matrix Psi.</span>
-<span class="sd">        Psi parameterizes the kernel function as triangular basis functions </span>
+<span class="sd">        Psi parameterizes the kernel function as triangular basis functions</span>
 <span class="sd">        evaluated on pairs of points on the convolution&#39;s input and output grids,</span>
 <span class="sd">        such that Psi[l, i, j] is the l-th basis function evaluated on point i in</span>
 <span class="sd">        the output grid and point j in the input grid.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">psi</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sparse_coo_tensor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi_idx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_vals</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kernel_size</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_out</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_in</span><span class="p">))</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sparse_coo_tensor</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">psi_idx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_vals</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kernel_size</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_out</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_in</span><span class="p">)</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="n">psi</span></div>
 
 
 <div class="viewcode-block" id="DiscreteContinuousConvTranspose2d.forward">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.discrete_continuous_convolution.DiscreteContinuousConvTranspose2d.html#neuralop.layers.discrete_continuous_convolution.DiscreteContinuousConvTranspose2d.forward">[docs]</a>
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Forward call. Expects an input of shape batch_size x in_channels x n_in.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -687,9 +804,13 @@
         <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">groupsize</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_out</span><span class="p">)</span>
 
         <span class="c1"># do weight multiplication</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;bgckx,gock-&gt;bgox&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
-                                                                      <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                                                                      <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
+            <span class="s2">&quot;bgckx,gock-&gt;bgox&quot;</span><span class="p">,</span>
+            <span class="n">x</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
         <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -702,14 +823,13 @@
 
 <div class="viewcode-block" id="EquidistantDiscreteContinuousConv2d">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.discrete_continuous_convolution.EquidistantDiscreteContinuousConv2d.html#neuralop.layers.discrete_continuous_convolution.EquidistantDiscreteContinuousConv2d">[docs]</a>
-<span class="k">class</span> <span class="nc">EquidistantDiscreteContinuousConv2d</span><span class="p">(</span><span class="n">DiscreteContinuousConv</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Discrete-continuous convolutions (DISCO) on equidistant 2d grids</span>
-<span class="sd">    as implemented for [1]_. This implementation maps to 2d convolution</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">EquidistantDiscreteContinuousConv2d</span><span class="p">(</span><span class="n">DiscreteContinuousConv</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Discrete-continuous convolutions (DISCO) on equidistant 2d grids.</span>
+<span class="sd">    It is implemented as described in [1]_. This implementation maps to 2d convolution</span>
 <span class="sd">    kernels which makes it more efficient than the unstructured implementation</span>
 <span class="sd">    above. Due to the mapping to an equidistant grid, the domain lengths need</span>
 <span class="sd">    to be specified in order to compute the effective resolution and the</span>
-<span class="sd">    corresponding cutoff radius. Forward call expects an input of shape </span>
+<span class="sd">    corresponding cutoff radius. The forward call expects an input of shape</span>
 <span class="sd">    (batch_size, in_channels, in_shape[0], in_shape[1]).</span>
 
 <span class="sd">    Parameters</span>
@@ -725,8 +845,15 @@
 <span class="sd">        of out_shape must be less than or equal to the side lengths</span>
 <span class="sd">        of in_shape, and must be integer divisions of the corresponding</span>
 <span class="sd">        in_shape side lengths.</span>
-<span class="sd">    kernel_shape: Union[int, List[int]]</span>
-<span class="sd">        kernel shape. Expects either a single integer for isotropic kernels or two integers for anisotropic kernels</span>
+<span class="sd">    kernel_shape : ``Union[int, List[int]]``</span>
+<span class="sd">        Dimensions of the convolution kernel, either one int or a two-int tuple.</span>
+<span class="sd">        * If one int k, the kernel will be a square of shape (k,k), meaning the convolution</span>
+<span class="sd">        will be &#39;isotropic&#39;: both directions are equally scaled in feature space.</span>
+
+<span class="sd">        * If two ints (k1,k2), the kernel will be a rectangle of shape (k1,k2), meaning the convolution</span>
+<span class="sd">        will  be &#39;anisotropic&#39;: one direction will be compressed or stretched in feature space.</span>
+<span class="sd">    basis_type: str literal ``{&#39;piecewise_linear&#39;, &#39;morlet&#39;, &#39;zernike&#39;}``</span>
+<span class="sd">        choice of basis functions to use for convolution filter tensor.</span>
 <span class="sd">    domain_length: torch.Tensor, optional</span>
 <span class="sd">        extent/length of the physical domain. Assumes square domain [-1, 1]^2 by default</span>
 <span class="sd">    periodic: bool, optional</span>
@@ -738,7 +865,7 @@
 <span class="sd">    radius_cutoff: float, optional</span>
 <span class="sd">        cutoff radius for the kernel. For a point ``x`` on the input grid,</span>
 <span class="sd">        every point ``y`` on the output grid with ``||x - y|| &lt;= radius_cutoff``</span>
-<span class="sd">        will be affected by the value at ``x``. </span>
+<span class="sd">        will be affected by the value at ``x``.</span>
 <span class="sd">        By default, set to 2 / sqrt(# of output points)</span>
 
 <span class="sd">    References</span>
@@ -747,21 +874,28 @@
 <span class="sd">        Neural Operators with Localized Integral and Differential Kernels;  arxiv:2402.16845</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">out_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">in_shape</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
         <span class="n">out_shape</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
         <span class="n">kernel_shape</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
+        <span class="n">basis_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;piecewise_linear&quot;</span><span class="p">,</span>
         <span class="n">domain_length</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">periodic</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">groups</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
         <span class="n">bias</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">radius_cutoff</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">kernel_shape</span><span class="p">,</span> <span class="n">groups</span><span class="p">,</span> <span class="n">bias</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">in_channels</span><span class="o">=</span><span class="n">in_channels</span><span class="p">,</span>
+            <span class="n">out_channels</span><span class="o">=</span><span class="n">out_channels</span><span class="p">,</span>
+            <span class="n">kernel_shape</span><span class="o">=</span><span class="n">kernel_shape</span><span class="p">,</span>
+            <span class="n">basis_type</span><span class="o">=</span><span class="n">basis_type</span><span class="p">,</span>
+            <span class="n">groups</span><span class="o">=</span><span class="n">groups</span><span class="p">,</span>
+            <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="c1"># to ensure compatibility with the unstructured code, only constant zero and periodic padding are supported currently</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">padding_mode</span> <span class="o">=</span> <span class="s2">&quot;circular&quot;</span> <span class="k">if</span> <span class="n">periodic</span> <span class="k">else</span> <span class="s2">&quot;zeros&quot;</span>
@@ -772,7 +906,9 @@
         <span class="c1"># compute the cutoff radius based on the assumption that the grid is [-1, 1]^2</span>
         <span class="c1"># this still assumes a quadratic domain</span>
         <span class="k">if</span> <span class="n">radius_cutoff</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">radius_cutoff</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">domain_length</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">out_shape</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)])</span>
+            <span class="n">radius_cutoff</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">domain_length</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">out_shape</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">radius_cutoff</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Error, radius_cutoff has to be positive.&quot;</span><span class="p">)</span>
@@ -790,7 +926,7 @@
         <span class="c1"># psi_local is essentially the support of the hat functions evaluated locally</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">radius_cutoff</span><span class="p">,</span> <span class="n">radius_cutoff</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_local_h</span><span class="p">)</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">radius_cutoff</span><span class="p">,</span> <span class="n">radius_cutoff</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_local_w</span><span class="p">)</span>
-        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span><span class="p">)</span>
         <span class="n">grid_in</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)])</span>
 
         <span class="c1"># compute quadrature weights on the incoming grid</span>
@@ -799,71 +935,86 @@
         <span class="n">grid_out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([[</span><span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]])</span>
 
         <span class="c1"># precompute psi using conventional routines onto the local grid</span>
-        <span class="n">idx</span><span class="p">,</span> <span class="n">vals</span> <span class="o">=</span> <span class="n">_precompute_convolution_filter_matrix</span><span class="p">(</span><span class="n">grid_in</span><span class="p">,</span>
-                                                      <span class="n">grid_out</span><span class="p">,</span>
-                                                      <span class="bp">self</span><span class="o">.</span><span class="n">kernel_shape</span><span class="p">,</span>
-                                                      <span class="n">quadrature_weights</span><span class="p">,</span>
-                                                      <span class="n">radius_cutoff</span><span class="o">=</span><span class="n">radius_cutoff</span><span class="p">,</span>
-                                                      <span class="n">periodic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                                                      <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">idx</span><span class="p">,</span> <span class="n">vals</span> <span class="o">=</span> <span class="n">_precompute_convolution_filter_matrix</span><span class="p">(</span>
+            <span class="n">grid_in</span><span class="p">,</span>
+            <span class="n">grid_out</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kernel_shape</span><span class="p">,</span>
+            <span class="n">quadrature_weights</span><span class="p">,</span>
+            <span class="n">basis_type</span><span class="o">=</span><span class="n">basis_type</span><span class="p">,</span>
+            <span class="n">radius_cutoff</span><span class="o">=</span><span class="n">radius_cutoff</span><span class="p">,</span>
+            <span class="n">periodic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="c1"># extract the local psi as a dense representation</span>
         <span class="n">local_filter_matrix</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kernel_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_local_h</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">psi_local_w</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">ie</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vals</span><span class="p">)):</span>
-            <span class="n">f</span> <span class="o">=</span> <span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">ie</span><span class="p">];</span> <span class="n">j</span> <span class="o">=</span> <span class="n">idx</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">ie</span><span class="p">];</span> <span class="n">v</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="n">ie</span><span class="p">]</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">ie</span><span class="p">]</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">idx</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">ie</span><span class="p">]</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="n">ie</span><span class="p">]</span>
             <span class="n">local_filter_matrix</span><span class="p">[</span><span class="n">f</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
 
         <span class="c1"># compute local version of the filter matrix</span>
-        <span class="n">local_filter_matrix</span> <span class="o">=</span> <span class="n">local_filter_matrix</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kernel_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_local_h</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_local_w</span><span class="p">)</span>
+        <span class="n">local_filter_matrix</span> <span class="o">=</span> <span class="n">local_filter_matrix</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kernel_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_local_h</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_local_w</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">&quot;local_filter_matrix&quot;</span><span class="p">,</span> <span class="n">local_filter_matrix</span><span class="p">,</span> <span class="n">persistent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span>
+            <span class="s2">&quot;local_filter_matrix&quot;</span><span class="p">,</span> <span class="n">local_filter_matrix</span><span class="p">,</span> <span class="n">persistent</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
 
 <div class="viewcode-block" id="EquidistantDiscreteContinuousConv2d.get_local_filter_matrix">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.discrete_continuous_convolution.EquidistantDiscreteContinuousConv2d.html#neuralop.layers.discrete_continuous_convolution.EquidistantDiscreteContinuousConv2d.get_local_filter_matrix">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_local_filter_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_local_filter_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the precomputed local convolution filter matrix Psi.</span>
-<span class="sd">        Psi parameterizes the kernel function as triangular basis functions </span>
+<span class="sd">        Psi parameterizes the kernel function as triangular basis functions</span>
 <span class="sd">        evaluated on pairs of points on the convolution&#39;s input and output grids,</span>
 <span class="sd">        such that Psi[l, i, j] is the l-th basis function evaluated on point i in</span>
 <span class="sd">        the output grid and point j in the input grid.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_filter_matrix</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_filter_matrix</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="EquidistantDiscreteContinuousConv2d.forward">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.discrete_continuous_convolution.EquidistantDiscreteContinuousConv2d.html#neuralop.layers.discrete_continuous_convolution.EquidistantDiscreteContinuousConv2d.forward">[docs]</a>
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Forward call. Expects an input of shape batch_size x in_channels x in_shape[0] x in_shape[1].</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">kernel</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;kxy,ogk-&gt;ogxy&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_local_filter_matrix</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span>
+        <span class="n">kernel</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
+            <span class="s2">&quot;kxy,ogk-&gt;ogxy&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_local_filter_matrix</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span>
+        <span class="p">)</span>
         <span class="c1"># padding is rounded down to give the right result when even kernels are applied</span>
         <span class="c1"># Check https://pytorch.org/docs/stable/generated/torch.nn.Conv2d.html for output shape math</span>
-        <span class="n">h_pad</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi_local_h</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span>
-        <span class="n">w_pad</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi_local_w</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q_weight</span> <span class="o">*</span> <span class="n">x</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="p">,</span>
-                                   <span class="n">stride</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">scale_h</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_w</span><span class="p">],</span>
-                                   <span class="n">dilation</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                                   <span class="n">padding</span><span class="o">=</span><span class="p">[</span><span class="n">h_pad</span><span class="p">,</span> <span class="n">w_pad</span><span class="p">],</span>
-                                   <span class="n">groups</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">)</span>
+        <span class="n">h_pad</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi_local_h</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">w_pad</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi_local_w</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">q_weight</span> <span class="o">*</span> <span class="n">x</span><span class="p">,</span>
+            <span class="n">kernel</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="p">,</span>
+            <span class="n">stride</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">scale_h</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_w</span><span class="p">],</span>
+            <span class="n">dilation</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">padding</span><span class="o">=</span><span class="p">[</span><span class="n">h_pad</span><span class="p">,</span> <span class="n">w_pad</span><span class="p">],</span>
+            <span class="n">groups</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">out</span></div>
 </div>
 
 
+
 <div class="viewcode-block" id="EquidistantDiscreteContinuousConvTranspose2d">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.discrete_continuous_convolution.EquidistantDiscreteContinuousConvTranspose2d.html#neuralop.layers.discrete_continuous_convolution.EquidistantDiscreteContinuousConvTranspose2d">[docs]</a>
-<span class="k">class</span> <span class="nc">EquidistantDiscreteContinuousConvTranspose2d</span><span class="p">(</span><span class="n">DiscreteContinuousConv</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Transpose Discrete-continuous convolutions (DISCO) on equidistant 2d grids</span>
-<span class="sd">    as implemented for [1]_. This implementation maps to 2d convolution kernels</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">EquidistantDiscreteContinuousConvTranspose2d</span><span class="p">(</span><span class="n">DiscreteContinuousConv</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transpose Discrete-continuous convolutions (DISCO) on equidistant 2d grids.</span>
+<span class="sd">    It is implemented as described in [1]_. This implementation maps to 2d convolution kernels</span>
 <span class="sd">    which makes it more efficient than the unstructured implementation above.</span>
 <span class="sd">    Due to the mapping to an equidistant grid, the domain lengths need to be</span>
 <span class="sd">    specified in order to compute the effective resolution and the corresponding</span>
-<span class="sd">    cutoff radius. Forward call expects an input of shape</span>
+<span class="sd">    cutoff radius. The forward call expects an input of shape</span>
 <span class="sd">    (batch_size, in_channels, in_shape[0], in_shape[1]).</span>
 
 <span class="sd">    Parameters</span>
@@ -879,8 +1030,15 @@
 <span class="sd">        of out_shape must be greater than or equal to the side lengths</span>
 <span class="sd">        of in_shape, and must be integer multiples of the corresponding</span>
 <span class="sd">        in_shape side lengths.</span>
-<span class="sd">    kernel_shape: Union[int, List[int]]</span>
-<span class="sd">        kernel shape. Expects either a single integer for isotropic kernels or two integers for anisotropic kernels</span>
+<span class="sd">    kernel_shape : ``Union[int, List[int]]``</span>
+<span class="sd">        Dimensions of the convolution kernel, either one int or a two-int tuple.</span>
+<span class="sd">        * If one int k, the kernel will be a square of shape (k,k), meaning the convolution</span>
+<span class="sd">        will be &#39;isotropic&#39;: both directions are equally scaled in feature space.</span>
+
+<span class="sd">        * If two ints (k1,k2), the kernel will be a rectangle of shape (k1,k2), meaning the convolution</span>
+<span class="sd">        will  be &#39;anisotropic&#39;: one direction will be compressed or stretched in feature space.</span>
+<span class="sd">    basis_type: str literal ``{&#39;piecewise_linear&#39;, &#39;morlet&#39;, &#39;zernike&#39;}``</span>
+<span class="sd">        choice of basis functions to use for convolution filter tensor.</span>
 <span class="sd">    domain_length: torch.Tensor, optional</span>
 <span class="sd">        extent/length of the physical domain. Assumes square domain [-1, 1]^2 by default</span>
 <span class="sd">    periodic: bool, optional</span>
@@ -892,7 +1050,7 @@
 <span class="sd">    radius_cutoff: float, optional</span>
 <span class="sd">        cutoff radius for the kernel. For a point ``x`` on the input grid,</span>
 <span class="sd">        every point ``y`` on the output grid with ``||x - y|| &lt;= radius_cutoff``</span>
-<span class="sd">        will be affected by the value at ``x``. </span>
+<span class="sd">        will be affected by the value at ``x``.</span>
 <span class="sd">        By default, set to 2 / sqrt(# of output points)</span>
 
 <span class="sd">    References</span>
@@ -901,26 +1059,35 @@
 <span class="sd">        Neural Operators with Localized Integral and Differential Kernels;  arxiv:2402.16845</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">out_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">in_shape</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
         <span class="n">out_shape</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
         <span class="n">kernel_shape</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
+        <span class="n">basis_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;piecewise_linear&quot;</span><span class="p">,</span>
         <span class="n">domain_length</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">periodic</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">groups</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
         <span class="n">bias</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">radius_cutoff</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">kernel_shape</span><span class="p">,</span> <span class="n">groups</span><span class="p">,</span> <span class="n">bias</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">in_channels</span><span class="o">=</span><span class="n">in_channels</span><span class="p">,</span>
+            <span class="n">out_channels</span><span class="o">=</span><span class="n">out_channels</span><span class="p">,</span>
+            <span class="n">kernel_shape</span><span class="o">=</span><span class="n">kernel_shape</span><span class="p">,</span>
+            <span class="n">basis_type</span><span class="o">=</span><span class="n">basis_type</span><span class="p">,</span>
+            <span class="n">groups</span><span class="o">=</span><span class="n">groups</span><span class="p">,</span>
+            <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="c1"># torch ConvTranspose2d expects grouped weights stacked along the out_channels</span>
         <span class="c1"># shape (in_channels, out_channels/groups, h, w)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">groupsize</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">,</span>
-                                                                      <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
-                                                                      <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">groupsize</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="c1"># to ensure compatibility with the unstructured code, only constant zero and periodic padding are supported currently</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">padding_mode</span> <span class="o">=</span> <span class="s2">&quot;circular&quot;</span> <span class="k">if</span> <span class="n">periodic</span> <span class="k">else</span> <span class="s2">&quot;zeros&quot;</span>
@@ -931,7 +1098,9 @@
         <span class="c1"># compute the cutoff radius based on the assumption that the grid is [-1, 1]^2</span>
         <span class="c1"># this still assumes a quadratic domain</span>
         <span class="k">if</span> <span class="n">radius_cutoff</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">radius_cutoff</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">domain_length</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">in_shape</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)])</span>
+            <span class="n">radius_cutoff</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">domain_length</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">in_shape</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">radius_cutoff</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Error, radius_cutoff has to be positive.&quot;</span><span class="p">)</span>
@@ -949,7 +1118,7 @@
         <span class="c1"># psi_local is essentially the support of the hat functions evaluated locally</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">radius_cutoff</span><span class="p">,</span> <span class="n">radius_cutoff</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_local_h</span><span class="p">)</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">radius_cutoff</span><span class="p">,</span> <span class="n">radius_cutoff</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_local_w</span><span class="p">)</span>
-        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span><span class="p">)</span>
         <span class="n">grid_in</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)])</span>
         <span class="n">grid_out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([[</span><span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]])</span>
 
@@ -958,42 +1127,54 @@
         <span class="n">quadrature_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_weight</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi_local_h</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_local_w</span><span class="p">)</span>
 
         <span class="c1"># precompute psi using conventional routines onto the local grid</span>
-        <span class="n">idx</span><span class="p">,</span> <span class="n">vals</span> <span class="o">=</span> <span class="n">_precompute_convolution_filter_matrix</span><span class="p">(</span><span class="n">grid_in</span><span class="p">,</span> 
-                                                      <span class="n">grid_out</span><span class="p">,</span>
-                                                      <span class="bp">self</span><span class="o">.</span><span class="n">kernel_shape</span><span class="p">,</span>
-                                                      <span class="n">quadrature_weights</span><span class="p">,</span>
-                                                      <span class="n">radius_cutoff</span><span class="o">=</span><span class="n">radius_cutoff</span><span class="p">,</span>
-                                                      <span class="n">periodic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                                      <span class="n">transpose_normalization</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">idx</span><span class="p">,</span> <span class="n">vals</span> <span class="o">=</span> <span class="n">_precompute_convolution_filter_matrix</span><span class="p">(</span>
+            <span class="n">grid_in</span><span class="p">,</span>
+            <span class="n">grid_out</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kernel_shape</span><span class="p">,</span>
+            <span class="n">quadrature_weights</span><span class="p">,</span>
+            <span class="n">basis_type</span><span class="o">=</span><span class="n">basis_type</span><span class="p">,</span>
+            <span class="n">radius_cutoff</span><span class="o">=</span><span class="n">radius_cutoff</span><span class="p">,</span>
+            <span class="n">periodic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">transpose_normalization</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="c1"># extract the local psi as a dense representation</span>
-        <span class="n">local_filter_matrix</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kernel_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_local_h</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">psi_local_w</span><span class="p">)</span>
+        <span class="n">local_filter_matrix</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kernel_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_local_h</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_local_w</span>
+        <span class="p">)</span>
         <span class="k">for</span> <span class="n">ie</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vals</span><span class="p">)):</span>
-            <span class="n">f</span> <span class="o">=</span> <span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">ie</span><span class="p">];</span> <span class="n">j</span> <span class="o">=</span> <span class="n">idx</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">ie</span><span class="p">];</span> <span class="n">v</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="n">ie</span><span class="p">]</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">ie</span><span class="p">]</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">idx</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">ie</span><span class="p">]</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="n">ie</span><span class="p">]</span>
             <span class="n">local_filter_matrix</span><span class="p">[</span><span class="n">f</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
 
         <span class="c1"># compute local version of the filter matrix</span>
-        <span class="n">local_filter_matrix</span> <span class="o">=</span> <span class="n">local_filter_matrix</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kernel_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_local_h</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_local_w</span><span class="p">)</span>
+        <span class="n">local_filter_matrix</span> <span class="o">=</span> <span class="n">local_filter_matrix</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kernel_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_local_h</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_local_w</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">&quot;local_filter_matrix&quot;</span><span class="p">,</span> <span class="n">local_filter_matrix</span><span class="p">,</span> <span class="n">persistent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span>
+            <span class="s2">&quot;local_filter_matrix&quot;</span><span class="p">,</span> <span class="n">local_filter_matrix</span><span class="p">,</span> <span class="n">persistent</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
 
 <div class="viewcode-block" id="EquidistantDiscreteContinuousConvTranspose2d.get_local_filter_matrix">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.discrete_continuous_convolution.EquidistantDiscreteContinuousConvTranspose2d.html#neuralop.layers.discrete_continuous_convolution.EquidistantDiscreteContinuousConvTranspose2d.get_local_filter_matrix">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_local_filter_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_local_filter_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the precomputed local convolution filter matrix Psi.</span>
-<span class="sd">        Psi parameterizes the kernel function as triangular basis functions </span>
+<span class="sd">        Psi parameterizes the kernel function as triangular basis functions</span>
 <span class="sd">        evaluated on pairs of points on the convolution&#39;s input and output grids,</span>
 <span class="sd">        such that Psi[l, i, j] is the l-th basis function evaluated on point i in</span>
 <span class="sd">        the output grid and point j in the input grid.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_filter_matrix</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_filter_matrix</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="EquidistantDiscreteContinuousConvTranspose2d.forward">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.discrete_continuous_convolution.EquidistantDiscreteContinuousConvTranspose2d.html#neuralop.layers.discrete_continuous_convolution.EquidistantDiscreteContinuousConvTranspose2d.forward">[docs]</a>
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Forward call. Expects an input of shape batch_size x in_channels x in_shape[0] x in_shape[1].</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1001,13 +1182,22 @@
 
         <span class="c1"># padding is rounded down to give the right result when even kernels are applied</span>
         <span class="c1"># Check https://pytorch.org/docs/stable/generated/torch.nn.Conv2d.html for output shape math</span>
-        <span class="n">h_pad</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi_local_h</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span>
-        <span class="n">w_pad</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi_local_w</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">h_pad</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi_local_h</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">w_pad</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi_local_w</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="c1"># additional one-sided padding. See https://discuss.pytorch.org/t/question-of-2d-transpose-convolution/99419</span>
         <span class="n">h_pad_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_h</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi_local_h</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">h_pad</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="n">w_pad_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_w</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi_local_w</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">w_pad</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
 
-        <span class="n">out</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">conv_transpose2d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q_weight</span> <span class="o">*</span> <span class="n">x</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">scale_h</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_w</span><span class="p">],</span> <span class="n">dilation</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">padding</span><span class="o">=</span><span class="p">[</span><span class="n">h_pad</span><span class="p">,</span> <span class="n">w_pad</span><span class="p">],</span> <span class="n">output_padding</span><span class="o">=</span><span class="p">[</span><span class="n">h_pad_out</span><span class="p">,</span> <span class="n">w_pad_out</span><span class="p">],</span> <span class="n">groups</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">conv_transpose2d</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">q_weight</span> <span class="o">*</span> <span class="n">x</span><span class="p">,</span>
+            <span class="n">kernel</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="p">,</span>
+            <span class="n">stride</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">scale_h</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_w</span><span class="p">],</span>
+            <span class="n">dilation</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">padding</span><span class="o">=</span><span class="p">[</span><span class="n">h_pad</span><span class="p">,</span> <span class="n">w_pad</span><span class="p">],</span>
+            <span class="n">output_padding</span><span class="o">=</span><span class="p">[</span><span class="n">h_pad_out</span><span class="p">,</span> <span class="n">w_pad_out</span><span class="p">],</span>
+            <span class="n">groups</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">out</span></div>
 </div>
@@ -1021,7 +1211,7 @@
         <footer class="footer">
     <div class="content has-text-centered">
         <div class="block">
-          &copy; Copyright 2024, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+          &copy; Copyright 2025, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
         </div>
     </div>
   </footer>

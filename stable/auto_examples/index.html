@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Gallery of examples &#8212; neuraloperator 1.0.2 documentation</title> 
+    <title>Examples &#8212; neuraloperator 2.0.0 documentation</title> 
 <link rel="stylesheet" href="../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../_static/favicon/favicon-32x32.png">
@@ -15,24 +15,27 @@
 <link rel="shortcut icon" href="../_static/favicon/favicon.ico">
 <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/tensorly_style.css?v=a02e9698" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=5126dfd5" />
 
   
-    <script src="../_static/documentation_options.js?v=1ed6394b"></script>
+    <script src="../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
  
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Using torchtnt to count FLOPS" href="plot_count_flops.html" />
-    <link rel="prev" title="neuralop.data.transforms.data_processors.MGPatchingDataProcessor" href="../modules/generated/neuralop.data.transforms.data_processors.MGPatchingDataProcessor.html" />
+    <link rel="next" title="Data" href="data/index.html" />
+    <link rel="prev" title="neuralop.utils.compute_explained_variance" href="../modules/generated/neuralop.utils.compute_explained_variance.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   </head>
@@ -67,6 +70,9 @@
               <a class="navbar-item" href="../install.html">
               Install
             </a>
+              <a class="navbar-item" href="../theory_guide/index.html">
+              Theory Guide
+            </a>
               <a class="navbar-item" href="../user_guide/index.html">
               User Guide
             </a>
@@ -75,6 +81,9 @@
             </a>
               <a class="navbar-item" href="#">
               Examples
+            </a>
+              <a class="navbar-item" href="../dev_guide/index.html">
+              Developer's Guide
             </a>
           </div>
         
@@ -126,20 +135,18 @@
       <div class="sidebar-menu-toc">
       <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installing NeuralOperator</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">NeuralOperator User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory_guide/index.html">Theory Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules/api.html">API reference</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Gallery of examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="plot_count_flops.html">Using <cite>torchtnt</cite> to count FLOPS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_darcy_flow.html">A simple Darcy-Flow dataset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="checkpoint_FNO_darcy.html">Checkpointing and loading training states</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_SFNO_swe.html">Training a SFNO on the spherical Shallow Water equations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_UNO_darcy.html">U-NO on Darcy-Flow</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_darcy_flow_spectrum.html">A simple Darcy-Flow spectrum analysis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_FNO_darcy.html">Training an FNO on Darcy-Flow</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_incremental_FNO_darcy.html">Training an FNO with incremental meta-learning</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_DISCO_convolutions.html">Visualization of discrete-continuous convolutions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-generation">Data Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#layers">Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#models">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#training-and-meta-algorithms">Training and Meta-Algorithms</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Development guide</a></li>
 </ul>
  
       </div>
@@ -164,36 +171,93 @@
 
       <div class="container content main-content">
         
-  <section id="gallery-of-examples">
-<span id="gallery-examples"></span><h1>Gallery of examples<a class="headerlink" href="#gallery-of-examples" title="Link to this heading"></a></h1>
-<p>A gallery of interactive examples, demonstrating use cases of the library.</p>
-<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="In this example, we demonstrate how to use torchtnt to estimate the number of floating-point operations per second (FLOPS) required for a model&#x27;s forward and backward pass. "><img alt="" src="../_images/sphx_glr_plot_count_flops_thumb.png" />
-<p><a class="reference internal" href="plot_count_flops.html#sphx-glr-auto-examples-plot-count-flops-py"><span class="std std-ref">Using torchtnt to count FLOPS</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Using torchtnt to count FLOPS</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="A simple Darcy-Flow dataset"><img alt="" src="../_images/sphx_glr_plot_darcy_flow_thumb.png" />
-<p><a class="reference internal" href="plot_darcy_flow.html#sphx-glr-auto-examples-plot-darcy-flow-py"><span class="std std-ref">A simple Darcy-Flow dataset</span></a></p>
+  <section id="examples">
+<span id="gallery-examples"></span><h1>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h1>
+<p>A gallery of interactive examples that showcase how the tools we provide in <code class="docutils literal notranslate"><span class="pre">neuraloperator</span></code> can be applied to a variety of problems.
+Check out the <a class="reference internal" href="../user_guide/index.html#user-guide"><span class="std std-ref">User Guide</span></a> for more detailed information on the theory behind neural operators.</p>
+<div class="sphx-glr-thumbnails"></div><section id="data">
+<h2>Data<a class="headerlink" href="#data" title="Link to this heading"></a></h2>
+<p>Examples of NO layers in action.</p>
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="The Darcy-Flow problem is a fundamental partial differential equation (PDE) in fluid mechanics that describes the flow of a fluid through a porous medium. In this tutorial, we explore the dataset structure and visualize how the data is processed for neural operator training."><img alt="" src="../_images/sphx_glr_plot_darcy_flow_thumb.png" />
+<p><a class="reference internal" href="data/plot_darcy_flow.html#sphx-glr-auto-examples-data-plot-darcy-flow-py"><span class="std std-ref">A simple Darcy-Flow dataset</span></a></p>
   <div class="sphx-glr-thumbnail-title">A simple Darcy-Flow dataset</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="In this example, we demonstrate the Trainer&#x27;s saving and loading functionality, which makes it easy to checkpoint and resume training states. "><img alt="" src="../_images/sphx_glr_checkpoint_FNO_darcy_thumb.png" />
-<p><a class="reference internal" href="checkpoint_FNO_darcy.html#sphx-glr-auto-examples-checkpoint-fno-darcy-py"><span class="std std-ref">Checkpointing and loading training states</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Checkpointing and loading training states</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="In this example, we demonstrate how to use the small Spherical Shallow Water Equations example we ship with the package to train a Spherical Fourier-Neural Operator"><img alt="" src="../_images/sphx_glr_plot_SFNO_swe_thumb.png" />
-<p><a class="reference internal" href="plot_SFNO_swe.html#sphx-glr-auto-examples-plot-sfno-swe-py"><span class="std std-ref">Training a SFNO on the spherical Shallow Water equations</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Training a SFNO on the spherical Shallow Water equations</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="In this example, we demonstrate how to train a U-shaped Neural Operator on  the small Darcy-Flow example we ship with the package"><img alt="" src="../_images/sphx_glr_plot_UNO_darcy_thumb.png" />
-<p><a class="reference internal" href="plot_UNO_darcy.html#sphx-glr-auto-examples-plot-uno-darcy-py"><span class="std std-ref">U-NO on Darcy-Flow</span></a></p>
-  <div class="sphx-glr-thumbnail-title">U-NO on Darcy-Flow</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Short summary -------------"><img alt="" src="../_images/sphx_glr_plot_darcy_flow_spectrum_thumb.png" />
-<p><a class="reference internal" href="plot_darcy_flow_spectrum.html#sphx-glr-auto-examples-plot-darcy-flow-spectrum-py"><span class="std std-ref">A simple Darcy-Flow spectrum analysis</span></a></p>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates how to analyze the spectral characteristics of the Darcy-Flow dataset, which provides insights into the frequency content and energy distribution of the vector fields."><img alt="" src="../_images/sphx_glr_plot_darcy_flow_spectrum_thumb.png" />
+<p><a class="reference internal" href="data/plot_darcy_flow_spectrum.html#sphx-glr-auto-examples-data-plot-darcy-flow-spectrum-py"><span class="std std-ref">A simple Darcy-Flow spectrum analysis</span></a></p>
   <div class="sphx-glr-thumbnail-title">A simple Darcy-Flow spectrum analysis</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="In this example, we demonstrate how to use the small Darcy-Flow example we ship with the package to train a Fourier Neural Operator. "><img alt="" src="../_images/sphx_glr_plot_FNO_darcy_thumb.png" />
-<p><a class="reference internal" href="plot_FNO_darcy.html#sphx-glr-auto-examples-plot-fno-darcy-py"><span class="std std-ref">Training an FNO on Darcy-Flow</span></a></p>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates how to work with unstructured mesh data from computational fluid dynamics (CFD) simulations. We will explore the 3D geometry of a car and understand how pressure fields are distributed over the surface, which is crucial for aerodynamic analysis and neural operator applications."><img alt="" src="../_images/sphx_glr_plot_mini_car_cfd_thumb.png" />
+<p><a class="reference internal" href="data/plot_mini_car_cfd.html#sphx-glr-auto-examples-data-plot-mini-car-cfd-py"><span class="std std-ref">Visualizing computational fluid dynamics on a car</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Visualizing computational fluid dynamics on a car</div>
+</div></div></section>
+<section id="data-generation">
+<h2>Data Generation<a class="headerlink" href="#data-generation" title="Link to this heading"></a></h2>
+<p>Examples demonstrating the use of our built-in finite difference solver
+to generate PDE data.</p>
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="A simple finite-difference solver for the diffusion-advection equation"><img alt="" src="../_images/sphx_glr_plot_diffusion_advection_solver_thumb.gif" />
+<p><a class="reference internal" href="data_gen/plot_diffusion_advection_solver.html#sphx-glr-auto-examples-data-gen-plot-diffusion-advection-solver-py"><span class="std std-ref">A simple finite-difference solver for the diffusion-advection equation</span></a></p>
+  <div class="sphx-glr-thumbnail-title">A simple finite-difference solver for the diffusion-advection equation</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="A finite difference solver for Burgers&#x27; equation in 2 dimensions"><img alt="" src="../_images/sphx_glr_plot_burgers_2d_solver_thumb.gif" />
+<p><a class="reference internal" href="data_gen/plot_burgers_2d_solver.html#sphx-glr-auto-examples-data-gen-plot-burgers-2d-solver-py"><span class="std std-ref">A finite difference solver for Burgers’ equation in 2 dimensions</span></a></p>
+  <div class="sphx-glr-thumbnail-title">A finite difference solver for Burgers' equation in 2 dimensions</div>
+</div></div></section>
+<section id="layers">
+<h2>Layers<a class="headerlink" href="#layers" title="Link to this heading"></a></h2>
+<p>Examples of individual layers which comprise operators or parts of operators for composition into end-to-end models.</p>
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates neighbor search algorithms used in Graph Neural Operators (GNO). Neighbor search is crucial for:"><img alt="" src="../_images/sphx_glr_plot_neighbor_search_thumb.png" />
+<p><a class="reference internal" href="layers/plot_neighbor_search.html#sphx-glr-auto-examples-layers-plot-neighbor-search-py"><span class="std std-ref">Neighbor Search for Graph Neural Operators</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Neighbor Search for Graph Neural Operators</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Grid embeddings encode spatial coordinates in neural operators, helping models understand geometric structure. This tutorial shows how to use:"><img alt="" src="../_images/sphx_glr_plot_embeddings_thumb.png" />
+<p><a class="reference internal" href="layers/plot_embeddings.html#sphx-glr-auto-examples-layers-plot-embeddings-py"><span class="std std-ref">Grid Embeddings</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Grid Embeddings</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="When working with neural operators, we often need to change the resolution of our data. For some architectures, like the FNO, this is handled automatically due to the  resolution-invariant nature of the Fourier domain."><img alt="" src="../_images/sphx_glr_plot_resample_thumb.png" />
+<p><a class="reference internal" href="layers/plot_resample.html#sphx-glr-auto-examples-layers-plot-resample-py"><span class="std std-ref">Resampling layers</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Resampling layers</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Divergence-Free Spectral Projection"><img alt="" src="../_images/sphx_glr_plot_spectral_projection_thumb.png" />
+<p><a class="reference internal" href="layers/plot_spectral_projection.html#sphx-glr-auto-examples-layers-plot-spectral-projection-py"><span class="std std-ref">Divergence-Free Spectral Projection</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Divergence-Free Spectral Projection</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates Discrete-Continuous (DISCO) convolutions, which are the building blocks of localized neural operator frameworks. DISCO convolutions are crucial for:"><img alt="" src="../_images/sphx_glr_plot_DISCO_convolutions_thumb.png" />
+<p><a class="reference internal" href="layers/plot_DISCO_convolutions.html#sphx-glr-auto-examples-layers-plot-disco-convolutions-py"><span class="std std-ref">DISCO Convolutions</span></a></p>
+  <div class="sphx-glr-thumbnail-title">DISCO Convolutions</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates normalization layers designed for neural operators. Normalization is crucial for:"><img alt="" src="../_images/sphx_glr_plot_normalization_layers_thumb.png" />
+<p><a class="reference internal" href="layers/plot_normalization_layers.html#sphx-glr-auto-examples-layers-plot-normalization-layers-py"><span class="std std-ref">Normalization Layers</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Normalization Layers</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates Fourier-based differentiation methods for computing derivatives of periodic functions. Fourier differentiation is crucial for:"><img alt="" src="../_images/sphx_glr_plot_fourier_diff_thumb.png" />
+<p><a class="reference internal" href="layers/plot_fourier_diff.html#sphx-glr-auto-examples-layers-plot-fourier-diff-py"><span class="std std-ref">Fourier Differentiation</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Fourier Differentiation</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Inputs to deep learning models often represent positions on a spatial, temporal, or  spatio-temporal grid. To enrich these coordinates, positional embeddings can be introduced  to improve a model&#x27;s capacity to generalize across the domain. In this tutorial, we focus  on sinusoidal positional embeddings."><img alt="" src="../_images/sphx_glr_plot_sinusoidal_embeddings_thumb.png" />
+<p><a class="reference internal" href="layers/plot_sinusoidal_embeddings.html#sphx-glr-auto-examples-layers-plot-sinusoidal-embeddings-py"><span class="std std-ref">Sinusoidal Embeddings</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Sinusoidal Embeddings</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates Fourier continuation methods for extending non-periodic functions to periodic ones, enabling efficient spectral analysis and neural operator applications. Fourier continuation is crucial for:"><img alt="" src="../_images/sphx_glr_plot_fourier_continuation_thumb.png" />
+<p><a class="reference internal" href="layers/plot_fourier_continuation.html#sphx-glr-auto-examples-layers-plot-fourier-continuation-py"><span class="std std-ref">Fourier Continuation</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Fourier Continuation</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates the use of finite difference methods for computing derivatives of functions in neural operators. Finite differences are crucial for:"><img alt="" src="../_images/sphx_glr_plot_finite_diff_thumb.png" />
+<p><a class="reference internal" href="layers/plot_finite_diff.html#sphx-glr-auto-examples-layers-plot-finite-diff-py"><span class="std std-ref">Finite Differences</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Finite Differences</div>
+</div></div></section>
+<section id="models">
+<h2>Models<a class="headerlink" href="#models" title="Link to this heading"></a></h2>
+<p>Examples showcasing our end-to-end NO architectures.</p>
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="Using the small Spherical Shallow Water Equations example we ship with the package to train a Spherical Fourier-Neural Operator (SFNO)."><img alt="" src="../_images/sphx_glr_plot_SFNO_swe_thumb.png" />
+<p><a class="reference internal" href="models/plot_SFNO_swe.html#sphx-glr-auto-examples-models-plot-sfno-swe-py"><span class="std std-ref">Training a SFNO on the spherical Shallow Water equations</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Training a SFNO on the spherical Shallow Water equations</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Training a U-shaped Neural Operator (U-NO) on the small Darcy-Flow example we ship with the package."><img alt="" src="../_images/sphx_glr_plot_UNO_darcy_thumb.png" />
+<p><a class="reference internal" href="models/plot_UNO_darcy.html#sphx-glr-auto-examples-models-plot-uno-darcy-py"><span class="std std-ref">U-NO on Darcy-Flow</span></a></p>
+  <div class="sphx-glr-thumbnail-title">U-NO on Darcy-Flow</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="We train a Fourier Neural Operator (FNO) on our small Darcy-Flow example &lt;sphx_glr_auto_examples_data_plot_darcy_flow.py&gt;."><img alt="" src="../_images/sphx_glr_plot_FNO_darcy_thumb.png" />
+<p><a class="reference internal" href="models/plot_FNO_darcy.html#sphx-glr-auto-examples-models-plot-fno-darcy-py"><span class="std std-ref">Training an FNO on Darcy-Flow</span></a></p>
   <div class="sphx-glr-thumbnail-title">Training an FNO on Darcy-Flow</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Training an FNO with incremental meta-learning"><img alt="" src="../_images/sphx_glr_plot_incremental_FNO_darcy_thumb.png" />
-<p><a class="reference internal" href="plot_incremental_FNO_darcy.html#sphx-glr-auto-examples-plot-incremental-fno-darcy-py"><span class="std std-ref">Training an FNO with incremental meta-learning</span></a></p>
+</div></div></section>
+<section id="training-and-meta-algorithms">
+<h2>Training and Meta-Algorithms<a class="headerlink" href="#training-and-meta-algorithms" title="Link to this heading"></a></h2>
+<p>Examples to highlight our flexible <code class="docutils literal notranslate"><span class="pre">Trainer</span></code> module and the meta-algorithms built on top of it.</p>
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="A demo using torchtnt to estimate the number of floating-point operations per second (FLOPS) required for a model&#x27;s forward and backward pass. "><img alt="" src="../_images/sphx_glr_plot_count_flops_thumb.png" />
+<p><a class="reference internal" href="training/plot_count_flops.html#sphx-glr-auto-examples-training-plot-count-flops-py"><span class="std std-ref">Using torchtnt to count FLOPS</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Using torchtnt to count FLOPS</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Demonstrating the Trainer&#x27;s saving and loading functionality,  which makes it easy to checkpoint and resume training states."><img alt="" src="../_images/sphx_glr_checkpoint_FNO_darcy_thumb.png" />
+<p><a class="reference internal" href="training/checkpoint_FNO_darcy.html#sphx-glr-auto-examples-training-checkpoint-fno-darcy-py"><span class="std std-ref">Checkpointing and loading training states</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Checkpointing and loading training states</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This tutorial demonstrates incremental meta-learning for neural operators, which allows the model to gradually increase its complexity during training. This approach can lead to:"><img alt="" src="../_images/sphx_glr_plot_incremental_FNO_darcy_thumb.png" />
+<p><a class="reference internal" href="training/plot_incremental_FNO_darcy.html#sphx-glr-auto-examples-training-plot-incremental-fno-darcy-py"><span class="std std-ref">Training an FNO with incremental meta-learning</span></a></p>
   <div class="sphx-glr-thumbnail-title">Training an FNO with incremental meta-learning</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="In this example, we demonstrate the usage of the discrete-continuous (DISCO) convolutions used in the localized neural operator framework. These modules can be used on both equidistant and unstructured grids."><img alt="" src="../_images/sphx_glr_plot_DISCO_convolutions_thumb.png" />
-<p><a class="reference internal" href="plot_DISCO_convolutions.html#sphx-glr-auto-examples-plot-disco-convolutions-py"><span class="std std-ref">Visualization of discrete-continuous convolutions</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Visualization of discrete-continuous convolutions</div>
 </div></div><div class="toctree-wrapper compound">
 </div>
 <div class="sphx-glr-footer sphx-glr-footer-gallery docutils container">
@@ -206,6 +270,7 @@
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </section>
+</section>
 
 
       </div>
@@ -213,16 +278,16 @@
       
         <nav class="pagination" role="navigation" aria-label="pagination">
     
-    <a class="button pagination-previous" href="../modules/generated/neuralop.data.transforms.data_processors.MGPatchingDataProcessor.html" title="previous page" accesskey="p">
+    <a class="button pagination-previous" href="../modules/generated/neuralop.utils.compute_explained_variance.html" title="previous page" accesskey="p">
         <span class="icon">
             <i class="fa fa-arrow-circle-left"></i>
         </span>
-        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.transforms.data_processors</span></code>.MGPatchingDataProcessor</span>
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.utils</span></code>.compute_explained_variance</span>
     </a>
     
     
-    <a class="button pagination-next" href="plot_count_flops.html" title="next page" accesskey="n">
-        <span>Using <cite>torchtnt</cite> to count FLOPS </span>
+    <a class="button pagination-next" href="data/index.html" title="next page" accesskey="n">
+        <span>Data </span>
         <span class="icon">
             <i class="fa fa-arrow-circle-right"></i>
         </span>
@@ -235,7 +300,7 @@
         <footer class="footer">
     <div class="content has-text-centered">
         <div class="block">
-          &copy; Copyright 2024, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+          &copy; Copyright 2025, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
         </div>
     </div>
   </footer>
@@ -246,6 +311,31 @@
 
 	
     
+    <div class="column is-hidden-touch is-2-desktop is-one-fifth-widescreen" id="localtoc-column">
+
+    <aside class="sticky-nav localtoc"> 
+        <p class="menu-label"> 
+            <span class="icon-text">
+                <span class="icon"><i class="fas fa-duotone fa-list"></i></span>
+                <span> On this page </span>
+            </span>
+        </p>
+
+        <div class="menu menu-list localtoc-list">
+        <ul>
+<li><a class="reference internal" href="#">Examples</a><ul>
+<li><a class="reference internal" href="#data">Data</a></li>
+<li><a class="reference internal" href="#data-generation">Data Generation</a></li>
+<li><a class="reference internal" href="#layers">Layers</a></li>
+<li><a class="reference internal" href="#models">Models</a></li>
+<li><a class="reference internal" href="#training-and-meta-algorithms">Training and Meta-Algorithms</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+    </aside>
+    </div>
 
   
 

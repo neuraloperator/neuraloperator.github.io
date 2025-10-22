@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Neural Operator Applications &#8212; neuraloperator 2.0.0 documentation</title> 
+<link rel="stylesheet" href="../_static/tensorly_style.css">
+<link rel="apple-touch-icon" sizes="180x180" href="../_static/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../_static/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../_static/favicon/favicon-16x16.png">
+<link rel="manifest" href="../_static/favicon/site.webmanifest">
+<link rel="mask-icon" href="../_static/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="../_static/favicon/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/tensorly_style.css?v=a02e9698" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=5126dfd5" />
+
+  
+    <script src="../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+ <script src="../_static/navbar_burger.js"></script>
+ <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+ 
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="User Guide" href="../user_guide/index.html" />
+    <link rel="prev" title="Advantages of Neural Operators" href="advantages.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  </head>
+<body  class="has-navbar-fixed-top">
+
+  <header>
+    <navbar>
+      <nav class="navbar top-navbar is-fixed-top has-shadow is-flex-wrap-wrap" role="navigation" aria-label="main top navigation">
+        <div class="navbar-brand">
+        
+
+          <a class="navbar-item" href="../index.html">
+            <img src="../_static/neuraloperator_logo.png" height="28">
+          </a>
+          <a class="navbar-item is-hidden-desktop" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon"><i class="fab fa-github"></i></span>
+          </a>
+
+          <a role="button" class="navbar-burger" data-target="top-nav-menu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+
+        </div>
+        
+        <div class="navbar-menu" id="top-nav-menu">
+        
+
+          <div class="navbar-start">
+            
+              <a class="navbar-item" href="../install.html">
+              Install
+            </a>
+              <a class="navbar-item" href="index.html">
+              Theory Guide
+            </a>
+              <a class="navbar-item" href="../user_guide/index.html">
+              User Guide
+            </a>
+              <a class="navbar-item" href="../modules/api.html">
+              API
+            </a>
+              <a class="navbar-item" href="../auto_examples/index.html">
+              Examples
+            </a>
+              <a class="navbar-item" href="../dev_guide/index.html">
+              Developer's Guide
+            </a>
+          </div>
+        
+          <div class="navbar-end">
+            <div class="navbar-item">
+            
+            <a class="button is-hidden-touch is-dark" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon-text">
+                <span class="icon is-large">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Github</span>
+              </span>
+            </a>
+
+            </div> 
+          </div> 
+        </div> 
+
+      </nav>
+      
+    </navbar>
+  </header>
+
+
+  <div id="column-container">
+  <div class="columns is-mobile is-centered">
+	
+  
+      <div class="column is-10-mobile is-one-third-tablet is-3-desktop is-hidden-mobile" id="sidebar">
+    
+    <aside class="sticky-nav sidebar-menu">
+<div class="sidebar-search">
+  <form class="field" id="searchbox" role="search" action="../search.html" method="get">
+    <!-- <label class="label" id="searchlabel">Quick search</label> -->
+    <div class="field has-addons">
+      <div class="control is-expanded">
+        <input class="input" type="text" placeholder="Search the doc" name="q" aria-labelledby="searchlabel autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      </div>
+      <div class="control">
+        <input class="button is-info" type="submit" value="Go" />
+      </div>
+    </div>
+  </form>
+  <script>document.getElementById('searchbox').style.display = "block"</script>
+
+</div>
+      
+      <div class="sidebar-menu-toc">
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installing NeuralOperator</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Theory Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="neural_operators.html">Neural Operators: an Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fno.html">Fourier Neural Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advantages.html">Advantages of Neural Operators</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Neural Operator Applications</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Development guide</a></li>
+</ul>
+ 
+      </div>
+    </aside>
+  </div>
+  
+
+  <div class="column main-column">
+
+    
+    <div class="main-section">
+
+      
+      
+      <div class="side-menu-toggle">
+        <button class="button" id="toggle-sidebar" onclick="toggle_sidebar()">
+          <span class="icon"><i class="fa fa-bars" aria-hidden="true"></i></span>
+          <span>menu</span> 
+        </button>
+      </div>
+      
+
+      <div class="container content main-content">
+        
+  <section id="neural-operator-applications">
+<span id="neural-op-applications"></span><h1>Neural Operator Applications<a class="headerlink" href="#neural-operator-applications" title="Link to this heading"></a></h1>
+<p>This guide presents examples of neural operator applications across scientific and
+engineering domains, demonstrating their transformative impact on computational
+science and real-world problem solving.</p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
+<p>Neural operators have been successfully applied to a wide variety of scientific and
+engineering problems, from fluid dynamics and climate modeling to materials
+science and biomedical applications. Their ability to learn mappings between
+function spaces makes them particularly well-suited for problems involving
+continuous physical phenomena governed by partial differential equations.</p>
+<p>The examples presented here span multiple scales, from molecular dynamics to climate systems,
+and demonstrate the versatility of neural operators in handling complex,
+multi-physics problems that were previously computationally prohibitive or
+intractable with traditional methods. This is not an exhaustive list, but rather
+a selection of representative applications that showcase the potential of neural operators.</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="fluid-and-solid-mechanics">
+<h2>Fluid and Solid Mechanics<a class="headerlink" href="#fluid-and-solid-mechanics" title="Link to this heading"></a></h2>
+<p><strong>Computational Mechanics Applications</strong></p>
+<p>Neural operators have fostered significant advancements in computational mechanics,
+including modeling porous media, fluid mechanics, and solid mechanics <a class="footnote-reference brackets" href="#id39" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id40" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>.
+They offer substantial speedups over traditional numerical solvers while achieving
+competitive accuracies and expanding their features <a class="footnote-reference brackets" href="#id41" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id42" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a>.</p>
+<p><strong>Turbulent Flow Modeling</strong></p>
+<p>Fourier Neural Operators (FNOs) constitute the first machine learning-based method
+to successfully model turbulent flows with zero-shot super-resolution capabilities <a class="footnote-reference brackets" href="#id43" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a>.
+This breakthrough enables researchers to predict complex fluid behavior at resolutions
+that were previously computationally prohibitive. The ability to generalize across
+different Reynolds numbers and flow geometries makes FNOs particularly valuable for
+industrial applications where traditional computational fluid dynamics methods would
+require extensive computational resources.</p>
+<p><strong>Stabilization Techniques</strong></p>
+<p>Sobolev losses and dissipativity-inducing regularization terms are effective in
+stabilizing long autoregressive rollouts for highly turbulent flows <a class="footnote-reference brackets" href="#id44" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></a>. These
+techniques ensure that neural operators maintain physical consistency over extended
+time periods, which is crucial for applications such as weather forecasting and
+climate modeling where long-term stability is essential.</p>
+<p><strong>Large-Scale Simulations</strong></p>
+<p>Neural operators have also been used in large eddy simulations of three-dimensional
+turbulence <a class="footnote-reference brackets" href="#id42" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a> and to learn the stress-strain fields in digital composites <a class="footnote-reference brackets" href="#id45" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></a>.
+These applications demonstrate the versatility of neural operators in handling
+complex multi-physics problems that involve multiple length and time scales. The
+ability to learn from high-fidelity simulation data and then rapidly predict
+solutions for new configurations makes neural operators invaluable for design
+optimization and uncertainty quantification.</p>
+<p><strong>Probabilistic Modeling</strong></p>
+<p>Finally, neural operators have been used in combination with diffusion models on function
+spaces to learn distributions over solutions when given sparse or noisy observations <a class="footnote-reference brackets" href="#id46" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>9<span class="fn-bracket">]</span></a>.
+This capability is particularly important for real-world applications where data may be
+incomplete or uncertain, enabling robust predictions even in the presence of measurement
+noise or missing information.</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="nuclear-fusion-and-plasma-physics">
+<h2>Nuclear Fusion and Plasma Physics<a class="headerlink" href="#nuclear-fusion-and-plasma-physics" title="Link to this heading"></a></h2>
+<p><strong>Magnetohydrodynamic Simulations</strong></p>
+<p>Neural operators have been used to accelerate magnetohydrodynamic (MHD) simulations
+for plasma evolution both from state and camera data <a class="footnote-reference brackets" href="#id47" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>10<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id48" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>11<span class="fn-bracket">]</span></a>. This represents a
+significant advancement in fusion energy research, where understanding plasma behavior
+is crucial for developing sustainable fusion reactors. The ability to rapidly simulate
+complex plasma dynamics enables researchers to explore a wider range of operating
+conditions and design parameters than would be possible with traditional methods.</p>
+<p><strong>Plasma Instability Analysis</strong></p>
+<p>Instabilities arising in long-term rollouts using neural operators for plasma evolution
+have been studied <a class="footnote-reference brackets" href="#id49" id="id12" role="doc-noteref"><span class="fn-bracket">[</span>12<span class="fn-bracket">]</span></a>, together with the potential of learning across different MHD
+simulation codes, data fidelities, and subsets of state variables. This research is
+critical for understanding how plasma instabilities develop and propagate in fusion
+devices, which directly impacts the efficiency and safety of fusion reactors.</p>
+<p><strong>Tokamak Discharge Classification</strong></p>
+<p>Furthermore, neural operators have been used for labeling the confinement states of
+tokamak discharges <a class="footnote-reference brackets" href="#id50" id="id13" role="doc-noteref"><span class="fn-bracket">[</span>13<span class="fn-bracket">]</span></a>. This application is particularly important for real-time
+control of fusion experiments, where rapid classification of plasma states can help
+operators make informed decisions about experimental parameters and safety protocols.
+The ability to process high-dimensional plasma data in real-time represents a major
+step forward in fusion energy research and development.</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="geoscience-and-environmental-engineering">
+<h2>Geoscience and Environmental Engineering<a class="headerlink" href="#geoscience-and-environmental-engineering" title="Link to this heading"></a></h2>
+<p><strong>Seismic Wave Propagation and Inversion</strong></p>
+<p>In the geosciences, FNOs and UNOs have been used for seismic wave propagation and
+inversion <a class="footnote-reference brackets" href="#id51" id="id14" role="doc-noteref"><span class="fn-bracket">[</span>14<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id52" id="id15" role="doc-noteref"><span class="fn-bracket">[</span>15<span class="fn-bracket">]</span></a>. These applications are crucial for understanding Earth’s
+internal structure and for oil and gas exploration. The ability to rapidly process
+seismic data and invert for subsurface properties enables geophysicists to make
+more informed decisions about resource exploration and geological hazard assessment.</p>
+<p><strong>Earth Surface Movement Modeling</strong></p>
+<p>Extensions of generative models to function spaces have been employed to model earth
+surface movements in response to volcanic eruptions or earthquakes, or subsidence
+due to excessive groundwater extraction <a class="footnote-reference brackets" href="#id53" id="id16" role="doc-noteref"><span class="fn-bracket">[</span>16<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id54" id="id17" role="doc-noteref"><span class="fn-bracket">[</span>17<span class="fn-bracket">]</span></a>. These applications are essential
+for understanding natural hazards and their impact on human populations. The ability
+to predict ground deformation patterns helps in disaster preparedness and mitigation
+planning, particularly in regions prone to seismic activity or volcanic eruptions.</p>
+<p><strong>Multiphase Flow in Porous Media</strong></p>
+<p>Neural operators have also been used to model multiphase flow in porous media, which
+is critical for applications such as contaminant transport, carbon capture and storage,
+hydrogen storage, and nuclear waste storage <a class="footnote-reference brackets" href="#id55" id="id18" role="doc-noteref"><span class="fn-bracket">[</span>18<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id56" id="id19" role="doc-noteref"><span class="fn-bracket">[</span>19<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id57" id="id20" role="doc-noteref"><span class="fn-bracket">[</span>20<span class="fn-bracket">]</span></a>. These applications are
+increasingly important as society seeks to address climate change through carbon
+capture technologies and transition to clean energy sources. The ability to accurately
+model fluid flow in complex geological formations is crucial for ensuring the safety
+and effectiveness of these technologies.</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="weather-and-climate-forecasting">
+<h2>Weather and Climate Forecasting<a class="headerlink" href="#weather-and-climate-forecasting" title="Link to this heading"></a></h2>
+<p><strong>Numerical Weather Prediction</strong></p>
+<p>Versions of FNOs can match the accuracy of physics-based numerical weather
+prediction systems while being orders-of-magnitude faster <a class="footnote-reference brackets" href="#id41" id="id21" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id58" id="id22" role="doc-noteref"><span class="fn-bracket">[</span>21<span class="fn-bracket">]</span></a>. This represents
+a paradigm shift in weather forecasting, enabling more frequent and higher-resolution
+forecasts that can better capture local weather phenomena. The speed advantage of
+neural operators allows for ensemble forecasting and rapid updates as new data becomes
+available, which is crucial for severe weather warnings and emergency response.</p>
+<p><strong>Spherical Geometry Handling</strong></p>
+<p>To facilitate stable simulations of atmospheric dynamics on the earth, the spherical
+Fourier neural operator (SFNO) has been introduced to extend FNOs to spherical
+geometries <a class="footnote-reference brackets" href="#id59" id="id23" role="doc-noteref"><span class="fn-bracket">[</span>22<span class="fn-bracket">]</span></a>. This development is particularly important for global weather
+and climate modeling, where the Earth’s spherical geometry must be properly
+accounted for to avoid numerical artifacts and maintain physical consistency.
+The SFNO enables accurate modeling of atmospheric circulation patterns and
+large-scale climate phenomena.</p>
+<p><strong>Climate Data Downscaling</strong></p>
+<p>The super-resolution capabilities of FNOs have also been leveraged for downscaling
+of climate data, i.e., predicting climate variables at high resolutions from
+low-resolution simulations <a class="footnote-reference brackets" href="#id60" id="id24" role="doc-noteref"><span class="fn-bracket">[</span>23<span class="fn-bracket">]</span></a>. This capability is essential for regional
+climate impact assessments, where high-resolution local climate information is
+needed for planning and adaptation strategies. The ability to downscale global
+climate models to local scales enables more accurate assessment of climate change
+impacts on specific regions and communities.</p>
+<p><strong>Climate Tipping Points</strong></p>
+<p>Additionally, neural operators have been utilized for tipping point forecasting,
+with potential applications to climate tipping points <a class="footnote-reference brackets" href="#id61" id="id25" role="doc-noteref"><span class="fn-bracket">[</span>24<span class="fn-bracket">]</span></a>. This research is
+critical for understanding the potential for abrupt climate changes and their
+cascading effects on global climate systems. The ability to identify and predict
+climate tipping points could provide early warning systems for catastrophic
+climate changes and inform mitigation strategies.</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="medicine-and-healthcare">
+<h2>Medicine and Healthcare<a class="headerlink" href="#medicine-and-healthcare" title="Link to this heading"></a></h2>
+<p><strong>Medical Imaging Applications</strong></p>
+<p>Neural operators have been used in multiple settings to improve medical imaging,
+such as ultrasound computer tomography <a class="footnote-reference brackets" href="#id62" id="id26" role="doc-noteref"><span class="fn-bracket">[</span>25<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id63" id="id27" role="doc-noteref"><span class="fn-bracket">[</span>26<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id64" id="id28" role="doc-noteref"><span class="fn-bracket">[</span>27<span class="fn-bracket">]</span></a>. These applications represent
+a significant advancement in medical diagnostics, enabling more accurate and
+rapid imaging procedures that can improve patient outcomes and reduce healthcare costs.</p>
+<p><strong>Lung Disease Diagnosis</strong></p>
+<p>As an example, they have been used on radio-frequency data from lung ultrasounds
+to accurately reconstruct lung aeration maps, which can be used for diagnosing
+and monitoring acute and chronic lung diseases <a class="footnote-reference brackets" href="#id64" id="id29" role="doc-noteref"><span class="fn-bracket">[</span>27<span class="fn-bracket">]</span></a>. This application is particularly
+important for respiratory medicine, where early detection of lung conditions can
+significantly improve treatment outcomes. The ability to process ultrasound data
+in real-time enables point-of-care diagnostics in resource-limited settings.</p>
+<p><strong>MRI Reconstruction</strong></p>
+<p>FNOs supplemented with local integral and differential kernels have been used for
+MRI reconstructions <a class="footnote-reference brackets" href="#id65" id="id30" role="doc-noteref"><span class="fn-bracket">[</span>28<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id66" id="id31" role="doc-noteref"><span class="fn-bracket">[</span>29<span class="fn-bracket">]</span></a>. This development is crucial for reducing scan times
+and improving image quality in magnetic resonance imaging. The ability to reconstruct
+high-quality images from undersampled data enables faster and more comfortable
+patient experiences while maintaining diagnostic accuracy.</p>
+<p><strong>Medical Device Design</strong></p>
+<p>Neural operators have also been used to improve the design of medical devices,
+such as catheters with reduced risk of catheter-associated urinary tract infection <a class="footnote-reference brackets" href="#id67" id="id32" role="doc-noteref"><span class="fn-bracket">[</span>30<span class="fn-bracket">]</span></a>.
+This application demonstrates the potential of neural operators in biomedical
+engineering, where understanding fluid dynamics and material properties is crucial
+for designing safer and more effective medical devices.</p>
+<p><strong>Spatial Transcriptomics</strong></p>
+<p>Finally, GNOs have been used for spatial transcriptomics data classification <a class="footnote-reference brackets" href="#id68" id="id33" role="doc-noteref"><span class="fn-bracket">[</span>31<span class="fn-bracket">]</span></a>.
+This application is at the forefront of precision medicine, where understanding
+the spatial organization of gene expression in tissues can provide insights into
+disease mechanisms and potential therapeutic targets. The ability to process
+high-dimensional biological data efficiently enables researchers to explore
+complex biological systems at unprecedented resolution.</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="computer-vision">
+<h2>Computer Vision<a class="headerlink" href="#computer-vision" title="Link to this heading"></a></h2>
+<p>Neural operators have been effectively adapted to computer vision tasks.
+They have served as efficient token mixers in vision transformers <a href="#id69"><span class="problematic" id="id34">[32]_</span></a>, sped up diffusion
+model sampling for faster image and media generation <a href="#id70"><span class="problematic" id="id35">[33]_</span></a>, and have been applied in
+image classification <a href="#id71"><span class="problematic" id="id36">[34]_</span></a> and segmentation <a href="#id72"><span class="problematic" id="id37">[35]_</span></a>.</p>
+<p>Their ability to handle images at multiple resolutions and integrate with existing deep
+learning methods makes them a versatile tool for vision applications.</p>
+<div style="margin-top: 3em;"></div></section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id38" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Principled Approaches for Extending Neural Architectures to Function Spaces for Operator Learning,
+Julius Berner, Miguel Liu-Schiaffini, Jean Kossaifi, Valentin Duruisseaux,
+Boris Bonev, Kamyar Azizzadenesheli, Anima Anandkumar, 2025.
+arXiv:2506.10973. https://arxiv.org/abs/2506.10973</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id39" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">2</a><span class="fn-bracket">]</span></span>
+<p>Learning deep implicit Fourier neural operators (IFNOs) with applications to heterogeneous material modeling,
+Huaiqian You, Quinn Zhang, Colton J Ross, Chung-Hao Lee, Yue Yu, 2022.
+Computer Methods in Applied Mechanics and Engineering, 398, 115296.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id40" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">3</a><span class="fn-bracket">]</span></span>
+<p>Fourier Neural Operator for Fluid Flow in Small-Shape 2D Simulated Porous Media Dataset,
+A Choubineh, J Chen, DA Wood, F Coenen, F Ma, 2023.
+Algorithms, 16(1), 24.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id41" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id3">1</a>,<a role="doc-backlink" href="#id21">2</a>)</span>
+<p>FourCastNet: Accelerating Global High-Resolution Weather Forecasting Using Adaptive Fourier Neural Operators,
+Thorsten Kurth, Shashank Subramanian, Peter Harrington, Jaideep Pathak, Morteza Mardani,
+David Hall, Andrea Miele, Karthik Kashinath, Anima Anandkumar, 2023.
+Proceedings of the Platform for Advanced Scientific Computing Conference.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id42" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id4">1</a>,<a role="doc-backlink" href="#id7">2</a>)</span>
+<p>Fourier neural operator approach to large eddy simulation of three-dimensional turbulence,
+Zhijie Li, Wenhui Peng, Zelong Yuan, Jianchun Wang, 2022.
+Theoretical and Applied Mechanics Letters, 12(6), 100389.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id43" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">6</a><span class="fn-bracket">]</span></span>
+<p>Efficient super-resolution of near-surface climate modeling using the Fourier neural operator,
+P Jiang, Z Yang, J Wang, C Huang, P Xue, TC Chakraborty, 2023.
+Journal of Advances in Modeling Earth Systems, 15.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id44" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id6">7</a><span class="fn-bracket">]</span></span>
+<p>Learning the stress-strain fields in digital composites using Fourier neural operator,
+Meer Mehran Rashid, Tanu Pittie, Souvik Chakraborty, N.M. Anoop Krishnan, 2022.
+iScience, 25(11), 105452.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id45" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id8">8</a><span class="fn-bracket">]</span></span>
+<p>Guided Diffusion Sampling on Function Spaces with Applications to PDEs,
+Jiachen Yao, Abbas Mammadov, Julius Berner, Gavin Kerrigan, Jong Chul Ye,
+Kamyar Azizzadenesheli, Anima Anandkumar, 2025.
+arXiv:2505.17004.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id46" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id9">9</a><span class="fn-bracket">]</span></span>
+<p>Plasma surrogate modelling using Fourier neural operators,
+Vignesh Gopakumar, Stanislas Pamela, Lorenzo Zanisi, Zongyi Li, Ander Gray,
+Daniel Brennand, Nitesh Bhatia, Gregory Stathopoulos, Matt Kusner,
+Marc Peter Deisenroth, Anima Anandkumar, 2024.
+Nuclear Fusion, 64(5), 056025.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id47" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id10">10</a><span class="fn-bracket">]</span></span>
+<p>Neural-Parareal: Self-improving acceleration of fusion MHD simulations using time-parallelisation and neural operators,
+S.J.P. Pamela, N. Carey, J. Brandstetter, R. Akers, L. Zanisi, J. Buchanan,
+V. Gopakumar, M. Hoelzl, G. Huijsmans, K. Pentland, T. James, G. Antonucci, 2025.
+Computer Physics Communications, 307, 109391.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id48" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id11">11</a><span class="fn-bracket">]</span></span>
+<p>Robust Confinement State Classification with Uncertainty Quantification through Ensembled Data-Driven Methods,
+Yoeri Poels, Cristina Venturini, Alessandro Pau, Olivier Sauter, Vlado Menkovski,
+the TCV team, the WPTE team, 2025.
+arXiv:2502.17397.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id49" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id12">12</a><span class="fn-bracket">]</span></span>
+<p>Seismic wave propagation and inversion with neural operators,
+Yan Yang, Angela F Gao, Jorge C Castellanos, Zachary E Ross,
+Kamyar Azizzadenesheli, Robert W Clayton, 2021.
+The Seismic Record, 1(3), 126-134.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id50" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id13">13</a><span class="fn-bracket">]</span></span>
+<p>Accelerating Time-Reversal Imaging with Neural Operators for Real-time Earthquake Locations,
+Hongyu Sun, Yan Yang, Kamyar Azizzadenesheli, Robert W Clayton, Zachary E Ross, 2022.
+arXiv:2210.06636.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id51" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id14">14</a><span class="fn-bracket">]</span></span>
+<p>Generative adversarial neural operators,
+Md Ashiqur Rahman, Manuel A Florez, Anima Anandkumar, Zachary E Ross,
+Kamyar Azizzadenesheli, 2022.
+arXiv:2205.03017.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id52" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id15">15</a><span class="fn-bracket">]</span></span>
+<p>Variational Autoencoding Neural Operators,
+Jacob H Seidman, Georgios Kissas, George J Pappas, Paris Perdikaris, 2023.
+arXiv:2302.10351.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id53" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id16">16</a><span class="fn-bracket">]</span></span>
+<p>Real-time high-resolution CO2 geological storage prediction using nested Fourier neural operators,
+Gege Wen, Zongyi Li, Qirui Long, Kamyar Azizzadenesheli, Anima Anandkumar,
+Sally M Benson, 2023.
+Energy Environ. Sci., 16(4), 1732-1741.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id54" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id17">17</a><span class="fn-bracket">]</span></span>
+<p>Fourier Neural Operator based surrogates for CO2 storage in realistic geologies,
+Anirban Chandra, Marius Koch, Suraj Pawar, Aniruddha Panda,
+Kamyar Azizzadenesheli, Jeroen Snippe, Faruk O Alpak, Farah Hariri,
+Clement Etienam, Pandu Devarakota, Anima Anandkumar, Detlef Hohl, 2025.
+arXiv:2503.11031.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id55" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id18">18</a><span class="fn-bracket">]</span></span>
+<p>Huge ensembles part i: Design of ensemble weather forecasts using spherical Fourier neural operators,
+Ankur Mahesh, William Collins, Boris Bonev, Noah Brenowitz, Yair Cohen,
+Joshua Elms, Peter Harrington, Karthik Kashinath, Thorsten Kurth,
+Joshua North, 2024.
+arXiv:2408.03100.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id56" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id19">19</a><span class="fn-bracket">]</span></span>
+<p>Spherical Fourier neural operators: learning stable dynamics on the sphere,
+Boris Bonev, Thorsten Kurth, Christian Hundt, Jaideep Pathak, Maximilian Baust,
+Karthik Kashinath, Anima Anandkumar, 2023.
+Proceedings of the 40th International Conference on Machine Learning (ICML).</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id57" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id20">20</a><span class="fn-bracket">]</span></span>
+<p>Fourier Neural Operators for Arbitrary Resolution Climate Data Downscaling,
+Qidong Yang, Paula Harder, Venkatesh Ramesh, Alex Hernandez-Garcia,
+Daniela Szwarcman, Prasanna Sattigeri, Campbell D Watson, David Rolnick, 2023.
+ICLR 2023 Workshop on Tackling Climate Change with Machine Learning.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id58" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id22">21</a><span class="fn-bracket">]</span></span>
+<p>Tipping Point Forecasting in Non-Stationary Dynamics on Function Spaces,
+Miguel Liu-Schiaffini, Clare E Singer, Nikola Kovachki, Tapio Schneider,
+Kamyar Azizzadenesheli, Anima Anandkumar, 2023.
+arXiv:2308.08794.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id59" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id23">22</a><span class="fn-bracket">]</span></span>
+<p>Ultrasound Lung Aeration Map via Physics-Aware Neural Operators,
+Jiayun Wang, Oleksii Ostras, Masashi Sode, Bahareh Tolooshams, Zongyi Li,
+Kamyar Azizzadenesheli, Gianmarco Pinton, Anima Anandkumar, 2025.
+arXiv:2501.01157.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id60" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id24">23</a><span class="fn-bracket">]</span></span>
+<p>A Unified Model for Compressed Sensing MRI Across Undersampling Patterns,
+Armeet Singh Jatyani, Jiayun Wang, Aditi Chandrashekar, Zihui Wu,
+Miguel Liu-Schiaffini, Bahareh Tolooshams, Anima Anandkumar, 2024.
+arXiv:2410.16290.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id61" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id25">24</a><span class="fn-bracket">]</span></span>
+<p>AI-aided geometric design of anti-infection catheters,
+Tingtao Zhou, Xuan Wan, Daniel Zhengyu Huang, Zongyi Li, Zhiwei Peng,
+Anima Anandkumar, John F Brady, Paul W Sternberg, Chiara Daraio, 2024.
+Science Advances, 10(1).</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id62" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id26">25</a><span class="fn-bracket">]</span></span>
+<p>Neural Operator Learning for Ultrasound Tomography Inversion,
+Haocheng Dai, Michael Penwarden, Robert M Kirby, Sarang Joshi, 2023.
+arXiv:2304.03297.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id63" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id27">26</a><span class="fn-bracket">]</span></span>
+<p>Neural Born Series Operator for Biomedical Ultrasound Computed Tomography,
+Zhijun Zeng, Yihang Zheng, Youjia Zheng, Yubing Li, Zuoqiang Shi, He Sun, 2023.
+arXiv:2312.15575.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id64" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>27<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id28">1</a>,<a role="doc-backlink" href="#id29">2</a>)</span>
+<p>Graph Neural Operators for Classification of Spatial Transcriptomics Data,
+Junaid Ahmed, Alhassan S Yasin, 2023.
+arXiv:2302.00658.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id65" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id30">28</a><span class="fn-bracket">]</span></span>
+<p>Adaptive Fourier neural operators: Efficient token mixers for transformers,
+John Guibas, Morteza Mardani, Zongyi Li, Andrew Tao, Anima Anandkumar,
+Bryan Catanzaro, 2021.
+arXiv:2111.13587.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id66" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id31">29</a><span class="fn-bracket">]</span></span>
+<p>Fast sampling of diffusion models via operator learning,
+Hongkai Zheng, Weili Nie, Arash Vahdat, Kamyar Azizzadenesheli, Anima Anandkumar, 2023.
+International Conference on Machine Learning.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id67" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id32">30</a><span class="fn-bracket">]</span></span>
+<p>Resolution-invariant image classification based on Fourier neural operators,
+Samira Kabri, Tim Roith, Daniel Tenbrinck, Martin Burger, 2023.
+International Conference on Scale Space and Variational Methods in Computer Vision.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id68" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id33">31</a><span class="fn-bracket">]</span></span>
+<p>FNOSeg3D: Resolution-Robust 3D Image Segmentation with Fourier Neural Operator,
+Ken CL Wong, Hongzhi Wang, Tanveer Syeda-Mahmood, 2023.
+2023 IEEE 20th International Symposium on Biomedical Imaging (ISBI).</p>
+</aside>
+</aside>
+<div style="margin-top: 3em;"></div></section>
+</section>
+
+
+      </div>
+
+      
+        <nav class="pagination" role="navigation" aria-label="pagination">
+    
+    <a class="button pagination-previous" href="advantages.html" title="previous page" accesskey="p">
+        <span class="icon">
+            <i class="fa fa-arrow-circle-left"></i>
+        </span>
+        <span>Advantages of Neural Operators</span>
+    </a>
+    
+    
+    <a class="button pagination-next" href="../user_guide/index.html" title="next page" accesskey="n">
+        <span>User Guide </span>
+        <span class="icon">
+            <i class="fa fa-arrow-circle-right"></i>
+        </span>
+    </a>
+    
+</nav>
+
+      
+
+        <footer class="footer">
+    <div class="content has-text-centered">
+        <div class="block">
+          &copy; Copyright 2025, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+        </div>
+    </div>
+  </footer>
+
+    </div>
+
+  </div>  
+
+	
+    
+    <div class="column is-hidden-touch is-2-desktop is-one-fifth-widescreen" id="localtoc-column">
+
+    <aside class="sticky-nav localtoc"> 
+        <p class="menu-label"> 
+            <span class="icon-text">
+                <span class="icon"><i class="fas fa-duotone fa-list"></i></span>
+                <span> On this page </span>
+            </span>
+        </p>
+
+        <div class="menu menu-list localtoc-list">
+        <ul>
+<li><a class="reference internal" href="#">Neural Operator Applications</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#fluid-and-solid-mechanics">Fluid and Solid Mechanics</a></li>
+<li><a class="reference internal" href="#nuclear-fusion-and-plasma-physics">Nuclear Fusion and Plasma Physics</a></li>
+<li><a class="reference internal" href="#geoscience-and-environmental-engineering">Geoscience and Environmental Engineering</a></li>
+<li><a class="reference internal" href="#weather-and-climate-forecasting">Weather and Climate Forecasting</a></li>
+<li><a class="reference internal" href="#medicine-and-healthcare">Medicine and Healthcare</a></li>
+<li><a class="reference internal" href="#computer-vision">Computer Vision</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+    </aside>
+    </div>
+
+  
+
+  </div>  
+  </div> 
+
+  
+  <script>
+    function toggle_sidebar() {
+        var element = document.getElementById("sidebar");
+        var container = document.getElementById("column-container");
+        var localtoccolumn = document.getElementById("localtoc-column");
+        element.classList.toggle("hide-tablet");
+        element.classList.toggle("is-hidden-mobile");
+        container.classList.toggle("sidemenu-hidden");
+        localtoccolumn.classList.toggle("is-one-fifth-widescreen");
+        localtoccolumn.classList.toggle("is-2-desktop");
+        localtoccolumn.classList.toggle("is-3-desktop");
+    }
+  </script> 
+
+
+
+  </body>
+</html>

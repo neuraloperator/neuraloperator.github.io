@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>neuralop.training.IncrementalFNOTrainer &#8212; neuraloperator 1.0.2 documentation</title> 
+    <title>neuralop.training.IncrementalFNOTrainer &#8212; neuraloperator 2.0.0 documentation</title> 
 <link rel="stylesheet" href="../../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../_static/favicon/favicon-32x32.png">
@@ -15,23 +15,26 @@
 <link rel="shortcut icon" href="../../_static/favicon/favicon.ico">
 <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/tensorly_style.css?v=a02e9698" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=5126dfd5" />
 
   
-    <script src="../../_static/documentation_options.js?v=1ed6394b"></script>
+    <script src="../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
  
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="neuralop.losses.LpLoss" href="neuralop.losses.LpLoss.html" />
+    <link rel="next" title="neuralop.training.torch_setup.setup" href="neuralop.training.torch_setup.setup.html" />
     <link rel="prev" title="neuralop.training.Trainer" href="neuralop.training.Trainer.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -67,6 +70,9 @@
               <a class="navbar-item" href="../../install.html">
               Install
             </a>
+              <a class="navbar-item" href="../../theory_guide/index.html">
+              Theory Guide
+            </a>
               <a class="navbar-item" href="../../user_guide/index.html">
               User Guide
             </a>
@@ -75,6 +81,9 @@
             </a>
               <a class="navbar-item" href="../../auto_examples/index.html">
               Examples
+            </a>
+              <a class="navbar-item" href="../../dev_guide/index.html">
+              Developer's Guide
             </a>
           </div>
         
@@ -126,16 +135,20 @@
       <div class="sidebar-menu-toc">
       <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing NeuralOperator</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">NeuralOperator User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory_guide/index.html">Theory Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User Guide</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../api.html#models">Models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.layers">Layers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#model-dispatching">Model Dispatching</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../api.html#training">Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#loss-functions">Loss Functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.utils">Utility Functions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Gallery of examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Development guide</a></li>
 </ul>
  
       </div>
@@ -164,54 +177,108 @@
 <h1><a class="reference internal" href="../api.html#module-neuralop.training" title="neuralop.training"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.training</span></code></a>.IncrementalFNOTrainer<a class="headerlink" href="#neuralop-training-incrementalfnotrainer" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.training.IncrementalFNOTrainer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.training.</span></span><span class="sig-name descname"><span class="pre">IncrementalFNOTrainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wandb_log</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cpu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mixed_precision</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_processor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_interval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_distributed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incremental_grad</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incremental_loss_gap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incremental_grad_eps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incremental_buffer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incremental_max_iter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incremental_grad_max_iter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incremental_loss_eps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/training/incremental.html#IncrementalFNOTrainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.training.IncrementalFNOTrainer" title="Link to this definition"></a></dt>
-<dd><p>IncrementalFNOTrainer subclasses the Trainer 
-to implement specific logic for the Incremental-FNO
-as described in <span id="id1">[Rb82b7576506a-1]</span>.</p>
-<p class="rubric">Methods</p>
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">grad_explained</span></code>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">incremental_update</span></code>([loss])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.training.IncrementalFNOTrainer.loss_gap" title="neuralop.training.IncrementalFNOTrainer.loss_gap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loss_gap</span></code></a>(loss)</p></td>
-<td><p>loss_gap increases the model's incremental modes if  the epoch's training loss does not decrease sufficiently</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#neuralop.training.IncrementalFNOTrainer.train_one_epoch" title="neuralop.training.IncrementalFNOTrainer.train_one_epoch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_one_epoch</span></code></a>(epoch, train_loader, ...)</p></td>
-<td><p>train_one_epoch inherits from the base Trainer's method</p></td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">References</p>
-<dl class="simple">
-<dt>George, R., Zhao, J., Kossaifi, J., Li, Z., and Anandkumar, A. (2024)</dt><dd><p>“Incremental Spatial and Spectral Learning of Neural Operators for Solving Large-Scale PDEs”.
-TMLR, <a class="reference external" href="https://openreview.net/pdf?id=xI6cPQObp0">https://openreview.net/pdf?id=xI6cPQObp0</a>.</p>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="neuralop.training.IncrementalFNOTrainer.train_one_epoch">
-<span class="sig-name descname"><span class="pre">train_one_epoch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_loader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">training_loss</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/training/incremental.html#IncrementalFNOTrainer.train_one_epoch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.training.IncrementalFNOTrainer.train_one_epoch" title="Link to this definition"></a></dt>
-<dd><dl class="simple">
-<dt>train_one_epoch inherits from the base Trainer’s method</dt><dd><p>and adds the computation of the incremental-FNO algorithm
-before returning the training epoch’s metrics.</p>
-</dd>
-</dl>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.training.</span></span><span class="sig-name descname"><span class="pre">IncrementalFNOTrainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wandb_log</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cpu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mixed_precision</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_processor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_interval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_distributed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incremental_grad</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incremental_loss_gap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incremental_grad_eps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incremental_buffer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incremental_max_iter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incremental_grad_max_iter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incremental_loss_eps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/training/incremental.html#IncrementalFNOTrainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.training.IncrementalFNOTrainer" title="Link to this definition"></a></dt>
+<dd><p>Trainer for the Incremental Fourier Neural Operator (iFNO)</p>
+<p>Implements iFNO approach from [1] that progressively increases
+Fourier modes during training. This class supports two algorithms:</p>
+<ol class="arabic simple">
+<li><p>Loss Gap (<cite>incremental_loss_gap=True</cite>): Increases modes when loss
+improvement becomes too small</p></li>
+<li><p>Gradient-based (<cite>incremental_grad=True</cite>): Uses explained variance of
+gradient strengths to determine when more modes are needed</p></li>
+</ol>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>epoch</strong><span class="classifier">int</span></dt><dd><p>epoch of training</p>
+<dt><strong>model</strong><span class="classifier">nn.Module</span></dt><dd><p>FNO or TFNO model to train.</p>
 </dd>
-<dt><strong>train_loader</strong><span class="classifier">DataLoader</span></dt><dd></dd>
-<dt><strong>training_loss</strong><span class="classifier">callable</span></dt><dd><p>loss function to train with</p>
+<dt><strong>n_epochs</strong><span class="classifier">int</span></dt><dd><p>Total number of training epochs.</p>
+</dd>
+<dt><strong>incremental_grad</strong><span class="classifier">bool, optional</span></dt><dd><p>Use gradient-based algorithm, by default False.</p>
+</dd>
+<dt><strong>incremental_loss_gap</strong><span class="classifier">bool, optional</span></dt><dd><p>Use loss gap algorithm, by default False.</p>
+</dd>
+<dt><strong>incremental_grad_eps</strong><span class="classifier">float, optional</span></dt><dd><p>Explained variance threshold for gradient algorithm, by default 0.001.</p>
+</dd>
+<dt><strong>incremental_loss_eps</strong><span class="classifier">float, optional</span></dt><dd><p>Loss improvement threshold for loss gap algorithm, by default 0.001.</p>
+</dd>
+<dt><strong>incremental_grad_max_iter</strong><span class="classifier">int, optional</span></dt><dd><p>Iterations for gradient accumulation, by default 10.</p>
+</dd>
+<dt><strong>incremental_buffer</strong><span class="classifier">int, optional</span></dt><dd><p>Buffer size for gradient accumulation, by default 5.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.training.IncrementalFNOTrainer.grad_explained" title="neuralop.training.IncrementalFNOTrainer.grad_explained"><code class="xref py py-obj docutils literal notranslate"><span class="pre">grad_explained</span></code></a>()</p></td>
+<td><p>Gradient-based explained variance algorithm for incremental learning.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#neuralop.training.IncrementalFNOTrainer.incremental_update" title="neuralop.training.IncrementalFNOTrainer.incremental_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">incremental_update</span></code></a>([loss])</p></td>
+<td><p>Main incremental update function that determines which algorithm to run.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.training.IncrementalFNOTrainer.loss_gap" title="neuralop.training.IncrementalFNOTrainer.loss_gap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loss_gap</span></code></a>(loss)</p></td>
+<td><p>Loss gap algorithm for incremental learning.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#neuralop.training.IncrementalFNOTrainer.train_one_epoch" title="neuralop.training.IncrementalFNOTrainer.train_one_epoch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_one_epoch</span></code></a>(epoch, train_loader, ...)</p></td>
+<td><p>Train the model for one epoch with incremental learning.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Exactly one algorithm must be enabled (not both)</p></li>
+<li><p>Gradient algorithm requires multiple iterations for statistics</p></li>
+<li><p>Both algorithms respect maximum modes in FNO model</p></li>
+</ul>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="rb82b7576506a-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>George, R., Zhao, J., Kossaifi, J., Li, Z., and Anandkumar, A. (2024)
+“Incremental Spatial and Spectral Learning of Neural Operators for Solving Large-Scale PDEs”.
+TMLR, <a class="reference external" href="https://openreview.net/pdf?id=xI6cPQObp0">https://openreview.net/pdf?id=xI6cPQObp0</a>.</p>
+</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralop.training.IncrementalFNOTrainer.incremental_update">
+<span class="sig-name descname"><span class="pre">incremental_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loss</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/training/incremental.html#IncrementalFNOTrainer.incremental_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.training.IncrementalFNOTrainer.incremental_update" title="Link to this definition"></a></dt>
+<dd><p>Main incremental update function that determines which algorithm to run.</p>
+<p>This method is called after each training epoch to potentially increase the number
+of Fourier modes in the FNO model based on the selected incremental algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>loss</strong><span class="classifier">float or torch.Tensor, optional</span></dt><dd><p>Current training loss value. Required for loss gap algorithm.
+If None and loss gap algorithm is enabled, no update will occur.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralop.training.IncrementalFNOTrainer.train_one_epoch">
+<span class="sig-name descname"><span class="pre">train_one_epoch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_loader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">training_loss</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/training/incremental.html#IncrementalFNOTrainer.train_one_epoch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.training.IncrementalFNOTrainer.train_one_epoch" title="Link to this definition"></a></dt>
+<dd><p>Train the model for one epoch with incremental learning.</p>
+<p>Extends base trainer by adding incremental learning updates after each epoch.
+May increase Fourier modes based on training progress.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>epoch</strong><span class="classifier">int</span></dt><dd><p>Current epoch number.</p>
+</dd>
+<dt><strong>train_loader</strong><span class="classifier">torch.utils.data.DataLoader</span></dt><dd><p>DataLoader containing training data.</p>
+</dd>
+<dt><strong>training_loss</strong><span class="classifier">callable</span></dt><dd><p>Loss function to use for training.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>train_err, avg_loss, avg_lasso_loss, epoch_train_time</dt><dd></dd>
+<dt>tuple</dt><dd><p>(train_err, avg_loss, avg_lasso_loss, epoch_train_time)</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -220,16 +287,36 @@ before returning the training epoch’s metrics.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="neuralop.training.IncrementalFNOTrainer.loss_gap">
 <span class="sig-name descname"><span class="pre">loss_gap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loss</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/training/incremental.html#IncrementalFNOTrainer.loss_gap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.training.IncrementalFNOTrainer.loss_gap" title="Link to this definition"></a></dt>
-<dd><p>loss_gap increases the model’s incremental modes if 
-the epoch’s training loss does not decrease sufficiently</p>
+<dd><p>Loss gap algorithm for incremental learning.</p>
+<p>Monitors training loss convergence and increases Fourier modes when loss improvement
+becomes too small. Helps escape local minima by increasing model capacity.</p>
+<p>Algorithm:
+1. Track training losses over epochs
+2. Compute difference between consecutive losses
+3. If difference &lt; threshold, increase modes by 1
+4. Update FNO blocks with new mode count</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>loss</strong><span class="classifier">float | scalar torch.Tensor</span></dt><dd><p>scalar value of epoch’s training loss</p>
+<dt><strong>loss</strong><span class="classifier">float or torch.Tensor</span></dt><dd><p>Current epoch’s training loss value.</p>
 </dd>
 </dl>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralop.training.IncrementalFNOTrainer.grad_explained">
+<span class="sig-name descname"><span class="pre">grad_explained</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/training/incremental.html#IncrementalFNOTrainer.grad_explained"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.training.IncrementalFNOTrainer.grad_explained" title="Link to this definition"></a></dt>
+<dd><p>Gradient-based explained variance algorithm for incremental learning.</p>
+<p>Analyzes gradient patterns of FNO weights to determine when additional
+Fourier modes are needed by computing explained variance of gradient strengths.</p>
+<p>Algorithm:
+1. Accumulate gradients over multiple iterations
+2. Compute Frobenius norm of gradients for each Fourier mode
+3. Compute explained variance of gradient strengths
+4. If explained variance &lt; threshold, increase modes
+5. Reset accumulation and update model</p>
 </dd></dl>
 
 </dd></dl>
@@ -250,8 +337,8 @@ the epoch’s training loss does not decrease sufficiently</p>
     </a>
     
     
-    <a class="button pagination-next" href="neuralop.losses.LpLoss.html" title="next page" accesskey="n">
-        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.losses</span></code>.LpLoss </span>
+    <a class="button pagination-next" href="neuralop.training.torch_setup.setup.html" title="next page" accesskey="n">
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.training.torch_setup</span></code>.setup </span>
         <span class="icon">
             <i class="fa fa-arrow-circle-right"></i>
         </span>
@@ -264,7 +351,7 @@ the epoch’s training loss does not decrease sufficiently</p>
         <footer class="footer">
     <div class="content has-text-centered">
         <div class="block">
-          &copy; Copyright 2024, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+          &copy; Copyright 2025, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
         </div>
     </div>
   </footer>
@@ -289,8 +376,10 @@ the epoch’s training loss does not decrease sufficiently</p>
         <ul>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.training</span></code>.IncrementalFNOTrainer</a><ul>
 <li><a class="reference internal" href="#neuralop.training.IncrementalFNOTrainer"><code class="docutils literal notranslate"><span class="pre">IncrementalFNOTrainer</span></code></a><ul>
+<li><a class="reference internal" href="#neuralop.training.IncrementalFNOTrainer.incremental_update"><code class="docutils literal notranslate"><span class="pre">IncrementalFNOTrainer.incremental_update()</span></code></a></li>
 <li><a class="reference internal" href="#neuralop.training.IncrementalFNOTrainer.train_one_epoch"><code class="docutils literal notranslate"><span class="pre">IncrementalFNOTrainer.train_one_epoch()</span></code></a></li>
 <li><a class="reference internal" href="#neuralop.training.IncrementalFNOTrainer.loss_gap"><code class="docutils literal notranslate"><span class="pre">IncrementalFNOTrainer.loss_gap()</span></code></a></li>
+<li><a class="reference internal" href="#neuralop.training.IncrementalFNOTrainer.grad_explained"><code class="docutils literal notranslate"><span class="pre">IncrementalFNOTrainer.grad_explained()</span></code></a></li>
 </ul>
 </li>
 </ul>

@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>neuralop.models.gino &#8212; neuraloperator 1.0.2 documentation</title> 
+    <title>neuralop.models.gino &#8212; neuraloperator 2.0.0 documentation</title> 
 <link rel="stylesheet" href="../../../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../../../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../../_static/favicon/favicon-32x32.png">
@@ -14,17 +14,20 @@
 <link rel="shortcut icon" href="../../../_static/favicon/favicon.ico">
 <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=5126dfd5" />
 
   
-    <script src="../../../_static/documentation_options.js?v=1ed6394b"></script>
+    <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
  
@@ -64,6 +67,9 @@
               <a class="navbar-item" href="../../../install.html">
               Install
             </a>
+              <a class="navbar-item" href="../../../theory_guide/index.html">
+              Theory Guide
+            </a>
               <a class="navbar-item" href="../../../user_guide/index.html">
               User Guide
             </a>
@@ -72,6 +78,9 @@
             </a>
               <a class="navbar-item" href="../../../auto_examples/index.html">
               Examples
+            </a>
+              <a class="navbar-item" href="../../../dev_guide/index.html">
+              Developer's Guide
             </a>
           </div>
         
@@ -113,163 +122,187 @@
       <div class="container content main-content">
         
   <h1>Source code for neuralop.models.gino</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
-<span class="kn">import</span> <span class="nn">time</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn.functional</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">F</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 
-<span class="kn">from</span> <span class="nn">.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+<span class="c1"># Set warning filter to show each warning only once</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
-<span class="kn">from</span> <span class="nn">..layers.channel_mlp</span> <span class="kn">import</span> <span class="n">ChannelMLP</span>
-<span class="kn">from</span> <span class="nn">..layers.embeddings</span> <span class="kn">import</span> <span class="n">SinusoidalEmbedding</span>
-<span class="kn">from</span> <span class="nn">..layers.fno_block</span> <span class="kn">import</span> <span class="n">FNOBlocks</span>
-<span class="kn">from</span> <span class="nn">..layers.spectral_convolution</span> <span class="kn">import</span> <span class="n">SpectralConv</span>
-<span class="kn">from</span> <span class="nn">..layers.gno_block</span> <span class="kn">import</span> <span class="n">GNOBlock</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;once&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
+
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.base_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..layers.channel_mlp</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChannelMLP</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..layers.embeddings</span><span class="w"> </span><span class="kn">import</span> <span class="n">SinusoidalEmbedding</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..layers.fno_block</span><span class="w"> </span><span class="kn">import</span> <span class="n">FNOBlocks</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..layers.spectral_convolution</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpectralConv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..layers.gno_block</span><span class="w"> </span><span class="kn">import</span> <span class="n">GNOBlock</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..layers.gno_weighting_functions</span><span class="w"> </span><span class="kn">import</span> <span class="n">dispatch_weighting_fn</span>
+
 
 <div class="viewcode-block" id="GINO">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.models.GINO.html#neuralop.models.GINO">[docs]</a>
-<span class="k">class</span> <span class="nc">GINO</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;GINO: Geometry-informed Neural Operator. Learns a mapping between</span>
-<span class="sd">       functions presented over arbitrary coordinate meshes. The model carries</span>
-<span class="sd">       global integration through spectral convolution layers in an intermediate</span>
-<span class="sd">       latent space, as described in [1]_.</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GINO</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    GINO: Geometry-informed Neural Operator - learns a mapping between</span>
+<span class="sd">    functions presented over arbitrary coordinate meshes. The model carries</span>
+<span class="sd">    global integration through spectral convolution layers in an intermediate</span>
+<span class="sd">    latent space, as described in [1]_. Optionally enables a weighted output</span>
+<span class="sd">    GNO for use in a Mollified Graph Neural Operator scheme, as introduced in [2]_.</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        in_channels : int</span>
-<span class="sd">            feature dimension of input points</span>
-<span class="sd">        out_channels : int</span>
-<span class="sd">            feature dimension of output points</span>
-<span class="sd">        latent_feature_channels : int, optional</span>
-<span class="sd">            number of channels in optional latent feature map</span>
-<span class="sd">            to concatenate onto latent embeddings before </span>
-<span class="sd">            the FNO&#39;s forward pass, default None</span>
-<span class="sd">        projection_channels : int, optional</span>
-<span class="sd">            number of channels in FNO pointwise projection</span>
-<span class="sd">        gno_coord_dim : int, optional</span>
-<span class="sd">            geometric dimension of input/output queries, by default 3</span>
-<span class="sd">        gno_radius : float, optional</span>
-<span class="sd">            radius in input/output space for GNO neighbor search, by default 0.033</span>
-<span class="sd">        in_gno_transform_type : str, optional</span>
-<span class="sd">            transform type parameter for input GNO, by default &#39;linear&#39;</span>
-<span class="sd">            see neuralop.layers.gno_block for more details</span>
-<span class="sd">        out_gno_transform_type : str, optional</span>
-<span class="sd">            transform type parameter for output GNO, by default &#39;linear&#39;</span>
-<span class="sd">            see neuralop.layers.gno_block for more details</span>
-<span class="sd">        gno_pos_embed_type : literal `{&#39;transformer&#39;, &#39;nerf&#39;}` | None</span>
-<span class="sd">            type of optional sinusoidal positional embedding to use in GNOBlock,</span>
-<span class="sd">            by default `&#39;transformer&#39;`</span>
-<span class="sd">        fno_in_channels : int, optional</span>
-<span class="sd">            number of input channels for FNO, by default 26</span>
-<span class="sd">        fno_n_modes : tuple, optional</span>
-<span class="sd">            number of modes along each dimension </span>
-<span class="sd">            to use in FNO, by default (16, 16, 16)</span>
-<span class="sd">        fno_hidden_channels : int, optional</span>
-<span class="sd">            hidden channels for use in FNO, by default 64</span>
-<span class="sd">        lifting_channel_ratio : int, optional</span>
-<span class="sd">            ratio of lifting channels to `fno_hidden_channels`, by default 2</span>
-<span class="sd">            The number of liting channels in the lifting block of the FNO is</span>
-<span class="sd">            lifting_channel_ratio * hidden_channels (e.g. default 512)</span>
-<span class="sd">        fno_n_layers : int, optional</span>
-<span class="sd">            number of layers in FNO, by default 4</span>
-<span class="sd">        </span>
-<span class="sd">        Other Parameters</span>
-<span class="sd">        ----------------</span>
-<span class="sd">        gno_embed_channels: int</span>
-<span class="sd">            dimension of optional per-channel embedding to use in GNOBlock,</span>
-<span class="sd">            by default 32</span>
-<span class="sd">        gno_embed_max_positions: int</span>
-<span class="sd">            max positions of optional per-channel embedding to use in GNOBlock,</span>
-<span class="sd">            by default 10000. If `gno_pos_embed_type != &#39;transformer&#39;`, value is unused.</span>
-<span class="sd">        in_gno_channel_mlp_hidden_layers : list, optional</span>
-<span class="sd">            widths of hidden layers in input GNO, by default [80, 80, 80]</span>
-<span class="sd">        out_gno_channel_mlp_hidden_layers : list, optional</span>
-<span class="sd">            widths of hidden layers in output GNO, by default [512, 256]</span>
-<span class="sd">        gno_channel_mlp_non_linearity : nn.Module, optional</span>
-<span class="sd">            nonlinearity to use in gno ChannelMLP, by default F.gelu</span>
-<span class="sd">        gno_use_open3d : bool, optional</span>
-<span class="sd">            whether to use open3d neighbor search, by default True</span>
-<span class="sd">            if False, uses pure-PyTorch fallback neighbor search</span>
-<span class="sd">        gno_use_torch_scatter : bool, optional</span>
-<span class="sd">            whether to use torch_scatter&#39;s neighborhood reduction function</span>
-<span class="sd">            or the native PyTorch implementation in IntegralTransform layers.</span>
-<span class="sd">            If False, uses the fallback PyTorch version.</span>
-<span class="sd">        out_gno_tanh : bool, optional</span>
-<span class="sd">            whether to use tanh to stabilize outputs of the output GNO, by default False</span>
-<span class="sd">        fno_resolution_scaling_factor : float | None, optional</span>
-<span class="sd">            factor by which to scale output of FNO, by default None</span>
-<span class="sd">        fno_incremental_n_modes : list[int] | None, defaults to None</span>
-<span class="sd">        if passed, sets n_modes separately for each FNO layer.</span>
-<span class="sd">        fno_block_precision : str, defaults to &#39;full&#39;</span>
-<span class="sd">            data precision to compute within fno block</span>
-<span class="sd">        fno_use_channel_mlp : bool, defaults to True</span>
-<span class="sd">            Whether to use a ChannelMLP layer after each FNO block.</span>
-<span class="sd">        fno_channel_mlp_dropout : float, defaults to 0</span>
-<span class="sd">            dropout parameter of above ChannelMLP.</span>
-<span class="sd">        fno_channel_mlp_expansion : float, defaults to 0.5</span>
-<span class="sd">            expansion parameter of above ChannelMLP.</span>
-<span class="sd">        fno_non_linearity : nn.Module, defaults to F.gelu</span>
-<span class="sd">            nonlinear activation function between each FNO layer.</span>
-<span class="sd">        fno_stabilizer : nn.Module | None, defaults to None</span>
-<span class="sd">            By default None, otherwise tanh is used before FFT in the FNO block.</span>
-<span class="sd">        fno_norm : nn.Module | None, defaults to None</span>
-<span class="sd">            normalization layer to use in FNO.</span>
-<span class="sd">        fno_ada_in_features : int | None, defaults to 4</span>
-<span class="sd">            if an adaptive mesh is used, number of channels of its positional embedding.</span>
-<span class="sd">            If None, adaptive mesh embedding is not used.</span>
-<span class="sd">        fno_ada_in_dim : int, defaults to 1</span>
-<span class="sd">            dimensions of above FNO adaptive mesh.</span>
-<span class="sd">        fno_preactivation : bool, defaults to False</span>
-<span class="sd">            whether to use Resnet-style preactivation.</span>
-<span class="sd">        fno_skip : str, defaults to &#39;linear&#39;</span>
-<span class="sd">            type of skip connection to use.</span>
-<span class="sd">        fno_channel_mlp_skip : str, defaults to &#39;soft-gating&#39;</span>
-<span class="sd">            type of skip connection to use in the FNO</span>
-<span class="sd">            &#39;linear&#39;: conv layer</span>
-<span class="sd">            &#39;soft-gating&#39;: weights the channels of the input</span>
-<span class="sd">            &#39;identity&#39;: nn.Identity</span>
-<span class="sd">        fno_separable : bool, defaults to False</span>
-<span class="sd">            if True, use a depthwise separable spectral convolution.</span>
-<span class="sd">        fno_factorization : str {&#39;tucker&#39;, &#39;tt&#39;, &#39;cp&#39;} |  None, defaults to None</span>
-<span class="sd">            Tensor factorization of the parameters weight to use</span>
-<span class="sd">        fno_rank : float, defaults to 1.0</span>
-<span class="sd">            Rank of the tensor factorization of the Fourier weights.</span>
-<span class="sd">        fno_joint_factorization : bool, defaults to False</span>
-<span class="sd">            Whether all the Fourier layers should be parameterized by a single tensor (vs one per layer).</span>
-<span class="sd">        fno_fixed_rank_modes : bool, defaults to False</span>
-<span class="sd">            Modes to not factorize.</span>
-<span class="sd">        fno_implementation : str {&#39;factorized&#39;, &#39;reconstructed&#39;} | None, defaults to &#39;factorized&#39;</span>
-<span class="sd">            If factorization is not None, forward mode to use::</span>
-<span class="sd">            * `reconstructed` : the full weight tensor is reconstructed from the factorization and used for the forward pass</span>
-<span class="sd">            * `factorized` : the input is directly contracted with the factors of the decomposition</span>
-<span class="sd">        fno_decomposition_kwargs : dict, defaults to dict()</span>
-<span class="sd">            Optionaly additional parameters to pass to the tensor decomposition.</span>
-<span class="sd">        fno_conv_module : nn.Module, defaults to SpectralConv</span>
-<span class="sd">            Spectral Convolution module to use.</span>
-<span class="sd">        </span>
-<span class="sd">            </span>
-<span class="sd">        References</span>
-<span class="sd">        -----------</span>
-<span class="sd">        .. _[1] : </span>
-<span class="sd">        </span>
-<span class="sd">        Li, Z., Kovachki, N., Choy, C., Li, B., Kossaifi, J., Otta, S., </span>
-<span class="sd">            Nabian, M., Stadler, M., Hundt, C., Azizzadenesheli, K., Anandkumar, A. (2023)</span>
-<span class="sd">            Geometry-Informed Neural Operator for Large-Scale 3D PDEs. NeurIPS 2023,</span>
-<span class="sd">            https://proceedings.neurips.cc/paper_files/paper/2023/hash/70518ea42831f02afc3a2828993935ad-Abstract-Conference.html</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    in_channels : int</span>
+<span class="sd">        Feature dimension of input points. Determined by the problem.</span>
+<span class="sd">    out_channels : int</span>
+<span class="sd">        Feature dimension of output points. Determined by the problem.</span>
+<span class="sd">    fno_n_modes : tuple, optional</span>
+<span class="sd">        Number of modes along each dimension to use in FNO. Default: (16, 16, 16)</span>
+<span class="sd">        Must be larger enough but smaller than max_resolution//2 (Nyquist frequency) on the latent grid</span>
+<span class="sd">    fno_hidden_channels : int, optional</span>
+<span class="sd">        Hidden channels for use in FNO. Default: 64</span>
+<span class="sd">    fno_n_layers : int, optional</span>
+<span class="sd">        Number of layers in FNO. Default: 4</span>
+<span class="sd">    latent_feature_channels : int, optional</span>
+<span class="sd">        Number of channels in optional latent feature map to concatenate onto latent embeddings</span>
+<span class="sd">        before the FNO&#39;s forward pass. Default: None</span>
+<span class="sd">    projection_channel_ratio : int, optional</span>
+<span class="sd">        Ratio of pointwise projection channels in the final ChannelMLP to fno_hidden_channels.</span>
+<span class="sd">        The number of projection channels in the final ChannelMLP is computed by</span>
+<span class="sd">        projection_channel_ratio * fno_hidden_channels (i.e. default 256). Default: 4</span>
+<span class="sd">    gno_coord_dim : int, optional</span>
+<span class="sd">        Geometric dimension of input/output queries. Determined by the problem. Default: 3</span>
+<span class="sd">    in_gno_radius : float, optional</span>
+<span class="sd">        Radius in input space for GNO neighbor search. Default: 0.033</span>
+<span class="sd">        Larger radius means more neighboors so more global interactions, but larger computational cost.</span>
+<span class="sd">    out_gno_radius : float, optional</span>
+<span class="sd">        Radius in output space for GNO neighbor search. Default: 0.033</span>
+<span class="sd">        Larger radius means more neighboors so more global interactions, but larger computational cost.</span>
+<span class="sd">    gno_weighting_function : Literal[&quot;half_cos&quot;, &quot;bump&quot;, &quot;quartic&quot;, &quot;quadr&quot;, &quot;octic&quot;], optional</span>
+<span class="sd">        Choice of weighting function to use in the output GNO for Mollified Graph Neural Operator-based models.</span>
+<span class="sd">        See neuralop.layers.gno_weighting_functions for more details. Default: None</span>
+<span class="sd">    gno_weight_function_scale : float, optional</span>
+<span class="sd">        Factor by which to scale weights from GNO weighting function.</span>
+<span class="sd">        If gno_weighting_function is None, this is not used. Default: 1</span>
+<span class="sd">    in_gno_transform_type : str, optional</span>
+<span class="sd">        Transform type parameter for input GNO. Default: &quot;linear&quot;</span>
+<span class="sd">        See neuralop.layers.gno_block for more details.</span>
+<span class="sd">        See neuralop.layers.gno_block for more details.</span>
+<span class="sd">    out_gno_transform_type : str, optional</span>
+<span class="sd">        Transform type parameter for output GNO.</span>
+<span class="sd">        Options: &quot;linear&quot;, &quot;nonlinear&quot;, &quot;nonlinear_kernelonly&quot;. Default: &quot;linear&quot;</span>
+<span class="sd">        See neuralop.layers.gno_block for more details.</span>
+<span class="sd">        Type of optional sinusoidal positional embedding to use in input GNOBlock. Default: &quot;transformer&quot;</span>
+<span class="sd">        Type of optional sinusoidal positional embedding to use in input GNOBlock.</span>
+<span class="sd">        Options: &quot;transformer&quot;, &quot;nerf&quot;. Default: &quot;transformer&quot;</span>
+<span class="sd">        Type of optional sinusoidal positional embedding to use in output GNOBlock. Default: &quot;transformer&quot;</span>
+<span class="sd">    fno_in_channels : int, optional</span>
+<span class="sd">        Number of input channels for FNO. Default: 3</span>
+<span class="sd">    fno_lifting_channel_ratio : int, optional</span>
+<span class="sd">        Ratio of lifting channels to fno_hidden_channels.</span>
+<span class="sd">        The number of lifting channels in the lifting block of the FNO is</span>
+<span class="sd">        fno_lifting_channel_ratio * hidden_channels (i.e. default 128). Default: 2</span>
+<span class="sd">    gno_embed_channels : int, optional</span>
+<span class="sd">        Dimension of optional per-channel embedding to use in GNOBlock. Default: 32</span>
+<span class="sd">    gno_embed_max_positions : int, optional</span>
+<span class="sd">        Max positions of optional per-channel embedding to use in GNOBlock.</span>
+<span class="sd">        If gno_pos_embed_type != &#39;transformer&#39;, this is not used. Default: 10000</span>
+<span class="sd">    in_gno_channel_mlp_hidden_layers : list, optional</span>
+<span class="sd">        Widths of hidden layers in input GNO. Default: [80, 80, 80]</span>
+<span class="sd">    out_gno_channel_mlp_hidden_layers : list, optional</span>
+<span class="sd">        Widths of hidden layers in output GNO. Default: [512, 256]</span>
+<span class="sd">    gno_channel_mlp_non_linearity : nn.Module, optional</span>
+<span class="sd">        Nonlinearity to use in GNO ChannelMLP. Default: F.gelu</span>
+<span class="sd">    gno_use_open3d : bool, optional</span>
+<span class="sd">        Whether to use Open3D neighbor search.</span>
+<span class="sd">        If False, uses pure-PyTorch fallback neighbor search. Default: True</span>
+<span class="sd">    gno_use_torch_scatter : bool, optional</span>
+<span class="sd">        Whether to use torch-scatter to perform grouped reductions in the IntegralTransform.</span>
+<span class="sd">        If False, uses native Python reduction in neuralop.layers.segment_csr. Default: True</span>
+
+<span class="sd">        .. warning::</span>
+<span class="sd">            torch-scatter is an optional dependency that conflicts with the newest versions of PyTorch,</span>
+<span class="sd">            so you must handle the conflict explicitly in your environment. See :ref:`torch_scatter_dependency`</span>
+<span class="sd">            for more information.</span>
+<span class="sd">    out_gno_tanh : bool, optional</span>
+<span class="sd">        Whether to use tanh to stabilize outputs of the output GNO. Default: False</span>
+<span class="sd">    fno_resolution_scaling_factor : float, optional</span>
+<span class="sd">        Factor by which to scale output of FNO. Default: None</span>
+<span class="sd">    fno_block_precision : str, optional</span>
+<span class="sd">        Data precision to compute within FNO block. Options: &quot;full&quot;, &quot;half&quot;, &quot;mixed&quot;. Default: &quot;full&quot;</span>
+<span class="sd">    fno_use_channel_mlp : bool, optional</span>
+<span class="sd">        Whether to use a ChannelMLP layer after each FNO block. Default: True</span>
+<span class="sd">    fno_channel_mlp_dropout : float, optional</span>
+<span class="sd">        Dropout parameter of above ChannelMLP. Default: 0</span>
+<span class="sd">    fno_channel_mlp_expansion : float, optional</span>
+<span class="sd">        Expansion parameter of above ChannelMLP. Default: 0.5</span>
+<span class="sd">    fno_non_linearity : nn.Module, optional</span>
+<span class="sd">        Nonlinear activation function between each FNO layer. Default: F.gelu</span>
+<span class="sd">    fno_stabilizer : nn.Module, optional</span>
+<span class="sd">        By default None, otherwise tanh is used before FFT in the FNO block. Default: None</span>
+<span class="sd">    fno_norm : str, optional</span>
+<span class="sd">        Normalization layer to use in FNO. Options: &quot;ada_in&quot;, &quot;group_norm&quot;, &quot;instance_norm&quot;, None. Default: None</span>
+<span class="sd">    fno_ada_in_features : int, optional</span>
+<span class="sd">        If an adaptive mesh is used, number of channels of its positional embedding.</span>
+<span class="sd">        If None, adaptive mesh embedding is not used. Default: 4</span>
+<span class="sd">    fno_ada_in_dim : int, optional</span>
+<span class="sd">        Dimensions of above FNO adaptive mesh. Default: 1</span>
+<span class="sd">    fno_preactivation : bool, optional</span>
+<span class="sd">        Whether to use ResNet-style preactivation. Default: False</span>
+<span class="sd">    fno_skip : str, optional</span>
+<span class="sd">        Type of skip connection to use. Options: &quot;linear&quot;, &quot;identity&quot;, &quot;soft-gating&quot;, None. Default: &quot;linear&quot;</span>
+<span class="sd">    fno_channel_mlp_skip : str, optional</span>
+<span class="sd">        Type of skip connection to use in the FNO.</span>
+<span class="sd">        Options: &quot;linear&quot;, &quot;identity&quot;, &quot;soft-gating&quot;, None. Default: &quot;soft-gating&quot;</span>
+<span class="sd">    fno_separable : bool, optional</span>
+<span class="sd">        Whether to use a separable spectral convolution. Default: False</span>
+<span class="sd">    fno_factorization : str, optional</span>
+<span class="sd">        Tensor factorization of the parameters weight to use.</span>
+<span class="sd">        Options: &quot;tucker&quot;, &quot;tt&quot;, &quot;cp&quot;, None. Default: None</span>
+<span class="sd">    fno_rank : float, optional</span>
+<span class="sd">        Rank of the tensor factorization of the Fourier weights. Default: 1.0</span>
+<span class="sd">        Set to float &lt;1.0 when using TFNO (i.e. when factorization is not None).</span>
+<span class="sd">        A TFNO with rank 0.1 has roughly 10% of the parameters of a dense FNO.</span>
+<span class="sd">    fno_fixed_rank_modes : bool, optional</span>
+<span class="sd">        Whether to not factorize certain modes. Default: False</span>
+<span class="sd">    fno_implementation : str, optional</span>
+<span class="sd">        If factorization is not None, forward mode to use.</span>
+<span class="sd">        Options: &quot;reconstructed&quot;, &quot;factorized&quot;. Default: &quot;factorized&quot;</span>
+<span class="sd">    fno_decomposition_kwargs : dict, optional</span>
+<span class="sd">        Additional parameters to pass to the tensor decomposition. Default: {}</span>
+<span class="sd">    fno_conv_module : nn.Module, optional</span>
+<span class="sd">        Spectral convolution module to use. Default: SpectralConv</span>
+
+
+<span class="sd">    References</span>
+<span class="sd">    -----------</span>
+<span class="sd">    .. [1] : Li, Z., Kovachki, N., Choy, C., Li, B., Kossaifi, J., Otta, S.,</span>
+<span class="sd">        Nabian, M., Stadler, M., Hundt, C., Azizzadenesheli, K., Anandkumar, A. (2023)</span>
+<span class="sd">        Geometry-Informed Neural Operator for Large-Scale 3D PDEs. NeurIPS 2023,</span>
+<span class="sd">        https://proceedings.neurips.cc/paper_files/paper/2023/hash/70518ea42831f02afc3a2828993935ad-Abstract-Conference.html</span>
+<span class="sd">    .. [2] : Lin, R. et al. Placeholder reference for Mollified Graph Neural Operators.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">in_channels</span><span class="p">,</span>
         <span class="n">out_channels</span><span class="p">,</span>
         <span class="n">latent_feature_channels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">projection_channels</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
+        <span class="n">projection_channel_ratio</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
         <span class="n">gno_coord_dim</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-        <span class="n">gno_radius</span><span class="o">=</span><span class="mf">0.033</span><span class="p">,</span>
-        <span class="n">in_gno_transform_type</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
-        <span class="n">out_gno_transform_type</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
-        <span class="n">gno_pos_embed_type</span><span class="o">=</span><span class="s1">&#39;transformer&#39;</span><span class="p">,</span>
+        <span class="n">in_gno_radius</span><span class="o">=</span><span class="mf">0.033</span><span class="p">,</span>
+        <span class="n">out_gno_radius</span><span class="o">=</span><span class="mf">0.033</span><span class="p">,</span>
+        <span class="n">in_gno_transform_type</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
+        <span class="n">out_gno_transform_type</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
+        <span class="n">gno_weighting_function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">gno_weight_function_scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">in_gno_pos_embed_type</span><span class="o">=</span><span class="s2">&quot;transformer&quot;</span><span class="p">,</span>
+        <span class="n">out_gno_pos_embed_type</span><span class="o">=</span><span class="s2">&quot;transformer&quot;</span><span class="p">,</span>
         <span class="n">fno_in_channels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-        <span class="n">fno_n_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> 
+        <span class="n">fno_n_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span>
         <span class="n">fno_hidden_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
         <span class="n">fno_lifting_channel_ratio</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="n">fno_n_layers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
@@ -278,36 +311,32 @@
         <span class="n">gno_embed_max_positions</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
         <span class="n">in_gno_channel_mlp_hidden_layers</span><span class="o">=</span><span class="p">[</span><span class="mi">80</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">80</span><span class="p">],</span>
         <span class="n">out_gno_channel_mlp_hidden_layers</span><span class="o">=</span><span class="p">[</span><span class="mi">512</span><span class="p">,</span> <span class="mi">256</span><span class="p">],</span>
-        <span class="n">gno_channel_mlp_non_linearity</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">gelu</span><span class="p">,</span> 
+        <span class="n">gno_channel_mlp_non_linearity</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">gelu</span><span class="p">,</span>
         <span class="n">gno_use_open3d</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">gno_use_torch_scatter</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">out_gno_tanh</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="c1"># Other FNO Params</span>
         <span class="n">fno_resolution_scaling_factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">fno_incremental_n_modes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">fno_block_precision</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">,</span>
-        <span class="n">fno_use_channel_mlp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+        <span class="n">fno_block_precision</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">,</span>
+        <span class="n">fno_use_channel_mlp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">fno_channel_mlp_dropout</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="n">fno_channel_mlp_expansion</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
         <span class="n">fno_non_linearity</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">gelu</span><span class="p">,</span>
-        <span class="n">fno_stabilizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+        <span class="n">fno_stabilizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">fno_norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">fno_ada_in_features</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
         <span class="n">fno_ada_in_dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">fno_preactivation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">fno_skip</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
-        <span class="n">fno_channel_mlp_skip</span><span class="o">=</span><span class="s1">&#39;soft-gating&#39;</span><span class="p">,</span>
+        <span class="n">fno_skip</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
+        <span class="n">fno_channel_mlp_skip</span><span class="o">=</span><span class="s2">&quot;soft-gating&quot;</span><span class="p">,</span>
         <span class="n">fno_separable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">fno_factorization</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">fno_rank</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-        <span class="n">fno_joint_factorization</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
         <span class="n">fno_fixed_rank_modes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">fno_implementation</span><span class="o">=</span><span class="s1">&#39;factorized&#39;</span><span class="p">,</span>
+        <span class="n">fno_implementation</span><span class="o">=</span><span class="s2">&quot;factorized&quot;</span><span class="p">,</span>
         <span class="n">fno_decomposition_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span>
         <span class="n">fno_conv_module</span><span class="o">=</span><span class="n">SpectralConv</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
-        <span class="p">):</span>
-        
+    <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span> <span class="o">=</span> <span class="n">in_channels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span> <span class="o">=</span> <span class="n">out_channels</span>
@@ -317,12 +346,16 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">lifting_channels</span> <span class="o">=</span> <span class="n">fno_lifting_channel_ratio</span> <span class="o">*</span> <span class="n">fno_hidden_channels</span>
 
-        <span class="c1"># TODO: make sure this makes sense in all contexts</span>
+        <span class="c1"># If the input GNO performs a nonlinear kernel, the GNO&#39;s output</span>
+        <span class="c1"># features must be the same dimension as its input.</span>
+        <span class="c1"># otherwise the kernel&#39;s MLP will perform a lifting operation to</span>
+        <span class="c1"># lift the inputs to ``fno_in_channels`` channels</span>
         <span class="k">if</span> <span class="n">in_gno_transform_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;nonlinear&quot;</span><span class="p">,</span> <span class="s2">&quot;nonlinear_kernelonly&quot;</span><span class="p">]:</span>
             <span class="n">in_gno_out_channels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">in_gno_out_channels</span> <span class="o">=</span> <span class="n">fno_in_channels</span>
 
+        <span class="c1"># The actual input channels to the FNO are computed here.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fno_in_channels</span> <span class="o">=</span> <span class="n">in_gno_out_channels</span>
 
         <span class="k">if</span> <span class="n">latent_feature_channels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -338,16 +371,19 @@
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Warning: FNO expects </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">in_coord_dim</span><span class="si">}</span><span class="s1">-d data while input GNO expects </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gno_coord_dim</span><span class="si">}</span><span class="s1">-d data&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">in_coord_dim_forward_order</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_coord_dim</span><span class="p">))</span>
-        <span class="c1"># channels starting at 2 to permute everything after channel and batch dims</span>
+
+        <span class="c1"># tensor indices starting at 2 to permute everything after channel and batch dims</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">in_coord_dim_reverse_order</span> <span class="o">=</span> <span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_coord_dim_forward_order</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">fno_norm</span> <span class="o">=</span> <span class="n">fno_norm</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fno_norm</span> <span class="o">==</span> <span class="s2">&quot;ada_in&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">fno_ada_in_features</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">gno_pos_embed_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">adain_pos_embed</span> <span class="o">=</span> <span class="n">SinusoidalEmbedding</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="n">fno_ada_in_dim</span><span class="p">,</span>
-                                                        <span class="n">num_frequencies</span><span class="o">=</span><span class="n">fno_ada_in_features</span><span class="p">,</span> 
-                                                        <span class="n">max_positions</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
-                                                        <span class="n">embedding_type</span><span class="o">=</span><span class="n">gno_pos_embed_type</span><span class="p">)</span>                    
+            <span class="k">if</span> <span class="n">fno_ada_in_features</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">out_gno_pos_embed_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">adain_pos_embed</span> <span class="o">=</span> <span class="n">SinusoidalEmbedding</span><span class="p">(</span>
+                    <span class="n">in_channels</span><span class="o">=</span><span class="n">fno_ada_in_dim</span><span class="p">,</span>
+                    <span class="n">num_frequencies</span><span class="o">=</span><span class="n">fno_ada_in_features</span><span class="p">,</span>
+                    <span class="n">max_positions</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+                    <span class="n">embedding_type</span><span class="o">=</span><span class="n">out_gno_pos_embed_type</span><span class="p">,</span>
+                <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">ada_in_dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">adain_pos_embed</span><span class="o">.</span><span class="n">out_channels</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">ada_in_dim</span> <span class="o">=</span> <span class="n">fno_ada_in_dim</span>
@@ -355,8 +391,10 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">adain_pos_embed</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ada_in_dim</span> <span class="o">=</span> <span class="kc">None</span>
-        
-        <span class="bp">self</span><span class="o">.</span><span class="n">gno_radius</span> <span class="o">=</span> <span class="n">gno_radius</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_gno_radius</span> <span class="o">=</span> <span class="n">in_gno_radius</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out_gno_radius</span> <span class="o">=</span> <span class="n">out_gno_radius</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">out_gno_tanh</span> <span class="o">=</span> <span class="n">out_gno_tanh</span>
 
         <span class="c1">### input GNO</span>
@@ -367,91 +405,99 @@
             <span class="n">in_channels</span><span class="o">=</span><span class="n">in_channels</span><span class="p">,</span>
             <span class="n">out_channels</span><span class="o">=</span><span class="n">in_gno_out_channels</span><span class="p">,</span>
             <span class="n">coord_dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gno_coord_dim</span><span class="p">,</span>
-            <span class="n">pos_embedding_type</span><span class="o">=</span><span class="n">gno_pos_embed_type</span><span class="p">,</span>
+            <span class="n">pos_embedding_type</span><span class="o">=</span><span class="n">in_gno_pos_embed_type</span><span class="p">,</span>
             <span class="n">pos_embedding_channels</span><span class="o">=</span><span class="n">gno_embed_channels</span><span class="p">,</span>
             <span class="n">pos_embedding_max_positions</span><span class="o">=</span><span class="n">gno_embed_max_positions</span><span class="p">,</span>
-            <span class="n">radius</span><span class="o">=</span><span class="n">gno_radius</span><span class="p">,</span>
+            <span class="n">radius</span><span class="o">=</span><span class="n">in_gno_radius</span><span class="p">,</span>
+            <span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+            <span class="n">weighting_fn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">channel_mlp_layers</span><span class="o">=</span><span class="n">in_gno_channel_mlp_hidden_layers</span><span class="p">,</span>
             <span class="n">channel_mlp_non_linearity</span><span class="o">=</span><span class="n">gno_channel_mlp_non_linearity</span><span class="p">,</span>
             <span class="n">transform_type</span><span class="o">=</span><span class="n">in_gno_transform_type</span><span class="p">,</span>
-            <span class="n">use_open3d_neighbor_search</span><span class="o">=</span><span class="n">gno_use_open3d</span><span class="p">,</span>
             <span class="n">use_torch_scatter_reduce</span><span class="o">=</span><span class="n">gno_use_torch_scatter</span><span class="p">,</span>
+            <span class="n">use_open3d_neighbor_search</span><span class="o">=</span><span class="n">gno_use_open3d</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="c1">### Lifting layer before FNOBlocks</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lifting</span> <span class="o">=</span> <span class="n">ChannelMLP</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fno_in_channels</span><span class="p">,</span>
-                                  <span class="n">hidden_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lifting_channels</span><span class="p">,</span>
-                                  <span class="n">out_channels</span><span class="o">=</span><span class="n">fno_hidden_channels</span><span class="p">,</span>
-                                  <span class="n">n_layers</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-        
+        <span class="bp">self</span><span class="o">.</span><span class="n">lifting</span> <span class="o">=</span> <span class="n">ChannelMLP</span><span class="p">(</span>
+            <span class="n">in_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fno_in_channels</span><span class="p">,</span>
+            <span class="n">hidden_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lifting_channels</span><span class="p">,</span>
+            <span class="n">out_channels</span><span class="o">=</span><span class="n">fno_hidden_channels</span><span class="p">,</span>
+            <span class="n">n_layers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>  <span class="c1"># CHANGED RECENTLY FOR THIS PAPER</span>
+
         <span class="c1">### FNOBlocks in latent space</span>
         <span class="c1"># input: `in_p` intermediate embeddings,</span>
-        <span class="c1"># possibly concatenated feature channels `latent_features` </span>
+        <span class="c1"># possibly concatenated feature channels `latent_features`</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fno_blocks</span> <span class="o">=</span> <span class="n">FNOBlocks</span><span class="p">(</span>
-                <span class="n">n_modes</span><span class="o">=</span><span class="n">fno_n_modes</span><span class="p">,</span>
-                <span class="n">hidden_channels</span><span class="o">=</span><span class="n">fno_hidden_channels</span><span class="p">,</span>
-                <span class="n">in_channels</span><span class="o">=</span><span class="n">fno_hidden_channels</span><span class="p">,</span>
-                <span class="n">out_channels</span><span class="o">=</span><span class="n">fno_hidden_channels</span><span class="p">,</span>
-                <span class="n">positional_embedding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                <span class="n">n_layers</span><span class="o">=</span><span class="n">fno_n_layers</span><span class="p">,</span>
-                <span class="n">resolution_scaling_factor</span><span class="o">=</span><span class="n">fno_resolution_scaling_factor</span><span class="p">,</span>
-                <span class="n">incremental_n_modes</span><span class="o">=</span><span class="n">fno_incremental_n_modes</span><span class="p">,</span>
-                <span class="n">fno_block_precision</span><span class="o">=</span><span class="n">fno_block_precision</span><span class="p">,</span>
-                <span class="n">use_channel_mlp</span><span class="o">=</span><span class="n">fno_use_channel_mlp</span><span class="p">,</span>
-                <span class="n">channel_mlp_expansion</span><span class="o">=</span><span class="n">fno_channel_mlp_expansion</span><span class="p">,</span>
-                <span class="n">channel_mlp_dropout</span><span class="o">=</span><span class="n">fno_channel_mlp_dropout</span><span class="p">,</span>
-                <span class="n">non_linearity</span><span class="o">=</span><span class="n">fno_non_linearity</span><span class="p">,</span>
-                <span class="n">stabilizer</span><span class="o">=</span><span class="n">fno_stabilizer</span><span class="p">,</span> 
-                <span class="n">norm</span><span class="o">=</span><span class="n">fno_norm</span><span class="p">,</span>
-                <span class="n">ada_in_features</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ada_in_dim</span><span class="p">,</span>
-                <span class="n">preactivation</span><span class="o">=</span><span class="n">fno_preactivation</span><span class="p">,</span>
-                <span class="n">fno_skip</span><span class="o">=</span><span class="n">fno_skip</span><span class="p">,</span>
-                <span class="n">channel_mlp_skip</span><span class="o">=</span><span class="n">fno_channel_mlp_skip</span><span class="p">,</span>
-                <span class="n">separable</span><span class="o">=</span><span class="n">fno_separable</span><span class="p">,</span>
-                <span class="n">factorization</span><span class="o">=</span><span class="n">fno_factorization</span><span class="p">,</span>
-                <span class="n">rank</span><span class="o">=</span><span class="n">fno_rank</span><span class="p">,</span>
-                <span class="n">joint_factorization</span><span class="o">=</span><span class="n">fno_joint_factorization</span><span class="p">,</span> 
-                <span class="n">fixed_rank_modes</span><span class="o">=</span><span class="n">fno_fixed_rank_modes</span><span class="p">,</span>
-                <span class="n">implementation</span><span class="o">=</span><span class="n">fno_implementation</span><span class="p">,</span>
-                <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="n">fno_decomposition_kwargs</span><span class="p">,</span>
-                <span class="n">domain_padding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                <span class="n">domain_padding_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                <span class="n">conv_module</span><span class="o">=</span><span class="n">fno_conv_module</span><span class="p">,</span>
-                <span class="o">**</span><span class="n">kwargs</span>
+            <span class="n">n_modes</span><span class="o">=</span><span class="n">fno_n_modes</span><span class="p">,</span>
+            <span class="n">in_channels</span><span class="o">=</span><span class="n">fno_hidden_channels</span><span class="p">,</span>
+            <span class="n">out_channels</span><span class="o">=</span><span class="n">fno_hidden_channels</span><span class="p">,</span>
+            <span class="n">n_layers</span><span class="o">=</span><span class="n">fno_n_layers</span><span class="p">,</span>
+            <span class="n">resolution_scaling_factor</span><span class="o">=</span><span class="n">fno_resolution_scaling_factor</span><span class="p">,</span>
+            <span class="n">fno_block_precision</span><span class="o">=</span><span class="n">fno_block_precision</span><span class="p">,</span>
+            <span class="n">use_channel_mlp</span><span class="o">=</span><span class="n">fno_use_channel_mlp</span><span class="p">,</span>
+            <span class="n">channel_mlp_expansion</span><span class="o">=</span><span class="n">fno_channel_mlp_expansion</span><span class="p">,</span>
+            <span class="n">channel_mlp_dropout</span><span class="o">=</span><span class="n">fno_channel_mlp_dropout</span><span class="p">,</span>
+            <span class="n">non_linearity</span><span class="o">=</span><span class="n">fno_non_linearity</span><span class="p">,</span>
+            <span class="n">stabilizer</span><span class="o">=</span><span class="n">fno_stabilizer</span><span class="p">,</span>
+            <span class="n">norm</span><span class="o">=</span><span class="n">fno_norm</span><span class="p">,</span>
+            <span class="n">ada_in_features</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ada_in_dim</span><span class="p">,</span>
+            <span class="n">preactivation</span><span class="o">=</span><span class="n">fno_preactivation</span><span class="p">,</span>
+            <span class="n">fno_skip</span><span class="o">=</span><span class="n">fno_skip</span><span class="p">,</span>
+            <span class="n">channel_mlp_skip</span><span class="o">=</span><span class="n">fno_channel_mlp_skip</span><span class="p">,</span>
+            <span class="n">separable</span><span class="o">=</span><span class="n">fno_separable</span><span class="p">,</span>
+            <span class="n">factorization</span><span class="o">=</span><span class="n">fno_factorization</span><span class="p">,</span>
+            <span class="n">rank</span><span class="o">=</span><span class="n">fno_rank</span><span class="p">,</span>
+            <span class="n">fixed_rank_modes</span><span class="o">=</span><span class="n">fno_fixed_rank_modes</span><span class="p">,</span>
+            <span class="n">implementation</span><span class="o">=</span><span class="n">fno_implementation</span><span class="p">,</span>
+            <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="n">fno_decomposition_kwargs</span><span class="p">,</span>
+            <span class="n">conv_module</span><span class="o">=</span><span class="n">fno_conv_module</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="c1">### output GNO</span>
-
+        <span class="k">if</span> <span class="n">gno_weighting_function</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># sq radius**2?</span>
+            <span class="n">weight_fn</span> <span class="o">=</span> <span class="n">dispatch_weighting_fn</span><span class="p">(</span>
+                <span class="n">gno_weighting_function</span><span class="p">,</span>
+                <span class="n">sq_radius</span><span class="o">=</span><span class="n">out_gno_radius</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span>
+                <span class="n">scale</span><span class="o">=</span><span class="n">gno_weight_function_scale</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">weight_fn</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gno_out</span> <span class="o">=</span> <span class="n">GNOBlock</span><span class="p">(</span>
-            <span class="n">in_channels</span><span class="o">=</span><span class="n">fno_hidden_channels</span><span class="p">,</span> <span class="c1"># number of channels in f_y</span>
+            <span class="n">in_channels</span><span class="o">=</span><span class="n">fno_hidden_channels</span><span class="p">,</span>  <span class="c1"># number of channels in f_y</span>
             <span class="n">out_channels</span><span class="o">=</span><span class="n">fno_hidden_channels</span><span class="p">,</span>
             <span class="n">coord_dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gno_coord_dim</span><span class="p">,</span>
-            <span class="n">radius</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gno_radius</span><span class="p">,</span>
-            <span class="n">pos_embedding_type</span><span class="o">=</span><span class="n">gno_pos_embed_type</span><span class="p">,</span>
+            <span class="n">radius</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">out_gno_radius</span><span class="p">,</span>
+            <span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;sum&quot;</span><span class="p">,</span>
+            <span class="n">weighting_fn</span><span class="o">=</span><span class="n">weight_fn</span><span class="p">,</span>
+            <span class="n">pos_embedding_type</span><span class="o">=</span><span class="n">out_gno_pos_embed_type</span><span class="p">,</span>
             <span class="n">pos_embedding_channels</span><span class="o">=</span><span class="n">gno_embed_channels</span><span class="p">,</span>
             <span class="n">pos_embedding_max_positions</span><span class="o">=</span><span class="n">gno_embed_max_positions</span><span class="p">,</span>
             <span class="n">channel_mlp_layers</span><span class="o">=</span><span class="n">out_gno_channel_mlp_hidden_layers</span><span class="p">,</span>
             <span class="n">channel_mlp_non_linearity</span><span class="o">=</span><span class="n">gno_channel_mlp_non_linearity</span><span class="p">,</span>
             <span class="n">transform_type</span><span class="o">=</span><span class="n">out_gno_transform_type</span><span class="p">,</span>
+            <span class="n">use_torch_scatter_reduce</span><span class="o">=</span><span class="n">gno_use_torch_scatter</span><span class="p">,</span>
             <span class="n">use_open3d_neighbor_search</span><span class="o">=</span><span class="n">gno_use_open3d</span><span class="p">,</span>
-            <span class="n">use_torch_scatter_reduce</span><span class="o">=</span><span class="n">gno_use_torch_scatter</span>
         <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">projection</span> <span class="o">=</span> <span class="n">ChannelMLP</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="n">fno_hidden_channels</span><span class="p">,</span> 
-                              <span class="n">out_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span><span class="p">,</span> 
-                              <span class="n">hidden_channels</span><span class="o">=</span><span class="n">projection_channels</span><span class="p">,</span> 
-                              <span class="n">n_layers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> 
-                              <span class="n">n_dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
-                              <span class="n">non_linearity</span><span class="o">=</span><span class="n">fno_non_linearity</span><span class="p">)</span> 
+        <span class="n">projection_channels</span> <span class="o">=</span> <span class="n">projection_channel_ratio</span> <span class="o">*</span> <span class="n">fno_hidden_channels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">projection</span> <span class="o">=</span> <span class="n">ChannelMLP</span><span class="p">(</span>
+            <span class="n">in_channels</span><span class="o">=</span><span class="n">fno_hidden_channels</span><span class="p">,</span>
+            <span class="n">out_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span><span class="p">,</span>
+            <span class="n">hidden_channels</span><span class="o">=</span><span class="n">projection_channels</span><span class="p">,</span>
+            <span class="n">n_layers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">n_dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">non_linearity</span><span class="o">=</span><span class="n">fno_non_linearity</span><span class="p">,</span>
+        <span class="p">)</span>
 
-    <span class="c1">#returns: (fno_hidden_channels, n_1, n_2, ...)</span>
-    <span class="k">def</span> <span class="nf">latent_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_p</span><span class="p">,</span> <span class="n">ada_in</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-
+    <span class="c1"># returns: (fno_hidden_channels, n_1, n_2, ...)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">latent_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_p</span><span class="p">,</span> <span class="n">ada_in</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="c1"># in_p : (batch, n_1 , ... , n_k, in_channels + k)</span>
         <span class="c1"># ada_in : (fno_ada_in_dim, )</span>
 
         <span class="c1"># permute (b, n_1, ..., n_k, c) -&gt; (b,c, n_1,...n_k)</span>
-        <span class="n">in_p</span> <span class="o">=</span> <span class="n">in_p</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">in_p</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">in_p</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
+        <span class="n">in_p</span> <span class="o">=</span> <span class="n">in_p</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">in_p</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">in_p</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
         <span class="c1">#Update Ada IN embedding    </span>
         <span class="k">if</span> <span class="n">ada_in</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">ada_in</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
@@ -463,19 +509,41 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fno_norm</span> <span class="o">==</span> <span class="s2">&quot;ada_in&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">fno_blocks</span><span class="o">.</span><span class="n">set_ada_in_embeddings</span><span class="p">(</span><span class="n">ada_in_embed</span><span class="p">)</span>
 
-        <span class="c1">#Apply FNO blocks</span>
+        <span class="c1"># Apply FNO blocks</span>
         <span class="n">in_p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lifting</span><span class="p">(</span><span class="n">in_p</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fno_blocks</span><span class="o">.</span><span class="n">n_layers</span><span class="p">):</span>
             <span class="n">in_p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fno_blocks</span><span class="p">(</span><span class="n">in_p</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">in_p</span> 
-    
+        <span class="k">return</span> <span class="n">in_p</span>
+
 <div class="viewcode-block" id="GINO.forward">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.models.GINO.html#neuralop.models.GINO.forward">[docs]</a>
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_geom</span><span class="p">,</span> <span class="n">latent_queries</span><span class="p">,</span> <span class="n">output_queries</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">latent_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ada_in</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">input_geom</span><span class="p">,</span>
+        <span class="n">latent_queries</span><span class="p">,</span>
+        <span class="n">output_queries</span><span class="p">,</span>
+        <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">latent_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">ada_in</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;GINO.forward() received unexpected keyword arguments: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">. &quot;</span>
+                <span class="s2">&quot;These arguments will be ignored.&quot;</span><span class="p">,</span>
+                <span class="ne">UserWarning</span><span class="p">,</span>
+                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="p">)</span>
+
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The GINO&#39;s forward call:</span>
-<span class="sd">        Input GNO --&gt; FNOBlocks --&gt; output GNO + projection to output queries</span>
+<span class="sd">        Input GNO --&gt; FNOBlocks --&gt; output GNO + projection to output queries.</span>
+
+<span class="sd">        .. note ::</span>
+<span class="sd">            GINO currently supports batching **only in cases where the geometry of</span>
+<span class="sd">            inputs and outputs is shared across the entire batch**. Inputs can have a batch dim</span>
+<span class="sd">            in ``x`` and ``latent_features``, but it must be shared for both. </span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -486,9 +554,16 @@
 <span class="sd">            latent geometry on which to compute FNO latent embeddings</span>
 <span class="sd">            a grid on [0,1] x [0,1] x ....</span>
 <span class="sd">            shape (1, n_gridpts_1, .... n_gridpts_n, gno_coord_dim)</span>
-<span class="sd">        output_queries : torch.Tensor</span>
-<span class="sd">            points at which to query the final GNO layer to get output</span>
-<span class="sd">            shape (batch, n_out, gno_coord_dim)</span>
+<span class="sd">        output_queries : torch.Tensor | dict[torch.Tensor]</span>
+<span class="sd">            points at which to query the final GNO layer to get output.</span>
+
+<span class="sd">            shape (1, n_out, gno_coord_dim) per tensor.</span>
+
+<span class="sd">            * if a tensor, the model will output a tensor. </span>
+
+<span class="sd">            * if a dict of tensors, the model will return a dict of outputs, so</span>
+<span class="sd">            that ``output[key]`` corresponds to the model queried at </span>
+<span class="sd">            ``output_queries[key]``. </span>
 <span class="sd">        x : torch.Tensor, optional</span>
 <span class="sd">            input function a defined on the input domain `input_geom`</span>
 <span class="sd">            shape (batch, n_in, in_channels). Default None</span>
@@ -498,6 +573,13 @@
 <span class="sd">            if `latent_feature_channels` is set, must be passed</span>
 <span class="sd">        ada_in : torch.Tensor, optional</span>
 <span class="sd">            adaptive scalar instance parameter, defaults to None</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        out : torch.Tensor | dict[torch.Tensor]</span>
+<span class="sd">            Function over the output query coordinates</span>
+<span class="sd">            * tensor if if ``output_queries`` is a tensor</span>
+<span class="sd">            * dict if if ``output_queries`` is a dict</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># Ensure input functions on the input geom and latent geom</span>
@@ -506,59 +588,85 @@
             <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">batch_size</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        
+
         <span class="k">if</span> <span class="n">latent_features</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">latent_feature_channels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span>\
-                  <span class="s2">&quot;if passing latent features, latent_feature_channels must be set.&quot;</span>
+            <span class="k">assert</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">latent_feature_channels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="p">),</span> <span class="s2">&quot;if passing latent features, latent_feature_channels must be set.&quot;</span>
             <span class="k">assert</span> <span class="n">latent_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">latent_feature_channels</span>
 
             <span class="c1"># batch, n_gridpts_1, .... n_gridpts_n, gno_coord_dim</span>
-            <span class="k">assert</span> <span class="n">latent_features</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">gno_coord_dim</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span>\
-                <span class="sa">f</span><span class="s2">&quot;Latent features must be of shape (batch, n_gridpts_1, ...n_gridpts_n, gno_coord_dim), got </span><span class="si">{</span><span class="n">latent_features</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="c1"># latent features must have the same shape (except channels) as latent_queries </span>
+            <span class="k">assert</span> <span class="p">(</span>
+                <span class="n">latent_features</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">gno_coord_dim</span> <span class="o">+</span> <span class="mi">2</span>
+            <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Latent features must be of shape (batch, n_gridpts_1, ...n_gridpts_n, gno_coord_dim), got </span><span class="si">{</span><span class="n">latent_features</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="c1"># latent features must have the same shape (except channels) as latent_queries</span>
             <span class="k">if</span> <span class="n">latent_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">batch_size</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">latent_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="n">latent_features</span> <span class="o">=</span> <span class="n">latent_features</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">*</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">latent_features</span><span class="o">.</span><span class="n">ndim</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
 
-        <span class="n">input_geom</span> <span class="o">=</span> <span class="n">input_geom</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> 
+        <span class="n">input_geom</span> <span class="o">=</span> <span class="n">input_geom</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">latent_queries</span> <span class="o">=</span> <span class="n">latent_queries</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
-        <span class="c1"># Pass through input GNOBlock </span>
-        <span class="n">in_p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gno_in</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">input_geom</span><span class="p">,</span>
-                           <span class="n">x</span><span class="o">=</span><span class="n">latent_queries</span><span class="o">.</span><span class="n">view</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">latent_queries</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])),</span>
-                           <span class="n">f_y</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
-        
-        <span class="n">grid_shape</span> <span class="o">=</span> <span class="n">latent_queries</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># disregard positional encoding dim</span>
-        
+        <span class="c1"># Pass through input GNOBlock</span>
+        <span class="n">in_p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gno_in</span><span class="p">(</span>
+            <span class="n">y</span><span class="o">=</span><span class="n">input_geom</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">latent_queries</span><span class="o">.</span><span class="n">view</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">latent_queries</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])),</span> <span class="n">f_y</span><span class="o">=</span><span class="n">x</span>
+        <span class="p">)</span>
+
+        <span class="n">grid_shape</span> <span class="o">=</span> <span class="n">latent_queries</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># disregard positional encoding dim</span>
+
         <span class="c1"># shape (batch_size, grid1, ...gridn, -1)</span>
         <span class="n">in_p</span> <span class="o">=</span> <span class="n">in_p</span><span class="o">.</span><span class="n">view</span><span class="p">((</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">*</span><span class="n">grid_shape</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
-        
+
         <span class="k">if</span> <span class="n">latent_features</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">in_p</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">in_p</span><span class="p">,</span> <span class="n">latent_features</span><span class="p">),</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
         <span class="c1"># take apply fno in latent space</span>
-        <span class="n">latent_embed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">latent_embedding</span><span class="p">(</span><span class="n">in_p</span><span class="o">=</span><span class="n">in_p</span><span class="p">,</span> 
-                                             <span class="n">ada_in</span><span class="o">=</span><span class="n">ada_in</span><span class="p">)</span>
+        <span class="n">latent_embed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">latent_embedding</span><span class="p">(</span><span class="n">in_p</span><span class="o">=</span><span class="n">in_p</span><span class="p">,</span> <span class="n">ada_in</span><span class="o">=</span><span class="n">ada_in</span><span class="p">)</span>
 
         <span class="c1"># Integrate latent space to output queries</span>
-        <span class="c1">#latent_embed shape (b, c, n_1, n_2, ..., n_k)</span>
+        <span class="c1"># latent_embed shape (b, c, n_1, n_2, ..., n_k)</span>
         <span class="n">batch_size</span> <span class="o">=</span> <span class="n">latent_embed</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="c1"># permute to (b, n_1, n_2, ...n_k, c)</span>
         <span class="c1"># then reshape to (b, n_1 * n_2 * ...n_k, out_channels)</span>
         <span class="n">latent_embed</span> <span class="o">=</span> <span class="n">latent_embed</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">in_coord_dim_reverse_order</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fno_hidden_channels</span><span class="p">)</span>
-        
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_gno_tanh</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;latent_embed&#39;</span><span class="p">,</span> <span class="s1">&#39;both&#39;</span><span class="p">]:</span>
-            <span class="n">latent_embed</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">latent_embed</span><span class="p">)</span>
-        
-        <span class="c1"># latent queries is of shape (d_1 x d_2 x... d_n x n), reshape to n_out x n</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gno_out</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">latent_queries</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">latent_queries</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])),</span> 
-                    <span class="n">x</span><span class="o">=</span><span class="n">output_queries</span><span class="p">,</span>
-                    <span class="n">f_y</span><span class="o">=</span><span class="n">latent_embed</span><span class="p">,)</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
-        <span class="c1"># Project pointwise to out channels</span>
-        <span class="c1">#(b, n_in, out_channels)</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  
-        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_gno_tanh</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;latent_embed&quot;</span><span class="p">,</span> <span class="s2">&quot;both&quot;</span><span class="p">]:</span>
+            <span class="n">latent_embed</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">latent_embed</span><span class="p">)</span>
+
+        <span class="c1"># integrate over the latent space</span>
+        <span class="c1"># if output queries is a dict, query the output gno separately</span>
+        <span class="c1"># with each tensor of query points</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">output_queries</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">out_p</span> <span class="ow">in</span> <span class="n">output_queries</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">out_p</span> <span class="o">=</span> <span class="n">out_p</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+                <span class="n">sub_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gno_out</span><span class="p">(</span>
+                    <span class="n">y</span><span class="o">=</span><span class="n">latent_queries</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">latent_queries</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])),</span>
+                    <span class="n">x</span><span class="o">=</span><span class="n">out_p</span><span class="p">,</span>
+                    <span class="n">f_y</span><span class="o">=</span><span class="n">latent_embed</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">sub_output</span> <span class="o">=</span> <span class="n">sub_output</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+                <span class="c1"># Project pointwise to out channels</span>
+                <span class="c1"># (b, n_in, out_channels)</span>
+                <span class="n">sub_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">(</span><span class="n">sub_output</span><span class="p">)</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+                <span class="n">out</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">sub_output</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">output_queries</span> <span class="o">=</span> <span class="n">output_queries</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="c1"># latent queries is of shape (d_1 x d_2 x... d_n x n), reshape to n_out x n</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gno_out</span><span class="p">(</span>
+                <span class="n">y</span><span class="o">=</span><span class="n">latent_queries</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">latent_queries</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])),</span>
+                <span class="n">x</span><span class="o">=</span><span class="n">output_queries</span><span class="p">,</span>
+                <span class="n">f_y</span><span class="o">=</span><span class="n">latent_embed</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="c1"># Project pointwise to out channels</span>
+            <span class="c1"># (b, n_in, out_channels)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="n">out</span></div>
 </div>
 
@@ -571,7 +679,7 @@
         <footer class="footer">
     <div class="content has-text-centered">
         <div class="block">
-          &copy; Copyright 2024, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+          &copy; Copyright 2025, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
         </div>
     </div>
   </footer>

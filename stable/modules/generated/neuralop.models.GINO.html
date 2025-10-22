@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>neuralop.models.GINO &#8212; neuraloperator 1.0.2 documentation</title> 
+    <title>neuralop.models.GINO &#8212; neuraloperator 2.0.0 documentation</title> 
 <link rel="stylesheet" href="../../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../_static/favicon/favicon-32x32.png">
@@ -15,23 +15,26 @@
 <link rel="shortcut icon" href="../../_static/favicon/favicon.ico">
 <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/tensorly_style.css?v=a02e9698" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=5126dfd5" />
 
   
-    <script src="../../_static/documentation_options.js?v=1ed6394b"></script>
+    <script src="../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
  
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="neuralop.models.UNO" href="neuralop.models.UNO.html" />
+    <link rel="next" title="neuralop.models.LocalNO" href="neuralop.models.LocalNO.html" />
     <link rel="prev" title="neuralop.models.SFNO" href="neuralop.models.SFNO.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -67,6 +70,9 @@
               <a class="navbar-item" href="../../install.html">
               Install
             </a>
+              <a class="navbar-item" href="../../theory_guide/index.html">
+              Theory Guide
+            </a>
               <a class="navbar-item" href="../../user_guide/index.html">
               User Guide
             </a>
@@ -75,6 +81,9 @@
             </a>
               <a class="navbar-item" href="../../auto_examples/index.html">
               Examples
+            </a>
+              <a class="navbar-item" href="../../dev_guide/index.html">
+              Developer's Guide
             </a>
           </div>
         
@@ -126,16 +135,20 @@
       <div class="sidebar-menu-toc">
       <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing NeuralOperator</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">NeuralOperator User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory_guide/index.html">Theory Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User Guide</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../api.html#models">Models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.layers">Layers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#model-dispatching">Model Dispatching</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#training">Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#loss-functions">Loss Functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.utils">Utility Functions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Gallery of examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Development guide</a></li>
 </ul>
  
       </div>
@@ -164,49 +177,135 @@
 <h1><a class="reference internal" href="../api.html#module-neuralop.models" title="neuralop.models"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.models</span></code></a>.GINO<a class="headerlink" href="#neuralop-models-gino" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.models.GINO">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.models.</span></span><span class="sig-name descname"><span class="pre">GINO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/models/gino.html#GINO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.models.GINO" title="Link to this definition"></a></dt>
-<dd><p>GINO: Geometry-informed Neural Operator. Learns a mapping between
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.models.</span></span><span class="sig-name descname"><span class="pre">GINO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/models/gino.html#GINO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.models.GINO" title="Link to this definition"></a></dt>
+<dd><p>GINO: Geometry-informed Neural Operator - learns a mapping between
 functions presented over arbitrary coordinate meshes. The model carries
 global integration through spectral convolution layers in an intermediate
-latent space, as described in <a href="#id2"><span class="problematic" id="id1">[1]_</span></a>.</p>
+latent space, as described in <a class="reference internal" href="#rf1a08f23c851-1" id="id1">[1]</a>. Optionally enables a weighted output
+GNO for use in a Mollified Graph Neural Operator scheme, as introduced in <a class="reference internal" href="#rf1a08f23c851-2" id="id2">[2]</a>.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt><strong>in_channels</strong><span class="classifier">int</span></dt><dd><p>feature dimension of input points</p>
+<dt><strong>in_channels</strong><span class="classifier">int</span></dt><dd><p>Feature dimension of input points. Determined by the problem.</p>
 </dd>
-<dt><strong>out_channels</strong><span class="classifier">int</span></dt><dd><p>feature dimension of output points</p>
+<dt><strong>out_channels</strong><span class="classifier">int</span></dt><dd><p>Feature dimension of output points. Determined by the problem.</p>
 </dd>
-<dt><strong>latent_feature_channels</strong><span class="classifier">int, optional</span></dt><dd><p>number of channels in optional latent feature map
-to concatenate onto latent embeddings before 
-the FNO’s forward pass, default None</p>
+<dt><strong>fno_n_modes</strong><span class="classifier">tuple, optional</span></dt><dd><p>Number of modes along each dimension to use in FNO. Default: (16, 16, 16)
+Must be larger enough but smaller than max_resolution//2 (Nyquist frequency) on the latent grid</p>
 </dd>
-<dt><strong>projection_channels</strong><span class="classifier">int, optional</span></dt><dd><p>number of channels in FNO pointwise projection</p>
+<dt><strong>fno_hidden_channels</strong><span class="classifier">int, optional</span></dt><dd><p>Hidden channels for use in FNO. Default: 64</p>
 </dd>
-<dt><strong>gno_coord_dim</strong><span class="classifier">int, optional</span></dt><dd><p>geometric dimension of input/output queries, by default 3</p>
+<dt><strong>fno_n_layers</strong><span class="classifier">int, optional</span></dt><dd><p>Number of layers in FNO. Default: 4</p>
 </dd>
-<dt><strong>gno_radius</strong><span class="classifier">float, optional</span></dt><dd><p>radius in input/output space for GNO neighbor search, by default 0.033</p>
+<dt><strong>latent_feature_channels</strong><span class="classifier">int, optional</span></dt><dd><p>Number of channels in optional latent feature map to concatenate onto latent embeddings
+before the FNO’s forward pass. Default: None</p>
 </dd>
-<dt><strong>in_gno_transform_type</strong><span class="classifier">str, optional</span></dt><dd><p>transform type parameter for input GNO, by default ‘linear’
-see neuralop.layers.gno_block for more details</p>
+<dt><strong>projection_channel_ratio</strong><span class="classifier">int, optional</span></dt><dd><p>Ratio of pointwise projection channels in the final ChannelMLP to fno_hidden_channels.
+The number of projection channels in the final ChannelMLP is computed by
+projection_channel_ratio * fno_hidden_channels (i.e. default 256). Default: 4</p>
 </dd>
-<dt><strong>out_gno_transform_type</strong><span class="classifier">str, optional</span></dt><dd><p>transform type parameter for output GNO, by default ‘linear’
-see neuralop.layers.gno_block for more details</p>
+<dt><strong>gno_coord_dim</strong><span class="classifier">int, optional</span></dt><dd><p>Geometric dimension of input/output queries. Determined by the problem. Default: 3</p>
 </dd>
-<dt><strong>gno_pos_embed_type</strong><span class="classifier">literal <cite>{‘transformer’, ‘nerf’}</cite> | None</span></dt><dd><p>type of optional sinusoidal positional embedding to use in GNOBlock,
-by default <cite>‘transformer’</cite></p>
+<dt><strong>in_gno_radius</strong><span class="classifier">float, optional</span></dt><dd><p>Radius in input space for GNO neighbor search. Default: 0.033
+Larger radius means more neighboors so more global interactions, but larger computational cost.</p>
 </dd>
-<dt><strong>fno_in_channels</strong><span class="classifier">int, optional</span></dt><dd><p>number of input channels for FNO, by default 26</p>
+<dt><strong>out_gno_radius</strong><span class="classifier">float, optional</span></dt><dd><p>Radius in output space for GNO neighbor search. Default: 0.033
+Larger radius means more neighboors so more global interactions, but larger computational cost.</p>
 </dd>
-<dt><strong>fno_n_modes</strong><span class="classifier">tuple, optional</span></dt><dd><p>number of modes along each dimension 
-to use in FNO, by default (16, 16, 16)</p>
+<dt><strong>gno_weighting_function</strong><span class="classifier">Literal[“half_cos”, “bump”, “quartic”, “quadr”, “octic”], optional</span></dt><dd><p>Choice of weighting function to use in the output GNO for Mollified Graph Neural Operator-based models.
+See neuralop.layers.gno_weighting_functions for more details. Default: None</p>
 </dd>
-<dt><strong>fno_hidden_channels</strong><span class="classifier">int, optional</span></dt><dd><p>hidden channels for use in FNO, by default 64</p>
+<dt><strong>gno_weight_function_scale</strong><span class="classifier">float, optional</span></dt><dd><p>Factor by which to scale weights from GNO weighting function.
+If gno_weighting_function is None, this is not used. Default: 1</p>
 </dd>
-<dt><strong>lifting_channel_ratio</strong><span class="classifier">int, optional</span></dt><dd><p>ratio of lifting channels to <cite>fno_hidden_channels</cite>, by default 2
-The number of liting channels in the lifting block of the FNO is
-lifting_channel_ratio * hidden_channels (e.g. default 512)</p>
+<dt><strong>in_gno_transform_type</strong><span class="classifier">str, optional</span></dt><dd><p>Transform type parameter for input GNO. Default: “linear”
+See neuralop.layers.gno_block for more details.
+See neuralop.layers.gno_block for more details.</p>
 </dd>
-<dt><strong>fno_n_layers</strong><span class="classifier">int, optional</span></dt><dd><p>number of layers in FNO, by default 4</p>
+<dt><strong>out_gno_transform_type</strong><span class="classifier">str, optional</span></dt><dd><p>Transform type parameter for output GNO.
+Options: “linear”, “nonlinear”, “nonlinear_kernelonly”. Default: “linear”
+See neuralop.layers.gno_block for more details.
+Type of optional sinusoidal positional embedding to use in input GNOBlock. Default: “transformer”
+Type of optional sinusoidal positional embedding to use in input GNOBlock.
+Options: “transformer”, “nerf”. Default: “transformer”
+Type of optional sinusoidal positional embedding to use in output GNOBlock. Default: “transformer”</p>
+</dd>
+<dt><strong>fno_in_channels</strong><span class="classifier">int, optional</span></dt><dd><p>Number of input channels for FNO. Default: 3</p>
+</dd>
+<dt><strong>fno_lifting_channel_ratio</strong><span class="classifier">int, optional</span></dt><dd><p>Ratio of lifting channels to fno_hidden_channels.
+The number of lifting channels in the lifting block of the FNO is
+fno_lifting_channel_ratio * hidden_channels (i.e. default 128). Default: 2</p>
+</dd>
+<dt><strong>gno_embed_channels</strong><span class="classifier">int, optional</span></dt><dd><p>Dimension of optional per-channel embedding to use in GNOBlock. Default: 32</p>
+</dd>
+<dt><strong>gno_embed_max_positions</strong><span class="classifier">int, optional</span></dt><dd><p>Max positions of optional per-channel embedding to use in GNOBlock.
+If gno_pos_embed_type != ‘transformer’, this is not used. Default: 10000</p>
+</dd>
+<dt><strong>in_gno_channel_mlp_hidden_layers</strong><span class="classifier">list, optional</span></dt><dd><p>Widths of hidden layers in input GNO. Default: [80, 80, 80]</p>
+</dd>
+<dt><strong>out_gno_channel_mlp_hidden_layers</strong><span class="classifier">list, optional</span></dt><dd><p>Widths of hidden layers in output GNO. Default: [512, 256]</p>
+</dd>
+<dt><strong>gno_channel_mlp_non_linearity</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>Nonlinearity to use in GNO ChannelMLP. Default: F.gelu</p>
+</dd>
+<dt><strong>gno_use_open3d</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use Open3D neighbor search.
+If False, uses pure-PyTorch fallback neighbor search. Default: True</p>
+</dd>
+<dt><strong>gno_use_torch_scatter</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use torch-scatter to perform grouped reductions in the IntegralTransform.
+If False, uses native Python reduction in neuralop.layers.segment_csr. Default: True</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>torch-scatter is an optional dependency that conflicts with the newest versions of PyTorch,
+so you must handle the conflict explicitly in your environment. See <a class="reference internal" href="../../install.html#torch-scatter-dependency"><span class="std std-ref">Sparse computations with PyTorch-Scatter</span></a>
+for more information.</p>
+</div>
+</dd>
+<dt><strong>out_gno_tanh</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use tanh to stabilize outputs of the output GNO. Default: False</p>
+</dd>
+<dt><strong>fno_resolution_scaling_factor</strong><span class="classifier">float, optional</span></dt><dd><p>Factor by which to scale output of FNO. Default: None</p>
+</dd>
+<dt><strong>fno_block_precision</strong><span class="classifier">str, optional</span></dt><dd><p>Data precision to compute within FNO block. Options: “full”, “half”, “mixed”. Default: “full”</p>
+</dd>
+<dt><strong>fno_use_channel_mlp</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use a ChannelMLP layer after each FNO block. Default: True</p>
+</dd>
+<dt><strong>fno_channel_mlp_dropout</strong><span class="classifier">float, optional</span></dt><dd><p>Dropout parameter of above ChannelMLP. Default: 0</p>
+</dd>
+<dt><strong>fno_channel_mlp_expansion</strong><span class="classifier">float, optional</span></dt><dd><p>Expansion parameter of above ChannelMLP. Default: 0.5</p>
+</dd>
+<dt><strong>fno_non_linearity</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>Nonlinear activation function between each FNO layer. Default: F.gelu</p>
+</dd>
+<dt><strong>fno_stabilizer</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>By default None, otherwise tanh is used before FFT in the FNO block. Default: None</p>
+</dd>
+<dt><strong>fno_norm</strong><span class="classifier">str, optional</span></dt><dd><p>Normalization layer to use in FNO. Options: “ada_in”, “group_norm”, “instance_norm”, None. Default: None</p>
+</dd>
+<dt><strong>fno_ada_in_features</strong><span class="classifier">int, optional</span></dt><dd><p>If an adaptive mesh is used, number of channels of its positional embedding.
+If None, adaptive mesh embedding is not used. Default: 4</p>
+</dd>
+<dt><strong>fno_ada_in_dim</strong><span class="classifier">int, optional</span></dt><dd><p>Dimensions of above FNO adaptive mesh. Default: 1</p>
+</dd>
+<dt><strong>fno_preactivation</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use ResNet-style preactivation. Default: False</p>
+</dd>
+<dt><strong>fno_skip</strong><span class="classifier">str, optional</span></dt><dd><p>Type of skip connection to use. Options: “linear”, “identity”, “soft-gating”, None. Default: “linear”</p>
+</dd>
+<dt><strong>fno_channel_mlp_skip</strong><span class="classifier">str, optional</span></dt><dd><p>Type of skip connection to use in the FNO.
+Options: “linear”, “identity”, “soft-gating”, None. Default: “soft-gating”</p>
+</dd>
+<dt><strong>fno_separable</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use a separable spectral convolution. Default: False</p>
+</dd>
+<dt><strong>fno_factorization</strong><span class="classifier">str, optional</span></dt><dd><p>Tensor factorization of the parameters weight to use.
+Options: “tucker”, “tt”, “cp”, None. Default: None</p>
+</dd>
+<dt><strong>fno_rank</strong><span class="classifier">float, optional</span></dt><dd><p>Rank of the tensor factorization of the Fourier weights. Default: 1.0
+Set to float &lt;1.0 when using TFNO (i.e. when factorization is not None).
+A TFNO with rank 0.1 has roughly 10% of the parameters of a dense FNO.</p>
+</dd>
+<dt><strong>fno_fixed_rank_modes</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to not factorize certain modes. Default: False</p>
+</dd>
+<dt><strong>fno_implementation</strong><span class="classifier">str, optional</span></dt><dd><p>If factorization is not None, forward mode to use.
+Options: “reconstructed”, “factorized”. Default: “factorized”</p>
+</dd>
+<dt><strong>fno_decomposition_kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>Additional parameters to pass to the tensor decomposition. Default: {}</p>
+</dd>
+<dt><strong>fno_conv_module</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>Spectral convolution module to use. Default: SpectralConv</p>
 </dd>
 </dl>
 </dd>
@@ -215,120 +314,39 @@ lifting_channel_ratio * hidden_channels (e.g. default 512)</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.models.GINO.forward" title="neuralop.models.GINO.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>(input_geom, latent_queries, ...[, ...])</p></td>
-<td><p>The GINO's forward call: Input GNO --&gt; FNOBlocks --&gt; output GNO + projection to output queries</p></td>
+<td><p>Define the computation performed at every call.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">latent_embedding</span></code>(in_p[, ada_in])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
 </table>
-<dl class="field-list simple">
-<dt class="field-odd">Other Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>gno_embed_channels: int</strong></dt><dd><p>dimension of optional per-channel embedding to use in GNOBlock,
-by default 32</p>
-</dd>
-<dt><strong>gno_embed_max_positions: int</strong></dt><dd><p>max positions of optional per-channel embedding to use in GNOBlock,
-by default 10000. If <cite>gno_pos_embed_type != ‘transformer’</cite>, value is unused.</p>
-</dd>
-<dt><strong>in_gno_channel_mlp_hidden_layers</strong><span class="classifier">list, optional</span></dt><dd><p>widths of hidden layers in input GNO, by default [80, 80, 80]</p>
-</dd>
-<dt><strong>out_gno_channel_mlp_hidden_layers</strong><span class="classifier">list, optional</span></dt><dd><p>widths of hidden layers in output GNO, by default [512, 256]</p>
-</dd>
-<dt><strong>gno_channel_mlp_non_linearity</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>nonlinearity to use in gno ChannelMLP, by default F.gelu</p>
-</dd>
-<dt><strong>gno_use_open3d</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to use open3d neighbor search, by default True
-if False, uses pure-PyTorch fallback neighbor search</p>
-</dd>
-<dt><strong>gno_use_torch_scatter</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to use torch_scatter’s neighborhood reduction function
-or the native PyTorch implementation in IntegralTransform layers.
-If False, uses the fallback PyTorch version.</p>
-</dd>
-<dt><strong>out_gno_tanh</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to use tanh to stabilize outputs of the output GNO, by default False</p>
-</dd>
-<dt><strong>fno_resolution_scaling_factor</strong><span class="classifier">float | None, optional</span></dt><dd><p>factor by which to scale output of FNO, by default None</p>
-</dd>
-<dt><strong>fno_incremental_n_modes</strong><span class="classifier">list[int] | None, defaults to None</span></dt><dd></dd>
-<dt><strong>if passed, sets n_modes separately for each FNO layer.</strong></dt><dd></dd>
-<dt><strong>fno_block_precision</strong><span class="classifier">str, defaults to ‘full’</span></dt><dd><p>data precision to compute within fno block</p>
-</dd>
-<dt><strong>fno_use_channel_mlp</strong><span class="classifier">bool, defaults to True</span></dt><dd><p>Whether to use a ChannelMLP layer after each FNO block.</p>
-</dd>
-<dt><strong>fno_channel_mlp_dropout</strong><span class="classifier">float, defaults to 0</span></dt><dd><p>dropout parameter of above ChannelMLP.</p>
-</dd>
-<dt><strong>fno_channel_mlp_expansion</strong><span class="classifier">float, defaults to 0.5</span></dt><dd><p>expansion parameter of above ChannelMLP.</p>
-</dd>
-<dt><strong>fno_non_linearity</strong><span class="classifier">nn.Module, defaults to F.gelu</span></dt><dd><p>nonlinear activation function between each FNO layer.</p>
-</dd>
-<dt><strong>fno_stabilizer</strong><span class="classifier">nn.Module | None, defaults to None</span></dt><dd><p>By default None, otherwise tanh is used before FFT in the FNO block.</p>
-</dd>
-<dt><strong>fno_norm</strong><span class="classifier">nn.Module | None, defaults to None</span></dt><dd><p>normalization layer to use in FNO.</p>
-</dd>
-<dt><strong>fno_ada_in_features</strong><span class="classifier">int | None, defaults to 4</span></dt><dd><p>if an adaptive mesh is used, number of channels of its positional embedding.
-If None, adaptive mesh embedding is not used.</p>
-</dd>
-<dt><strong>fno_ada_in_dim</strong><span class="classifier">int, defaults to 1</span></dt><dd><p>dimensions of above FNO adaptive mesh.</p>
-</dd>
-<dt><strong>fno_preactivation</strong><span class="classifier">bool, defaults to False</span></dt><dd><p>whether to use Resnet-style preactivation.</p>
-</dd>
-<dt><strong>fno_skip</strong><span class="classifier">str, defaults to ‘linear’</span></dt><dd><p>type of skip connection to use.</p>
-</dd>
-<dt><strong>fno_channel_mlp_skip</strong><span class="classifier">str, defaults to ‘soft-gating’</span></dt><dd><p>type of skip connection to use in the FNO
-‘linear’: conv layer
-‘soft-gating’: weights the channels of the input
-‘identity’: nn.Identity</p>
-</dd>
-<dt><strong>fno_separable</strong><span class="classifier">bool, defaults to False</span></dt><dd><p>if True, use a depthwise separable spectral convolution.</p>
-</dd>
-<dt><strong>fno_factorization</strong><span class="classifier">str {‘tucker’, ‘tt’, ‘cp’} |  None, defaults to None</span></dt><dd><p>Tensor factorization of the parameters weight to use</p>
-</dd>
-<dt><strong>fno_rank</strong><span class="classifier">float, defaults to 1.0</span></dt><dd><p>Rank of the tensor factorization of the Fourier weights.</p>
-</dd>
-<dt><strong>fno_joint_factorization</strong><span class="classifier">bool, defaults to False</span></dt><dd><p>Whether all the Fourier layers should be parameterized by a single tensor (vs one per layer).</p>
-</dd>
-<dt><strong>fno_fixed_rank_modes</strong><span class="classifier">bool, defaults to False</span></dt><dd><p>Modes to not factorize.</p>
-</dd>
-<dt><strong>fno_implementation</strong><span class="classifier">str {‘factorized’, ‘reconstructed’} | None, defaults to ‘factorized’</span></dt><dd><p>If factorization is not None, forward mode to use::
-* <cite>reconstructed</cite> : the full weight tensor is reconstructed from the factorization and used for the forward pass
-* <cite>factorized</cite> : the input is directly contracted with the factors of the decomposition</p>
-</dd>
-<dt><strong>fno_decomposition_kwargs</strong><span class="classifier">dict, defaults to dict()</span></dt><dd><p>Optionaly additional parameters to pass to the tensor decomposition.</p>
-</dd>
-<dt><strong>fno_conv_module</strong><span class="classifier">nn.Module, defaults to SpectralConv</span></dt><dd><p>Spectral Convolution module to use.</p>
-</dd>
-</dl>
-</dd>
-</dl>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="rf1a08f23c851-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>: Li, Z., Kovachki, N., Choy, C., Li, B., Kossaifi, J., Otta, S.,
+Nabian, M., Stadler, M., Hundt, C., Azizzadenesheli, K., Anandkumar, A. (2023)
+Geometry-Informed Neural Operator for Large-Scale 3D PDEs. NeurIPS 2023,
+<a class="reference external" href="https://proceedings.neurips.cc/paper_files/paper/2023/hash/70518ea42831f02afc3a2828993935ad-Abstract-Conference.html">https://proceedings.neurips.cc/paper_files/paper/2023/hash/70518ea42831f02afc3a2828993935ad-Abstract-Conference.html</a></p>
+</div>
+<div class="citation" id="rf1a08f23c851-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>: Lin, R. et al. Placeholder reference for Mollified Graph Neural Operators.</p>
+</div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="neuralop.models.GINO.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_geom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latent_queries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_queries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latent_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ada_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/models/gino.html#GINO.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.models.GINO.forward" title="Link to this definition"></a></dt>
-<dd><p>The GINO’s forward call:
-Input GNO –&gt; FNOBlocks –&gt; output GNO + projection to output queries</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>input_geom</strong><span class="classifier">torch.Tensor</span></dt><dd><p>input domain coordinate mesh
-shape (1, n_in, gno_coord_dim)</p>
-</dd>
-<dt><strong>latent_queries</strong><span class="classifier">torch.Tensor</span></dt><dd><p>latent geometry on which to compute FNO latent embeddings
-a grid on [0,1] x [0,1] x ….
-shape (1, n_gridpts_1, …. n_gridpts_n, gno_coord_dim)</p>
-</dd>
-<dt><strong>output_queries</strong><span class="classifier">torch.Tensor</span></dt><dd><p>points at which to query the final GNO layer to get output
-shape (batch, n_out, gno_coord_dim)</p>
-</dd>
-<dt><strong>x</strong><span class="classifier">torch.Tensor, optional</span></dt><dd><p>input function a defined on the input domain <cite>input_geom</cite>
-shape (batch, n_in, in_channels). Default None</p>
-</dd>
-<dt><strong>latent_features</strong><span class="classifier">torch.Tensor, optional</span></dt><dd><p>optional feature map to concatenate onto latent embedding
-before being passed into the latent FNO, default None
-if <cite>latent_feature_channels</cite> is set, must be passed</p>
-</dd>
-<dt><strong>ada_in</strong><span class="classifier">torch.Tensor, optional</span></dt><dd><p>adaptive scalar instance parameter, defaults to None</p>
-</dd>
-</dl>
-</dd>
-</dl>
+<dd><p>Define the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -349,8 +367,8 @@ if <cite>latent_feature_channels</cite> is set, must be passed</p>
     </a>
     
     
-    <a class="button pagination-next" href="neuralop.models.UNO.html" title="next page" accesskey="n">
-        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.models</span></code>.UNO </span>
+    <a class="button pagination-next" href="neuralop.models.LocalNO.html" title="next page" accesskey="n">
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.models</span></code>.LocalNO </span>
         <span class="icon">
             <i class="fa fa-arrow-circle-right"></i>
         </span>
@@ -363,7 +381,7 @@ if <cite>latent_feature_channels</cite> is set, must be passed</p>
         <footer class="footer">
     <div class="content has-text-centered">
         <div class="block">
-          &copy; Copyright 2024, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+          &copy; Copyright 2025, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
         </div>
     </div>
   </footer>

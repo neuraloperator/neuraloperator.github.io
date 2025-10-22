@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>neuralop.losses.equation_losses &#8212; neuraloperator 2.0.0 documentation</title> 
+<link rel="stylesheet" href="../../../_static/tensorly_style.css">
+<link rel="apple-touch-icon" sizes="180x180" href="../../../_static/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../../_static/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../../_static/favicon/favicon-16x16.png">
+<link rel="manifest" href="../../../_static/favicon/site.webmanifest">
+<link rel="mask-icon" href="../../../_static/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="../../../_static/favicon/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=5126dfd5" />
+
+  
+    <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+ <script src="../../../_static/navbar_burger.js"></script>
+ <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+ 
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  </head>
+<body  class="has-navbar-fixed-top">
+
+  <header>
+    <navbar>
+      <nav class="navbar top-navbar is-fixed-top has-shadow is-flex-wrap-wrap" role="navigation" aria-label="main top navigation">
+        <div class="navbar-brand">
+        
+
+          <a class="navbar-item" href="../../../index.html">
+            <img src="../../../_static/neuraloperator_logo.png" height="28">
+          </a>
+          <a class="navbar-item is-hidden-desktop" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon"><i class="fab fa-github"></i></span>
+          </a>
+
+          <a role="button" class="navbar-burger" data-target="top-nav-menu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+
+        </div>
+        
+        <div class="navbar-menu" id="top-nav-menu">
+        
+
+          <div class="navbar-start">
+            
+              <a class="navbar-item" href="../../../install.html">
+              Install
+            </a>
+              <a class="navbar-item" href="../../../theory_guide/index.html">
+              Theory Guide
+            </a>
+              <a class="navbar-item" href="../../../user_guide/index.html">
+              User Guide
+            </a>
+              <a class="navbar-item" href="../../../modules/api.html">
+              API
+            </a>
+              <a class="navbar-item" href="../../../auto_examples/index.html">
+              Examples
+            </a>
+              <a class="navbar-item" href="../../../dev_guide/index.html">
+              Developer's Guide
+            </a>
+          </div>
+        
+          <div class="navbar-end">
+            <div class="navbar-item">
+            
+            <a class="button is-hidden-touch is-dark" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon-text">
+                <span class="icon is-large">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Github</span>
+              </span>
+            </a>
+
+            </div> 
+          </div> 
+        </div> 
+
+      </nav>
+      
+    </navbar>
+  </header>
+
+
+  <div id="column-container">
+  <div class="columns is-mobile is-centered">
+	
+  
+
+  <div class="column main-column">
+
+    
+    <div class="main-section">
+
+      
+      
+
+      <div class="container content main-content">
+        
+  <h1>Source code for neuralop.losses.equation_losses</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn.functional</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">F</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.autograd</span><span class="w"> </span><span class="kn">import</span> <span class="n">grad</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.differentiation</span><span class="w"> </span><span class="kn">import</span> <span class="n">FiniteDiff</span>
+
+<span class="c1"># Set warning filter to show each warning only once</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;once&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="BurgersEqnLoss">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.losses.equation_losses.BurgersEqnLoss.html#neuralop.losses.equation_losses.BurgersEqnLoss">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BurgersEqnLoss</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes loss for Burgers&#39; equation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visc</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fdm&quot;</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">,</span> <span class="n">domain_length</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visc</span> <span class="o">=</span> <span class="n">visc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">domain_length</span> <span class="o">=</span> <span class="n">domain_length</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain_length</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">domain_length</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">domain_length</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">fdm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">):</span>
+        <span class="c1"># remove extra channel dimensions</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># shapes</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">nt</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">shape</span>
+
+        <span class="c1"># we assume that the input is given on a regular grid</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain_length</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">nt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain_length</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">nx</span>
+
+        <span class="c1"># Get derivatives, du/dt and du/dx and d^2u/dxx</span>
+        <span class="n">fd2d</span> <span class="o">=</span> <span class="n">FiniteDiff</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">dx</span><span class="p">),</span> <span class="n">periodic_in_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">periodic_in_y</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">dudt</span><span class="p">,</span> <span class="n">dudx</span> <span class="o">=</span> <span class="n">fd2d</span><span class="o">.</span><span class="n">dx</span><span class="p">(</span><span class="n">u</span><span class="p">),</span> <span class="n">fd2d</span><span class="o">.</span><span class="n">dy</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+        <span class="n">dudxx</span> <span class="o">=</span> <span class="n">fd2d</span><span class="o">.</span><span class="n">dy</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># right hand side</span>
+        <span class="n">right_hand_side</span> <span class="o">=</span> <span class="o">-</span><span class="n">dudx</span> <span class="o">*</span> <span class="n">u</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">visc</span> <span class="o">*</span> <span class="n">dudxx</span>
+
+        <span class="c1"># compute the loss of the left and right hand sides of Burgers&#39; equation</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">dudt</span><span class="p">,</span> <span class="n">right_hand_side</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;BurgersLoss.__call__() received unexpected keyword arguments: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">. &quot;</span>
+                <span class="s2">&quot;These arguments will be ignored.&quot;</span><span class="p">,</span>
+                <span class="ne">UserWarning</span><span class="p">,</span>
+                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;fdm&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fdm</span><span class="p">(</span><span class="n">u</span><span class="o">=</span><span class="n">y_pred</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="ICLoss">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.losses.equation_losses.ICLoss.html#neuralop.losses.equation_losses.ICLoss">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ICLoss</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes loss for initial value problems.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">initial_condition_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">boundary_true</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">boundary_pred</span> <span class="o">=</span> <span class="n">y_pred</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">boundary_pred</span><span class="p">,</span> <span class="n">boundary_true</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;ICLoss.__call__() received unexpected keyword arguments: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">. &quot;</span>
+                <span class="s2">&quot;These arguments will be ignored.&quot;</span><span class="p">,</span>
+                <span class="ne">UserWarning</span><span class="p">,</span>
+                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_condition_loss</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="PoissonInteriorLoss">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.losses.equation_losses.PoissonInteriorLoss.html#neuralop.losses.equation_losses.PoissonInteriorLoss">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PoissonInteriorLoss</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    PoissonInteriorLoss computes the loss on the interior points of model outputs</span>
+<span class="sd">    according to Poisson&#39;s equation in 2d: ∇·((1 + 0.1u^2)∇u(x)) = f(x)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    method : Literal[&#39;autograd&#39;] only (for now)</span>
+<span class="sd">        How to compute derivatives for equation loss.</span>
+
+<span class="sd">        * If &#39;autograd&#39;, differentiates using torch.autograd.grad. This can be used with outputs with any irregular</span>
+<span class="sd">        point cloud structure.</span>
+<span class="sd">    loss: Callable, optional</span>
+<span class="sd">        Base loss class to compute distances between expected and true values,</span>
+<span class="sd">        by default torch.nn.functional.mse_loss</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;autograd&quot;</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span>
+    
+<div class="viewcode-block" id="PoissonInteriorLoss.autograd">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.losses.equation_losses.PoissonInteriorLoss.html#neuralop.losses.equation_losses.PoissonInteriorLoss.autograd">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">autograd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">output_queries</span><span class="p">,</span> <span class="n">output_source_terms_domain</span><span class="p">,</span> <span class="n">num_boundary</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute loss between the left-hand side and right-hand side of</span>
+<span class="sd">        nonlinear Poisson&#39;s equation: ∇·((1 + 0.1u^2)∇u(x)) = f(x)</span>
+
+<span class="sd">        u: torch.Tensor | dict</span>
+<span class="sd">            output of the model.</span>
+
+<span class="sd">            * If output_queries is passed to the model as a dict, this will be a</span>
+<span class="sd">            dict of outputs provided over the points at each value in output_queries.</span>
+<span class="sd">            Each tensor will be shape (batch, n_points, 2).</span>
+
+<span class="sd">            * If a tensor, u will be of shape (batch, num_boundary + num_interior, 2), where</span>
+<span class="sd">            u[:, 0:num_boundary, :] are boundary points and u[:, num_boundary:, :] are interior points.</span>
+<span class="sd">        output_queries: torch.Tensor | dict</span>
+<span class="sd">            output queries provided to the model. If provided as a dict of tensors,</span>
+<span class="sd">            u will also be returned as a dict keyed the same way. If provided as a tensor,</span>
+<span class="sd">            u will be a tensor of the same shape except for number of channels. If a tensor,</span>
+<span class="sd">            output_queries[:, 0:num_boundary, :] are boundary points and output_queries[:, num_boundary:, :]</span>
+<span class="sd">            are interior points.</span>
+<span class="sd">        output_source_terms_domain: torch.Tensor</span>
+<span class="sd">            source terms f(x) defined for this specific instance of Poisson&#39;s equation.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">output_queries</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">output_queries_domain</span> <span class="o">=</span> <span class="n">output_queries</span><span class="p">[</span><span class="s2">&quot;domain&quot;</span><span class="p">]</span>
+            <span class="n">u_prime</span> <span class="o">=</span> <span class="n">grad</span><span class="p">(</span>
+                <span class="n">outputs</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+                <span class="n">inputs</span><span class="o">=</span><span class="n">output_queries_domain</span><span class="p">,</span>
+                <span class="n">create_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">retain_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># We only care about U defined over the interior. Grab it now if the entire U is passed.</span>
+            <span class="n">output_queries_domain</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="p">[:,</span> <span class="n">num_boundary</span><span class="p">:,</span> <span class="o">...</span><span class="p">]</span>
+            <span class="n">u_prime</span> <span class="o">=</span> <span class="n">grad</span><span class="p">(</span>
+                <span class="n">outputs</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+                <span class="n">inputs</span><span class="o">=</span><span class="n">output_queries</span><span class="p">,</span>
+                <span class="n">create_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">retain_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)[</span><span class="mi">0</span><span class="p">][:,</span> <span class="n">num_boundary</span><span class="p">:,</span> <span class="p">:]</span>
+
+        <span class="n">u_x</span> <span class="o">=</span> <span class="n">u_prime</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">u_y</span> <span class="o">=</span> <span class="n">u_prime</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># compute second derivatives</span>
+        <span class="k">if</span> <span class="n">output_queries_domain</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">u_xx</span> <span class="o">=</span> <span class="n">grad</span><span class="p">(</span>
+                <span class="n">outputs</span><span class="o">=</span><span class="n">u_x</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+                <span class="n">inputs</span><span class="o">=</span><span class="n">output_queries_domain</span><span class="p">,</span>
+                <span class="n">create_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">retain_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)[</span><span class="mi">0</span><span class="p">][:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="n">u_yy</span> <span class="o">=</span> <span class="n">grad</span><span class="p">(</span>
+                <span class="n">outputs</span><span class="o">=</span><span class="n">u_y</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+                <span class="n">inputs</span><span class="o">=</span><span class="n">output_queries_domain</span><span class="p">,</span>
+                <span class="n">create_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">retain_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)[</span><span class="mi">0</span><span class="p">][:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">u_xx</span> <span class="o">=</span> <span class="n">grad</span><span class="p">(</span>
+                <span class="n">outputs</span><span class="o">=</span><span class="n">u_x</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+                <span class="n">inputs</span><span class="o">=</span><span class="n">output_queries</span><span class="p">,</span>
+                <span class="n">create_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">retain_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)[</span><span class="mi">0</span><span class="p">][:,</span> <span class="n">num_boundary</span><span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="n">u_yy</span> <span class="o">=</span> <span class="n">grad</span><span class="p">(</span>
+                <span class="n">outputs</span><span class="o">=</span><span class="n">u_y</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+                <span class="n">inputs</span><span class="o">=</span><span class="n">output_queries</span><span class="p">,</span>
+                <span class="n">create_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">retain_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)[</span><span class="mi">0</span><span class="p">][:,</span> <span class="n">num_boundary</span><span class="p">:,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">u_xx</span> <span class="o">=</span> <span class="n">u_xx</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">u_yy</span> <span class="o">=</span> <span class="n">u_yy</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">u_prime</span> <span class="o">=</span> <span class="n">u_prime</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">squeeze</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="c1"># compute LHS of the Poisson equation</span>
+        <span class="n">u_sq</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">laplacian</span> <span class="o">=</span> <span class="n">u_xx</span> <span class="o">+</span> <span class="n">u_yy</span>
+        <span class="n">norm_grad_u</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">u_prime</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">u_sq</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">u_xx</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">u_yy</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">norm_grad_u</span><span class="o">.</span><span class="n">shape</span>
+
+        <span class="n">left_hand_side</span> <span class="o">=</span> <span class="n">laplacian</span> <span class="o">+</span> <span class="n">laplacian</span> <span class="o">*</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">u_sq</span> <span class="o">+</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">u</span> <span class="o">*</span> <span class="n">norm_grad_u</span>
+        <span class="n">output_source_terms_domain</span> <span class="o">=</span> <span class="n">output_source_terms_domain</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">left_hand_side</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">output_source_terms_domain</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">left_hand_side</span><span class="p">,</span> <span class="n">output_source_terms_domain</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">u_prime</span><span class="o">.</span><span class="n">isnan</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">u_yy</span><span class="o">.</span><span class="n">isnan</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">u_xx</span><span class="o">.</span><span class="n">isnan</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
+        <span class="k">del</span> <span class="n">u_xx</span><span class="p">,</span> <span class="n">u_yy</span><span class="p">,</span> <span class="n">u_x</span><span class="p">,</span> <span class="n">u_y</span><span class="p">,</span> <span class="n">left_hand_side</span>
+
+        <span class="k">return</span> <span class="n">loss</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;PoissonInteriorLoss.__call__() received unexpected keyword arguments: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">. &quot;</span>
+                <span class="s2">&quot;These arguments will be ignored.&quot;</span><span class="p">,</span>
+                <span class="ne">UserWarning</span><span class="p">,</span>
+                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;autograd&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">autograd</span><span class="p">(</span><span class="n">u</span><span class="o">=</span><span class="n">y_pred</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;finite_difference&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="PoissonBoundaryLoss">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.losses.equation_losses.PoissonBoundaryLoss.html#neuralop.losses.equation_losses.PoissonBoundaryLoss">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PoissonBoundaryLoss</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">num_boundary</span><span class="p">,</span> <span class="n">out_sub_level</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">output_queries</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;PoissonBoundaryLoss.__call__() received unexpected keyword arguments: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">. &quot;</span>
+                <span class="s2">&quot;These arguments will be ignored.&quot;</span><span class="p">,</span>
+                <span class="ne">UserWarning</span><span class="p">,</span>
+                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="n">num_boundary</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">num_boundary</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="o">*</span> <span class="n">out_sub_level</span><span class="p">)</span>
+        <span class="n">boundary_pred</span> <span class="o">=</span> <span class="n">y_pred</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)[:</span><span class="n">num_boundary</span><span class="p">]</span>
+        <span class="n">y_bound</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)[:</span><span class="n">num_boundary</span><span class="p">]</span>
+
+        <span class="k">assert</span> <span class="n">boundary_pred</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">y_bound</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">boundary_pred</span><span class="p">,</span> <span class="n">y_bound</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="PoissonEqnLoss">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.losses.equation_losses.PoissonEqnLoss.html#neuralop.losses.equation_losses.PoissonEqnLoss">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PoissonEqnLoss</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;PoissonEqnLoss computes a weighted sum of equation loss computed on the interior points of a model&#39;s output</span>
+<span class="sd">    and a boundary loss computed on the boundary points.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    boundary_weight : float</span>
+<span class="sd">        weight by which to multiply boundary loss</span>
+<span class="sd">    interior_weight : float</span>
+<span class="sd">        weight by which to multiply interior loss</span>
+<span class="sd">    diff_method : Literal[&#39;autograd&#39;, &#39;finite_difference&#39;], optional</span>
+<span class="sd">        method to use to compute derivatives, by default &#39;autograd&#39;</span>
+<span class="sd">    base_loss : Callable, optional</span>
+<span class="sd">        base loss class to use inside equation and boundary loss, by default F.mse_loss</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boundary_weight</span><span class="p">,</span> <span class="n">interior_weight</span><span class="p">,</span> <span class="n">diff_method</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;autograd&quot;</span><span class="p">,</span> <span class="n">base_loss</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">):</span> 
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">boundary_weight</span> <span class="o">=</span> <span class="n">boundary_weight</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">boundary_loss</span> <span class="o">=</span> <span class="n">PoissonBoundaryLoss</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="n">base_loss</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">interior_weight</span> <span class="o">=</span> <span class="n">interior_weight</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interior_loss</span> <span class="o">=</span> <span class="n">PoissonInteriorLoss</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">diff_method</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="n">base_loss</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;PoissonEqnLoss.__call__() received unexpected keyword arguments: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">. &quot;</span>
+                <span class="s2">&quot;These arguments will be ignored.&quot;</span><span class="p">,</span>
+                <span class="ne">UserWarning</span><span class="p">,</span>
+                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">interior_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interior_weight</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">interior_loss</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;domain&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">bc_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary_weight</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary_loss</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;boundary&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">[</span><span class="s1">&#39;boundary&#39;</span><span class="p">],</span>  <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">interior_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interior_weight</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">interior_loss</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">bc_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary_weight</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary_loss</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">interior_loss</span> <span class="o">+</span> <span class="n">bc_loss</span></div>
+
+</pre></div>
+
+      </div>
+
+      
+
+        <footer class="footer">
+    <div class="content has-text-centered">
+        <div class="block">
+          &copy; Copyright 2025, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+        </div>
+    </div>
+  </footer>
+
+    </div>
+
+  </div>  
+
+	
+
+  </div>  
+  </div> 
+
+  
+  <script>
+    function toggle_sidebar() {
+        var element = document.getElementById("sidebar");
+        var container = document.getElementById("column-container");
+        var localtoccolumn = document.getElementById("localtoc-column");
+        element.classList.toggle("hide-tablet");
+        element.classList.toggle("is-hidden-mobile");
+        container.classList.toggle("sidemenu-hidden");
+        localtoccolumn.classList.toggle("is-one-fifth-widescreen");
+        localtoccolumn.classList.toggle("is-2-desktop");
+        localtoccolumn.classList.toggle("is-3-desktop");
+    }
+  </script> 
+
+
+
+  </body>
+</html>

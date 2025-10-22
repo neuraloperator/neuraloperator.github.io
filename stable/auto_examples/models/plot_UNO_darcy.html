@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>U-NO on Darcy-Flow &#8212; neuraloperator 2.0.0 documentation</title> 
+<link rel="stylesheet" href="../../_static/tensorly_style.css">
+<link rel="apple-touch-icon" sizes="180x180" href="../../_static/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../_static/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../_static/favicon/favicon-16x16.png">
+<link rel="manifest" href="../../_static/favicon/site.webmanifest">
+<link rel="mask-icon" href="../../_static/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="../../_static/favicon/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/tensorly_style.css?v=a02e9698" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=5126dfd5" />
+
+  
+    <script src="../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+ <script src="../../_static/navbar_burger.js"></script>
+ <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+ 
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Training an FNO on Darcy-Flow" href="plot_FNO_darcy.html" />
+    <link rel="prev" title="Training a SFNO on the spherical Shallow Water equations" href="plot_SFNO_swe.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  </head>
+<body  class="has-navbar-fixed-top">
+
+  <header>
+    <navbar>
+      <nav class="navbar top-navbar is-fixed-top has-shadow is-flex-wrap-wrap" role="navigation" aria-label="main top navigation">
+        <div class="navbar-brand">
+        
+
+          <a class="navbar-item" href="../../index.html">
+            <img src="../../_static/neuraloperator_logo.png" height="28">
+          </a>
+          <a class="navbar-item is-hidden-desktop" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon"><i class="fab fa-github"></i></span>
+          </a>
+
+          <a role="button" class="navbar-burger" data-target="top-nav-menu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+
+        </div>
+        
+        <div class="navbar-menu" id="top-nav-menu">
+        
+
+          <div class="navbar-start">
+            
+              <a class="navbar-item" href="../../install.html">
+              Install
+            </a>
+              <a class="navbar-item" href="../../theory_guide/index.html">
+              Theory Guide
+            </a>
+              <a class="navbar-item" href="../../user_guide/index.html">
+              User Guide
+            </a>
+              <a class="navbar-item" href="../../modules/api.html">
+              API
+            </a>
+              <a class="navbar-item" href="../index.html">
+              Examples
+            </a>
+              <a class="navbar-item" href="../../dev_guide/index.html">
+              Developer's Guide
+            </a>
+          </div>
+        
+          <div class="navbar-end">
+            <div class="navbar-item">
+            
+            <a class="button is-hidden-touch is-dark" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon-text">
+                <span class="icon is-large">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Github</span>
+              </span>
+            </a>
+
+            </div> 
+          </div> 
+        </div> 
+
+      </nav>
+      
+    </navbar>
+  </header>
+
+
+  <div id="column-container">
+  <div class="columns is-mobile is-centered">
+	
+  
+      <div class="column is-10-mobile is-one-third-tablet is-3-desktop is-hidden-mobile" id="sidebar">
+    
+    <aside class="sticky-nav sidebar-menu">
+<div class="sidebar-search">
+  <form class="field" id="searchbox" role="search" action="../../search.html" method="get">
+    <!-- <label class="label" id="searchlabel">Quick search</label> -->
+    <div class="field has-addons">
+      <div class="control is-expanded">
+        <input class="input" type="text" placeholder="Search the doc" name="q" aria-labelledby="searchlabel autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      </div>
+      <div class="control">
+        <input class="button is-info" type="submit" value="Go" />
+      </div>
+    </div>
+  </form>
+  <script>document.getElementById('searchbox').style.display = "block"</script>
+
+</div>
+      
+      <div class="sidebar-menu-toc">
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing NeuralOperator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory_guide/index.html">Theory Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/api.html">API reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../index.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#data-generation">Data Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#layers">Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#models">Models</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#training-and-meta-algorithms">Training and Meta-Algorithms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Development guide</a></li>
+</ul>
+ 
+      </div>
+    </aside>
+  </div>
+  
+
+  <div class="column main-column">
+
+    
+    <div class="main-section">
+
+      
+      
+      <div class="side-menu-toggle">
+        <button class="button" id="toggle-sidebar" onclick="toggle_sidebar()">
+          <span class="icon"><i class="fa fa-bars" aria-hidden="true"></i></span>
+          <span>menu</span> 
+        </button>
+      </div>
+      
+
+      <div class="container content main-content">
+        
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-auto-examples-models-plot-uno-darcy-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="u-no-on-darcy-flow">
+<span id="sphx-glr-auto-examples-models-plot-uno-darcy-py"></span><h1>U-NO on Darcy-Flow<a class="headerlink" href="#u-no-on-darcy-flow" title="Link to this heading"></a></h1>
+<p>Training a U-shaped Neural Operator (U-NO) on the small Darcy-Flow example we ship with the package.</p>
+<p>This tutorial demonstrates the U-NO architecture, which combines the resolution invariance
+of neural operators with the multi-scale feature extraction of U-Net architectures.
+The U-NO uses skip connections and multi-resolution processing to capture both local
+and global features in the data, making it particularly effective for complex PDE problems.</p>
+<div style="margin-top: 3em;"></div><section id="import-dependencies">
+<h2>Import dependencies<a class="headerlink" href="#import-dependencies" title="Link to this heading"></a></h2>
+<p>We import the necessary modules for working with the UNO model</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">UNO</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neuralop</span><span class="w"> </span><span class="kn">import</span> <span class="n">Trainer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.training</span><span class="w"> </span><span class="kn">import</span> <span class="n">AdamW</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.data.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_darcy_flow_small</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">count_model_params</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neuralop</span><span class="w"> </span><span class="kn">import</span> <span class="n">LpLoss</span><span class="p">,</span> <span class="n">H1Loss</span>
+
+<span class="n">device</span> <span class="o">=</span> <span class="s1">&#39;cpu&#39;</span>
+</pre></div>
+</div>
+<div style="margin-top: 3em;"></div></section>
+<section id="loading-the-darcy-flow-dataset">
+<h2>Loading the Darcy-Flow dataset<a class="headerlink" href="#loading-the-darcy-flow-dataset" title="Link to this heading"></a></h2>
+<p>We load the Darcy-Flow dataset for training and testing.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">train_loader</span><span class="p">,</span> <span class="n">test_loaders</span><span class="p">,</span> <span class="n">data_processor</span> <span class="o">=</span> <span class="n">load_darcy_flow_small</span><span class="p">(</span>
+        <span class="n">n_train</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+        <span class="n">n_tests</span><span class="o">=</span><span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span>
+        <span class="n">test_resolutions</span><span class="o">=</span><span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span>
+        <span class="n">test_batch_sizes</span><span class="o">=</span><span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Loading test db for resolution 16 with 100 samples
+Loading test db for resolution 32 with 50 samples
+</pre></div>
+</div>
+<div style="margin-top: 3em;"></div></section>
+<section id="creating-the-u-no-model">
+<h2>Creating the U-NO model<a class="headerlink" href="#creating-the-u-no-model" title="Link to this heading"></a></h2>
+<p>We create a U-shaped Neural Operator with the following architecture:</p>
+<ul class="simple">
+<li><p>in_channels: Number of input channels</p></li>
+<li><p>out_channels: Number of output channels</p></li>
+<li><p>hidden_channels: Width of the hidden layers</p></li>
+<li><p>uno_out_channels: Channel dimensions for each layer in the U-Net structure</p></li>
+<li><p>uno_n_modes: Fourier modes for each layer (decreasing then increasing)</p></li>
+<li><p>uno_scalings: Scaling factors for each layer</p></li>
+</ul>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">UNO</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">hidden_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+            <span class="n">projection_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+            <span class="n">uno_out_channels</span><span class="o">=</span><span class="p">[</span><span class="mi">32</span><span class="p">,</span><span class="mi">64</span><span class="p">,</span><span class="mi">64</span><span class="p">,</span><span class="mi">64</span><span class="p">,</span><span class="mi">32</span><span class="p">],</span>
+            <span class="n">uno_n_modes</span><span class="o">=</span><span class="p">[[</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">]],</span>
+            <span class="n">uno_scalings</span><span class="o">=</span><span class="p">[[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">],[</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]],</span>
+            <span class="n">horizontal_skips_map</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">channel_mlp_skip</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
+            <span class="n">n_layers</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<span class="c1"># Count and display the number of parameters</span>
+<span class="n">n_params</span> <span class="o">=</span> <span class="n">count_model_params</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Our model has </span><span class="si">{</span><span class="n">n_params</span><span class="si">}</span><span class="s1"> parameters.&#39;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>fno_skip=&#39;linear&#39;
+channel_mlp_skip=&#39;linear&#39;
+fno_skip=&#39;linear&#39;
+channel_mlp_skip=&#39;linear&#39;
+fno_skip=&#39;linear&#39;
+channel_mlp_skip=&#39;linear&#39;
+fno_skip=&#39;linear&#39;
+channel_mlp_skip=&#39;linear&#39;
+fno_skip=&#39;linear&#39;
+channel_mlp_skip=&#39;linear&#39;
+
+Our model has 1405761 parameters.
+</pre></div>
+</div>
+<div style="margin-top: 3em;"></div></section>
+<section id="creating-the-optimizer-and-scheduler">
+<h2>Creating the optimizer and scheduler<a class="headerlink" href="#creating-the-optimizer-and-scheduler" title="Link to this heading"></a></h2>
+<p>We use AdamW optimizer with weight decay for regularization</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">AdamW</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">8e-3</span><span class="p">,</span> <span class="n">weight_decay</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">)</span>
+<span class="n">scheduler</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">lr_scheduler</span><span class="o">.</span><span class="n">CosineAnnealingLR</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">T_max</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+</pre></div>
+</div>
+<div style="margin-top: 3em;"></div></section>
+<section id="setting-up-loss-functions">
+<h2>Setting up loss functions<a class="headerlink" href="#setting-up-loss-functions" title="Link to this heading"></a></h2>
+<p>We use H1 loss for training and L2 loss for evaluation</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">l2loss</span> <span class="o">=</span> <span class="n">LpLoss</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">h1loss</span> <span class="o">=</span> <span class="n">H1Loss</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">train_loss</span> <span class="o">=</span> <span class="n">h1loss</span>
+<span class="n">eval_losses</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;h1&#39;</span><span class="p">:</span> <span class="n">h1loss</span><span class="p">,</span> <span class="s1">&#39;l2&#39;</span><span class="p">:</span> <span class="n">l2loss</span><span class="p">}</span>
+</pre></div>
+</div>
+<div style="margin-top: 3em;"></div></section>
+<section id="displaying-configuration">
+<h2>Displaying configuration<a class="headerlink" href="#displaying-configuration" title="Link to this heading"></a></h2>
+<p>We print the model architecture, optimizer, scheduler, and loss functions</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### MODEL ###</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### OPTIMIZER ###</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### SCHEDULER ###</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">scheduler</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### LOSSES ###&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> * Train: </span><span class="si">{</span><span class="n">train_loss</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> * Test: </span><span class="si">{</span><span class="n">eval_losses</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>### MODEL ###
+ UNO(
+  (positional_embedding): GridEmbeddingND()
+  (lifting): ChannelMLP(
+    (fcs): ModuleList(
+      (0): Conv1d(3, 256, kernel_size=(1,), stride=(1,))
+      (1): Conv1d(256, 64, kernel_size=(1,), stride=(1,))
+    )
+  )
+  (fno_blocks): ModuleList(
+    (0): FNOBlocks(
+      (convs): ModuleList(
+        (0): SpectralConv(
+          (weight): DenseTensor(shape=torch.Size([64, 32, 8, 5]), rank=None)
+        )
+      )
+      (fno_skips): ModuleList(
+        (0): Flattened1dConv(
+          (conv): Conv1d(64, 32, kernel_size=(1,), stride=(1,), bias=False)
+        )
+      )
+      (channel_mlp): ModuleList(
+        (0): ChannelMLP(
+          (fcs): ModuleList(
+            (0): Conv1d(32, 16, kernel_size=(1,), stride=(1,))
+            (1): Conv1d(16, 32, kernel_size=(1,), stride=(1,))
+          )
+        )
+      )
+      (channel_mlp_skips): ModuleList(
+        (0): Flattened1dConv(
+          (conv): Conv1d(64, 32, kernel_size=(1,), stride=(1,), bias=False)
+        )
+      )
+    )
+    (1): FNOBlocks(
+      (convs): ModuleList(
+        (0): SpectralConv(
+          (weight): DenseTensor(shape=torch.Size([32, 64, 8, 5]), rank=None)
+        )
+      )
+      (fno_skips): ModuleList(
+        (0): Flattened1dConv(
+          (conv): Conv1d(32, 64, kernel_size=(1,), stride=(1,), bias=False)
+        )
+      )
+      (channel_mlp): ModuleList(
+        (0): ChannelMLP(
+          (fcs): ModuleList(
+            (0): Conv1d(64, 32, kernel_size=(1,), stride=(1,))
+            (1): Conv1d(32, 64, kernel_size=(1,), stride=(1,))
+          )
+        )
+      )
+      (channel_mlp_skips): ModuleList(
+        (0): Flattened1dConv(
+          (conv): Conv1d(32, 64, kernel_size=(1,), stride=(1,), bias=False)
+        )
+      )
+    )
+    (2): FNOBlocks(
+      (convs): ModuleList(
+        (0): SpectralConv(
+          (weight): DenseTensor(shape=torch.Size([64, 64, 4, 3]), rank=None)
+        )
+      )
+      (fno_skips): ModuleList(
+        (0): Flattened1dConv(
+          (conv): Conv1d(64, 64, kernel_size=(1,), stride=(1,), bias=False)
+        )
+      )
+      (channel_mlp): ModuleList(
+        (0): ChannelMLP(
+          (fcs): ModuleList(
+            (0): Conv1d(64, 32, kernel_size=(1,), stride=(1,))
+            (1): Conv1d(32, 64, kernel_size=(1,), stride=(1,))
+          )
+        )
+      )
+      (channel_mlp_skips): ModuleList(
+        (0): Flattened1dConv(
+          (conv): Conv1d(64, 64, kernel_size=(1,), stride=(1,), bias=False)
+        )
+      )
+    )
+    (3): FNOBlocks(
+      (convs): ModuleList(
+        (0): SpectralConv(
+          (weight): DenseTensor(shape=torch.Size([128, 64, 8, 5]), rank=None)
+        )
+      )
+      (fno_skips): ModuleList(
+        (0): Flattened1dConv(
+          (conv): Conv1d(128, 64, kernel_size=(1,), stride=(1,), bias=False)
+        )
+      )
+      (channel_mlp): ModuleList(
+        (0): ChannelMLP(
+          (fcs): ModuleList(
+            (0): Conv1d(64, 32, kernel_size=(1,), stride=(1,))
+            (1): Conv1d(32, 64, kernel_size=(1,), stride=(1,))
+          )
+        )
+      )
+      (channel_mlp_skips): ModuleList(
+        (0): Flattened1dConv(
+          (conv): Conv1d(128, 64, kernel_size=(1,), stride=(1,), bias=False)
+        )
+      )
+    )
+    (4): FNOBlocks(
+      (convs): ModuleList(
+        (0): SpectralConv(
+          (weight): DenseTensor(shape=torch.Size([96, 32, 8, 5]), rank=None)
+        )
+      )
+      (fno_skips): ModuleList(
+        (0): Flattened1dConv(
+          (conv): Conv1d(96, 32, kernel_size=(1,), stride=(1,), bias=False)
+        )
+      )
+      (channel_mlp): ModuleList(
+        (0): ChannelMLP(
+          (fcs): ModuleList(
+            (0): Conv1d(32, 16, kernel_size=(1,), stride=(1,))
+            (1): Conv1d(16, 32, kernel_size=(1,), stride=(1,))
+          )
+        )
+      )
+      (channel_mlp_skips): ModuleList(
+        (0): Flattened1dConv(
+          (conv): Conv1d(96, 32, kernel_size=(1,), stride=(1,), bias=False)
+        )
+      )
+    )
+  )
+  (horizontal_skips): ModuleDict(
+    (0): Flattened1dConv(
+      (conv): Conv1d(32, 32, kernel_size=(1,), stride=(1,), bias=False)
+    )
+    (1): Flattened1dConv(
+      (conv): Conv1d(64, 64, kernel_size=(1,), stride=(1,), bias=False)
+    )
+  )
+  (projection): ChannelMLP(
+    (fcs): ModuleList(
+      (0): Conv1d(32, 64, kernel_size=(1,), stride=(1,))
+      (1): Conv1d(64, 1, kernel_size=(1,), stride=(1,))
+    )
+  )
+)
+
+### OPTIMIZER ###
+ AdamW (
+Parameter Group 0
+    betas: (0.9, 0.999)
+    correct_bias: True
+    eps: 1e-06
+    initial_lr: 0.008
+    lr: 0.008
+    weight_decay: 0.0001
+)
+
+### SCHEDULER ###
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f7385668410&gt;
+
+### LOSSES ###
+
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f73854ee270&gt;
+
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f73854ee270&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f738566bc50&gt;}
+</pre></div>
+</div>
+<div style="margin-top: 3em;"></div></section>
+<section id="creating-the-trainer">
+<h2>Creating the trainer<a class="headerlink" href="#creating-the-trainer" title="Link to this heading"></a></h2>
+<p>We create a Trainer object that handles the training loop for the U-NO</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+                  <span class="n">n_epochs</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+                  <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
+                  <span class="n">data_processor</span><span class="o">=</span><span class="n">data_processor</span><span class="p">,</span>
+                  <span class="n">wandb_log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>        <span class="c1"># Disable Weights &amp; Biases logging</span>
+                  <span class="n">eval_interval</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>        <span class="c1"># Evaluate every 5 epochs</span>
+                  <span class="n">use_distributed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># Single GPU/CPU training</span>
+                  <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>           <span class="c1"># Print training progress</span>
+</pre></div>
+</div>
+<div style="margin-top: 3em;"></div></section>
+<section id="training-the-u-no-model">
+<h2>Training the U-NO model<a class="headerlink" href="#training-the-u-no-model" title="Link to this heading"></a></h2>
+<p>We train the model on our Darcy-Flow dataset. The trainer will:</p>
+<ol class="arabic simple">
+<li><p>Run the forward pass through the U-NO</p></li>
+<li><p>Compute the H1 loss</p></li>
+<li><p>Backpropagate and update weights</p></li>
+<li><p>Evaluate on test data every 5 epochs</p></li>
+</ol>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_loader</span><span class="o">=</span><span class="n">train_loader</span><span class="p">,</span>
+              <span class="n">test_loaders</span><span class="o">=</span><span class="n">test_loaders</span><span class="p">,</span>
+              <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
+              <span class="n">scheduler</span><span class="o">=</span><span class="n">scheduler</span><span class="p">,</span>
+              <span class="n">regularizer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+              <span class="n">training_loss</span><span class="o">=</span><span class="n">train_loss</span><span class="p">,</span>
+              <span class="n">eval_losses</span><span class="o">=</span><span class="n">eval_losses</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Training on 1000 samples
+Testing on [50, 50] samples         on resolutions [16, 32].
+/opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:668: UserWarning: &#39;pin_memory&#39; argument is set as true but no accelerator is found, then device pinned memory won&#39;t be used.
+  warnings.warn(warn_msg)
+/opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/torch/nn/modules/module.py:1786: UserWarning: UNO.forward() received unexpected keyword arguments: [&#39;y&#39;]. These arguments will be ignored.
+  return forward_call(*args, **kwargs)
+Raw outputs of shape torch.Size([32, 1, 16, 16])
+/home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:536: UserWarning: H1Loss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
+  loss += training_loss(out, **sample)
+[0] time=4.64, avg_loss=0.6939, train_err=21.6854
+/home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:581: UserWarning: LpLoss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
+  val_loss = loss(out, **sample)
+Eval: 16_h1=0.4403, 16_l2=0.3016, 32_h1=0.5529, 32_l2=0.3119
+[5] time=4.70, avg_loss=0.2293, train_err=7.1661
+Eval: 16_h1=0.2858, 16_l2=0.1821, 32_h1=0.4620, 32_l2=0.2025
+[10] time=4.63, avg_loss=0.2067, train_err=6.4589
+Eval: 16_h1=0.2256, 16_l2=0.1315, 32_h1=0.3950, 32_l2=0.1683
+[15] time=4.63, avg_loss=0.1749, train_err=5.4645
+Eval: 16_h1=0.2329, 16_l2=0.1398, 32_h1=0.3876, 32_l2=0.1619
+[20] time=4.62, avg_loss=0.1389, train_err=4.3417
+Eval: 16_h1=0.2258, 16_l2=0.1345, 32_h1=0.3964, 32_l2=0.1585
+[25] time=4.62, avg_loss=0.0982, train_err=3.0687
+Eval: 16_h1=0.2016, 16_l2=0.1119, 32_h1=0.3850, 32_l2=0.1480
+
+{&#39;train_err&#39;: 2.5808369256556034, &#39;avg_loss&#39;: 0.08258678162097931, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 4.700438005000024}
+</pre></div>
+</div>
+<div style="margin-top: 3em;"></div></section>
+<section id="visualizing-u-no-predictions">
+<h2>Visualizing U-NO predictions<a class="headerlink" href="#visualizing-u-no-predictions" title="Link to this heading"></a></h2>
+<p>We visualize the model’s predictions on the Darcy-Flow dataset.
+Note that we trained on a very small resolution for a very small number of epochs.
+In practice, we would train at larger resolution on many more samples.</p>
+<p>However, for practicality, we created a minimal example that:
+i) fits in just a few MB of memory
+ii) can be trained quickly on CPU</p>
+<p>In practice we would train a Neural Operator on one or multiple GPUs</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">test_samples</span> <span class="o">=</span> <span class="n">test_loaders</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">.</span><span class="n">dataset</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">test_samples</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data_processor</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">batched</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="c1"># Input x</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+    <span class="c1"># Ground-truth</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+    <span class="c1"># Model prediction: U-NO output</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">))</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
+
+    <span class="c1"># Plot input x</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">index</span><span class="o">*</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Input x&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([],</span> <span class="p">[])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([],</span> <span class="p">[])</span>
+
+    <span class="c1"># Plot ground-truth y</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">index</span><span class="o">*</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">squeeze</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Ground-truth y&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([],</span> <span class="p">[])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([],</span> <span class="p">[])</span>
+
+    <span class="c1"># Plot model prediction</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">index</span><span class="o">*</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;U-NO prediction&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([],</span> <span class="p">[])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([],</span> <span class="p">[])</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;U-NO predictions on 32x32 Darcy-Flow data&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.98</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img src="../../_images/sphx_glr_plot_UNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_UNO_darcy_001.png" alt="U-NO predictions on 32x32 Darcy-Flow data, Input x, Ground-truth y, U-NO prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 24.602 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-models-plot-uno-darcy-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/fee630be9801a5d2d76c0b9e3091063c/plot_UNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_UNO_darcy.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/f3d75a130ab718f2d09f1697402fa5d1/plot_UNO_darcy.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_UNO_darcy.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/7c718a7ba6521c6026bc04a7bb6709ef/plot_UNO_darcy.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_UNO_darcy.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+      </div>
+
+      
+        <nav class="pagination" role="navigation" aria-label="pagination">
+    
+    <a class="button pagination-previous" href="plot_SFNO_swe.html" title="previous page" accesskey="p">
+        <span class="icon">
+            <i class="fa fa-arrow-circle-left"></i>
+        </span>
+        <span>Training a SFNO on the spherical Shallow Water equations</span>
+    </a>
+    
+    
+    <a class="button pagination-next" href="plot_FNO_darcy.html" title="next page" accesskey="n">
+        <span>Training an FNO on Darcy-Flow </span>
+        <span class="icon">
+            <i class="fa fa-arrow-circle-right"></i>
+        </span>
+    </a>
+    
+</nav>
+
+      
+
+        <footer class="footer">
+    <div class="content has-text-centered">
+        <div class="block">
+          &copy; Copyright 2025, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+        </div>
+    </div>
+  </footer>
+
+    </div>
+
+  </div>  
+
+	
+    
+    <div class="column is-hidden-touch is-2-desktop is-one-fifth-widescreen" id="localtoc-column">
+
+    <aside class="sticky-nav localtoc"> 
+        <p class="menu-label"> 
+            <span class="icon-text">
+                <span class="icon"><i class="fas fa-duotone fa-list"></i></span>
+                <span> On this page </span>
+            </span>
+        </p>
+
+        <div class="menu menu-list localtoc-list">
+        <ul>
+<li><a class="reference internal" href="#">U-NO on Darcy-Flow</a><ul>
+<li><a class="reference internal" href="#import-dependencies">Import dependencies</a></li>
+<li><a class="reference internal" href="#loading-the-darcy-flow-dataset">Loading the Darcy-Flow dataset</a></li>
+<li><a class="reference internal" href="#creating-the-u-no-model">Creating the U-NO model</a></li>
+<li><a class="reference internal" href="#creating-the-optimizer-and-scheduler">Creating the optimizer and scheduler</a></li>
+<li><a class="reference internal" href="#setting-up-loss-functions">Setting up loss functions</a></li>
+<li><a class="reference internal" href="#displaying-configuration">Displaying configuration</a></li>
+<li><a class="reference internal" href="#creating-the-trainer">Creating the trainer</a></li>
+<li><a class="reference internal" href="#training-the-u-no-model">Training the U-NO model</a></li>
+<li><a class="reference internal" href="#visualizing-u-no-predictions">Visualizing U-NO predictions</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+    </aside>
+    </div>
+
+  
+
+  </div>  
+  </div> 
+
+  
+  <script>
+    function toggle_sidebar() {
+        var element = document.getElementById("sidebar");
+        var container = document.getElementById("column-container");
+        var localtoccolumn = document.getElementById("localtoc-column");
+        element.classList.toggle("hide-tablet");
+        element.classList.toggle("is-hidden-mobile");
+        container.classList.toggle("sidemenu-hidden");
+        localtoccolumn.classList.toggle("is-one-fifth-widescreen");
+        localtoccolumn.classList.toggle("is-2-desktop");
+        localtoccolumn.classList.toggle("is-3-desktop");
+    }
+  </script> 
+
+
+
+  </body>
+</html>

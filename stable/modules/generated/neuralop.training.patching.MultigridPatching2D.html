@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>neuralop.training.patching.MultigridPatching2D &#8212; neuraloperator 2.0.0 documentation</title> 
+<link rel="stylesheet" href="../../_static/tensorly_style.css">
+<link rel="apple-touch-icon" sizes="180x180" href="../../_static/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../_static/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../_static/favicon/favicon-16x16.png">
+<link rel="manifest" href="../../_static/favicon/site.webmanifest">
+<link rel="mask-icon" href="../../_static/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="../../_static/favicon/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/tensorly_style.css?v=a02e9698" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=5126dfd5" />
+
+  
+    <script src="../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+ <script src="../../_static/navbar_burger.js"></script>
+ <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+ 
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="neuralop.losses.data_losses.LpLoss" href="neuralop.losses.data_losses.LpLoss.html" />
+    <link rel="prev" title="neuralop.training.torch_setup.setup" href="neuralop.training.torch_setup.setup.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  </head>
+<body  class="has-navbar-fixed-top">
+
+  <header>
+    <navbar>
+      <nav class="navbar top-navbar is-fixed-top has-shadow is-flex-wrap-wrap" role="navigation" aria-label="main top navigation">
+        <div class="navbar-brand">
+        
+
+          <a class="navbar-item" href="../../index.html">
+            <img src="../../_static/neuraloperator_logo.png" height="28">
+          </a>
+          <a class="navbar-item is-hidden-desktop" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon"><i class="fab fa-github"></i></span>
+          </a>
+
+          <a role="button" class="navbar-burger" data-target="top-nav-menu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+
+        </div>
+        
+        <div class="navbar-menu" id="top-nav-menu">
+        
+
+          <div class="navbar-start">
+            
+              <a class="navbar-item" href="../../install.html">
+              Install
+            </a>
+              <a class="navbar-item" href="../../theory_guide/index.html">
+              Theory Guide
+            </a>
+              <a class="navbar-item" href="../../user_guide/index.html">
+              User Guide
+            </a>
+              <a class="navbar-item" href="../api.html">
+              API
+            </a>
+              <a class="navbar-item" href="../../auto_examples/index.html">
+              Examples
+            </a>
+              <a class="navbar-item" href="../../dev_guide/index.html">
+              Developer's Guide
+            </a>
+          </div>
+        
+          <div class="navbar-end">
+            <div class="navbar-item">
+            
+            <a class="button is-hidden-touch is-dark" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon-text">
+                <span class="icon is-large">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Github</span>
+              </span>
+            </a>
+
+            </div> 
+          </div> 
+        </div> 
+
+      </nav>
+      
+    </navbar>
+  </header>
+
+
+  <div id="column-container">
+  <div class="columns is-mobile is-centered">
+	
+  
+      <div class="column is-10-mobile is-one-third-tablet is-3-desktop is-hidden-mobile" id="sidebar">
+    
+    <aside class="sticky-nav sidebar-menu">
+<div class="sidebar-search">
+  <form class="field" id="searchbox" role="search" action="../../search.html" method="get">
+    <!-- <label class="label" id="searchlabel">Quick search</label> -->
+    <div class="field has-addons">
+      <div class="control is-expanded">
+        <input class="input" type="text" placeholder="Search the doc" name="q" aria-labelledby="searchlabel autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      </div>
+      <div class="control">
+        <input class="button is-info" type="submit" value="Go" />
+      </div>
+    </div>
+  </form>
+  <script>document.getElementById('searchbox').style.display = "block"</script>
+
+</div>
+      
+      <div class="sidebar-menu-toc">
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing NeuralOperator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory_guide/index.html">Theory Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#models">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.layers">Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#model-dispatching">Model Dispatching</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#training">Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#loss-functions">Loss Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.utils">Utility Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Development guide</a></li>
+</ul>
+ 
+      </div>
+    </aside>
+  </div>
+  
+
+  <div class="column main-column">
+
+    
+    <div class="main-section">
+
+      
+      
+      <div class="side-menu-toggle">
+        <button class="button" id="toggle-sidebar" onclick="toggle_sidebar()">
+          <span class="icon"><i class="fa fa-bars" aria-hidden="true"></i></span>
+          <span>menu</span> 
+        </button>
+      </div>
+      
+
+      <div class="container content main-content">
+        
+  <section id="neuralop-training-patching-multigridpatching2d">
+<h1><a class="reference internal" href="../api.html#module-neuralop.training.patching" title="neuralop.training.patching"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.training.patching</span></code></a>.MultigridPatching2D<a class="headerlink" href="#neuralop-training-patching-multigridpatching2d" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="neuralop.training.patching.MultigridPatching2D">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.training.patching.</span></span><span class="sig-name descname"><span class="pre">MultigridPatching2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">levels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding_fraction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_distributed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stitching</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/training/patching.html#MultigridPatching2D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.training.patching.MultigridPatching2D" title="Link to this definition"></a></dt>
+<dd><p>MultigridPatching2D wraps a model in multi-grid domain decomposition and patching.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>model</strong><span class="classifier">nn.Module</span></dt><dd><p>model to wrap</p>
+</dd>
+<dt><strong>levels</strong><span class="classifier">int, optional</span></dt><dd><p>number of levels of patching to use, by default 0</p>
+</dd>
+<dt><strong>padding_fraction</strong><span class="classifier">float, optional</span></dt><dd><p>fraction of input size to add as padding around patches, by default 0</p>
+</dd>
+<dt><strong>use_distributed</strong><span class="classifier">bool, optional</span></dt><dd><p>whether patching is performed in distributed mode, by default False</p>
+</dd>
+<dt><strong>stitching</strong><span class="classifier">bool, optional</span></dt><dd><p>whether patches are to be stitched back together
+in spatial dimensions during training, by default True.
+Stitching is always performed during evaluation.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.training.patching.MultigridPatching2D.patch" title="neuralop.training.patching.MultigridPatching2D.patch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">patch</span></code></a>(x, y)</p></td>
+<td><p>use multi-grid domain decomposition to split <cite>x</cite> and <cite>y</cite> into patches.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#neuralop.training.patching.MultigridPatching2D.unpatch" title="neuralop.training.patching.MultigridPatching2D.unpatch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unpatch</span></code></a>(x, y[, evaluation])</p></td>
+<td><p>unpatch tensors created by <cite>self.patch</cite>.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralop.training.patching.MultigridPatching2D.patch">
+<span class="sig-name descname"><span class="pre">patch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/training/patching.html#MultigridPatching2D.patch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.training.patching.MultigridPatching2D.patch" title="Link to this definition"></a></dt>
+<dd><p>use multi-grid domain decomposition to split <cite>x</cite> and <cite>y</cite> into patches.
+If in a distributed scheme, scatters patches across processes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">torch.tensor</span></dt><dd><p>model input function</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">_type_</span></dt><dd><p>model output function</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralop.training.patching.MultigridPatching2D.unpatch">
+<span class="sig-name descname"><span class="pre">unpatch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/training/patching.html#MultigridPatching2D.unpatch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.training.patching.MultigridPatching2D.unpatch" title="Link to this definition"></a></dt>
+<dd><p>unpatch tensors created by <cite>self.patch</cite>. Stitch patches together if in
+evaluation mode, or if stitching is applied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">torch.tensor</span></dt><dd><p>tensor with patching structure created patching input <cite>x</cite>. May be
+either inputs <cite>x</cite> or raw model outputs (same shape/patching structure)
+Shape (b * n^2, c, h / n + 2 * pad_h, w / n + 2 * pad_w)</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">torch.tensor</span></dt><dd><p>tensor of patched ground-truth <cite>y</cite>.
+Shape (b * n^2, c, h / n, w / n) or (b, c, h, w) when not stitched</p>
+</dd>
+<dt><strong>evaluation</strong><span class="classifier">bool, optional</span></dt><dd><p>whether in evaluation mode, by default False.
+If True, <cite>x</cite> and <cite>y</cite> are both evaluated after stitching,
+regardless of other settings.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div class="clearer"></div></section>
+
+
+      </div>
+
+      
+        <nav class="pagination" role="navigation" aria-label="pagination">
+    
+    <a class="button pagination-previous" href="neuralop.training.torch_setup.setup.html" title="previous page" accesskey="p">
+        <span class="icon">
+            <i class="fa fa-arrow-circle-left"></i>
+        </span>
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.training.torch_setup</span></code>.setup</span>
+    </a>
+    
+    
+    <a class="button pagination-next" href="neuralop.losses.data_losses.LpLoss.html" title="next page" accesskey="n">
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.losses.data_losses</span></code>.LpLoss </span>
+        <span class="icon">
+            <i class="fa fa-arrow-circle-right"></i>
+        </span>
+    </a>
+    
+</nav>
+
+      
+
+        <footer class="footer">
+    <div class="content has-text-centered">
+        <div class="block">
+          &copy; Copyright 2025, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+        </div>
+    </div>
+  </footer>
+
+    </div>
+
+  </div>  
+
+	
+    
+    <div class="column is-hidden-touch is-2-desktop is-one-fifth-widescreen" id="localtoc-column">
+
+    <aside class="sticky-nav localtoc"> 
+        <p class="menu-label"> 
+            <span class="icon-text">
+                <span class="icon"><i class="fas fa-duotone fa-list"></i></span>
+                <span> On this page </span>
+            </span>
+        </p>
+
+        <div class="menu menu-list localtoc-list">
+        <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.training.patching</span></code>.MultigridPatching2D</a><ul>
+<li><a class="reference internal" href="#neuralop.training.patching.MultigridPatching2D"><code class="docutils literal notranslate"><span class="pre">MultigridPatching2D</span></code></a><ul>
+<li><a class="reference internal" href="#neuralop.training.patching.MultigridPatching2D.patch"><code class="docutils literal notranslate"><span class="pre">MultigridPatching2D.patch()</span></code></a></li>
+<li><a class="reference internal" href="#neuralop.training.patching.MultigridPatching2D.unpatch"><code class="docutils literal notranslate"><span class="pre">MultigridPatching2D.unpatch()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+    </aside>
+    </div>
+
+  
+
+  </div>  
+  </div> 
+
+  
+  <script>
+    function toggle_sidebar() {
+        var element = document.getElementById("sidebar");
+        var container = document.getElementById("column-container");
+        var localtoccolumn = document.getElementById("localtoc-column");
+        element.classList.toggle("hide-tablet");
+        element.classList.toggle("is-hidden-mobile");
+        container.classList.toggle("sidemenu-hidden");
+        localtoccolumn.classList.toggle("is-one-fifth-widescreen");
+        localtoccolumn.classList.toggle("is-2-desktop");
+        localtoccolumn.classList.toggle("is-3-desktop");
+    }
+  </script> 
+
+
+
+  </body>
+</html>

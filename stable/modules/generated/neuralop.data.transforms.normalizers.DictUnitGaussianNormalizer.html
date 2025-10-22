@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>neuralop.data.transforms.normalizers.DictUnitGaussianNormalizer &#8212; neuraloperator 2.0.0 documentation</title> 
+<link rel="stylesheet" href="../../_static/tensorly_style.css">
+<link rel="apple-touch-icon" sizes="180x180" href="../../_static/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../_static/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../_static/favicon/favicon-16x16.png">
+<link rel="manifest" href="../../_static/favicon/site.webmanifest">
+<link rel="mask-icon" href="../../_static/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="../../_static/favicon/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/tensorly_style.css?v=a02e9698" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=5126dfd5" />
+
+  
+    <script src="../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+ <script src="../../_static/navbar_burger.js"></script>
+ <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+ 
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="neuralop.utils.count_model_params" href="neuralop.utils.count_model_params.html" />
+    <link rel="prev" title="neuralop.data.transforms.normalizers.UnitGaussianNormalizer" href="neuralop.data.transforms.normalizers.UnitGaussianNormalizer.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  </head>
+<body  class="has-navbar-fixed-top">
+
+  <header>
+    <navbar>
+      <nav class="navbar top-navbar is-fixed-top has-shadow is-flex-wrap-wrap" role="navigation" aria-label="main top navigation">
+        <div class="navbar-brand">
+        
+
+          <a class="navbar-item" href="../../index.html">
+            <img src="../../_static/neuraloperator_logo.png" height="28">
+          </a>
+          <a class="navbar-item is-hidden-desktop" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon"><i class="fab fa-github"></i></span>
+          </a>
+
+          <a role="button" class="navbar-burger" data-target="top-nav-menu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+
+        </div>
+        
+        <div class="navbar-menu" id="top-nav-menu">
+        
+
+          <div class="navbar-start">
+            
+              <a class="navbar-item" href="../../install.html">
+              Install
+            </a>
+              <a class="navbar-item" href="../../theory_guide/index.html">
+              Theory Guide
+            </a>
+              <a class="navbar-item" href="../../user_guide/index.html">
+              User Guide
+            </a>
+              <a class="navbar-item" href="../api.html">
+              API
+            </a>
+              <a class="navbar-item" href="../../auto_examples/index.html">
+              Examples
+            </a>
+              <a class="navbar-item" href="../../dev_guide/index.html">
+              Developer's Guide
+            </a>
+          </div>
+        
+          <div class="navbar-end">
+            <div class="navbar-item">
+            
+            <a class="button is-hidden-touch is-dark" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon-text">
+                <span class="icon is-large">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Github</span>
+              </span>
+            </a>
+
+            </div> 
+          </div> 
+        </div> 
+
+      </nav>
+      
+    </navbar>
+  </header>
+
+
+  <div id="column-container">
+  <div class="columns is-mobile is-centered">
+	
+  
+      <div class="column is-10-mobile is-one-third-tablet is-3-desktop is-hidden-mobile" id="sidebar">
+    
+    <aside class="sticky-nav sidebar-menu">
+<div class="sidebar-search">
+  <form class="field" id="searchbox" role="search" action="../../search.html" method="get">
+    <!-- <label class="label" id="searchlabel">Quick search</label> -->
+    <div class="field has-addons">
+      <div class="control is-expanded">
+        <input class="input" type="text" placeholder="Search the doc" name="q" aria-labelledby="searchlabel autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      </div>
+      <div class="control">
+        <input class="button is-info" type="submit" value="Go" />
+      </div>
+    </div>
+  </form>
+  <script>document.getElementById('searchbox').style.display = "block"</script>
+
+</div>
+      
+      <div class="sidebar-menu-toc">
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing NeuralOperator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory_guide/index.html">Theory Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#models">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.layers">Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#model-dispatching">Model Dispatching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#training">Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#loss-functions">Loss Functions</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.utils">Utility Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Development guide</a></li>
+</ul>
+ 
+      </div>
+    </aside>
+  </div>
+  
+
+  <div class="column main-column">
+
+    
+    <div class="main-section">
+
+      
+      
+      <div class="side-menu-toggle">
+        <button class="button" id="toggle-sidebar" onclick="toggle_sidebar()">
+          <span class="icon"><i class="fa fa-bars" aria-hidden="true"></i></span>
+          <span>menu</span> 
+        </button>
+      </div>
+      
+
+      <div class="container content main-content">
+        
+  <section id="neuralop-data-transforms-normalizers-dictunitgaussiannormalizer">
+<h1><a class="reference internal" href="../api.html#module-neuralop.data.transforms.normalizers" title="neuralop.data.transforms.normalizers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.transforms.normalizers</span></code></a>.DictUnitGaussianNormalizer<a class="headerlink" href="#neuralop-data-transforms-normalizers-dictunitgaussiannormalizer" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="neuralop.data.transforms.normalizers.DictUnitGaussianNormalizer">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.data.transforms.normalizers.</span></span><span class="sig-name descname"><span class="pre">DictUnitGaussianNormalizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">normalizer_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="neuralop.data.transforms.normalizers.UnitGaussianNormalizer.html#neuralop.data.transforms.normalizers.UnitGaussianNormalizer" title="neuralop.data.transforms.normalizers.UnitGaussianNormalizer"><span class="pre">UnitGaussianNormalizer</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_mappings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">slice</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_mappings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">slice</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/data/transforms/normalizers.html#DictUnitGaussianNormalizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.data.transforms.normalizers.DictUnitGaussianNormalizer" title="Link to this definition"></a></dt>
+<dd><p>DictUnitGaussianNormalizer composes
+DictTransform and UnitGaussianNormalizer to normalize different
+fields of a model output tensor to Gaussian distributions w/
+mean 0 and unit variance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>normalizer_dict</strong><span class="classifier">Dict[str, UnitGaussianNormalizer]</span></dt><dd><p>dictionary of normalizers, keyed to fields</p>
+</dd>
+<dt><strong>input_mappings</strong><span class="classifier">Dict[slice]</span></dt><dd><p>slices of input tensor to grab per field, must share keys with above</p>
+</dd>
+<dt><strong>return_mappings</strong><span class="classifier">Dict[slice]</span></dt><dd><p>_description_</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.data.transforms.normalizers.DictUnitGaussianNormalizer.from_dataset" title="neuralop.data.transforms.normalizers.DictUnitGaussianNormalizer.from_dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_dataset</span></code></a>(dataset[, dim, keys, mask])</p></td>
+<td><p>Return a dictionary of normalizer instances, fitted on the given dataset</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralop.data.transforms.normalizers.DictUnitGaussianNormalizer.from_dataset">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/data/transforms/normalizers.html#DictUnitGaussianNormalizer.from_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.data.transforms.normalizers.DictUnitGaussianNormalizer.from_dataset" title="Link to this definition"></a></dt>
+<dd><p>Return a dictionary of normalizer instances, fitted on the given dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>dataset</strong><span class="classifier">pytorch dataset</span></dt><dd><p>each element must be a dict {key: sample}
+e.g. {‘x’: input_samples, ‘y’: target_labels}</p>
+</dd>
+<dt><strong>dim</strong><span class="classifier">int list, default is None</span></dt><dd><ul class="simple">
+<li><p>If None, reduce over all dims (scalar mean and std)</p></li>
+<li><p>Otherwise, must include batch-dimensions and all over dims to reduce over</p></li>
+</ul>
+</dd>
+<dt><strong>keys</strong><span class="classifier">str list or None</span></dt><dd><p>if not None, a normalizer is instanciated only for the given keys</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div class="clearer"></div></section>
+
+
+      </div>
+
+      
+        <nav class="pagination" role="navigation" aria-label="pagination">
+    
+    <a class="button pagination-previous" href="neuralop.data.transforms.normalizers.UnitGaussianNormalizer.html" title="previous page" accesskey="p">
+        <span class="icon">
+            <i class="fa fa-arrow-circle-left"></i>
+        </span>
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.transforms.normalizers</span></code>.UnitGaussianNormalizer</span>
+    </a>
+    
+    
+    <a class="button pagination-next" href="neuralop.utils.count_model_params.html" title="next page" accesskey="n">
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.utils</span></code>.count_model_params </span>
+        <span class="icon">
+            <i class="fa fa-arrow-circle-right"></i>
+        </span>
+    </a>
+    
+</nav>
+
+      
+
+        <footer class="footer">
+    <div class="content has-text-centered">
+        <div class="block">
+          &copy; Copyright 2025, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+        </div>
+    </div>
+  </footer>
+
+    </div>
+
+  </div>  
+
+	
+    
+    <div class="column is-hidden-touch is-2-desktop is-one-fifth-widescreen" id="localtoc-column">
+
+    <aside class="sticky-nav localtoc"> 
+        <p class="menu-label"> 
+            <span class="icon-text">
+                <span class="icon"><i class="fas fa-duotone fa-list"></i></span>
+                <span> On this page </span>
+            </span>
+        </p>
+
+        <div class="menu menu-list localtoc-list">
+        <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.data.transforms.normalizers</span></code>.DictUnitGaussianNormalizer</a><ul>
+<li><a class="reference internal" href="#neuralop.data.transforms.normalizers.DictUnitGaussianNormalizer"><code class="docutils literal notranslate"><span class="pre">DictUnitGaussianNormalizer</span></code></a><ul>
+<li><a class="reference internal" href="#neuralop.data.transforms.normalizers.DictUnitGaussianNormalizer.from_dataset"><code class="docutils literal notranslate"><span class="pre">DictUnitGaussianNormalizer.from_dataset()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+    </aside>
+    </div>
+
+  
+
+  </div>  
+  </div> 
+
+  
+  <script>
+    function toggle_sidebar() {
+        var element = document.getElementById("sidebar");
+        var container = document.getElementById("column-container");
+        var localtoccolumn = document.getElementById("localtoc-column");
+        element.classList.toggle("hide-tablet");
+        element.classList.toggle("is-hidden-mobile");
+        container.classList.toggle("sidemenu-hidden");
+        localtoccolumn.classList.toggle("is-one-fifth-widescreen");
+        localtoccolumn.classList.toggle("is-2-desktop");
+        localtoccolumn.classList.toggle("is-3-desktop");
+    }
+  </script> 
+
+
+
+  </body>
+</html>

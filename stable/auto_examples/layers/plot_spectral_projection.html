@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Divergence-Free Spectral Projection &#8212; neuraloperator 2.0.0 documentation</title> 
+<link rel="stylesheet" href="../../_static/tensorly_style.css">
+<link rel="apple-touch-icon" sizes="180x180" href="../../_static/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../_static/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../_static/favicon/favicon-16x16.png">
+<link rel="manifest" href="../../_static/favicon/site.webmanifest">
+<link rel="mask-icon" href="../../_static/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="../../_static/favicon/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/tensorly_style.css?v=a02e9698" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=5126dfd5" />
+
+  
+    <script src="../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+ <script src="../../_static/navbar_burger.js"></script>
+ <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+ 
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="DISCO Convolutions" href="plot_DISCO_convolutions.html" />
+    <link rel="prev" title="Resampling layers" href="plot_resample.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  </head>
+<body  class="has-navbar-fixed-top">
+
+  <header>
+    <navbar>
+      <nav class="navbar top-navbar is-fixed-top has-shadow is-flex-wrap-wrap" role="navigation" aria-label="main top navigation">
+        <div class="navbar-brand">
+        
+
+          <a class="navbar-item" href="../../index.html">
+            <img src="../../_static/neuraloperator_logo.png" height="28">
+          </a>
+          <a class="navbar-item is-hidden-desktop" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon"><i class="fab fa-github"></i></span>
+          </a>
+
+          <a role="button" class="navbar-burger" data-target="top-nav-menu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+
+        </div>
+        
+        <div class="navbar-menu" id="top-nav-menu">
+        
+
+          <div class="navbar-start">
+            
+              <a class="navbar-item" href="../../install.html">
+              Install
+            </a>
+              <a class="navbar-item" href="../../theory_guide/index.html">
+              Theory Guide
+            </a>
+              <a class="navbar-item" href="../../user_guide/index.html">
+              User Guide
+            </a>
+              <a class="navbar-item" href="../../modules/api.html">
+              API
+            </a>
+              <a class="navbar-item" href="../index.html">
+              Examples
+            </a>
+              <a class="navbar-item" href="../../dev_guide/index.html">
+              Developer's Guide
+            </a>
+          </div>
+        
+          <div class="navbar-end">
+            <div class="navbar-item">
+            
+            <a class="button is-hidden-touch is-dark" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon-text">
+                <span class="icon is-large">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Github</span>
+              </span>
+            </a>
+
+            </div> 
+          </div> 
+        </div> 
+
+      </nav>
+      
+    </navbar>
+  </header>
+
+
+  <div id="column-container">
+  <div class="columns is-mobile is-centered">
+	
+  
+      <div class="column is-10-mobile is-one-third-tablet is-3-desktop is-hidden-mobile" id="sidebar">
+    
+    <aside class="sticky-nav sidebar-menu">
+<div class="sidebar-search">
+  <form class="field" id="searchbox" role="search" action="../../search.html" method="get">
+    <!-- <label class="label" id="searchlabel">Quick search</label> -->
+    <div class="field has-addons">
+      <div class="control is-expanded">
+        <input class="input" type="text" placeholder="Search the doc" name="q" aria-labelledby="searchlabel autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      </div>
+      <div class="control">
+        <input class="button is-info" type="submit" value="Go" />
+      </div>
+    </div>
+  </form>
+  <script>document.getElementById('searchbox').style.display = "block"</script>
+
+</div>
+      
+      <div class="sidebar-menu-toc">
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing NeuralOperator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory_guide/index.html">Theory Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/api.html">API reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../index.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#data-generation">Data Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#layers">Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#models">Models</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#training-and-meta-algorithms">Training and Meta-Algorithms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Development guide</a></li>
+</ul>
+ 
+      </div>
+    </aside>
+  </div>
+  
+
+  <div class="column main-column">
+
+    
+    <div class="main-section">
+
+      
+      
+      <div class="side-menu-toggle">
+        <button class="button" id="toggle-sidebar" onclick="toggle_sidebar()">
+          <span class="icon"><i class="fa fa-bars" aria-hidden="true"></i></span>
+          <span>menu</span> 
+        </button>
+      </div>
+      
+
+      <div class="container content main-content">
+        
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-auto-examples-layers-plot-spectral-projection-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="divergence-free-spectral-projection">
+<span id="spectral-projection"></span><span id="sphx-glr-auto-examples-layers-plot-spectral-projection-py"></span><h1>Divergence-Free Spectral Projection<a class="headerlink" href="#divergence-free-spectral-projection" title="Link to this heading"></a></h1>
+<p>An example demonstrating spectral projection to enforce divergence-free constraints
+in 2D velocity fields</p>
+<div style="margin-top: 3em;"></div><section id="import-the-library">
+<h2>Import the library<a class="headerlink" href="#import-the-library" title="Link to this heading"></a></h2>
+<p>We first import our <cite>neuralop</cite> library and required dependencies.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.layers.spectral_projection</span><span class="w"> </span><span class="kn">import</span> <span class="n">spectral_projection_divergence_free</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.losses.differentiation</span><span class="w"> </span><span class="kn">import</span> <span class="n">FourierDiff</span><span class="p">,</span> <span class="n">FiniteDiff</span>
+
+<span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Using device: </span><span class="si">{</span><span class="n">device</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Using device: cpu
+</pre></div>
+</div>
+<div style="margin-top: 3em;"></div></section>
+<section id="divergence-error-computation-functions">
+<h2>Divergence error computation functions<a class="headerlink" href="#divergence-error-computation-functions" title="Link to this heading"></a></h2>
+<p>We define two functions to compute the divergence error
+using spectral differentiation and finite differences.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">div_error_fourier</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">L</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute divergence error using spectral differentiation.&quot;&quot;&quot;</span>
+    <span class="n">fourier_diff_2d</span> <span class="o">=</span> <span class="n">FourierDiff</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">L</span><span class="o">=</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">L</span><span class="p">),</span> <span class="n">use_fc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">div</span> <span class="o">=</span> <span class="n">fourier_diff_2d</span><span class="o">.</span><span class="n">divergence</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+    <span class="n">error_val</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">div</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">div</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">div</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]))</span><span class="o">**</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">error_val</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">div_error_finite_diff</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">L</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute divergence error using FiniteDiff.&quot;&quot;&quot;</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">L</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">dy</span> <span class="o">=</span> <span class="n">L</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">finite_diff_2d</span> <span class="o">=</span> <span class="n">FiniteDiff</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">),</span> <span class="n">periodic_in_x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">periodic_in_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">div</span> <span class="o">=</span> <span class="n">finite_diff_2d</span><span class="o">.</span><span class="n">divergence</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+    <span class="n">error_val</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">div</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">div</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">div</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]))</span><span class="o">**</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">error_val</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+</pre></div>
+</div>
+<div style="margin-top: 3em;"></div></section>
+<section id="setting-considered">
+<h2>Setting considered<a class="headerlink" href="#setting-considered" title="Link to this heading"></a></h2>
+<p>We start from a divergence-free velocity field on [0, 2*pi] x [0, 2*pi]
+constructed from the stream function ψ(x,y) = sin(x) * cos(6*y)</p>
+<dl>
+<dt>Velocity components:</dt><dd><p>u_x  =  ∂ψ/∂y  =  -6 * sin(x) * sin(6*y)</p>
+<p>u_y =  -∂ψ/∂x  = - cos(x) * cos(6*y)</p>
+</dd>
+</dl>
+<hr class="docutils" />
+<p>Mathematical verification of divergence-free property:</p>
+<blockquote>
+<div><p>∇·u = ∂u_x/∂x + ∂u_y/∂y</p>
+<p>= ∂/∂x[-6*sin(x) * sin(6*y)] + ∂/∂y[-cos(x) * cos(6*y)]</p>
+<p>= -6*cos(x) * sin(6*y) + 6*cos(x) * sin(6*y)</p>
+<p>= 0  ✓</p>
+</div></blockquote>
+<hr class="docutils" />
+<p>We then add 10% noise to break the divergence-free property.</p>
+<p>We then apply the spectral projection to restore the divergence-free property.</p>
+<p>We then compute the divergence error for the original, noisy, and projected fields.</p>
+<p>We repeat this at various resolutions, [256, 512, 1024, 2048, 4096, 8192].</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">L</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+<span class="n">noise_level</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">resolutions</span> <span class="o">=</span> <span class="p">[</span><span class="mi">256</span><span class="p">,</span> <span class="mi">512</span><span class="p">,</span> <span class="mi">1024</span><span class="p">,</span> <span class="mi">2048</span><span class="p">,</span> <span class="mi">4096</span><span class="p">,</span> <span class="mi">8192</span><span class="p">]</span>
+
+
+<span class="n">errors_original_spectral</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">errors_original_finite</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">errors_noisy_spectral</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">errors_noisy_finite</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">errors_prog_spectral</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">errors_prog_finite</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">target_resolution</span> <span class="ow">in</span> <span class="n">resolutions</span><span class="p">:</span>
+
+    <span class="c1"># Create coordinate grids for this resolution</span>
+    <span class="n">xs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">target_resolution</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">L</span> <span class="o">/</span> <span class="n">target_resolution</span><span class="p">)</span>
+    <span class="n">ys</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">target_resolution</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">L</span> <span class="o">/</span> <span class="n">target_resolution</span><span class="p">)</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s1">&#39;ij&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Create divergence-free field using the stream function defined earlier</span>
+    <span class="n">u_x</span> <span class="o">=</span> <span class="o">-</span><span class="mf">6.0</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">6.0</span> <span class="o">*</span> <span class="n">Y</span><span class="p">)</span>
+    <span class="n">u_y</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mf">6.0</span> <span class="o">*</span> <span class="n">Y</span><span class="p">)</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">u_x</span><span class="p">,</span> <span class="n">u_y</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="c1"># Add noise to break divergence-free property</span>
+    <span class="n">mean_magnitude</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">u</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">u</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">noise</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn_like</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="o">*</span> <span class="n">noise_level</span> <span class="o">*</span> <span class="n">mean_magnitude</span>
+    <span class="n">u_noisy</span> <span class="o">=</span> <span class="n">u</span> <span class="o">+</span> <span class="n">noise</span>
+
+    <span class="c1"># Apply spectral projection to restore divergence-free property</span>
+    <span class="n">u_proj</span> <span class="o">=</span> <span class="n">spectral_projection_divergence_free</span><span class="p">(</span><span class="n">u_noisy</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">constraint_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">))</span>
+
+    <span class="c1"># Compute divergence errors for all three fields</span>
+    <span class="n">errors_original_spectral</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">div_error_fourier</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">L</span><span class="p">))</span>
+    <span class="n">errors_original_finite</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">div_error_finite_diff</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">L</span><span class="p">))</span>
+    <span class="n">errors_noisy_spectral</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">div_error_fourier</span><span class="p">(</span><span class="n">u_noisy</span><span class="p">,</span> <span class="n">L</span><span class="p">))</span>
+    <span class="n">errors_noisy_finite</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">div_error_finite_diff</span><span class="p">(</span><span class="n">u_noisy</span><span class="p">,</span> <span class="n">L</span><span class="p">))</span>
+    <span class="n">errors_prog_spectral</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">div_error_fourier</span><span class="p">(</span><span class="n">u_proj</span><span class="p">,</span> <span class="n">L</span><span class="p">))</span>
+    <span class="n">errors_prog_finite</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">div_error_finite_diff</span><span class="p">(</span><span class="n">u_proj</span><span class="p">,</span> <span class="n">L</span><span class="p">))</span>
+</pre></div>
+</div>
+<div style="margin-top: 3em;"></div></section>
+<section id="divergence-errors-using-spectral-differentiation">
+<h2>Divergence Errors using Spectral Differentiation<a class="headerlink" href="#divergence-errors-using-spectral-differentiation" title="Link to this heading"></a></h2>
+<p>The Fourier differentiation method computes derivatives in the spectral domain
+by transforming the field to Fourier space, applying the appropriate wavenumber
+operators, and transforming back.</p>
+<p>We display the divergence error for the original, noisy, and projected fields
+at the different resolutions.</p>
+<p>Note that at lower resolutions, finite differences are not accurate enough
+to properly compute the divergence error, which is why the errors appear higher
+initially but improve at higher resolutions. This is a limitation of
+finite differences for computing derivatives, not an issue with the
+spectral projection itself. Spectral differentiation provides more accurate
+derivative calculations at lower resolutions.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Spectral Differentiation table</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">55</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Resolution&#39;</span><span class="si">:</span><span class="s2">&lt;12</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;Original&#39;</span><span class="si">:</span><span class="s2">&lt;15</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;Noisy&#39;</span><span class="si">:</span><span class="s2">&lt;15</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;Projected&#39;</span><span class="si">:</span><span class="s2">&lt;15</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">55</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">res</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">resolutions</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">res</span><span class="si">:</span><span class="s2">&lt;12</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">errors_original_spectral</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">:</span><span class="s2">&lt;15.2e</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">errors_noisy_spectral</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">:</span><span class="s2">&lt;15.2e</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">errors_prog_spectral</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">:</span><span class="s2">&lt;15.2e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># Spectral Differentiation plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">resolutions</span><span class="p">,</span> <span class="n">errors_original_spectral</span><span class="p">,</span> <span class="s1">&#39;o-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Original&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">resolutions</span><span class="p">,</span> <span class="n">errors_noisy_spectral</span><span class="p">,</span> <span class="s1">&#39;o-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Noisy&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">resolutions</span><span class="p">,</span> <span class="n">errors_prog_spectral</span><span class="p">,</span> <span class="s1">&#39;o-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Projected&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Resolution&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Divergence Error (L2 norm)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Spectral Divergence Errors&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img src="../../_images/sphx_glr_plot_spectral_projection_001.png" srcset="../../_images/sphx_glr_plot_spectral_projection_001.png" alt="Spectral Divergence Errors" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>-------------------------------------------------------
+Resolution   Original        Noisy           Projected
+-------------------------------------------------------
+256          1.50e-06        1.69e+02        9.20e-07
+512          1.50e-06        3.37e+02        9.12e-07
+1024         1.50e-06        6.77e+02        9.10e-07
+2048         1.50e-06        1.35e+03        9.10e-07
+4096         1.50e-06        2.71e+03        9.10e-07
+8192         1.50e-06        5.42e+03        9.10e-07
+</pre></div>
+</div>
+<div style="margin-top: 3em;"></div></section>
+<section id="divergence-errors-using-finite-differences">
+<h2>Divergence Errors using Finite Differences<a class="headerlink" href="#divergence-errors-using-finite-differences" title="Link to this heading"></a></h2>
+<p>The finite difference method approximates derivatives using central differences.</p>
+<p>We display the divergence error for the original, noisy, and projected fields
+at the different resolutions.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Finite differences table</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">55</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Resolution&#39;</span><span class="si">:</span><span class="s2">&lt;12</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;Original&#39;</span><span class="si">:</span><span class="s2">&lt;15</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;Noisy&#39;</span><span class="si">:</span><span class="s2">&lt;15</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;Projected&#39;</span><span class="si">:</span><span class="s2">&lt;15</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">55</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">res</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">resolutions</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">res</span><span class="si">:</span><span class="s2">&lt;12</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">errors_original_finite</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">:</span><span class="s2">&lt;15.2e</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">errors_noisy_finite</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">:</span><span class="s2">&lt;15.2e</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">errors_prog_finite</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">:</span><span class="s2">&lt;15.2e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># Finite differences plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">resolutions</span><span class="p">,</span> <span class="n">errors_original_finite</span><span class="p">,</span> <span class="s1">&#39;o-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Original&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">resolutions</span><span class="p">,</span> <span class="n">errors_noisy_finite</span><span class="p">,</span> <span class="s1">&#39;o-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Noisy&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">resolutions</span><span class="p">,</span> <span class="n">errors_prog_finite</span><span class="p">,</span> <span class="s1">&#39;o-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Projected&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Resolution&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Divergence Error (L2 norm)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Finite Difference Divergence Errors&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img src="../../_images/sphx_glr_plot_spectral_projection_002.png" srcset="../../_images/sphx_glr_plot_spectral_projection_002.png" alt="Finite Difference Divergence Errors" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>-------------------------------------------------------
+Resolution   Original        Noisy           Projected
+-------------------------------------------------------
+256          6.62e-02        6.61e+01        1.62e-01
+512          1.66e-02        1.32e+02        2.53e-02
+1024         4.14e-03        2.64e+02        4.81e-03
+2048         1.03e-03        5.28e+02        1.08e-03
+4096         2.59e-04        1.06e+03        2.61e-04
+8192         6.47e-05        2.11e+03        6.43e-05
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 37.423 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-layers-plot-spectral-projection-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/0293c114493d7ce78ab4aad5a952e0cd/plot_spectral_projection.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_spectral_projection.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/eb75fe08d3a93bb05987157330beb2ef/plot_spectral_projection.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_spectral_projection.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/62cad32a03a6e8fdf3139c1000701aca/plot_spectral_projection.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_spectral_projection.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+      </div>
+
+      
+        <nav class="pagination" role="navigation" aria-label="pagination">
+    
+    <a class="button pagination-previous" href="plot_resample.html" title="previous page" accesskey="p">
+        <span class="icon">
+            <i class="fa fa-arrow-circle-left"></i>
+        </span>
+        <span>Resampling layers</span>
+    </a>
+    
+    
+    <a class="button pagination-next" href="plot_DISCO_convolutions.html" title="next page" accesskey="n">
+        <span>DISCO Convolutions </span>
+        <span class="icon">
+            <i class="fa fa-arrow-circle-right"></i>
+        </span>
+    </a>
+    
+</nav>
+
+      
+
+        <footer class="footer">
+    <div class="content has-text-centered">
+        <div class="block">
+          &copy; Copyright 2025, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+        </div>
+    </div>
+  </footer>
+
+    </div>
+
+  </div>  
+
+	
+    
+    <div class="column is-hidden-touch is-2-desktop is-one-fifth-widescreen" id="localtoc-column">
+
+    <aside class="sticky-nav localtoc"> 
+        <p class="menu-label"> 
+            <span class="icon-text">
+                <span class="icon"><i class="fas fa-duotone fa-list"></i></span>
+                <span> On this page </span>
+            </span>
+        </p>
+
+        <div class="menu menu-list localtoc-list">
+        <ul>
+<li><a class="reference internal" href="#">Divergence-Free Spectral Projection</a><ul>
+<li><a class="reference internal" href="#import-the-library">Import the library</a></li>
+<li><a class="reference internal" href="#divergence-error-computation-functions">Divergence error computation functions</a></li>
+<li><a class="reference internal" href="#setting-considered">Setting considered</a></li>
+<li><a class="reference internal" href="#divergence-errors-using-spectral-differentiation">Divergence Errors using Spectral Differentiation</a></li>
+<li><a class="reference internal" href="#divergence-errors-using-finite-differences">Divergence Errors using Finite Differences</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+    </aside>
+    </div>
+
+  
+
+  </div>  
+  </div> 
+
+  
+  <script>
+    function toggle_sidebar() {
+        var element = document.getElementById("sidebar");
+        var container = document.getElementById("column-container");
+        var localtoccolumn = document.getElementById("localtoc-column");
+        element.classList.toggle("hide-tablet");
+        element.classList.toggle("is-hidden-mobile");
+        container.classList.toggle("sidemenu-hidden");
+        localtoccolumn.classList.toggle("is-one-fifth-widescreen");
+        localtoccolumn.classList.toggle("is-2-desktop");
+        localtoccolumn.classList.toggle("is-3-desktop");
+    }
+  </script> 
+
+
+
+  </body>
+</html>

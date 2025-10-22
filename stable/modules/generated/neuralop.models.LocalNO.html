@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>neuralop.models.LocalNO &#8212; neuraloperator 2.0.0 documentation</title> 
+<link rel="stylesheet" href="../../_static/tensorly_style.css">
+<link rel="apple-touch-icon" sizes="180x180" href="../../_static/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../_static/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../_static/favicon/favicon-16x16.png">
+<link rel="manifest" href="../../_static/favicon/site.webmanifest">
+<link rel="mask-icon" href="../../_static/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="../../_static/favicon/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/tensorly_style.css?v=a02e9698" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=5126dfd5" />
+
+  
+    <script src="../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+ <script src="../../_static/navbar_burger.js"></script>
+ <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+ 
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="neuralop.models.UNO" href="neuralop.models.UNO.html" />
+    <link rel="prev" title="neuralop.models.GINO" href="neuralop.models.GINO.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  </head>
+<body  class="has-navbar-fixed-top">
+
+  <header>
+    <navbar>
+      <nav class="navbar top-navbar is-fixed-top has-shadow is-flex-wrap-wrap" role="navigation" aria-label="main top navigation">
+        <div class="navbar-brand">
+        
+
+          <a class="navbar-item" href="../../index.html">
+            <img src="../../_static/neuraloperator_logo.png" height="28">
+          </a>
+          <a class="navbar-item is-hidden-desktop" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon"><i class="fab fa-github"></i></span>
+          </a>
+
+          <a role="button" class="navbar-burger" data-target="top-nav-menu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+
+        </div>
+        
+        <div class="navbar-menu" id="top-nav-menu">
+        
+
+          <div class="navbar-start">
+            
+              <a class="navbar-item" href="../../install.html">
+              Install
+            </a>
+              <a class="navbar-item" href="../../theory_guide/index.html">
+              Theory Guide
+            </a>
+              <a class="navbar-item" href="../../user_guide/index.html">
+              User Guide
+            </a>
+              <a class="navbar-item" href="../api.html">
+              API
+            </a>
+              <a class="navbar-item" href="../../auto_examples/index.html">
+              Examples
+            </a>
+              <a class="navbar-item" href="../../dev_guide/index.html">
+              Developer's Guide
+            </a>
+          </div>
+        
+          <div class="navbar-end">
+            <div class="navbar-item">
+            
+            <a class="button is-hidden-touch is-dark" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon-text">
+                <span class="icon is-large">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Github</span>
+              </span>
+            </a>
+
+            </div> 
+          </div> 
+        </div> 
+
+      </nav>
+      
+    </navbar>
+  </header>
+
+
+  <div id="column-container">
+  <div class="columns is-mobile is-centered">
+	
+  
+      <div class="column is-10-mobile is-one-third-tablet is-3-desktop is-hidden-mobile" id="sidebar">
+    
+    <aside class="sticky-nav sidebar-menu">
+<div class="sidebar-search">
+  <form class="field" id="searchbox" role="search" action="../../search.html" method="get">
+    <!-- <label class="label" id="searchlabel">Quick search</label> -->
+    <div class="field has-addons">
+      <div class="control is-expanded">
+        <input class="input" type="text" placeholder="Search the doc" name="q" aria-labelledby="searchlabel autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      </div>
+      <div class="control">
+        <input class="button is-info" type="submit" value="Go" />
+      </div>
+    </div>
+  </form>
+  <script>document.getElementById('searchbox').style.display = "block"</script>
+
+</div>
+      
+      <div class="sidebar-menu-toc">
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing NeuralOperator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory_guide/index.html">Theory Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#models">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.layers">Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#model-dispatching">Model Dispatching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#training">Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#loss-functions">Loss Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.utils">Utility Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Development guide</a></li>
+</ul>
+ 
+      </div>
+    </aside>
+  </div>
+  
+
+  <div class="column main-column">
+
+    
+    <div class="main-section">
+
+      
+      
+      <div class="side-menu-toggle">
+        <button class="button" id="toggle-sidebar" onclick="toggle_sidebar()">
+          <span class="icon"><i class="fa fa-bars" aria-hidden="true"></i></span>
+          <span>menu</span> 
+        </button>
+      </div>
+      
+
+      <div class="container content main-content">
+        
+  <section id="neuralop-models-localno">
+<h1><a class="reference internal" href="../api.html#module-neuralop.models" title="neuralop.models"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.models</span></code></a>.LocalNO<a class="headerlink" href="#neuralop-models-localno" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="neuralop.models.LocalNO">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.models.</span></span><span class="sig-name descname"><span class="pre">LocalNO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/models/local_no.html#LocalNO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.models.LocalNO" title="Link to this definition"></a></dt>
+<dd><p>N-Dimensional Local Fourier Neural Operator. The LocalNO shares
+its forward pass and architecture with the standard FNO, with the key difference
+that its Fourier convolution layers are replaced with LocalNOBlocks that place
+differential kernel layers and local integral layers in parallel to its
+Fourier layers as detailed in <a class="reference internal" href="#r3cfd1ccbee5f-1" id="id1">[1]</a>.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>n_modes</strong><span class="classifier">Tuple[int]</span></dt><dd><p>Number of modes to keep in Fourier Layer, along each dimension.
+The dimensionality of the Local NO is inferred from len(n_modes).
+No default value (required parameter).</p>
+</dd>
+<dt><strong>in_channels</strong><span class="classifier">int</span></dt><dd><p>Number of channels in input function. Determined by the problem.</p>
+</dd>
+<dt><strong>out_channels</strong><span class="classifier">int</span></dt><dd><p>Number of channels in output function. Determined by the problem.</p>
+</dd>
+<dt><strong>hidden_channels</strong><span class="classifier">int</span></dt><dd><p>Width of the Local NO (i.e. number of channels).
+This significantly affects the number of parameters of the LocalNO.
+Good starting point can be 64, and then increased if more expressivity is needed.
+Update lifting_channel_ratio and projection_channel_ratio accordingly since they are proportional to hidden_channels.</p>
+</dd>
+<dt><strong>default_in_shape</strong><span class="classifier">Tuple[int]</span></dt><dd><p>Default input shape on spatiotemporal dimensions for structured DISCO convolutions.
+No default value (required parameter).</p>
+</dd>
+<dt><strong>n_layers</strong><span class="classifier">int, optional</span></dt><dd><p>Number of Local NO block layers. Default: 4</p>
+</dd>
+<dt><strong>disco_layers</strong><span class="classifier">Union[bool, List[bool]], optional</span></dt><dd><p>Must be same length as n_layers, dictates whether to include a
+local integral kernel parallel connection at each layer. If a single
+bool, shared for all layers. Default: True</p>
+</dd>
+<dt><strong>disco_kernel_shape</strong><span class="classifier">Union[int, List[int]], optional</span></dt><dd><p>Kernel shape for local integral. Expects either a single integer for isotropic kernels
+or two integers for anisotropic kernels. Default: [2, 4]</p>
+</dd>
+<dt><strong>domain_length</strong><span class="classifier">List[int], optional</span></dt><dd><p>Extent/length of the physical domain. Assumes square domain [-1, 1]^2 by default. Default: [2, 2]</p>
+</dd>
+<dt><strong>disco_groups</strong><span class="classifier">int, optional</span></dt><dd><p>Number of groups in the local integral convolution. Default: 1</p>
+</dd>
+<dt><strong>disco_bias</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use a bias for the integral kernel. Default: True</p>
+</dd>
+<dt><strong>radius_cutoff</strong><span class="classifier">float, optional</span></dt><dd><p>Cutoff radius (with respect to domain_length) for the local integral kernel. Default: None</p>
+</dd>
+<dt><strong>diff_layers</strong><span class="classifier">Union[bool, List[bool]], optional</span></dt><dd><p>Must be same length as n_layers, dictates whether to include a
+differential kernel parallel connection at each layer. If a single
+bool, shared for all layers. Default: True</p>
+</dd>
+<dt><strong>conv_padding_mode</strong><span class="classifier">str, optional</span></dt><dd><p>Padding mode for spatial convolution kernels. Options: “periodic”, “circular”, “replicate”, “reflect”, “zeros”.
+Default: “periodic”</p>
+</dd>
+<dt><strong>fin_diff_kernel_size</strong><span class="classifier">int, optional</span></dt><dd><p>Conv kernel size for finite difference convolution. Default: 3</p>
+</dd>
+<dt><strong>mix_derivatives</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to mix derivatives across channels. Default: True</p>
+</dd>
+<dt><strong>lifting_channel_ratio</strong><span class="classifier">Number, optional</span></dt><dd><p>Ratio of lifting channels to hidden_channels.
+The number of lifting channels in the lifting block of the Local NO is
+lifting_channel_ratio * hidden_channels (e.g. default 2 * hidden_channels). Default: 2</p>
+</dd>
+<dt><strong>projection_channel_ratio</strong><span class="classifier">Number, optional</span></dt><dd><p>Ratio of projection channels to hidden_channels.
+The number of projection channels in the projection block of the Local NO is
+projection_channel_ratio * hidden_channels (e.g. default 2 * hidden_channels). Default: 2</p>
+</dd>
+<dt><strong>positional_embedding</strong><span class="classifier">Union[str, nn.Module], optional</span></dt><dd><p>Positional embedding to apply to last channels of raw input before being passed through the Local FNO.</p>
+<p>Options:
+- “grid”: Appends a grid positional embedding with default settings to the last channels of raw input.</p>
+<blockquote>
+<div><p>Assumes the inputs are discretized over a grid with entry [0,0,…] at the origin and side lengths of 1.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>GridEmbedding2D: Uses this module directly for 2D cases.</p></li>
+<li><p>GridEmbeddingND: Uses this module directly (see neuralop.embeddings.GridEmbeddingND for details).</p></li>
+<li><p>None: Does nothing.</p></li>
+</ul>
+<p>Default: “grid”</p>
+</dd>
+<dt><strong>non_linearity</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>Non-linear activation function module to use. Default: F.gelu</p>
+</dd>
+<dt><strong>norm</strong><span class="classifier">str, optional</span></dt><dd><p>Normalization layer to use. Options: “ada_in”, “group_norm”, “instance_norm”, None. Default: None</p>
+</dd>
+<dt><strong>complex_data</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether data is complex-valued. If True, initializes complex-valued modules. Default: False</p>
+</dd>
+<dt><strong>use_channel_mlp</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use an MLP layer after each LocalNO block. Default: False</p>
+</dd>
+<dt><strong>channel_mlp_dropout</strong><span class="classifier">float, optional</span></dt><dd><p>Dropout parameter for ChannelMLP in LocalNO Block. Default: 0</p>
+</dd>
+<dt><strong>channel_mlp_expansion</strong><span class="classifier">float, optional</span></dt><dd><p>Expansion parameter for ChannelMLP in LocalNO Block. Default: 0.5</p>
+</dd>
+<dt><strong>channel_mlp_skip</strong><span class="classifier">str, optional</span></dt><dd><p>Type of skip connection to use in channel-mixing MLP. Options: “linear”, “identity”, “soft-gating”, None.
+Default: “soft-gating”</p>
+</dd>
+<dt><strong>local_no_skip</strong><span class="classifier">str, optional</span></dt><dd><p>Type of skip connection to use in LocalNO layers. Options: “linear”, “identity”, “soft-gating”, None.
+Default: “linear”</p>
+</dd>
+<dt><strong>resolution_scaling_factor</strong><span class="classifier">Union[Number, List[Number]], optional</span></dt><dd><p>Layer-wise factor by which to scale the domain resolution of function.
+Options:
+- None: No scaling
+- Single number n: Scales resolution by n at each layer
+- List of numbers [n_0, n_1,…]: Scales layer i’s resolution by n_i
+Default: None</p>
+</dd>
+<dt><strong>domain_padding</strong><span class="classifier">Union[Number, List[Number]], optional</span></dt><dd><p>Percentage of padding to use. If not None, percentage of padding to use.
+To vary the percentage of padding used along each input dimension,
+pass in a list of percentages e.g. [p1, p2, …, pN] such that
+p1 corresponds to the percentage of padding along dim 1, etc. Default: None</p>
+</dd>
+<dt><strong>local_no_block_precision</strong><span class="classifier">str, optional</span></dt><dd><p>Precision mode in which to perform spectral convolution. Options: “full”, “half”, “mixed”. Default: “full”</p>
+</dd>
+<dt><strong>stabilizer</strong><span class="classifier">str, optional</span></dt><dd><p>Whether to use a stabilizer in LocalNO block. Options: “tanh”, None. Default: None
+Note: stabilizer greatly improves performance in the case local_no_block_precision=’mixed’.</p>
+</dd>
+<dt><strong>max_n_modes</strong><span class="classifier">Tuple[int], optional</span></dt><dd><p>Maximum number of modes to use in Fourier domain during training.
+None means that all the n_modes are used.
+Tuple of integers: Incrementally increase the number of modes during training.
+This can be updated dynamically during training. Default: None</p>
+</dd>
+<dt><strong>factorization</strong><span class="classifier">str, optional</span></dt><dd><p>Tensor factorization of the Local NO layer weights to use.
+Options: “None”, “Tucker”, “CP”, “TT”
+Other factorization methods supported by tltorch. Default: None</p>
+</dd>
+<dt><strong>rank</strong><span class="classifier">float, optional</span></dt><dd><p>Tensor rank to use in factorization. Default: 1.0
+Set to float &lt;1.0 when using TFNO (i.e. when factorization is not None).
+A TFNO with rank 0.1 has roughly 10% of the parameters of a dense FNO.</p>
+</dd>
+<dt><strong>fixed_rank_modes</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to not factorize certain modes. Default: False</p>
+</dd>
+<dt><strong>implementation</strong><span class="classifier">str, optional</span></dt><dd><p>Implementation method for factorized tensors.
+Options: “factorized”, “reconstructed”. Default: “factorized”</p>
+</dd>
+<dt><strong>decomposition_kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>Extra kwargs for tensor decomposition (see tltorch.FactorizedTensor). Default: {}</p>
+</dd>
+<dt><strong>separable</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use a separable spectral convolution. Default: False</p>
+</dd>
+<dt><strong>preactivation</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to compute LocalNO forward pass with ResNet-style preactivation. Default: False</p>
+</dd>
+<dt><strong>conv_module</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>Module to use for LocalNOBlock’s convolutions. Default: SpectralConv</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>n_modes</strong></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.models.LocalNO.forward" title="neuralop.models.LocalNO.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>(x[, output_shape])</p></td>
+<td><p>FNO's forward pass</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="r3cfd1ccbee5f-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Liu-Schiaffini M., Berner J., Bonev B., Kurth T., Azizzadenesheli K., Anandkumar A.;
+“Neural Operators with Localized Integral and Differential Kernels” (2024).
+ICML 2024, <a class="reference external" href="https://arxiv.org/pdf/2402.16845">https://arxiv.org/pdf/2402.16845</a>.</p>
+</div>
+</div>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">LocalNO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">LocalNO</span><span class="p">(</span><span class="n">n_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">12</span><span class="p">),</span> <span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hidden_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span>
+<span class="go">FNO(</span>
+<span class="go">(positional_embedding): GridEmbeddingND()</span>
+<span class="go">(local_no_blocks): LocalNOBlocks(</span>
+<span class="go">    (convs): SpectralConv(</span>
+<span class="go">    (weight): ModuleList(</span>
+<span class="go">        (0-3): 4 x DenseTensor(shape=torch.Size([64, 64, 12, 7]), rank=None)</span>
+<span class="go">    )</span>
+<span class="go">    )</span>
+<span class="go">        ... torch.nn.Module printout truncated ...</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralop.models.LocalNO.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/models/local_no.html#LocalNO.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.models.LocalNO.forward" title="Link to this definition"></a></dt>
+<dd><p>FNO’s forward pass</p>
+<ol class="arabic simple">
+<li><p>Applies optional positional encoding</p></li>
+<li><dl class="simple">
+<dt>Sends inputs through a lifting layer to a high-dimensional latent</dt><dd><p>space</p>
+</dd>
+</dl>
+</li>
+<li><p>Applies optional domain padding to high-dimensional intermediate function representation</p></li>
+<li><p>Applies <cite>n_layers</cite> Local NO layers in sequence (Differential + optional DISCO + skip connections, nonlinearity)</p></li>
+<li><p>If domain padding was applied, domain padding is removed</p></li>
+<li><p>Projection of intermediate function representation to the output channels</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">tensor</span></dt><dd><p>input tensor</p>
+</dd>
+<dt><strong>output_shape</strong><span class="classifier">{tuple, tuple list, None}, default is None</span></dt><dd><p>Gives the option of specifying the exact output shape for odd shaped inputs.</p>
+<ul class="simple">
+<li><p>If None, don’t specify an output shape</p></li>
+<li><p>If tuple, specifies the output-shape of the <strong>last</strong> FNO Block</p></li>
+<li><p>If tuple list, specifies the exact output-shape of each FNO Block</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div class="clearer"></div></section>
+
+
+      </div>
+
+      
+        <nav class="pagination" role="navigation" aria-label="pagination">
+    
+    <a class="button pagination-previous" href="neuralop.models.GINO.html" title="previous page" accesskey="p">
+        <span class="icon">
+            <i class="fa fa-arrow-circle-left"></i>
+        </span>
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.models</span></code>.GINO</span>
+    </a>
+    
+    
+    <a class="button pagination-next" href="neuralop.models.UNO.html" title="next page" accesskey="n">
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.models</span></code>.UNO </span>
+        <span class="icon">
+            <i class="fa fa-arrow-circle-right"></i>
+        </span>
+    </a>
+    
+</nav>
+
+      
+
+        <footer class="footer">
+    <div class="content has-text-centered">
+        <div class="block">
+          &copy; Copyright 2025, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+        </div>
+    </div>
+  </footer>
+
+    </div>
+
+  </div>  
+
+	
+    
+    <div class="column is-hidden-touch is-2-desktop is-one-fifth-widescreen" id="localtoc-column">
+
+    <aside class="sticky-nav localtoc"> 
+        <p class="menu-label"> 
+            <span class="icon-text">
+                <span class="icon"><i class="fas fa-duotone fa-list"></i></span>
+                <span> On this page </span>
+            </span>
+        </p>
+
+        <div class="menu menu-list localtoc-list">
+        <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.models</span></code>.LocalNO</a><ul>
+<li><a class="reference internal" href="#neuralop.models.LocalNO"><code class="docutils literal notranslate"><span class="pre">LocalNO</span></code></a><ul>
+<li><a class="reference internal" href="#neuralop.models.LocalNO.forward"><code class="docutils literal notranslate"><span class="pre">LocalNO.forward()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+    </aside>
+    </div>
+
+  
+
+  </div>  
+  </div> 
+
+  
+  <script>
+    function toggle_sidebar() {
+        var element = document.getElementById("sidebar");
+        var container = document.getElementById("column-container");
+        var localtoccolumn = document.getElementById("localtoc-column");
+        element.classList.toggle("hide-tablet");
+        element.classList.toggle("is-hidden-mobile");
+        container.classList.toggle("sidemenu-hidden");
+        localtoccolumn.classList.toggle("is-one-fifth-widescreen");
+        localtoccolumn.classList.toggle("is-2-desktop");
+        localtoccolumn.classList.toggle("is-3-desktop");
+    }
+  </script> 
+
+
+
+  </body>
+</html>

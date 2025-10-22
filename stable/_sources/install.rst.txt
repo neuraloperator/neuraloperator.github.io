@@ -9,15 +9,20 @@ Once installed, you can import it as ``neuralop``::
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Basic Install
+--------------
+
 Pre-requisites
-===============
+++++++++++++++
 
 You will need to have Python 3 installed, as well as NumPy, Scipy, PyTorch, TensorLy and TensorLy-Torch.
 If you are starting with Python or generally want a pain-free experience, we recommend that you 
 install the `Anaconda distribution <https://www.anaconda.com/download/>`_. It comes ready to use with all prerequisite packages.
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Installing with pip
-=================================
++++++++++++++++++++
 
 We periodically package `neuraloperator` for release on PyPI. This version is not guaranteed to be up-to-date with
 the latest changes to our code. 
@@ -31,7 +36,7 @@ To install via pip, simply run, in your terminal::
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Building ``neuraloperator`` from source
-========================================
++++++++++++++++++++++++++++++++++++++++
 
 First ensure that you are in an environment with Python 3, NumPy, SciPy, PyTorch, TensorLy and TensorLy-Torch. 
 Then clone the repository and cd there::
@@ -49,11 +54,19 @@ Then install the package (here in editable mode with `-e`, or equivalently `--ed
 
    pip install -e .
 
+
+.. raw:: html
+
+   <br/>
+
 ~~~~~~~~~~~~~~~~~~~~
+
+Advanced dependencies
+---------------------
 
 .. _open3d_dependency :
 Fast 3D spatial computing with Open3D
-=======================================
++++++++++++++++++++++++++++++++++++++
 
 To accelerate spatial computing for 3D applications, we include 
 `Open3D <https://github.com/isl-org/Open3D>`_ as an optional dependency. Open3D includes
@@ -67,26 +80,27 @@ compatible with specific builds of PyTorch and CUDA. Check the sub-package
 
 ~~~~~~~~~~~~~~~~~~~~~
 
-Running the tests
-=================
+.. _torch_scatter_dependency :
 
-Unit-testing is an important part of this package.
-You can run all the tests using `pytest`::
+Sparse computations with PyTorch-Scatter
+++++++++++++++++++++++++++++++++++++++++
 
-   pip install -r requirements_dev.txt
-   pytest neuralop
+We use the package ``torch_scatter`` (available on PyPI) to speed up neighborhood reductions during 
+the final stage of the ``IntegralTransform`` layer, linked here: :ref:`gno_api`.
 
-Building the documentation
-==========================
+``torch_scatter`` uses compiled CUDA kernels 
+to perform this reduction, providing both memory efficiency and speed advantages over a native PyTorch implementation.
 
-You will need to install the dependencies::
+However, since these kernels are precompiled, it is crucial to install the version of ``torch_scatter`` that is built for
+your specific combination of OS, PyTorch and CUDA. All available wheels can be found `here <https://data.pyg.org/whl/>`_.  
 
-   cd doc
-   pip install -r requirements_doc.txt
+.. note :: 
+    The latest PyTorch version for which ``torch_scatter`` is built is 2.5.1, so you should downgrade if you are using 
+    the latest (``torch>=2.6.0``) release:
 
 
-You are now ready to build the doc (here in html)::
+To force-downgrade PyTorch, run 
 
-   make html
+.. code ::
 
-The results will be in ``build/html`` (the main page will be ``build/html/index.html``)
+   pip install -U torch==2.5.1

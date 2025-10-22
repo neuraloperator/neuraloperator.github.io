@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>neuralop.layers.skip_connections.skip_connection &#8212; neuraloperator 1.0.2 documentation</title> 
+    <title>neuralop.layers.skip_connections.skip_connection &#8212; neuraloperator 2.0.0 documentation</title> 
 <link rel="stylesheet" href="../../_static/tensorly_style.css">
 <link rel="apple-touch-icon" sizes="180x180" href="../../_static/favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../_static/favicon/favicon-32x32.png">
@@ -15,24 +15,27 @@
 <link rel="shortcut icon" href="../../_static/favicon/favicon.ico">
 <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/tensorly_style.css?v=a02e9698" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=5126dfd5" />
 
   
-    <script src="../../_static/documentation_options.js?v=1ed6394b"></script>
+    <script src="../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
  
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="neuralop.models.base_model.get_model" href="neuralop.models.base_model.get_model.html" />
-    <link rel="prev" title="neuralop.layers.skip_connections.SoftGating" href="neuralop.layers.skip_connections.SoftGating.html" />
+    <link rel="next" title="neuralop.layers.normalization_layers.AdaIN" href="neuralop.layers.normalization_layers.AdaIN.html" />
+    <link rel="prev" title="neuralop.layers.padding.DomainPadding" href="neuralop.layers.padding.DomainPadding.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   </head>
@@ -67,6 +70,9 @@
               <a class="navbar-item" href="../../install.html">
               Install
             </a>
+              <a class="navbar-item" href="../../theory_guide/index.html">
+              Theory Guide
+            </a>
               <a class="navbar-item" href="../../user_guide/index.html">
               User Guide
             </a>
@@ -75,6 +81,9 @@
             </a>
               <a class="navbar-item" href="../../auto_examples/index.html">
               Examples
+            </a>
+              <a class="navbar-item" href="../../dev_guide/index.html">
+              Developer's Guide
             </a>
           </div>
         
@@ -126,16 +135,20 @@
       <div class="sidebar-menu-toc">
       <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing NeuralOperator</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">NeuralOperator User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory_guide/index.html">Theory Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/index.html">User Guide</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../api.html#models">Models</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../api.html#module-neuralop.layers">Layers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#model-dispatching">Model Dispatching</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#training">Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#loss-functions">Loss Functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-neuralop.utils">Utility Functions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Gallery of examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Development guide</a></li>
 </ul>
  
       </div>
@@ -170,16 +183,16 @@ Returns an nn.Module skip connections, one of  {‘identity’, ‘linear’, so
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>in_features</strong><span class="classifier">int</span></dt><dd><p>number of input features</p>
+<dt><strong>in_features</strong><span class="classifier">int</span></dt><dd><p>Number of input features</p>
 </dd>
-<dt><strong>out_features</strong><span class="classifier">int</span></dt><dd><p>number of output features</p>
+<dt><strong>out_features</strong><span class="classifier">int</span></dt><dd><p>Number of output features</p>
 </dd>
-<dt><strong>n_dim</strong><span class="classifier">int, default is 2</span></dt><dd><p>Dimensionality of the input (excluding batch-size and channels).
-<code class="docutils literal notranslate"><span class="pre">n_dim=2</span></code> corresponds to having Module2D.</p>
+<dt><strong>n_dim</strong><span class="classifier">int, optional</span></dt><dd><p>Dimensionality of the input (excluding batch-size and channels).
+n_dim=2 corresponds to having Module2D, by default 2</p>
 </dd>
-<dt><strong>bias</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to use a bias, by default False</p>
+<dt><strong>bias</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use a bias, by default False</p>
 </dd>
-<dt><strong>skip_type</strong><span class="classifier">{‘identity’, ‘linear’, soft-gating’}</span></dt><dd><p>kind of skip connection to use, by default “soft-gating”</p>
+<dt><strong>skip_type</strong><span class="classifier">{‘identity’, ‘linear’, ‘soft-gating’}, optional</span></dt><dd><p>Kind of skip connection to use. Options: ‘identity’, ‘linear’, ‘soft-gating’, by default “soft-gating”</p>
 </dd>
 </dl>
 </dd>
@@ -200,16 +213,16 @@ Returns an nn.Module skip connections, one of  {‘identity’, ‘linear’, so
       
         <nav class="pagination" role="navigation" aria-label="pagination">
     
-    <a class="button pagination-previous" href="neuralop.layers.skip_connections.SoftGating.html" title="previous page" accesskey="p">
+    <a class="button pagination-previous" href="neuralop.layers.padding.DomainPadding.html" title="previous page" accesskey="p">
         <span class="icon">
             <i class="fa fa-arrow-circle-left"></i>
         </span>
-        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.skip_connections</span></code>.SoftGating</span>
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.padding</span></code>.DomainPadding</span>
     </a>
     
     
-    <a class="button pagination-next" href="neuralop.models.base_model.get_model.html" title="next page" accesskey="n">
-        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.models.base_model</span></code>.get_model </span>
+    <a class="button pagination-next" href="neuralop.layers.normalization_layers.AdaIN.html" title="next page" accesskey="n">
+        <span><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.normalization_layers</span></code>.AdaIN </span>
         <span class="icon">
             <i class="fa fa-arrow-circle-right"></i>
         </span>
@@ -222,7 +235,7 @@ Returns an nn.Module skip connections, one of  {‘identity’, ‘linear’, so
         <footer class="footer">
     <div class="content has-text-centered">
         <div class="block">
-          &copy; Copyright 2024, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+          &copy; Copyright 2025, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
         </div>
     </div>
   </footer>
