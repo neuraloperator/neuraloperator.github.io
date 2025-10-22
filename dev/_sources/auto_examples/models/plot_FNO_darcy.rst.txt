@@ -61,7 +61,7 @@ We import the necessary modules from `neuralop` for training a Fourier Neural Op
     from neuralop.utils import count_model_params
     from neuralop import LpLoss, H1Loss
 
-    device = 'cpu'
+    device = "cpu"
 
 
 
@@ -81,15 +81,17 @@ Loading the Darcy-Flow dataset
 We load the small Darcy-Flow dataset with multiple resolutions for training and testing.
 The dataset contains permeability fields (input) and pressure fields (output).
 
-.. GENERATED FROM PYTHON SOURCE LINES 51-60
+.. GENERATED FROM PYTHON SOURCE LINES 51-62
 
 .. code-block:: Python
 
 
     train_loader, test_loaders, data_processor = load_darcy_flow_small(
-            n_train=1000, batch_size=32, 
-            test_resolutions=[16, 32], n_tests=[100, 50],
-            test_batch_sizes=[32, 32],
+        n_train=1000,
+        batch_size=64,
+        n_tests=[100, 50],
+        test_resolutions=[16, 32],
+        test_batch_sizes=[32, 32],
     )
     data_processor = data_processor.to(device)
 
@@ -108,7 +110,7 @@ The dataset contains permeability fields (input) and pressure fields (output).
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 61-67
+.. GENERATED FROM PYTHON SOURCE LINES 63-69
 
 .. raw:: html
 
@@ -117,21 +119,23 @@ The dataset contains permeability fields (input) and pressure fields (output).
 Creating the FNO model
 ----------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 67-81
+.. GENERATED FROM PYTHON SOURCE LINES 69-85
 
 .. code-block:: Python
 
 
-    model = FNO(n_modes=(8, 8),
-                 in_channels=1, 
-                 out_channels=1,
-                 hidden_channels=32, 
-                 projection_channel_ratio=2)
+    model = FNO(
+        n_modes=(8, 8),
+        in_channels=1,
+        out_channels=1,
+        hidden_channels=24,
+        projection_channel_ratio=2,
+    )
     model = model.to(device)
 
     # Count and display the number of parameters
     n_params = count_model_params(model)
-    print(f'\nOur model has {n_params} parameters.')
+    print(f"\nOur model has {n_params} parameters.")
     sys.stdout.flush()
 
 
@@ -144,12 +148,12 @@ Creating the FNO model
  .. code-block:: none
 
 
-    Our model has 340833 parameters.
+    Our model has 191881 parameters.
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 82-89
+.. GENERATED FROM PYTHON SOURCE LINES 86-93
 
 .. raw:: html
 
@@ -159,13 +163,11 @@ Creating the optimizer and scheduler
 ------------------------------------
 We use AdamW optimizer with weight decay for regularization
 
-.. GENERATED FROM PYTHON SOURCE LINES 89-94
+.. GENERATED FROM PYTHON SOURCE LINES 93-96
 
 .. code-block:: Python
 
-    optimizer = AdamW(model.parameters(), 
-                                    lr=8e-3, 
-                                    weight_decay=1e-4)
+    optimizer = AdamW(model.parameters(), lr=1e-2, weight_decay=1e-4)
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=30)
 
 
@@ -175,7 +177,7 @@ We use AdamW optimizer with weight decay for regularization
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 95-103
+.. GENERATED FROM PYTHON SOURCE LINES 97-105
 
 .. raw:: html
 
@@ -186,15 +188,15 @@ Setting up loss functions
 We use H1 loss for training and L2 loss for evaluation
 H1 loss is particularly good for PDE problems as it penalizes both function values and gradients
 
-.. GENERATED FROM PYTHON SOURCE LINES 103-110
+.. GENERATED FROM PYTHON SOURCE LINES 105-112
 
 .. code-block:: Python
 
     l2loss = LpLoss(d=2, p=2)  # L2 loss for function values
-    h1loss = H1Loss(d=2)       # H1 loss includes gradient information
+    h1loss = H1Loss(d=2)  # H1 loss includes gradient information
 
     train_loss = h1loss
-    eval_losses={'h1': h1loss, 'l2': l2loss}
+    eval_losses = {"h1": h1loss, "l2": l2loss}
 
 
 
@@ -204,7 +206,7 @@ H1 loss is particularly good for PDE problems as it penalizes both function valu
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 111-118
+.. GENERATED FROM PYTHON SOURCE LINES 113-120
 
 .. raw:: html
 
@@ -214,17 +216,17 @@ Training the model
 ---------------------
 We display the training configuration and then train the model
 
-.. GENERATED FROM PYTHON SOURCE LINES 118-127
+.. GENERATED FROM PYTHON SOURCE LINES 120-129
 
 .. code-block:: Python
 
 
-    print('\n### MODEL ###\n', model)
-    print('\n### OPTIMIZER ###\n', optimizer)
-    print('\n### SCHEDULER ###\n', scheduler)
-    print('\n### LOSSES ###')
-    print(f'\n * Train: {train_loss}')
-    print(f'\n * Test: {eval_losses}')
+    print("\n### MODEL ###\n", model)
+    print("\n### OPTIMIZER ###\n", optimizer)
+    print("\n### SCHEDULER ###\n", scheduler)
+    print("\n### LOSSES ###")
+    print(f"\n * Train: {train_loss}")
+    print(f"\n * Test: {eval_losses}")
     sys.stdout.flush()
 
 
@@ -242,19 +244,19 @@ We display the training configuration and then train the model
       (fno_blocks): FNOBlocks(
         (convs): ModuleList(
           (0-3): 4 x SpectralConv(
-            (weight): DenseTensor(shape=torch.Size([32, 32, 8, 5]), rank=None)
+            (weight): DenseTensor(shape=torch.Size([24, 24, 8, 5]), rank=None)
           )
         )
         (fno_skips): ModuleList(
           (0-3): 4 x Flattened1dConv(
-            (conv): Conv1d(32, 32, kernel_size=(1,), stride=(1,), bias=False)
+            (conv): Conv1d(24, 24, kernel_size=(1,), stride=(1,), bias=False)
           )
         )
         (channel_mlp): ModuleList(
           (0-3): 4 x ChannelMLP(
             (fcs): ModuleList(
-              (0): Conv1d(32, 16, kernel_size=(1,), stride=(1,))
-              (1): Conv1d(16, 32, kernel_size=(1,), stride=(1,))
+              (0): Conv1d(24, 12, kernel_size=(1,), stride=(1,))
+              (1): Conv1d(12, 24, kernel_size=(1,), stride=(1,))
             )
           )
         )
@@ -264,14 +266,14 @@ We display the training configuration and then train the model
       )
       (lifting): ChannelMLP(
         (fcs): ModuleList(
-          (0): Conv1d(3, 64, kernel_size=(1,), stride=(1,))
-          (1): Conv1d(64, 32, kernel_size=(1,), stride=(1,))
+          (0): Conv1d(3, 48, kernel_size=(1,), stride=(1,))
+          (1): Conv1d(48, 24, kernel_size=(1,), stride=(1,))
         )
       )
       (projection): ChannelMLP(
         (fcs): ModuleList(
-          (0): Conv1d(32, 64, kernel_size=(1,), stride=(1,))
-          (1): Conv1d(64, 1, kernel_size=(1,), stride=(1,))
+          (0): Conv1d(24, 48, kernel_size=(1,), stride=(1,))
+          (1): Conv1d(48, 1, kernel_size=(1,), stride=(1,))
         )
       )
     )
@@ -282,24 +284,24 @@ We display the training configuration and then train the model
         betas: (0.9, 0.999)
         correct_bias: True
         eps: 1e-06
-        initial_lr: 0.008
-        lr: 0.008
+        initial_lr: 0.01
+        lr: 0.01
         weight_decay: 0.0001
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f0967d3bb10>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f946bf32c10>
 
     ### LOSSES ###
 
-     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7f0967d3bc50>
+     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7f946bf32d50>
 
-     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7f0967d3bc50>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f0967d3b890>}
-
-
+     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7f946bf32d50>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f946bf33ed0>}
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 128-135
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 130-137
 
 .. raw:: html
 
@@ -309,17 +311,20 @@ Creating the trainer
 --------------------
 We create a Trainer object that handles the training loop, evaluation, and logging
 
-.. GENERATED FROM PYTHON SOURCE LINES 135-143
+.. GENERATED FROM PYTHON SOURCE LINES 137-148
 
 .. code-block:: Python
 
-    trainer = Trainer(model=model, n_epochs=20,
-                      device=device,
-                      data_processor=data_processor,
-                      wandb_log=False,        # Disable Weights & Biases logging for this tutorial
-                      eval_interval=3,       # Evaluate every 3 epochs
-                      use_distributed=False,  # Single GPU/CPU training
-                      verbose=True)          # Print training progress
+    trainer = Trainer(
+        model=model,
+        n_epochs=15,
+        device=device,
+        data_processor=data_processor,
+        wandb_log=False,  # Disable Weights & Biases logging for this tutorial
+        eval_interval=5,  # Evaluate every 5 epochs
+        use_distributed=False,  # Single GPU/CPU training
+        verbose=True,  # Print training progress
+    )
 
 
 
@@ -328,7 +333,7 @@ We create a Trainer object that handles the training loop, evaluation, and loggi
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 144-155
+.. GENERATED FROM PYTHON SOURCE LINES 149-160
 
 .. raw:: html
 
@@ -342,18 +347,20 @@ We train the model on our Darcy-Flow dataset. The trainer will:
 3. Backpropagate and update weights
 4. Evaluate on test data every 3 epochs
 
-.. GENERATED FROM PYTHON SOURCE LINES 155-164
+.. GENERATED FROM PYTHON SOURCE LINES 160-171
 
 .. code-block:: Python
 
 
-    trainer.train(train_loader=train_loader,
-                  test_loaders=test_loaders,
-                  optimizer=optimizer,
-                  scheduler=scheduler, 
-                  regularizer=False, 
-                  training_loss=train_loss,
-                  eval_losses=eval_losses)
+    trainer.train(
+        train_loader=train_loader,
+        test_loaders=test_loaders,
+        optimizer=optimizer,
+        scheduler=scheduler,
+        regularizer=False,
+        training_loss=train_loss,
+        eval_losses=eval_losses,
+    )
 
 
 
@@ -369,31 +376,23 @@ We train the model on our Darcy-Flow dataset. The trainer will:
       warnings.warn(warn_msg)
     /opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/torch/nn/modules/module.py:1786: UserWarning: FNO.forward() received unexpected keyword arguments: ['y']. These arguments will be ignored.
       return forward_call(*args, **kwargs)
-    Raw outputs of shape torch.Size([32, 1, 16, 16])
+    Raw outputs of shape torch.Size([64, 1, 16, 16])
     /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:536: UserWarning: H1Loss.__call__() received unexpected keyword arguments: ['x']. These arguments will be ignored.
       loss += training_loss(out, **sample)
-    [0] time=1.60, avg_loss=0.6936, train_err=21.6741
+    [0] time=1.05, avg_loss=0.7494, train_err=46.8367
     /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:581: UserWarning: LpLoss.__call__() received unexpected keyword arguments: ['x']. These arguments will be ignored.
       val_loss = loss(out, **sample)
-    Eval: 16_h1=0.4676, 16_l2=0.2973, 32_h1=0.5650, 32_l2=0.3127
-    [3] time=1.57, avg_loss=0.2319, train_err=7.2453
-    Eval: 16_h1=0.2230, 16_l2=0.1526, 32_h1=0.3659, 32_l2=0.1778
-    [6] time=1.56, avg_loss=0.1881, train_err=5.8791
-    Eval: 16_h1=0.2137, 16_l2=0.1294, 32_h1=0.3373, 32_l2=0.1528
-    [9] time=1.58, avg_loss=0.1705, train_err=5.3293
-    Eval: 16_h1=0.1852, 16_l2=0.1036, 32_h1=0.3380, 32_l2=0.1348
-    [12] time=1.60, avg_loss=0.1766, train_err=5.5174
-    Eval: 16_h1=0.1918, 16_l2=0.1161, 32_h1=0.3323, 32_l2=0.1448
-    [15] time=1.59, avg_loss=0.1495, train_err=4.6705
-    Eval: 16_h1=0.1910, 16_l2=0.0989, 32_h1=0.3549, 32_l2=0.1289
-    [18] time=1.59, avg_loss=0.1317, train_err=4.1144
-    Eval: 16_h1=0.1839, 16_l2=0.1009, 32_h1=0.3334, 32_l2=0.1255
+    Eval: 16_h1=0.5404, 16_l2=0.3534, 32_h1=0.6243, 32_l2=0.3515
+    [5] time=1.03, avg_loss=0.2440, train_err=15.2512
+    Eval: 16_h1=0.2454, 16_l2=0.1694, 32_h1=0.3671, 32_l2=0.1857
+    [10] time=1.03, avg_loss=0.1984, train_err=12.4023
+    Eval: 16_h1=0.2022, 16_l2=0.1296, 32_h1=0.3408, 32_l2=0.1535
 
-    {'train_err': 4.114910505712032, 'avg_loss': 0.13167713618278504, 'avg_lasso_loss': None, 'epoch_train_time': 1.574587829000052}
+    {'train_err': 10.854974925518036, 'avg_loss': 0.17367959880828857, 'avg_lasso_loss': None, 'epoch_train_time': 1.01643435699998}
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 165-178
+.. GENERATED FROM PYTHON SOURCE LINES 172-185
 
 .. raw:: html
 
@@ -402,14 +401,14 @@ We train the model on our Darcy-Flow dataset. The trainer will:
 .. _plot_preds :
 Visualizing predictions
 ------------------------
-Let's take a look at what our model's predicted outputs look like. 
+Let's take a look at what our model's predicted outputs look like.
 We wll compare the inputs, ground-truth outputs, and model predictions side by side.
 
 Note that in this example, we train on a very small resolution for
-a very small number of epochs. In practice, we would train at a larger 
+a very small number of epochs. In practice, we would train at a larger
 resolution on many more samples.
 
-.. GENERATED FROM PYTHON SOURCE LINES 178-222
+.. GENERATED FROM PYTHON SOURCE LINES 185-229
 
 .. code-block:: Python
 
@@ -420,39 +419,39 @@ resolution on many more samples.
     for index in range(3):
         data = test_samples[index]
         data = data_processor.preprocess(data, batched=False)
-    
+
         # Input
-        x = data['x']
+        x = data["x"]
         # Ground-truth output
-        y = data['y']
+        y = data["y"]
         # Model prediction
         out = model(x.unsqueeze(0))
 
-        # Plot input 
-        ax = fig.add_subplot(3, 3, index*3 + 1)
-        ax.imshow(x[0], cmap='gray')
-        if index == 0: 
-            ax.set_title('Input x')
+        # Plot input
+        ax = fig.add_subplot(3, 3, index * 3 + 1)
+        ax.imshow(x[0], cmap="gray")
+        if index == 0:
+            ax.set_title("Input x")
         plt.xticks([], [])
         plt.yticks([], [])
 
         # Plot ground-truth output
-        ax = fig.add_subplot(3, 3, index*3 + 2)
+        ax = fig.add_subplot(3, 3, index * 3 + 2)
         ax.imshow(y.squeeze())
-        if index == 0: 
-            ax.set_title('Ground-truth output')
+        if index == 0:
+            ax.set_title("Ground-truth output")
         plt.xticks([], [])
         plt.yticks([], [])
 
         # Plot model prediction
-        ax = fig.add_subplot(3, 3, index*3 + 3)
+        ax = fig.add_subplot(3, 3, index * 3 + 3)
         ax.imshow(out.squeeze().detach().numpy())
-        if index == 0: 
-            ax.set_title('Model prediction')
+        if index == 0:
+            ax.set_title("Model prediction")
         plt.xticks([], [])
         plt.yticks([], [])
 
-    fig.suptitle('FNO predictions on 16x16 Darcy-Flow data', y=0.98)
+    fig.suptitle("FNO predictions on 16x16 Darcy-Flow data", y=0.98)
     plt.tight_layout()
     fig.show()
 
@@ -469,7 +468,7 @@ resolution on many more samples.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 223-234
+.. GENERATED FROM PYTHON SOURCE LINES 230-241
 
 .. raw:: html
 
@@ -479,11 +478,11 @@ resolution on many more samples.
 Zero-shot super-resolution evaluation
 -------------------------------------
 One of the key advantages of neural operators is their resolution invariance.
-The FNO's invariance to the discretization of input data means we can natively 
+The FNO's invariance to the discretization of input data means we can natively
 make predictions on higher-resolution inputs and get higher-resolution outputs
 without retraining the model!
 
-.. GENERATED FROM PYTHON SOURCE LINES 234-277
+.. GENERATED FROM PYTHON SOURCE LINES 241-284
 
 .. code-block:: Python
 
@@ -494,39 +493,39 @@ without retraining the model!
     for index in range(3):
         data = test_samples[index]
         data = data_processor.preprocess(data, batched=False)
-    
+
         # Input at higher-resolution
-        x = data['x']
+        x = data["x"]
         # Ground-truth output at higher-resolution
-        y = data['y']
+        y = data["y"]
         # Model prediction at higher-resolution
         out = model(x.unsqueeze(0))
 
         # Plot input at higher-resolution
-        ax = fig.add_subplot(3, 3, index*3 + 1)
-        ax.imshow(x[0], cmap='gray')
-        if index == 0: 
-            ax.set_title('Input at 32x32')
+        ax = fig.add_subplot(3, 3, index * 3 + 1)
+        ax.imshow(x[0], cmap="gray")
+        if index == 0:
+            ax.set_title("Input at 32x32")
         plt.xticks([], [])
         plt.yticks([], [])
 
         # Plot ground-truth output at higher-resolution
-        ax = fig.add_subplot(3, 3, index*3 + 2)
+        ax = fig.add_subplot(3, 3, index * 3 + 2)
         ax.imshow(y.squeeze())
-        if index == 0: 
-            ax.set_title('Ground-truth at 32x32')
+        if index == 0:
+            ax.set_title("Ground-truth at 32x32")
         plt.xticks([], [])
         plt.yticks([], [])
 
         # Plot model prediction at higher-resolution
-        ax = fig.add_subplot(3, 3, index*3 + 3)
+        ax = fig.add_subplot(3, 3, index * 3 + 3)
         ax.imshow(out.squeeze().detach().numpy())
-        if index == 0: 
-            ax.set_title('FNO prediction at 32x32')
+        if index == 0:
+            ax.set_title("FNO prediction at 32x32")
         plt.xticks([], [])
         plt.yticks([], [])
 
-    fig.suptitle('Zero-shot super-resolution: 16x16 → 32x32', y=0.98)
+    fig.suptitle("Zero-shot super-resolution: 16x16 → 32x32", y=0.98)
     plt.tight_layout()
     fig.show()
 
@@ -542,7 +541,7 @@ without retraining the model!
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 278-296
+.. GENERATED FROM PYTHON SOURCE LINES 285-304
 
 .. raw:: html
 
@@ -550,24 +549,24 @@ without retraining the model!
 
 Understanding zero-shot super-resolution
 ----------------------------------------
-We only trained the model on data at a resolution of 16x16, and with no modifications 
-or special prompting, we were able to perform inference on higher-resolution input data 
+We only trained the model on data at a resolution of 16x16, and with no modifications
+or special prompting, we were able to perform inference on higher-resolution input data
 and get higher-resolution predictions! This is a powerful capability of neural operators.
 
-In practice, we often want to evaluate neural operators at multiple resolutions to track 
-a model's zero-shot super-resolution performance throughout training. That's why many of 
-our datasets, including the small Darcy-flow we showcased, are parameterized with a list 
-of `test_resolutions` to choose from. 
+In practice, we often want to evaluate neural operators at multiple resolutions to track
+a model's zero-shot super-resolution performance throughout training. That's why many of
+our datasets, including the small Darcy-flow we showcased, are parameterized with a list
+of `test_resolutions` to choose from.
 
-Note: These predictions may be noisier than we would expect for a model evaluated 
+Note: These predictions may be noisier than we would expect for a model evaluated
 at the same resolution at which it was trained. This is because the model hasn't seen
 the higher-frequency patterns present in the 32x32 data during training. However, this
-demonstrates the fundamental resolution invariance of neural operators. 
+demonstrates the fundamental resolution invariance of neural operators.
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 35.332 seconds)
+   **Total running time of the script:** (0 minutes 17.078 seconds)
 
 
 .. _sphx_glr_download_auto_examples_models_plot_FNO_darcy.py:

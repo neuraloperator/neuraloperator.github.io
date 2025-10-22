@@ -233,7 +233,7 @@ We choose to update the modes using the incremental gradient explained algorithm
 <span class="k">if</span> <span class="n">incremental</span><span class="p">:</span>
     <span class="n">starting_modes</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># Start with very few modes</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="n">starting_modes</span> <span class="o">=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>  <span class="c1"># Standard number of modes</span>
+    <span class="n">starting_modes</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>  <span class="c1"># Standard number of modes</span>
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -242,7 +242,7 @@ We choose to update the modes using the incremental gradient explained algorithm
 <p>We create an FNO model with a maximum number of modes that can be reached
 during incremental training. The model starts with fewer modes and grows.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">FNO</span><span class="p">(</span>
-    <span class="n">max_n_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span>    <span class="c1"># Maximum modes the model can reach</span>
+    <span class="n">max_n_modes</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>  <span class="c1"># Maximum modes the model can reach</span>
     <span class="n">n_modes</span><span class="o">=</span><span class="n">starting_modes</span><span class="p">,</span>  <span class="c1"># Starting number of modes</span>
     <span class="n">hidden_channels</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
     <span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
@@ -279,11 +279,11 @@ When passed to the trainer, the trainer will automatically update the resolution
     <span class="n">in_normalizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">out_normalizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
-    <span class="n">subsampling_rates</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>      <span class="c1"># Resolution scaling factors</span>
-    <span class="n">dataset_resolution</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>          <span class="c1"># Base resolution</span>
-    <span class="n">dataset_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>        <span class="c1"># Dataset indices for regularization</span>
-    <span class="n">epoch_gap</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>                  <span class="c1"># Epochs between resolution updates</span>
-    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>                  <span class="c1"># Print progress information</span>
+    <span class="n">subsampling_rates</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>  <span class="c1"># Resolution scaling factors</span>
+    <span class="n">dataset_resolution</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>  <span class="c1"># Base resolution</span>
+    <span class="n">dataset_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>  <span class="c1"># Dataset indices for regularization</span>
+    <span class="n">epoch_gap</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>  <span class="c1"># Epochs between resolution updates</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># Print progress information</span>
 <span class="p">)</span>
 
 <span class="n">data_transform</span> <span class="o">=</span> <span class="n">data_transform</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
@@ -320,7 +320,7 @@ to verify our incremental training setup</p>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>### N PARAMS ###
- 2110305
+ 537441
 
 ### OPTIMIZER ###
  AdamW (
@@ -334,15 +334,15 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f096a8888a0&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f9486e908a0&gt;
 
 ### LOSSES ###
 
 ### INCREMENTAL RESOLUTION + GRADIENT EXPLAINED ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f0946240b90&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f945fa9ca50&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f0946240b90&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f096a888c30&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f945fa9ca50&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f9486e90c30&gt;}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -371,13 +371,13 @@ initially set should be strictly less than the resolution.</p>
     <span class="n">data_processor</span><span class="o">=</span><span class="n">data_transform</span><span class="p">,</span>
     <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
     <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">incremental_loss_gap</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>     <span class="c1"># Use gradient-based incremental learning</span>
-    <span class="n">incremental_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>          <span class="c1"># Enable gradient-based mode updates</span>
-    <span class="n">incremental_grad_eps</span><span class="o">=</span><span class="mf">0.9999</span><span class="p">,</span>    <span class="c1"># Gradient variance threshold</span>
-    <span class="n">incremental_loss_eps</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span>     <span class="c1"># Loss gap threshold</span>
-    <span class="n">incremental_buffer</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>           <span class="c1"># Buffer modes for gradient calculation</span>
-    <span class="n">incremental_max_iter</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>         <span class="c1"># Initial iterations</span>
-    <span class="n">incremental_grad_max_iter</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>    <span class="c1"># Maximum gradient accumulation iterations</span>
+    <span class="n">incremental_loss_gap</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># Use gradient-based incremental learning</span>
+    <span class="n">incremental_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># Enable gradient-based mode updates</span>
+    <span class="n">incremental_grad_eps</span><span class="o">=</span><span class="mf">0.9999</span><span class="p">,</span>  <span class="c1"># Gradient variance threshold</span>
+    <span class="n">incremental_loss_eps</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span>  <span class="c1"># Loss gap threshold</span>
+    <span class="n">incremental_buffer</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>  <span class="c1"># Buffer modes for gradient calculation</span>
+    <span class="n">incremental_max_iter</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># Initial iterations</span>
+    <span class="n">incremental_grad_max_iter</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  <span class="c1"># Maximum gradient accumulation iterations</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -409,56 +409,56 @@ Testing on [50, 50] samples         on resolutions [16, 32].
 Raw outputs of shape torch.Size([16, 1, 8, 8])
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:536: UserWarning: H1Loss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
   loss += training_loss(out, **sample)
-[0] time=0.34, avg_loss=0.8983, train_err=12.8325
+[0] time=0.23, avg_loss=0.9318, train_err=13.3118
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:581: UserWarning: LpLoss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
   val_loss = loss(out, **sample)
-Eval: 16_h1=0.8497, 16_l2=0.5370, 32_h1=0.9022, 32_l2=0.5456
-[1] time=0.34, avg_loss=0.7377, train_err=10.5381
-Eval: 16_h1=0.8889, 16_l2=0.4673, 32_h1=1.1802, 32_l2=0.4889
-[2] time=0.32, avg_loss=0.6609, train_err=9.4413
+Eval: 16_h1=0.8827, 16_l2=0.5874, 32_h1=0.9259, 32_l2=0.5873
+[1] time=0.22, avg_loss=0.8006, train_err=11.4365
+Eval: 16_h1=0.8165, 16_l2=0.5173, 32_h1=0.9482, 32_l2=0.5280
+[2] time=0.22, avg_loss=0.7004, train_err=10.0054
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/incremental.py:244: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
 Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
   torch.Tensor(strength_vector),
-Eval: 16_h1=0.8561, 16_l2=0.5281, 32_h1=0.9847, 32_l2=0.5500
-[3] time=0.33, avg_loss=0.6604, train_err=9.4340
-Eval: 16_h1=0.7128, 16_l2=0.4103, 32_h1=0.8457, 32_l2=0.4229
-[4] time=0.33, avg_loss=0.5800, train_err=8.2861
-Eval: 16_h1=0.7984, 16_l2=0.4268, 32_h1=1.1026, 32_l2=0.4648
-[5] time=0.32, avg_loss=0.5449, train_err=7.7849
-Eval: 16_h1=1.3767, 16_l2=1.0947, 32_h1=1.6055, 32_l2=1.1138
-[6] time=0.33, avg_loss=0.7552, train_err=10.7879
-Eval: 16_h1=0.7793, 16_l2=0.5684, 32_h1=0.9618, 32_l2=0.5860
-[7] time=0.33, avg_loss=0.5855, train_err=8.3637
-Eval: 16_h1=0.7063, 16_l2=0.4398, 32_h1=0.9744, 32_l2=0.4684
-[8] time=0.32, avg_loss=0.4921, train_err=7.0303
-Eval: 16_h1=0.7908, 16_l2=0.5673, 32_h1=1.0282, 32_l2=0.5832
-[9] time=0.33, avg_loss=0.5235, train_err=7.4793
-Eval: 16_h1=0.6402, 16_l2=0.3879, 32_h1=0.9030, 32_l2=0.4321
+Eval: 16_h1=0.7950, 16_l2=0.4743, 32_h1=0.9423, 32_l2=0.4981
+[3] time=0.22, avg_loss=0.6206, train_err=8.8653
+Eval: 16_h1=0.7852, 16_l2=0.4837, 32_h1=1.0500, 32_l2=0.5271
+[4] time=0.22, avg_loss=0.5689, train_err=8.1276
+Eval: 16_h1=0.7247, 16_l2=0.4180, 32_h1=0.9306, 32_l2=0.4420
+[5] time=0.22, avg_loss=0.5335, train_err=7.6216
+Eval: 16_h1=0.8613, 16_l2=0.4858, 32_h1=1.0195, 32_l2=0.4936
+[6] time=0.22, avg_loss=0.6143, train_err=8.7755
+Eval: 16_h1=0.7839, 16_l2=0.4420, 32_h1=1.0910, 32_l2=0.4822
+[7] time=0.22, avg_loss=0.5233, train_err=7.4752
+Eval: 16_h1=0.6875, 16_l2=0.3879, 32_h1=0.9614, 32_l2=0.4019
+[8] time=0.22, avg_loss=0.4651, train_err=6.6437
+Eval: 16_h1=0.7380, 16_l2=0.4280, 32_h1=0.9908, 32_l2=0.4641
+[9] time=0.22, avg_loss=0.4921, train_err=7.0305
+Eval: 16_h1=0.6122, 16_l2=0.3301, 32_h1=0.8817, 32_l2=0.3643
 Incre Res Update: change index to 1
 Incre Res Update: change sub to 1
 Incre Res Update: change res to 16
-[10] time=0.42, avg_loss=0.5757, train_err=8.2242
-Eval: 16_h1=0.5761, 16_l2=0.3805, 32_h1=0.7156, 32_l2=0.3712
-[11] time=0.39, avg_loss=0.5125, train_err=7.3214
-Eval: 16_h1=0.5599, 16_l2=0.3239, 32_h1=0.6999, 32_l2=0.3343
-[12] time=0.40, avg_loss=0.5113, train_err=7.3049
-Eval: 16_h1=0.4592, 16_l2=0.2750, 32_h1=0.5995, 32_l2=0.2874
-[13] time=0.40, avg_loss=0.4276, train_err=6.1089
-Eval: 16_h1=0.4224, 16_l2=0.2512, 32_h1=0.5361, 32_l2=0.2585
-[14] time=0.40, avg_loss=0.3930, train_err=5.6150
-Eval: 16_h1=0.4706, 16_l2=0.2742, 32_h1=0.6046, 32_l2=0.2912
-[15] time=0.41, avg_loss=0.4143, train_err=5.9181
-Eval: 16_h1=0.3937, 16_l2=0.2325, 32_h1=0.5077, 32_l2=0.2302
-[16] time=0.40, avg_loss=0.3683, train_err=5.2615
-Eval: 16_h1=0.3944, 16_l2=0.2389, 32_h1=0.5386, 32_l2=0.2562
-[17] time=0.41, avg_loss=0.3494, train_err=4.9910
-Eval: 16_h1=0.4603, 16_l2=0.2907, 32_h1=0.5401, 32_l2=0.2741
-[18] time=0.41, avg_loss=0.3949, train_err=5.6412
-Eval: 16_h1=0.3969, 16_l2=0.2463, 32_h1=0.5426, 32_l2=0.2719
-[19] time=0.40, avg_loss=0.3480, train_err=4.9716
-Eval: 16_h1=0.3572, 16_l2=0.2212, 32_h1=0.4653, 32_l2=0.2227
+[10] time=0.30, avg_loss=0.5504, train_err=7.8630
+Eval: 16_h1=0.5325, 16_l2=0.3083, 32_h1=0.6541, 32_l2=0.3026
+[11] time=0.29, avg_loss=0.4830, train_err=6.8999
+Eval: 16_h1=0.5283, 16_l2=0.3205, 32_h1=0.6920, 32_l2=0.3283
+[12] time=0.29, avg_loss=0.4850, train_err=6.9286
+Eval: 16_h1=0.4260, 16_l2=0.2598, 32_h1=0.5716, 32_l2=0.2716
+[13] time=0.29, avg_loss=0.4050, train_err=5.7860
+Eval: 16_h1=0.4057, 16_l2=0.2474, 32_h1=0.5139, 32_l2=0.2546
+[14] time=0.29, avg_loss=0.3717, train_err=5.3094
+Eval: 16_h1=0.4374, 16_l2=0.2529, 32_h1=0.5919, 32_l2=0.2732
+[15] time=0.29, avg_loss=0.3959, train_err=5.6564
+Eval: 16_h1=0.3810, 16_l2=0.2314, 32_h1=0.4932, 32_l2=0.2315
+[16] time=0.29, avg_loss=0.3502, train_err=5.0026
+Eval: 16_h1=0.3735, 16_l2=0.2296, 32_h1=0.5418, 32_l2=0.2486
+[17] time=0.30, avg_loss=0.3359, train_err=4.7990
+Eval: 16_h1=0.4108, 16_l2=0.2454, 32_h1=0.5450, 32_l2=0.2481
+[18] time=0.29, avg_loss=0.3747, train_err=5.3524
+Eval: 16_h1=0.3694, 16_l2=0.2346, 32_h1=0.5085, 32_l2=0.2512
+[19] time=0.29, avg_loss=0.3278, train_err=4.6834
+Eval: 16_h1=0.3360, 16_l2=0.2134, 32_h1=0.4594, 32_l2=0.2243
 
-{&#39;train_err&#39;: 4.971555965287345, &#39;avg_loss&#39;: 0.34800891757011415, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 0.4002516060000971, &#39;16_h1&#39;: tensor(0.3572), &#39;16_l2&#39;: tensor(0.2212), &#39;32_h1&#39;: tensor(0.4653), &#39;32_l2&#39;: tensor(0.2227)}
+{&#39;train_err&#39;: 4.683351618903024, &#39;avg_loss&#39;: 0.3278346133232117, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 0.29132556599995496, &#39;16_h1&#39;: tensor(0.3360), &#39;16_l2&#39;: tensor(0.2134), &#39;32_h1&#39;: tensor(0.4594), &#39;32_l2&#39;: tensor(0.2243)}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -514,7 +514,7 @@ ii) can be trained quickly on CPU</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" alt="Incremental FNO predictions on Darcy-Flow data, Input x, Ground-truth y, Incremental FNO prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 13.961 seconds)</p>
+<img src="../../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" alt="Incremental FNO predictions on Darcy-Flow data, Input x, Ground-truth y, Incremental FNO prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 11.231 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-training-plot-incremental-fno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/cfa67f99f9c5464f9ef46d85700f3993/plot_incremental_FNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_incremental_FNO_darcy.ipynb</span></code></a></p>

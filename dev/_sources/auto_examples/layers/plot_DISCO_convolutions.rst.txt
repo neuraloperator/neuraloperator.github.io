@@ -42,7 +42,7 @@ in neural operator architectures.
 
 Preparation
 
-.. GENERATED FROM PYTHON SOURCE LINES 26-46
+.. GENERATED FROM PYTHON SOURCE LINES 26-55
 
 .. code-block:: Python
 
@@ -57,14 +57,23 @@ Preparation
 
     from matplotlib import image
 
-    from torch_harmonics.quadrature import legendre_gauss_weights, lobatto_weights, clenshaw_curtiss_weights
+    from torch_harmonics.quadrature import (
+        legendre_gauss_weights,
+        lobatto_weights,
+        clenshaw_curtiss_weights,
+    )
 
     import matplotlib.pyplot as plt
 
-    cmap="inferno"
-    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    cmap = "inferno"
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-    from neuralop.layers.discrete_continuous_convolution import DiscreteContinuousConv2d, DiscreteContinuousConvTranspose2d, EquidistantDiscreteContinuousConv2d, EquidistantDiscreteContinuousConvTranspose2d
+    from neuralop.layers.discrete_continuous_convolution import (
+        DiscreteContinuousConv2d,
+        DiscreteContinuousConvTranspose2d,
+        EquidistantDiscreteContinuousConv2d,
+        EquidistantDiscreteContinuousConvTranspose2d,
+    )
 
 
 
@@ -73,7 +82,7 @@ Preparation
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 47-52
+.. GENERATED FROM PYTHON SOURCE LINES 56-61
 
 .. raw:: html
 
@@ -81,17 +90,21 @@ Preparation
 
 Let's start by loading an example image
 
-.. GENERATED FROM PYTHON SOURCE LINES 52-62
+.. GENERATED FROM PYTHON SOURCE LINES 61-75
 
 .. code-block:: Python
 
-    os.system("curl https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Albert_Einstein_Head.jpg/360px-Albert_Einstein_Head.jpg -o ./einstein.jpg")
+    os.system(
+        "curl https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Albert_Einstein_Head.jpg/360px-Albert_Einstein_Head.jpg -o ./einstein.jpg"
+    )
 
     nx = 90
     ny = 120
 
-    img = image.imread('./einstein.jpg')
-    data = nn.functional.interpolate(torch.from_numpy(img).unsqueeze(0).unsqueeze(0), size=(ny,nx)).squeeze()
+    img = image.imread("./einstein.jpg")
+    data = nn.functional.interpolate(
+        torch.from_numpy(img).unsqueeze(0).unsqueeze(0), size=(ny, nx)
+    ).squeeze()
     plt.imshow(data, cmap=cmap)
     plt.show()
 
@@ -108,13 +121,13 @@ Let's start by loading an example image
 
  .. code-block:: none
 
-    /home/runner/work/neuraloperator/neuraloperator/examples/layers/plot_DISCO_convolutions.py:58: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:206.)
-      data = nn.functional.interpolate(torch.from_numpy(img).unsqueeze(0).unsqueeze(0), size=(ny,nx)).squeeze()
+    /home/runner/work/neuraloperator/neuraloperator/examples/layers/plot_DISCO_convolutions.py:70: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:206.)
+      torch.from_numpy(img).unsqueeze(0).unsqueeze(0), size=(ny, nx)
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 63-68
+.. GENERATED FROM PYTHON SOURCE LINES 76-81
 
 .. raw:: html
 
@@ -122,7 +135,7 @@ Let's start by loading an example image
 
 Let's create a grid on which the data lives
 
-.. GENERATED FROM PYTHON SOURCE LINES 68-81
+.. GENERATED FROM PYTHON SOURCE LINES 81-94
 
 .. code-block:: Python
 
@@ -130,13 +143,13 @@ Let's create a grid on which the data lives
     x_in = torch.linspace(0, 2, nx)
     y_in = torch.linspace(0, 3, ny)
 
-    x_in, y_in = torch.meshgrid(x_in, y_in, indexing='ij')
+    x_in, y_in = torch.meshgrid(x_in, y_in, indexing="ij")
     grid_in = torch.stack([x_in.reshape(-1), y_in.reshape(-1)])
 
     # compute the correct quadrature weights
     # IMPORTANT: this needs to be done right in order for the DISCO convolution to be normalized proeperly
-    w_x = 2*torch.ones_like(x_in) / nx
-    w_y = 3*torch.ones_like(y_in) / ny
+    w_x = 2 * torch.ones_like(x_in) / nx
+    w_y = 3 * torch.ones_like(y_in) / ny
     q_in = (w_x * w_y).reshape(-1)
 
 
@@ -146,7 +159,7 @@ Let's create a grid on which the data lives
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 82-87
+.. GENERATED FROM PYTHON SOURCE LINES 95-100
 
 .. raw:: html
 
@@ -154,15 +167,17 @@ Let's create a grid on which the data lives
 
 Visualize the grid
 
-.. GENERATED FROM PYTHON SOURCE LINES 87-95
+.. GENERATED FROM PYTHON SOURCE LINES 100-110
 
 .. code-block:: Python
 
 
-    plt.figure(figsize=(4,6), )
+    plt.figure(
+        figsize=(4, 6),
+    )
     plt.scatter(grid_in[0], grid_in[1], s=0.2)
-    plt.xlim(0,2)
-    plt.ylim(0,3)
+    plt.xlim(0, 2)
+    plt.ylim(0, 3)
     plt.show()
 
 
@@ -178,7 +193,7 @@ Visualize the grid
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 96-101
+.. GENERATED FROM PYTHON SOURCE LINES 111-116
 
 .. raw:: html
 
@@ -186,18 +201,18 @@ Visualize the grid
 
 Format data into the same format and plot it on the grid
 
-.. GENERATED FROM PYTHON SOURCE LINES 101-111
+.. GENERATED FROM PYTHON SOURCE LINES 116-126
 
 .. code-block:: Python
 
 
-    data = data.permute(1,0).flip(1).reshape(-1)
+    data = data.permute(1, 0).flip(1).reshape(-1)
 
-    plt.figure(figsize=(4,6), )
+    plt.figure(figsize=(4,6))
     plt.tripcolor(grid_in[0], grid_in[1], data, cmap=cmap)
     # plt.colorbar()
-    plt.xlim(0,2)
-    plt.ylim(0,3)
+    plt.xlim(0, 2)
+    plt.ylim(0, 3)
     plt.show()
 
 
@@ -212,7 +227,7 @@ Format data into the same format and plot it on the grid
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 112-117
+.. GENERATED FROM PYTHON SOURCE LINES 127-132
 
 .. raw:: html
 
@@ -220,7 +235,7 @@ Format data into the same format and plot it on the grid
 
 For the convolution output we require an output mesh
 
-.. GENERATED FROM PYTHON SOURCE LINES 117-131
+.. GENERATED FROM PYTHON SOURCE LINES 132-146
 
 .. code-block:: Python
 
@@ -230,12 +245,12 @@ For the convolution output we require an output mesh
     x_out = torch.linspace(0, 2, nxo)
     y_out = torch.linspace(0, 3, nyo)
 
-    x_out, y_out = torch.meshgrid(x_out, y_out, indexing='ij')
+    x_out, y_out = torch.meshgrid(x_out, y_out, indexing="ij")
     grid_out = torch.stack([x_out.reshape(-1), y_out.reshape(-1)])
 
     # compute the correct quadrature weights
-    w_x = 2*torch.ones_like(x_out) / nxo
-    w_y = 3*torch.ones_like(y_out) / nyo
+    w_x = 2 * torch.ones_like(x_out) / nxo
+    w_y = 3 * torch.ones_like(y_out) / nyo
     q_out = (w_x * w_y).reshape(-1)
 
 
@@ -245,7 +260,7 @@ For the convolution output we require an output mesh
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 132-137
+.. GENERATED FROM PYTHON SOURCE LINES 147-152
 
 .. raw:: html
 
@@ -253,16 +268,25 @@ For the convolution output we require an output mesh
 
 Initialize the convolution and set the weights to something resembling an edge filter/finit differences
 
-.. GENERATED FROM PYTHON SOURCE LINES 137-146
+.. GENERATED FROM PYTHON SOURCE LINES 152-170
 
 .. code-block:: Python
 
-    conv = DiscreteContinuousConv2d(1, 1, grid_in=grid_in, grid_out=grid_out, quadrature_weights=q_in, kernel_shape=[2,4], radius_cutoff=5/nyo, periodic=False).float()
+    conv = DiscreteContinuousConv2d(
+        1,
+        1,
+        grid_in=grid_in,
+        grid_out=grid_out,
+        quadrature_weights=q_in,
+        kernel_shape=[2, 4],
+        radius_cutoff=5 / nyo,
+        periodic=False,
+    ).float()
 
     # initialize a kernel resembling an edge filter
     w = torch.zeros_like(conv.weight)
-    w[0,0,1] = 1.0
-    w[0,0,3] = -1.0
+    w[0, 0, 1] = 1.0
+    w[0, 0, 3] = -1.0
     conv.weight = nn.Parameter(w)
     psi = conv.get_local_filter_matrix()
 
@@ -273,7 +297,7 @@ Initialize the convolution and set the weights to something resembling an edge f
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 147-153
+.. GENERATED FROM PYTHON SOURCE LINES 171-177
 
 .. raw:: html
 
@@ -282,7 +306,7 @@ Initialize the convolution and set the weights to something resembling an edge f
 Apply the DISCO convolution to the data and plot it
 in order to compute the convolved image, we need to first bring it into the right shape with `batch_size x n_channels x n_grid_points`
 
-.. GENERATED FROM PYTHON SOURCE LINES 153-164
+.. GENERATED FROM PYTHON SOURCE LINES 177-188
 
 .. code-block:: Python
 
@@ -290,12 +314,12 @@ in order to compute the convolved image, we need to first bring it into the righ
 
     print(out.shape)
 
-    plt.figure(figsize=(4,6), )
+    plt.figure(figsize=(4,6))
     plt.imshow(torch.flip(out.squeeze().detach().reshape(nxo, nyo).transpose(0,1), dims=(-2, )), cmap=cmap)
     plt.colorbar()
     plt.show()
 
-    out1 = torch.flip(out.squeeze().detach().reshape(nxo, nyo).transpose(0,1), dims=(-2, ))
+    out1 = torch.flip(out.squeeze().detach().reshape(nxo, nyo).transpose(0, 1), dims=(-2,))
 
 
 
@@ -315,7 +339,7 @@ in order to compute the convolved image, we need to first bring it into the righ
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 165-170
+.. GENERATED FROM PYTHON SOURCE LINES 189-194
 
 .. raw:: html
 
@@ -323,25 +347,35 @@ in order to compute the convolved image, we need to first bring it into the righ
 
 Do the same but on an equidistant grid
 
-.. GENERATED FROM PYTHON SOURCE LINES 170-193
+.. GENERATED FROM PYTHON SOURCE LINES 194-227
 
 .. code-block:: Python
 
-    conv_equi = EquidistantDiscreteContinuousConv2d(1, 1, (nx, ny), (nxo, nyo), kernel_shape=[2,4], radius_cutoff=5/nyo, domain_length=[2,3])
+    conv_equi = EquidistantDiscreteContinuousConv2d(
+        1,
+        1,
+        (nx, ny),
+        (nxo, nyo),
+        kernel_shape=[2, 4],
+        radius_cutoff=5 / nyo,
+        domain_length=[2, 3],
+    )
 
     # initialize a kernel resembling an edge filter
     w = torch.zeros_like(conv.weight)
-    w[0,0,1] = 1.0
-    w[0,0,3] = -1.0
+    w[0, 0, 1] = 1.0
+    w[0, 0, 3] = -1.0
     conv_equi.weight = nn.Parameter(w)
 
-    data = nn.functional.interpolate(torch.from_numpy(img).unsqueeze(0).unsqueeze(0), size=(ny,nx)).float()
+    data = nn.functional.interpolate(
+        torch.from_numpy(img).unsqueeze(0).unsqueeze(0), size=(ny, nx)
+    ).float()
 
     out_equi = conv_equi(data)
 
     print(out_equi.shape)
 
-    plt.figure(figsize=(4,6), )
+    plt.figure(figsize=(4,6))
     plt.imshow(out_equi.squeeze().detach(), cmap=cmap)
     plt.colorbar()
     plt.show()
@@ -369,7 +403,7 @@ Do the same but on an equidistant grid
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 194-199
+.. GENERATED FROM PYTHON SOURCE LINES 228-233
 
 .. raw:: html
 
@@ -377,22 +411,14 @@ Do the same but on an equidistant grid
 
 Visualize the local filter matrix
 
-.. GENERATED FROM PYTHON SOURCE LINES 199-212
+.. GENERATED FROM PYTHON SOURCE LINES 233-238
 
 .. code-block:: Python
 
 
-    plt.figure(figsize=(4,6), )
+    plt.figure(figsize=(4,6))
     plt.imshow(conv_equi.get_local_filter_matrix()[0].detach(), cmap=cmap)
     plt.colorbar()
-
-    # # %%
-
-    # print("plt the error:")
-    # plt.figure(figsize=(4,6), )
-    # plt.imshow(out1 - out2, cmap=cmap)
-    # plt.colorbar()
-    # plt.show()
 
 
 
@@ -408,11 +434,11 @@ Visualize the local filter matrix
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7f094f876ad0>
+    <matplotlib.colorbar.Colorbar object at 0x7f946bfef610>
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 213-218
+.. GENERATED FROM PYTHON SOURCE LINES 239-244
 
 .. raw:: html
 
@@ -420,30 +446,44 @@ Visualize the local filter matrix
 
 Test the transpose convolution
 
-.. GENERATED FROM PYTHON SOURCE LINES 218-240
+.. GENERATED FROM PYTHON SOURCE LINES 244-280
 
 .. code-block:: Python
 
-    convt = DiscreteContinuousConvTranspose2d(1, 1, grid_in=grid_out, grid_out=grid_in, quadrature_weights=q_out, kernel_shape=[2,4], radius_cutoff=3/nyo, periodic=False).float()
+    convt = DiscreteContinuousConvTranspose2d(
+        1,
+        1,
+        grid_in=grid_out,
+        grid_out=grid_in,
+        quadrature_weights=q_out,
+        kernel_shape=[2, 4],
+        radius_cutoff=3 / nyo,
+        periodic=False,
+    ).float()
 
     # initialize a flat
     w = torch.zeros_like(conv.weight)
-    w[0,0,0] = 1.0
-    w[0,0,1] = 1.0
-    w[0,0,2] = 1.0
-    w[0,0,3] = 1.0
+    w[0, 0, 0] = 1.0
+    w[0, 0, 1] = 1.0
+    w[0, 0, 2] = 1.0
+    w[0, 0, 3] = 1.0
     convt.weight = nn.Parameter(w)
 
-    data = nn.functional.interpolate(torch.from_numpy(img).unsqueeze(0).unsqueeze(0), size=(ny,nx)).squeeze().float().permute(1,0).flip(1).reshape(-1)
+    data = (
+        nn.functional.interpolate(
+            torch.from_numpy(img).unsqueeze(0).unsqueeze(0), size=(ny, nx)
+        )
+        .squeeze().float()
+        .permute(1, 0).flip(1).reshape(-1)
+    )
     out = convt(data.reshape(1, 1, -1))
 
     print(out.shape)
 
-    plt.figure(figsize=(4,6), )
+    plt.figure(figsize=(4,6))
     plt.imshow(torch.flip(out.squeeze().detach().reshape(nx, ny).transpose(0,1), dims=(-2, )), cmap=cmap)
     plt.colorbar()
     plt.show()
-
 
 
 
@@ -464,7 +504,7 @@ Test the transpose convolution
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 241-246
+.. GENERATED FROM PYTHON SOURCE LINES 281-286
 
 .. raw:: html
 
@@ -472,26 +512,36 @@ Test the transpose convolution
 
 Test the equidistant transpose convolution
 
-.. GENERATED FROM PYTHON SOURCE LINES 246-265
+.. GENERATED FROM PYTHON SOURCE LINES 286-315
 
 .. code-block:: Python
 
-    convt_equi = EquidistantDiscreteContinuousConvTranspose2d(1, 1, (nxo, nyo), (nx, ny), kernel_shape=[2,4], radius_cutoff=3/nyo, domain_length=[2,3])
+    convt_equi = EquidistantDiscreteContinuousConvTranspose2d(
+        1,
+        1,
+        (nxo, nyo),
+        (nx, ny),
+        kernel_shape=[2, 4],
+        radius_cutoff=3 / nyo,
+        domain_length=[2, 3],
+    )
 
     # initialize a flat
     w = torch.zeros_like(convt_equi.weight)
-    w[0,0,0] = 1.0
-    w[0,0,1] = 1.0
-    w[0,0,2] = 1.0
-    w[0,0,3] = 1.0
+    w[0, 0, 0] = 1.0
+    w[0, 0, 1] = 1.0
+    w[0, 0, 2] = 1.0
+    w[0, 0, 3] = 1.0
     convt_equi.weight = nn.Parameter(w)
 
-    data = nn.functional.interpolate(torch.from_numpy(img).unsqueeze(0).unsqueeze(0), size=(nyo,nxo)).float()
+    data = nn.functional.interpolate(
+        torch.from_numpy(img).unsqueeze(0).unsqueeze(0), size=(nyo, nxo)
+    ).float()
     out_equi = convt_equi(data)
 
     print(out_equi.shape)
 
-    plt.figure(figsize=(4,6), )
+    plt.figure(figsize=(4,6))
     plt.imshow(out_equi.squeeze().detach(), cmap=cmap)
     plt.colorbar()
     plt.show()
@@ -516,7 +566,7 @@ Test the equidistant transpose convolution
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 29.325 seconds)
+   **Total running time of the script:** (0 minutes 29.030 seconds)
 
 
 .. _sphx_glr_download_auto_examples_layers_plot_DISCO_convolutions.py:

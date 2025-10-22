@@ -203,11 +203,11 @@ its use to create a simple numerical solver for the diffusion-advection equation
 <p>Where <span class="math notranslate nohighlight">\(f(x,y,t)\)</span> is a source term and <span class="math notranslate nohighlight">\(c_x\)</span> and <span class="math notranslate nohighlight">\(c_y\)</span> are advection speeds in x and y.
 We set simulation parameters below:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1">## Simulation parameters</span>
-<span class="n">Lx</span><span class="p">,</span> <span class="n">Ly</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span>   <span class="c1"># Domain lengths</span>
-<span class="n">nx</span><span class="p">,</span> <span class="n">ny</span> <span class="o">=</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span>   <span class="c1"># Grid resolution</span>
-<span class="n">T</span> <span class="o">=</span> <span class="mf">1.6</span>    <span class="c1"># Total simulation time</span>
+<span class="n">Lx</span><span class="p">,</span> <span class="n">Ly</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span>  <span class="c1"># Domain lengths</span>
+<span class="n">nx</span><span class="p">,</span> <span class="n">ny</span> <span class="o">=</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span>  <span class="c1"># Grid resolution</span>
+<span class="n">T</span> <span class="o">=</span> <span class="mf">1.6</span>  <span class="c1"># Total simulation time</span>
 <span class="n">dt</span> <span class="o">=</span> <span class="mf">0.001</span>  <span class="c1"># Time step</span>
-<span class="n">nu</span> <span class="o">=</span> <span class="mf">0.02</span>   <span class="c1"># diffusion coefficient</span>
+<span class="n">nu</span> <span class="o">=</span> <span class="mf">0.02</span>  <span class="c1"># diffusion coefficient</span>
 <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.6</span>  <span class="c1"># advection speeds</span>
 
 <span class="c1">## Create grid</span>
@@ -222,9 +222,12 @@ We set simulation parameters below:</p>
 
 
 <span class="c1">## Initial condition and source term</span>
-<span class="n">u</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">Y</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">X</span><span class="p">)</span>
-        <span class="o">+</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">X</span> <span class="o">-</span> <span class="mf">0.75</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">Y</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mf">0.02</span><span class="p">)</span>
-        <span class="o">-</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">X</span> <span class="o">-</span> <span class="mf">1.25</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">Y</span> <span class="o">-</span> <span class="mf">1.5</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mf">0.02</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">u</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">Y</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">X</span><span class="p">)</span>
+    <span class="o">+</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">X</span> <span class="o">-</span> <span class="mf">0.75</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">Y</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mf">0.02</span><span class="p">)</span>
+    <span class="o">-</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">X</span> <span class="o">-</span> <span class="mf">1.25</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">Y</span> <span class="o">-</span> <span class="mf">1.5</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mf">0.02</span><span class="p">)</span>
+<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
 
 <span class="k">def</span><span class="w"> </span><span class="nf">source_term</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
     <span class="k">return</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">X</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">Y</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
@@ -237,7 +240,6 @@ We set simulation parameters below:</p>
 
 <span class="n">t</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nt</span><span class="p">):</span>
-
     <span class="c1"># Compute derivatives</span>
     <span class="n">u_x</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">dx</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
     <span class="n">u_y</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">dy</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
@@ -256,7 +258,9 @@ We set simulation parameters below:</p>
 <section id="animate-our-solution">
 <h2>Animate our solution<a class="headerlink" href="#animate-our-solution" title="Link to this heading"></a></h2>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">num_frames</span> <span class="o">=</span> <span class="mi">100</span>
-<span class="n">frame_indices</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">u_evolution</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_frames</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">frame_indices</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">u_evolution</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_frames</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="p">)</span>
 <span class="n">u_frames</span> <span class="o">=</span> <span class="n">u_evolution</span><span class="p">[</span><span class="n">frame_indices</span><span class="p">]</span>
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
@@ -264,12 +268,14 @@ We set simulation parameters below:</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Advection-Diffusion: u&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cmap_u</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
 
+
 <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">frame</span><span class="p">):</span>
     <span class="n">cmap_u</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">u_frames</span><span class="p">[</span><span class="n">frame</span><span class="p">])</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time: </span><span class="si">{</span><span class="n">frame_indices</span><span class="p">[</span><span class="n">frame</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dt</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
-    <span class="k">return</span> <span class="n">cmap_u</span><span class="p">,</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">cmap_u</span><span class="p">,)</span>
+
 
 <span class="n">ani</span> <span class="o">=</span> <span class="n">animation</span><span class="o">.</span><span class="n">FuncAnimation</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">update</span><span class="p">,</span> <span class="n">frames</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">u_frames</span><span class="p">),</span> <span class="n">interval</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">blit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
@@ -459,42 +465,42 @@ input[type=range].anim-slider {
 </style>
 
 <div class="animation">
-  <img id="_anim_img91ecb908cc7d4cc5ae35d5eabf6ad8ea">
+  <img id="_anim_imgfd3c681054914830b47deaa7b7d58309">
   <div class="anim-controls">
-    <input id="_anim_slider91ecb908cc7d4cc5ae35d5eabf6ad8ea" type="range" class="anim-slider"
+    <input id="_anim_sliderfd3c681054914830b47deaa7b7d58309" type="range" class="anim-slider"
            name="points" min="0" max="1" step="1" value="0"
-           oninput="anim91ecb908cc7d4cc5ae35d5eabf6ad8ea.set_frame(parseInt(this.value));">
+           oninput="animfd3c681054914830b47deaa7b7d58309.set_frame(parseInt(this.value));">
     <div class="anim-buttons">
-      <button title="Decrease speed" aria-label="Decrease speed" onclick="anim91ecb908cc7d4cc5ae35d5eabf6ad8ea.slower()">
+      <button title="Decrease speed" aria-label="Decrease speed" onclick="animfd3c681054914830b47deaa7b7d58309.slower()">
           <i class="fa fa-minus"></i></button>
-      <button title="First frame" aria-label="First frame" onclick="anim91ecb908cc7d4cc5ae35d5eabf6ad8ea.first_frame()">
+      <button title="First frame" aria-label="First frame" onclick="animfd3c681054914830b47deaa7b7d58309.first_frame()">
         <i class="fa fa-fast-backward"></i></button>
-      <button title="Previous frame" aria-label="Previous frame" onclick="anim91ecb908cc7d4cc5ae35d5eabf6ad8ea.previous_frame()">
+      <button title="Previous frame" aria-label="Previous frame" onclick="animfd3c681054914830b47deaa7b7d58309.previous_frame()">
           <i class="fa fa-step-backward"></i></button>
-      <button title="Play backwards" aria-label="Play backwards" onclick="anim91ecb908cc7d4cc5ae35d5eabf6ad8ea.reverse_animation()">
+      <button title="Play backwards" aria-label="Play backwards" onclick="animfd3c681054914830b47deaa7b7d58309.reverse_animation()">
           <i class="fa fa-play fa-flip-horizontal"></i></button>
-      <button title="Pause" aria-label="Pause" onclick="anim91ecb908cc7d4cc5ae35d5eabf6ad8ea.pause_animation()">
+      <button title="Pause" aria-label="Pause" onclick="animfd3c681054914830b47deaa7b7d58309.pause_animation()">
           <i class="fa fa-pause"></i></button>
-      <button title="Play" aria-label="Play" onclick="anim91ecb908cc7d4cc5ae35d5eabf6ad8ea.play_animation()">
+      <button title="Play" aria-label="Play" onclick="animfd3c681054914830b47deaa7b7d58309.play_animation()">
           <i class="fa fa-play"></i></button>
-      <button title="Next frame" aria-label="Next frame" onclick="anim91ecb908cc7d4cc5ae35d5eabf6ad8ea.next_frame()">
+      <button title="Next frame" aria-label="Next frame" onclick="animfd3c681054914830b47deaa7b7d58309.next_frame()">
           <i class="fa fa-step-forward"></i></button>
-      <button title="Last frame" aria-label="Last frame" onclick="anim91ecb908cc7d4cc5ae35d5eabf6ad8ea.last_frame()">
+      <button title="Last frame" aria-label="Last frame" onclick="animfd3c681054914830b47deaa7b7d58309.last_frame()">
           <i class="fa fa-fast-forward"></i></button>
-      <button title="Increase speed" aria-label="Increase speed" onclick="anim91ecb908cc7d4cc5ae35d5eabf6ad8ea.faster()">
+      <button title="Increase speed" aria-label="Increase speed" onclick="animfd3c681054914830b47deaa7b7d58309.faster()">
           <i class="fa fa-plus"></i></button>
     </div>
-    <form title="Repetition mode" aria-label="Repetition mode" action="#n" name="_anim_loop_select91ecb908cc7d4cc5ae35d5eabf6ad8ea"
+    <form title="Repetition mode" aria-label="Repetition mode" action="#n" name="_anim_loop_selectfd3c681054914830b47deaa7b7d58309"
           class="anim-state">
-      <input type="radio" name="state" value="once" id="_anim_radio1_91ecb908cc7d4cc5ae35d5eabf6ad8ea"
+      <input type="radio" name="state" value="once" id="_anim_radio1_fd3c681054914830b47deaa7b7d58309"
              >
-      <label for="_anim_radio1_91ecb908cc7d4cc5ae35d5eabf6ad8ea">Once</label>
-      <input type="radio" name="state" value="loop" id="_anim_radio2_91ecb908cc7d4cc5ae35d5eabf6ad8ea"
+      <label for="_anim_radio1_fd3c681054914830b47deaa7b7d58309">Once</label>
+      <input type="radio" name="state" value="loop" id="_anim_radio2_fd3c681054914830b47deaa7b7d58309"
              checked>
-      <label for="_anim_radio2_91ecb908cc7d4cc5ae35d5eabf6ad8ea">Loop</label>
-      <input type="radio" name="state" value="reflect" id="_anim_radio3_91ecb908cc7d4cc5ae35d5eabf6ad8ea"
+      <label for="_anim_radio2_fd3c681054914830b47deaa7b7d58309">Loop</label>
+      <input type="radio" name="state" value="reflect" id="_anim_radio3_fd3c681054914830b47deaa7b7d58309"
              >
-      <label for="_anim_radio3_91ecb908cc7d4cc5ae35d5eabf6ad8ea">Reflect</label>
+      <label for="_anim_radio3_fd3c681054914830b47deaa7b7d58309">Reflect</label>
     </form>
   </div>
 </div>
@@ -504,9 +510,9 @@ input[type=range].anim-slider {
   /* Instantiate the Animation class. */
   /* The IDs given should match those used in the template above. */
   (function() {
-    var img_id = "_anim_img91ecb908cc7d4cc5ae35d5eabf6ad8ea";
-    var slider_id = "_anim_slider91ecb908cc7d4cc5ae35d5eabf6ad8ea";
-    var loop_select_id = "_anim_loop_select91ecb908cc7d4cc5ae35d5eabf6ad8ea";
+    var img_id = "_anim_imgfd3c681054914830b47deaa7b7d58309";
+    var slider_id = "_anim_sliderfd3c681054914830b47deaa7b7d58309";
+    var loop_select_id = "_anim_loop_selectfd3c681054914830b47deaa7b7d58309";
     var frames = new Array(100);
 
   frames[0] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAJYCAYAAAC+ZpjcAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
@@ -38500,12 +38506,12 @@ AABjBFgAAADGCLAAAACM/X+pFATcV82mXwAAAABJRU5ErkJggg==\
     /* set a timeout to make sure all the above elements are created before
        the object is initialized. */
     setTimeout(function() {
-        anim91ecb908cc7d4cc5ae35d5eabf6ad8ea = new Animation(frames, img_id, slider_id, 50.0,
+        animfd3c681054914830b47deaa7b7d58309 = new Animation(frames, img_id, slider_id, 50.0,
                                  loop_select_id);
     }, 0);
   })()
 </script></div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 9.657 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 9.313 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-data-gen-plot-diffusion-advection-solver-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/07795e165bda9881ff980becb31905ab/plot_diffusion_advection_solver.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_diffusion_advection_solver.ipynb</span></code></a></p>

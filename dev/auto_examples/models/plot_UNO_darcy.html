@@ -196,7 +196,7 @@ and global features in the data, making it particularly effective for complex PD
 <span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">count_model_params</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">neuralop</span><span class="w"> </span><span class="kn">import</span> <span class="n">LpLoss</span><span class="p">,</span> <span class="n">H1Loss</span>
 
-<span class="n">device</span> <span class="o">=</span> <span class="s1">&#39;cpu&#39;</span>
+<span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;cpu&quot;</span>
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -204,11 +204,11 @@ and global features in the data, making it particularly effective for complex PD
 <h2>Loading the Darcy-Flow dataset<a class="headerlink" href="#loading-the-darcy-flow-dataset" title="Link to this heading"></a></h2>
 <p>We load the Darcy-Flow dataset for training and testing.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">train_loader</span><span class="p">,</span> <span class="n">test_loaders</span><span class="p">,</span> <span class="n">data_processor</span> <span class="o">=</span> <span class="n">load_darcy_flow_small</span><span class="p">(</span>
-        <span class="n">n_train</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-        <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
-        <span class="n">n_tests</span><span class="o">=</span><span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span>
-        <span class="n">test_resolutions</span><span class="o">=</span><span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span>
-        <span class="n">test_batch_sizes</span><span class="o">=</span><span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span>
+    <span class="n">n_train</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+    <span class="n">n_tests</span><span class="o">=</span><span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span>
+    <span class="n">test_resolutions</span><span class="o">=</span><span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span>
+    <span class="n">test_batch_sizes</span><span class="o">=</span><span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -228,22 +228,24 @@ Loading test db for resolution 32 with 50 samples
 <li><p>uno_n_modes: Fourier modes for each layer (decreasing then increasing)</p></li>
 <li><p>uno_scalings: Scaling factors for each layer</p></li>
 </ul>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">UNO</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="n">hidden_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
-            <span class="n">projection_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
-            <span class="n">uno_out_channels</span><span class="o">=</span><span class="p">[</span><span class="mi">32</span><span class="p">,</span><span class="mi">64</span><span class="p">,</span><span class="mi">64</span><span class="p">,</span><span class="mi">64</span><span class="p">,</span><span class="mi">32</span><span class="p">],</span>
-            <span class="n">uno_n_modes</span><span class="o">=</span><span class="p">[[</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">]],</span>
-            <span class="n">uno_scalings</span><span class="o">=</span><span class="p">[[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">],[</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]],</span>
-            <span class="n">horizontal_skips_map</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">channel_mlp_skip</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
-            <span class="n">n_layers</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">UNO</span><span class="p">(</span>
+    <span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">hidden_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+    <span class="n">projection_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+    <span class="n">uno_out_channels</span><span class="o">=</span><span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span>
+    <span class="n">uno_n_modes</span><span class="o">=</span><span class="p">[[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">]],</span>
+    <span class="n">uno_scalings</span><span class="o">=</span><span class="p">[[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span>
+    <span class="n">horizontal_skips_map</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">channel_mlp_skip</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
+    <span class="n">n_layers</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
 <span class="c1"># Count and display the number of parameters</span>
 <span class="n">n_params</span> <span class="o">=</span> <span class="n">count_model_params</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Our model has </span><span class="si">{</span><span class="n">n_params</span><span class="si">}</span><span class="s1"> parameters.&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Our model has </span><span class="si">{</span><span class="n">n_params</span><span class="si">}</span><span class="s2"> parameters.&quot;</span><span class="p">)</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -277,19 +279,19 @@ Our model has 1405761 parameters.
 <span class="n">h1loss</span> <span class="o">=</span> <span class="n">H1Loss</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="n">train_loss</span> <span class="o">=</span> <span class="n">h1loss</span>
-<span class="n">eval_losses</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;h1&#39;</span><span class="p">:</span> <span class="n">h1loss</span><span class="p">,</span> <span class="s1">&#39;l2&#39;</span><span class="p">:</span> <span class="n">l2loss</span><span class="p">}</span>
+<span class="n">eval_losses</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;h1&quot;</span><span class="p">:</span> <span class="n">h1loss</span><span class="p">,</span> <span class="s2">&quot;l2&quot;</span><span class="p">:</span> <span class="n">l2loss</span><span class="p">}</span>
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
 <section id="displaying-configuration">
 <h2>Displaying configuration<a class="headerlink" href="#displaying-configuration" title="Link to this heading"></a></h2>
 <p>We print the model architecture, optimizer, scheduler, and loss functions</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### MODEL ###</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### OPTIMIZER ###</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### SCHEDULER ###</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">scheduler</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### LOSSES ###&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> * Train: </span><span class="si">{</span><span class="n">train_loss</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> * Test: </span><span class="si">{</span><span class="n">eval_losses</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">### MODEL ###</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">### OPTIMIZER ###</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">### SCHEDULER ###</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">scheduler</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">### LOSSES ###&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> * Train: </span><span class="si">{</span><span class="n">train_loss</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> * Test: </span><span class="si">{</span><span class="n">eval_losses</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -457,27 +459,29 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f094fbf4410&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f9470cd6ad0&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f094fcde270&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f947050a270&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f094fcde270&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f094fbf7c50&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f947050a270&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f946bfede50&gt;}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
 <section id="creating-the-trainer">
 <h2>Creating the trainer<a class="headerlink" href="#creating-the-trainer" title="Link to this heading"></a></h2>
 <p>We create a Trainer object that handles the training loop for the U-NO</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-                  <span class="n">n_epochs</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
-                  <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
-                  <span class="n">data_processor</span><span class="o">=</span><span class="n">data_processor</span><span class="p">,</span>
-                  <span class="n">wandb_log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>        <span class="c1"># Disable Weights &amp; Biases logging</span>
-                  <span class="n">eval_interval</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>        <span class="c1"># Evaluate every 5 epochs</span>
-                  <span class="n">use_distributed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># Single GPU/CPU training</span>
-                  <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>           <span class="c1"># Print training progress</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+    <span class="n">n_epochs</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+    <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
+    <span class="n">data_processor</span><span class="o">=</span><span class="n">data_processor</span><span class="p">,</span>
+    <span class="n">wandb_log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># Disable Weights &amp; Biases logging</span>
+    <span class="n">eval_interval</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>  <span class="c1"># Evaluate every 5 epochs</span>
+    <span class="n">use_distributed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># Single GPU/CPU training</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>  <span class="c1"># Print training progress</span>
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -490,13 +494,15 @@ Parameter Group 0
 <li><p>Backpropagate and update weights</p></li>
 <li><p>Evaluate on test data every 5 epochs</p></li>
 </ol>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_loader</span><span class="o">=</span><span class="n">train_loader</span><span class="p">,</span>
-              <span class="n">test_loaders</span><span class="o">=</span><span class="n">test_loaders</span><span class="p">,</span>
-              <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
-              <span class="n">scheduler</span><span class="o">=</span><span class="n">scheduler</span><span class="p">,</span>
-              <span class="n">regularizer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-              <span class="n">training_loss</span><span class="o">=</span><span class="n">train_loss</span><span class="p">,</span>
-              <span class="n">eval_losses</span><span class="o">=</span><span class="n">eval_losses</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+    <span class="n">train_loader</span><span class="o">=</span><span class="n">train_loader</span><span class="p">,</span>
+    <span class="n">test_loaders</span><span class="o">=</span><span class="n">test_loaders</span><span class="p">,</span>
+    <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
+    <span class="n">scheduler</span><span class="o">=</span><span class="n">scheduler</span><span class="p">,</span>
+    <span class="n">regularizer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">training_loss</span><span class="o">=</span><span class="n">train_loss</span><span class="p">,</span>
+    <span class="n">eval_losses</span><span class="o">=</span><span class="n">eval_losses</span><span class="p">,</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Training on 1000 samples
@@ -508,22 +514,22 @@ Testing on [50, 50] samples         on resolutions [16, 32].
 Raw outputs of shape torch.Size([32, 1, 16, 16])
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:536: UserWarning: H1Loss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
   loss += training_loss(out, **sample)
-[0] time=4.86, avg_loss=0.6939, train_err=21.6854
+[0] time=4.78, avg_loss=0.6279, train_err=19.6231
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:581: UserWarning: LpLoss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
   val_loss = loss(out, **sample)
-Eval: 16_h1=0.4403, 16_l2=0.3016, 32_h1=0.5529, 32_l2=0.3119
-[5] time=4.83, avg_loss=0.2293, train_err=7.1661
-Eval: 16_h1=0.2858, 16_l2=0.1821, 32_h1=0.4620, 32_l2=0.2025
-[10] time=4.80, avg_loss=0.2067, train_err=6.4589
-Eval: 16_h1=0.2256, 16_l2=0.1315, 32_h1=0.3950, 32_l2=0.1683
-[15] time=4.83, avg_loss=0.1749, train_err=5.4645
-Eval: 16_h1=0.2329, 16_l2=0.1398, 32_h1=0.3876, 32_l2=0.1619
-[20] time=4.81, avg_loss=0.1389, train_err=4.3417
-Eval: 16_h1=0.2258, 16_l2=0.1345, 32_h1=0.3964, 32_l2=0.1585
-[25] time=4.81, avg_loss=0.0982, train_err=3.0687
-Eval: 16_h1=0.2016, 16_l2=0.1119, 32_h1=0.3850, 32_l2=0.1480
+Eval: 16_h1=0.4184, 16_l2=0.2670, 32_h1=0.5756, 32_l2=0.2909
+[5] time=4.72, avg_loss=0.2509, train_err=7.8392
+Eval: 16_h1=0.2317, 16_l2=0.1560, 32_h1=0.4333, 32_l2=0.1990
+[10] time=4.82, avg_loss=0.1990, train_err=6.2181
+Eval: 16_h1=0.2916, 16_l2=0.2057, 32_h1=0.4681, 32_l2=0.2499
+[15] time=4.79, avg_loss=0.1697, train_err=5.3018
+Eval: 16_h1=0.2228, 16_l2=0.1396, 32_h1=0.4168, 32_l2=0.1796
+[20] time=4.72, avg_loss=0.1346, train_err=4.2050
+Eval: 16_h1=0.2205, 16_l2=0.1286, 32_h1=0.3854, 32_l2=0.1499
+[25] time=4.73, avg_loss=0.1012, train_err=3.1633
+Eval: 16_h1=0.2082, 16_l2=0.1227, 32_h1=0.3961, 32_l2=0.1603
 
-{&#39;train_err&#39;: 2.5808369256556034, &#39;avg_loss&#39;: 0.08258678162097931, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 4.813518196000018}
+{&#39;train_err&#39;: 2.4650430642068386, &#39;avg_loss&#39;: 0.07888137805461884, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 4.783878876000017}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -543,42 +549,42 @@ ii) can be trained quickly on CPU</p>
     <span class="n">data</span> <span class="o">=</span> <span class="n">test_samples</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">data_processor</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">batched</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="c1"># Input x</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span>
     <span class="c1"># Ground-truth</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span>
     <span class="c1"># Model prediction: U-NO output</span>
     <span class="n">out</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">))</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
 
     <span class="c1"># Plot input x</span>
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">index</span><span class="o">*</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">index</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Input x&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Input x&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([],</span> <span class="p">[])</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([],</span> <span class="p">[])</span>
 
     <span class="c1"># Plot ground-truth y</span>
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">index</span><span class="o">*</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">index</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">squeeze</span><span class="p">())</span>
     <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Ground-truth y&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Ground-truth y&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([],</span> <span class="p">[])</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([],</span> <span class="p">[])</span>
 
     <span class="c1"># Plot model prediction</span>
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">index</span><span class="o">*</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">index</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
     <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;U-NO prediction&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;U-NO prediction&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([],</span> <span class="p">[])</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([],</span> <span class="p">[])</span>
 
-<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;U-NO predictions on 32x32 Darcy-Flow data&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.98</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;U-NO predictions on 32x32 Darcy-Flow data&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.98</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_UNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_UNO_darcy_001.png" alt="U-NO predictions on 32x32 Darcy-Flow data, Input x, Ground-truth y, U-NO prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 30.490 seconds)</p>
+<img src="../../_images/sphx_glr_plot_UNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_UNO_darcy_001.png" alt="U-NO predictions on 32x32 Darcy-Flow data, Input x, Ground-truth y, U-NO prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 27.119 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-models-plot-uno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/fee630be9801a5d2d76c0b9e3091063c/plot_UNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_UNO_darcy.ipynb</span></code></a></p>

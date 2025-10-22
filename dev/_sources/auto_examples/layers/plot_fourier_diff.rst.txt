@@ -42,7 +42,7 @@ Import the library
 ------------------
 We first import our `neuralop` library and required dependencies.
 
-.. GENERATED FROM PYTHON SOURCE LINES 25-34
+.. GENERATED FROM PYTHON SOURCE LINES 25-33
 
 .. code-block:: Python
 
@@ -61,8 +61,7 @@ We first import our `neuralop` library and required dependencies.
 
 
 
-
-.. GENERATED FROM PYTHON SOURCE LINES 35-42
+.. GENERATED FROM PYTHON SOURCE LINES 34-41
 
 .. raw:: html
 
@@ -72,7 +71,7 @@ Creating an example of periodic 1D curve
 ----------------------------------------
 Here we consider sin(x) and cos(x), which are periodic on the interval [0, 2π]
 
-.. GENERATED FROM PYTHON SOURCE LINES 42-47
+.. GENERATED FROM PYTHON SOURCE LINES 41-46
 
 .. code-block:: Python
 
@@ -88,7 +87,7 @@ Here we consider sin(x) and cos(x), which are periodic on the interval [0, 2π]
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 48-55
+.. GENERATED FROM PYTHON SOURCE LINES 47-54
 
 .. raw:: html
 
@@ -98,7 +97,7 @@ Differentiate the signal
 -----------------------------------------
 We use the FourierDiff class to differentiate the signal
 
-.. GENERATED FROM PYTHON SOURCE LINES 55-60
+.. GENERATED FROM PYTHON SOURCE LINES 54-59
 
 .. code-block:: Python
 
@@ -114,7 +113,7 @@ We use the FourierDiff class to differentiate the signal
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 61-67
+.. GENERATED FROM PYTHON SOURCE LINES 60-66
 
 .. raw:: html
 
@@ -123,18 +122,18 @@ We use the FourierDiff class to differentiate the signal
 Plot the results for sin(x)
 ---------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 67-78
+.. GENERATED FROM PYTHON SOURCE LINES 66-77
 
 .. code-block:: Python
 
     plt.figure()
-    plt.plot(x_np, dfdx[0].squeeze().cpu().numpy(), label='Fourier dfdx')
-    plt.plot(x_np, np.cos(x_np), '--', label='dfdx')
-    plt.plot(x_np, df2dx2[0].squeeze().cpu().numpy(), label='Fourier df2dx2')
-    plt.plot(x_np, -np.sin(x_np), '--', label='df2dx2')
-    plt.plot(x_np, df3dx3[0].squeeze().cpu().numpy(), label='Fourier df3dx3')
-    plt.plot(x_np, -np.cos(x_np), '--', label='df3dx3')
-    plt.xlabel('x')
+    plt.plot(x_np, dfdx[0].squeeze().cpu().numpy(), label="Fourier dfdx")
+    plt.plot(x_np, np.cos(x_np), "--", label="dfdx")
+    plt.plot(x_np, df2dx2[0].squeeze().cpu().numpy(), label="Fourier df2dx2")
+    plt.plot(x_np, -np.sin(x_np), "--", label="df2dx2")
+    plt.plot(x_np, df3dx3[0].squeeze().cpu().numpy(), label="Fourier df3dx3")
+    plt.plot(x_np, -np.cos(x_np), "--", label="df3dx3")
+    plt.xlabel("x")
     plt.legend()
     plt.show()
 
@@ -150,7 +149,7 @@ Plot the results for sin(x)
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 79-85
+.. GENERATED FROM PYTHON SOURCE LINES 78-84
 
 .. raw:: html
 
@@ -159,23 +158,22 @@ Plot the results for sin(x)
 Plot the results for cos(x)
 ---------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 85-98
+.. GENERATED FROM PYTHON SOURCE LINES 84-96
 
 .. code-block:: Python
 
     plt.figure()
-    plt.plot(x_np, dfdx[1].squeeze().cpu().numpy(), label='Fourier dfdx')
-    plt.plot(x_np, -np.sin(x_np), '--', label='dfdx')
-    plt.plot(x_np, df2dx2[1].squeeze().cpu().numpy(), label='Fourier df2dx2')
-    plt.plot(x_np, -np.cos(x_np), '--', label='df2dx2')
-    plt.plot(x_np, df3dx3[1].squeeze().cpu().numpy(), label='Fourier df3dx3')
-    plt.plot(x_np, np.sin(x_np), '--', label='df3dx3')
-    plt.xlabel('x')
+    plt.plot(x_np, dfdx[1].squeeze().cpu().numpy(), label="Fourier dfdx")
+    plt.plot(x_np, -np.sin(x_np), "--", label="dfdx")
+    plt.plot(x_np, df2dx2[1].squeeze().cpu().numpy(), label="Fourier df2dx2")
+    plt.plot(x_np, -np.cos(x_np), "--", label="df2dx2")
+    plt.plot(x_np, df3dx3[1].squeeze().cpu().numpy(), label="Fourier df3dx3")
+    plt.plot(x_np, np.sin(x_np), "--", label="df3dx3")
+    plt.xlabel("x")
     plt.legend()
     plt.show()
-        
-        
-        
+
+
 
 
 
@@ -188,7 +186,7 @@ Plot the results for cos(x)
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 99-106
+.. GENERATED FROM PYTHON SOURCE LINES 97-104
 
 .. raw:: html
 
@@ -198,13 +196,15 @@ Creating an example of non-periodic 1D curve
 -------------------------------------------
 Here we consider sin(3x)-cos(x) and exp(-0.8x)+sin(x)
 
-.. GENERATED FROM PYTHON SOURCE LINES 106-111
+.. GENERATED FROM PYTHON SOURCE LINES 104-111
 
 .. code-block:: Python
 
     L = 2 * torch.pi
     x = torch.linspace(0, L, 101)[:-1]
-    f = torch.stack([torch.sin(3*x) - torch.cos(x), torch.exp(-0.8*x) + torch.sin(x)], dim=0)
+    f = torch.stack(
+        [torch.sin(3 * x) - torch.cos(x), torch.exp(-0.8 * x) + torch.sin(x)], dim=0
+    )
     x_np = x.cpu().numpy()
 
 
@@ -228,11 +228,11 @@ We use the FourierDiff class with Fourier continuation to differentiate the sign
 
 .. code-block:: Python
 
-    fd1d = FourierDiff(dim=1, L=L, use_fc='Legendre', fc_degree=4, fc_n_additional_pts=50)
+    fd1d = FourierDiff(dim=1, L=L, use_fc="Legendre", fc_degree=4, fc_n_additional_pts=50)
     derivatives = fd1d.compute_multiple_derivatives(f, [1, 2])
     dfdx, df2dx2 = derivatives
 
-     
+
 
 
 
@@ -254,11 +254,11 @@ Plot the results for sin(3x)-cos(x)
 .. code-block:: Python
 
     plt.figure()
-    plt.plot(x_np, dfdx[0].squeeze().cpu().numpy(), label='Fourier dfdx')
-    plt.plot(x_np, 3*torch.cos(3*x) + torch.sin(x), '--', label='dfdx')
-    plt.plot(x_np, df2dx2[0].squeeze().cpu().numpy(), label='Fourier df2dx2')
-    plt.plot(x_np, -9*torch.sin(3*x) + torch.cos(x), '--', label='df2dx2')
-    plt.xlabel('x')
+    plt.plot(x_np, dfdx[0].squeeze().cpu().numpy(), label="Fourier dfdx")
+    plt.plot(x_np, 3 * torch.cos(3 * x) + torch.sin(x), "--", label="dfdx")
+    plt.plot(x_np, df2dx2[0].squeeze().cpu().numpy(), label="Fourier df2dx2")
+    plt.plot(x_np, -9 * torch.sin(3 * x) + torch.cos(x), "--", label="df2dx2")
+    plt.xlabel("x")
     plt.legend()
     plt.show()
 
@@ -288,11 +288,11 @@ Plot the results for exp(-0.8x)+sin(x)
 .. code-block:: Python
 
     plt.figure()
-    plt.plot(x_np, dfdx[1].squeeze().cpu().numpy(), label='Fourier dfdx')
-    plt.plot(x_np, -0.8*torch.exp(-0.8*x)+torch.cos(x), '--', label='dfdx')
-    plt.plot(x_np, df2dx2[1].squeeze().cpu().numpy(), label='Fourier df2dx2')
-    plt.plot(x_np, 0.64*torch.exp(-0.8*x)-torch.sin(x), '--', label='df2dx2')
-    plt.xlabel('x')
+    plt.plot(x_np, dfdx[1].squeeze().cpu().numpy(), label="Fourier dfdx")
+    plt.plot(x_np, -0.8 * torch.exp(-0.8 * x) + torch.cos(x), "--", label="dfdx")
+    plt.plot(x_np, df2dx2[1].squeeze().cpu().numpy(), label="Fourier df2dx2")
+    plt.plot(x_np, 0.64 * torch.exp(-0.8 * x) - torch.sin(x), "--", label="df2dx2")
+    plt.xlabel("x")
     plt.legend()
     plt.show()
 
@@ -337,7 +337,7 @@ Here we consider f(x,y) = sin(x) * cos(y), which is periodic on the interval [0,
     nx, ny = 180, 186
     x = torch.linspace(0, L_x, nx, dtype=torch.float64)
     y = torch.linspace(0, L_y, ny, dtype=torch.float64)
-    X, Y = torch.meshgrid(x, y, indexing='ij')
+    X, Y = torch.meshgrid(x, y, indexing="ij")
 
     # Test function: f(x,y) = sin(x) * cos(y)
     f_2d = torch.sin(X) * torch.cos(Y)
@@ -371,9 +371,9 @@ We use the FourierDiff class to compute derivatives
     laplacian = fd2d.laplacian(f_2d)
 
     # Expected analytical results for f(x,y) = sin(x) * cos(y)
-    df_dx_expected = torch.cos(X) * torch.cos(Y)  
-    df_dy_expected = -torch.sin(X) * torch.sin(Y)  
-    laplacian_expected = -2 * torch.sin(X) * torch.cos(Y) 
+    df_dx_expected = torch.cos(X) * torch.cos(Y)
+    df_dy_expected = -torch.sin(X) * torch.sin(Y)
+    laplacian_expected = -2 * torch.sin(X) * torch.cos(Y)
 
 
 
@@ -391,12 +391,12 @@ We use the FourierDiff class to compute derivatives
 Plot the 2D results
 ----------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 210-255
+.. GENERATED FROM PYTHON SOURCE LINES 210-253
 
 .. code-block:: Python
 
     fig, axes = plt.subplots(2, 3, figsize=(15, 10))
-    fig.suptitle('2D Fourier Differentiation Results: f(x,y) = sin(x) * cos(y)')
+    fig.suptitle("2D Fourier Differentiation Results: f(x,y) = sin(x) * cos(y)")
 
     # Compute consistent colorbar limits for each derivative pair
     df_dx_min = min(df_dx.min().item(), df_dx_expected.min().item())
@@ -406,38 +406,36 @@ Plot the 2D results
 
     # Original function
     im0 = axes[0, 0].imshow(f_2d.cpu().numpy())
-    axes[0, 0].set_title('Original: sin(x) * cos(y)')
+    axes[0, 0].set_title("Original: sin(x) * cos(y)")
     plt.colorbar(im0, ax=axes[0, 0], shrink=0.57)
 
     # ∂f/∂x computed
     im1 = axes[0, 1].imshow(df_dx.cpu().numpy(), vmin=df_dx_min, vmax=df_dx_max)
-    axes[0, 1].set_title('∂f/∂x (computed)')
+    axes[0, 1].set_title("∂f/∂x (computed)")
     plt.colorbar(im1, ax=axes[0, 1], shrink=0.57)
 
     # ∂f/∂x expected
     im2 = axes[0, 2].imshow(df_dx_expected.cpu().numpy(), vmin=df_dx_min, vmax=df_dx_max)
-    axes[0, 2].set_title('∂f/∂x (expected: cos(x) * cos(y))')
+    axes[0, 2].set_title("∂f/∂x (expected: cos(x) * cos(y))")
     plt.colorbar(im2, ax=axes[0, 2], shrink=0.57)
 
     # ∂f/∂y computed
     im3 = axes[1, 0].imshow(df_dy.cpu().numpy(), vmin=df_dy_min, vmax=df_dy_max)
-    axes[1, 0].set_title('∂f/∂y (computed)')
+    axes[1, 0].set_title("∂f/∂y (computed)")
     plt.colorbar(im3, ax=axes[1, 0], shrink=0.57)
 
     # ∂f/∂y expected
     im4 = axes[1, 1].imshow(df_dy_expected.cpu().numpy(), vmin=df_dy_min, vmax=df_dy_max)
-    axes[1, 1].set_title('∂f/∂y (expected: -sin(x) * sin(y))')
+    axes[1, 1].set_title("∂f/∂y (expected: -sin(x) * sin(y))")
     plt.colorbar(im4, ax=axes[1, 1], shrink=0.57)
 
     # Laplacian
     im5 = axes[1, 2].imshow(laplacian.cpu().numpy())
-    axes[1, 2].set_title('∇²f (computed)')
+    axes[1, 2].set_title("∇²f (computed)")
     plt.colorbar(im5, ax=axes[1, 2], shrink=0.57)
 
     plt.tight_layout()
     plt.show()
-
-
 
 
 
@@ -452,7 +450,7 @@ Plot the 2D results
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 256-263
+.. GENERATED FROM PYTHON SOURCE LINES 254-261
 
 .. raw:: html
 
@@ -462,7 +460,7 @@ Plot the 2D results
 ===================================
 Here we demonstrate the FourierDiff class for 3D functions
 
-.. GENERATED FROM PYTHON SOURCE LINES 265-272
+.. GENERATED FROM PYTHON SOURCE LINES 263-270
 
 .. raw:: html
 
@@ -472,7 +470,7 @@ Creating an example of periodic 3D function
 -----------------------------------------
 Here we consider f(x,y,z) = sin(x) * cos(y) * sin(z), which is periodic on [0, 2π]³
 
-.. GENERATED FROM PYTHON SOURCE LINES 272-285
+.. GENERATED FROM PYTHON SOURCE LINES 270-283
 
 .. code-block:: Python
 
@@ -481,7 +479,7 @@ Here we consider f(x,y,z) = sin(x) * cos(y) * sin(z), which is periodic on [0, 2
     x = torch.linspace(0, L_x, nx, dtype=torch.float64)
     y = torch.linspace(0, L_y, ny, dtype=torch.float64)
     z = torch.linspace(0, L_z, nz, dtype=torch.float64)
-    X, Y, Z = torch.meshgrid(x, y, z, indexing='ij')
+    X, Y, Z = torch.meshgrid(x, y, z, indexing="ij")
 
     # Test function: f(x,y,z) = sin(x) * cos(y) * sin(z)
     f_3d = torch.sin(X) * torch.cos(Y) * torch.sin(Z)
@@ -496,7 +494,7 @@ Here we consider f(x,y,z) = sin(x) * cos(y) * sin(z), which is periodic on [0, 2
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 286-293
+.. GENERATED FROM PYTHON SOURCE LINES 284-291
 
 .. raw:: html
 
@@ -506,7 +504,7 @@ Differentiate the 3D signal
 -----------------------------------------
 We use the FourierDiff class to compute derivatives
 
-.. GENERATED FROM PYTHON SOURCE LINES 293-307
+.. GENERATED FROM PYTHON SOURCE LINES 291-305
 
 .. code-block:: Python
 
@@ -519,10 +517,10 @@ We use the FourierDiff class to compute derivatives
     laplacian_3d = fd3d.laplacian(f_3d)
 
     # Expected analytical results for f(x,y,z) = sin(x) * cos(y) * sin(z)
-    df_dx_expected_3d = torch.cos(X) * torch.cos(Y) * torch.sin(Z) 
-    df_dy_expected_3d = -torch.sin(X) * torch.sin(Y) * torch.sin(Z) 
-    df_dz_expected_3d = torch.sin(X) * torch.cos(Y) * torch.cos(Z) 
-    laplacian_expected_3d = -3 * torch.sin(X) * torch.cos(Y) * torch.sin(Z)  
+    df_dx_expected_3d = torch.cos(X) * torch.cos(Y) * torch.sin(Z)
+    df_dy_expected_3d = -torch.sin(X) * torch.sin(Y) * torch.sin(Z)
+    df_dz_expected_3d = torch.sin(X) * torch.cos(Y) * torch.cos(Z)
+    laplacian_expected_3d = -3 * torch.sin(X) * torch.cos(Y) * torch.sin(Z)
 
 
 
@@ -531,7 +529,7 @@ We use the FourierDiff class to compute derivatives
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 308-314
+.. GENERATED FROM PYTHON SOURCE LINES 306-312
 
 .. raw:: html
 
@@ -540,13 +538,13 @@ We use the FourierDiff class to compute derivatives
 Plot a slice of the 3D results (z=0 plane)
 ------------------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 314-360
+.. GENERATED FROM PYTHON SOURCE LINES 312-359
 
 .. code-block:: Python
 
     z_slice_idx = nz // 2
     fig, axes = plt.subplots(2, 3, figsize=(18, 12))
-    fig.suptitle('3D Fourier Differentiation Results (z=0 slice): f(x,y,z) = sin(x) * cos(y) * sin(z)')
+    fig.suptitle("3D Fourier Differentiation Results (z=0 slice): f(x,y,z) = sin(x) * cos(y) * sin(z)")
 
     # Compute consistent colorbar limits for each derivative pair at the z-slice
     df_dx_3d_slice = df_dx_3d[:, :, z_slice_idx]
@@ -561,36 +559,37 @@ Plot a slice of the 3D results (z=0 plane)
 
     # Original function slice
     im0 = axes[0, 0].imshow(f_3d[:, :, z_slice_idx].cpu().numpy())
-    axes[0, 0].set_title('Original: sin(x) * cos(y) * sin(z)')
+    axes[0, 0].set_title("Original: sin(x) * cos(y) * sin(z)")
     plt.colorbar(im0, ax=axes[0, 0], shrink=0.57)
 
     # ∂f/∂x slice
     im1 = axes[0, 1].imshow(df_dx_3d_slice.cpu().numpy(), vmin=df_dx_3d_min, vmax=df_dx_3d_max)
-    axes[0, 1].set_title('∂f/∂x (computed)')
+    axes[0, 1].set_title("∂f/∂x (computed)")
     plt.colorbar(im1, ax=axes[0, 1], shrink=0.57)
 
     # ∂f/∂x expected slice
     im2 = axes[0, 2].imshow(df_dx_expected_3d_slice.cpu().numpy(), vmin=df_dx_3d_min, vmax=df_dx_3d_max)
-    axes[0, 2].set_title('∂f/∂x (expected: cos(x) * cos(y) * sin(z))')
+    axes[0, 2].set_title("∂f/∂x (expected: cos(x) * cos(y) * sin(z))")
     plt.colorbar(im2, ax=axes[0, 2], shrink=0.57)
 
     # ∂f/∂y slice
     im3 = axes[1, 0].imshow(df_dy_3d_slice.cpu().numpy(), vmin=df_dy_3d_min, vmax=df_dy_3d_max)
-    axes[1, 0].set_title('∂f/∂y (computed)')
+    axes[1, 0].set_title("∂f/∂y (computed)")
     plt.colorbar(im3, ax=axes[1, 0], shrink=0.57)
 
     # ∂f/∂y expected slice
     im4 = axes[1, 1].imshow(df_dy_expected_3d_slice.cpu().numpy(), vmin=df_dy_3d_min, vmax=df_dy_3d_max)
-    axes[1, 1].set_title('∂f/∂y (expected: -sin(x) * sin(y) * sin(z))')
+    axes[1, 1].set_title("∂f/∂y (expected: -sin(x) * sin(y) * sin(z))")
     plt.colorbar(im4, ax=axes[1, 1], shrink=0.57)
 
     # ∂f/∂z slice
     im5 = axes[1, 2].imshow(df_dz_3d[:, :, z_slice_idx].cpu().numpy())
-    axes[1, 2].set_title('∂f/∂z (computed)')
+    axes[1, 2].set_title("∂f/∂z (computed)")
     plt.colorbar(im5, ax=axes[1, 2], shrink=0.57)
 
     plt.tight_layout()
     plt.show()
+
 
 
 .. image-sg:: /auto_examples/layers/images/sphx_glr_plot_fourier_diff_006.png
@@ -605,7 +604,7 @@ Plot a slice of the 3D results (z=0 plane)
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 4.129 seconds)
+   **Total running time of the script:** (0 minutes 3.888 seconds)
 
 
 .. _sphx_glr_download_auto_examples_layers_plot_fourier_diff.py:

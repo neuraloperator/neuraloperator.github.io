@@ -247,10 +247,18 @@ the highest frequency in our embedding does not exceed the Nyquist limit.</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.layers.embeddings</span><span class="w"> </span><span class="kn">import</span> <span class="n">SinusoidalEmbedding</span>
 
 <span class="c1"># Set default font sizes for better readability</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;font.size&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s1">&#39;axes.titlesize&#39;</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span> <span class="s1">&#39;axes.labelsize&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
-                     <span class="s1">&#39;xtick.labelsize&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s1">&#39;ytick.labelsize&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s1">&#39;legend.fontsize&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;font.size&quot;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span>
+        <span class="s2">&quot;axes.titlesize&quot;</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span>
+        <span class="s2">&quot;axes.labelsize&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
+        <span class="s2">&quot;xtick.labelsize&quot;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span>
+        <span class="s2">&quot;ytick.labelsize&quot;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span>
+        <span class="s2">&quot;legend.fontsize&quot;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">)</span>
 
-<span class="n">device</span> <span class="o">=</span> <span class="s1">&#39;cpu&#39;</span>
+<span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;cpu&quot;</span>
 
 <span class="c1"># Define a spatial domain and number of frequencies</span>
 <span class="c1"># Create 1000 equally spaced points in [0, 1]</span>
@@ -293,8 +301,8 @@ the highest frequency in our embedding does not exceed the Nyquist limit.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Embedding value&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Sinusoidal Embedding Components (L = 3)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower left&#39;</span><span class="p">,</span> <span class="n">framealpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">locator_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">nbins</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">,</span> <span class="n">framealpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">locator_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">nbins</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -370,7 +378,7 @@ amplitude and frequency modulation.</p>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Amplitude Modulation&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Embedding value&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">,</span> <span class="n">framealpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">locator_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">nbins</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">locator_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">nbins</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
 <span class="c1">## Frequency modulation</span>
 <span class="k">for</span> <span class="n">freq_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">L</span><span class="p">):</span>
@@ -381,7 +389,7 @@ amplitude and frequency modulation.</p>
 <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Frequency Modulation&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Embedding value&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">locator_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">nbins</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">locator_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">nbins</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sinusoidal Embeddings with Parameter m = </span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.98</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
@@ -440,18 +448,20 @@ transformer- and NeRF-style embeddings.</p>
 <span class="c1"># Define the transformer embedding</span>
 <span class="c1"># max_positions controls the frequency scaling in transformer-style embeddings</span>
 <span class="n">max_positions</span> <span class="o">=</span> <span class="mi">1000</span>
-<span class="n">transformer_embedder</span> <span class="o">=</span> <span class="n">SinusoidalEmbedding</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                                           <span class="n">num_frequencies</span><span class="o">=</span><span class="n">L</span><span class="p">,</span>
-                                           <span class="n">embedding_type</span><span class="o">=</span><span class="s1">&#39;transformer&#39;</span><span class="p">,</span>
-                                           <span class="n">max_positions</span><span class="o">=</span><span class="n">max_positions</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">transformer_embedder</span> <span class="o">=</span> <span class="n">SinusoidalEmbedding</span><span class="p">(</span>
+    <span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">num_frequencies</span><span class="o">=</span><span class="n">L</span><span class="p">,</span>
+    <span class="n">embedding_type</span><span class="o">=</span><span class="s2">&quot;transformer&quot;</span><span class="p">,</span>
+    <span class="n">max_positions</span><span class="o">=</span><span class="n">max_positions</span><span class="p">,</span>
+<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
 <span class="c1"># Apply transformer-style embedding</span>
 <span class="n">transformer_embedding</span> <span class="o">=</span> <span class="n">transformer_embedder</span><span class="p">(</span><span class="n">x_normalized</span><span class="p">)</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
 <span class="c1"># Define the NeRF embedding</span>
-<span class="n">nerf_embedder</span> <span class="o">=</span> <span class="n">SinusoidalEmbedding</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                                    <span class="n">num_frequencies</span><span class="o">=</span><span class="n">L</span><span class="p">,</span>
-                                    <span class="n">embedding_type</span><span class="o">=</span><span class="s1">&#39;nerf&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">nerf_embedder</span> <span class="o">=</span> <span class="n">SinusoidalEmbedding</span><span class="p">(</span>
+    <span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_frequencies</span><span class="o">=</span><span class="n">L</span><span class="p">,</span> <span class="n">embedding_type</span><span class="o">=</span><span class="s2">&quot;nerf&quot;</span>
+<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
 <span class="c1"># Apply NeRF-style embedding</span>
 <span class="n">nerf_embedding</span> <span class="o">=</span> <span class="n">nerf_embedder</span><span class="p">(</span><span class="n">x_normalized</span><span class="p">)</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
@@ -471,7 +481,7 @@ transformer- and NeRF-style embeddings.</p>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Transformer embedding&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Embedding value&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">,</span> <span class="n">framealpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">locator_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">nbins</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">locator_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">nbins</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
 <span class="c1">## NeRF embedding</span>
 <span class="k">for</span> <span class="n">freq_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">L</span><span class="p">):</span>
@@ -484,9 +494,9 @@ transformer- and NeRF-style embeddings.</p>
 <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;NeRF embedding&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Embedding value&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">locator_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">nbins</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">locator_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">nbins</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sinusoidal Embeddings using transformer and NeRF embedding types&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.98</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Sinusoidal Embeddings using transformer and NeRF embedding types&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.98</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -525,9 +535,9 @@ modulation of the NeRF-style embedding.</p>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nyquist-Shannon sampling theorem is violated for the given parameter </span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2"> and number of frequencies </span><span class="si">{</span><span class="n">L</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
 <span class="c1"># Define the NeRF embedding</span>
-<span class="n">nerf_embedder</span> <span class="o">=</span> <span class="n">SinusoidalEmbedding</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                                    <span class="n">num_frequencies</span><span class="o">=</span><span class="n">L</span><span class="p">,</span>
-                                    <span class="n">embedding_type</span><span class="o">=</span><span class="s1">&#39;nerf&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">nerf_embedder</span> <span class="o">=</span> <span class="n">SinusoidalEmbedding</span><span class="p">(</span>
+    <span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_frequencies</span><span class="o">=</span><span class="n">L</span><span class="p">,</span> <span class="n">embedding_type</span><span class="o">=</span><span class="s2">&quot;nerf&quot;</span>
+<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
 <span class="c1"># Apply frequency modulation: multiply input by parameter before embedding</span>
 <span class="c1"># This scales all frequencies by the parameter m</span>
@@ -542,14 +552,14 @@ modulation of the NeRF-style embedding.</p>
     <span class="n">sin_idx</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">freq_idx</span>
     <span class="n">cos_idx</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">freq_idx</span> <span class="o">+</span> <span class="mi">1</span>
 
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">nerf_embedding</span><span class="p">[</span><span class="n">sin_idx</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Channel </span><span class="si">{</span><span class="n">freq_idx</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">nerf_embedding</span><span class="p">[</span><span class="n">sin_idx</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Channel </span><span class="si">{</span><span class="n">freq_idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">nerf_embedding</span><span class="p">[</span><span class="n">cos_idx</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Embedding&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;NeRF-style embedding with modulated frequency&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower left&#39;</span><span class="p">,</span> <span class="n">framealpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">locator_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">nbins</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Embedding&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;NeRF-style embedding with modulated frequency&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">,</span> <span class="n">framealpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">locator_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">nbins</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -575,9 +585,9 @@ an example using the NeRF-style embedding below.</p>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nyquist-Shannon sampling theorem is violated for the given number of frequencies </span><span class="si">{</span><span class="n">L</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
 <span class="c1"># Define the embedding</span>
-<span class="n">nerf_embedder</span> <span class="o">=</span> <span class="n">SinusoidalEmbedding</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                                    <span class="n">num_frequencies</span><span class="o">=</span><span class="n">L</span><span class="p">,</span>
-                                    <span class="n">embedding_type</span><span class="o">=</span><span class="s1">&#39;nerf&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">nerf_embedder</span> <span class="o">=</span> <span class="n">SinusoidalEmbedding</span><span class="p">(</span>
+    <span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_frequencies</span><span class="o">=</span><span class="n">L</span><span class="p">,</span> <span class="n">embedding_type</span><span class="o">=</span><span class="s2">&quot;nerf&quot;</span>
+<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
 <span class="c1"># Apply amplitude modulation: multiply embedding by parameter after computation</span>
 <span class="c1"># This scales all embedding components by the parameter m</span>
@@ -592,14 +602,14 @@ an example using the NeRF-style embedding below.</p>
     <span class="n">sin_idx</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">freq_idx</span>
     <span class="n">cos_idx</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">freq_idx</span> <span class="o">+</span> <span class="mi">1</span>
 
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">nerf_embedding</span><span class="p">[</span><span class="n">sin_idx</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Channel </span><span class="si">{</span><span class="n">freq_idx</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">nerf_embedding</span><span class="p">[</span><span class="n">sin_idx</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Channel </span><span class="si">{</span><span class="n">freq_idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">nerf_embedding</span><span class="p">[</span><span class="n">cos_idx</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Embedding&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;NeRF-style embedding with amplitude modulation&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower left&#39;</span><span class="p">,</span> <span class="n">framealpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">locator_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">nbins</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Embedding&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;NeRF-style embedding with amplitude modulation&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">,</span> <span class="n">framealpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">locator_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">nbins</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -665,18 +675,20 @@ embeddings for a 3D input.</p>
 
 <span class="c1"># Define the transformer embedding</span>
 <span class="n">max_positions</span> <span class="o">=</span> <span class="mi">1000</span>
-<span class="n">transformer_embedder</span> <span class="o">=</span> <span class="n">SinusoidalEmbedding</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-                                           <span class="n">num_frequencies</span><span class="o">=</span><span class="n">L</span><span class="p">,</span>
-                                           <span class="n">embedding_type</span><span class="o">=</span><span class="s1">&#39;transformer&#39;</span><span class="p">,</span>
-                                           <span class="n">max_positions</span><span class="o">=</span><span class="n">max_positions</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">transformer_embedder</span> <span class="o">=</span> <span class="n">SinusoidalEmbedding</span><span class="p">(</span>
+    <span class="n">in_channels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">num_frequencies</span><span class="o">=</span><span class="n">L</span><span class="p">,</span>
+    <span class="n">embedding_type</span><span class="o">=</span><span class="s2">&quot;transformer&quot;</span><span class="p">,</span>
+    <span class="n">max_positions</span><span class="o">=</span><span class="n">max_positions</span><span class="p">,</span>
+<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
 <span class="c1"># Apply transformer-style embedding</span>
 <span class="n">transformer_embedding</span> <span class="o">=</span> <span class="n">transformer_embedder</span><span class="p">(</span><span class="n">x_normalized</span><span class="p">)</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
 <span class="c1"># Define the NeRF embedding</span>
-<span class="n">nerf_embedder</span> <span class="o">=</span> <span class="n">SinusoidalEmbedding</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="n">dim</span><span class="p">,</span>
-                                    <span class="n">num_frequencies</span><span class="o">=</span><span class="n">L</span><span class="p">,</span>
-                                    <span class="n">embedding_type</span><span class="o">=</span><span class="s1">&#39;nerf&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">nerf_embedder</span> <span class="o">=</span> <span class="n">SinusoidalEmbedding</span><span class="p">(</span>
+    <span class="n">in_channels</span><span class="o">=</span><span class="n">dim</span><span class="p">,</span> <span class="n">num_frequencies</span><span class="o">=</span><span class="n">L</span><span class="p">,</span> <span class="n">embedding_type</span><span class="o">=</span><span class="s2">&quot;nerf&quot;</span>
+<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
 <span class="c1"># Apply NeRF-style embedding</span>
 <span class="n">nerf_embedding</span> <span class="o">=</span> <span class="n">nerf_embedder</span><span class="p">(</span><span class="n">x_normalized</span><span class="p">)</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
@@ -685,7 +697,7 @@ embeddings for a 3D input.</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Nyquist-Shannon sampling theorem is satisfied for the given number of frequencies 3.
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.835 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.792 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-layers-plot-sinusoidal-embeddings-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/b1816e343c1a9a8d9033515c4c1295c4/plot_sinusoidal_embeddings.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_sinusoidal_embeddings.ipynb</span></code></a></p>

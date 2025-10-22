@@ -54,7 +54,7 @@ We import the necessary modules for neighbor search and visualization
     from neuralop.layers.neighbor_search import native_neighbor_search
     from neuralop.layers.embeddings import regular_grid_2d
 
-    device = 'cpu'
+    device = "cpu"
 
 
 
@@ -75,7 +75,7 @@ Many problems involve data collected over irregular point clouds.
 The Graph Neural Operator (GNO) is a neural operator architecture
 that learns mappings between functions evaluated on arbitrary point clouds.
 
-For input coordinates Y, input function f evaluated at all y ∈ Y, 
+For input coordinates Y, input function f evaluated at all y ∈ Y,
 and output coordinates X, our goal is to map to function g evaluated at all x ∈ X.
 The GNO computes the Nyström approximation of a continuous kernel integral:
 ∫_{N_r(x)} f(y) k(x,y) dy
@@ -93,20 +93,34 @@ Setting up the point cloud data
 We create a regular grid of input coordinates and random output query points
 to demonstrate the neighbor search functionality.
 
-.. GENERATED FROM PYTHON SOURCE LINES 63-79
+.. GENERATED FROM PYTHON SOURCE LINES 63-93
 
 .. code-block:: Python
 
 
     # Create a regular 8x8 grid of input coordinates
-    input_coords = torch.stack(regular_grid_2d(spatial_dims=(8,8))).permute(1,2,0).view(-1,2)
+    input_coords = (
+        torch.stack(regular_grid_2d(spatial_dims=(8, 8))).permute(1, 2, 0).view(-1, 2)
+    )
 
     # Generate random output query points
     output_queries = torch.rand([50, 2])
 
     # Visualize the input coordinates and query points
-    plt.scatter(input_coords[:, 0], input_coords[:, 1], color='orange', label="Input coordinates", s=50)
-    plt.scatter(output_queries[:, 0], output_queries[:, 1], color='blue', label="Output queries", s=30)
+    plt.scatter(
+        input_coords[:, 0],
+        input_coords[:, 1],
+        color="orange",
+        label="Input coordinates",
+        s=50,
+    )
+    plt.scatter(
+        output_queries[:, 0],
+        output_queries[:, 1],
+        color="blue",
+        label="Output queries",
+        s=30,
+    )
     plt.legend()
     plt.title("Input coordinates and output query points")
     plt.xlabel("x")
@@ -125,7 +139,7 @@ to demonstrate the neighbor search functionality.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 80-88
+.. GENERATED FROM PYTHON SOURCE LINES 94-102
 
 .. raw:: html
 
@@ -136,7 +150,7 @@ Performing neighbor search
 We select a query point and find all input coordinates within a specified radius.
 This demonstrates how the neighbor search algorithm identifies spatial relationships.
 
-.. GENERATED FROM PYTHON SOURCE LINES 88-97
+.. GENERATED FROM PYTHON SOURCE LINES 102-113
 
 .. code-block:: Python
 
@@ -147,7 +161,9 @@ This demonstrates how the neighbor search algorithm identifies spatial relations
     # Perform neighbor search with radius 0.25
     # Note: This radius is relatively large for our data density.
     # In practice, we typically use values that find around 10 neighbors.
-    nbr_data = native_neighbor_search(data=input_coords, queries=query_point.unsqueeze(0), radius=0.25)
+    nbr_data = native_neighbor_search(
+        data=input_coords, queries=query_point.unsqueeze(0), radius=0.25
+    )
 
 
 
@@ -156,7 +172,7 @@ This demonstrates how the neighbor search algorithm identifies spatial relations
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 98-106
+.. GENERATED FROM PYTHON SOURCE LINES 114-122
 
 .. raw:: html
 
@@ -167,22 +183,26 @@ Visualizing the neighbor search results
 We plot the query point, its neighbors, and the search radius to understand
 how the neighbor search algorithm works.
 
-.. GENERATED FROM PYTHON SOURCE LINES 106-118
+.. GENERATED FROM PYTHON SOURCE LINES 122-138
 
 .. code-block:: Python
 
 
     fig, ax = plt.subplots()
-    neighbors = input_coords[nbr_data['neighbors_index']]
-    ax.scatter(input_coords[:, 0], input_coords[:, 1], color='blue', label="Input coordinates")
-    ax.scatter(query_point[0], query_point[1], color='red', marker='*', s=200, label="Query point")
-    ax.scatter(neighbors[:, 0], neighbors[:, 1], color='green', label="Neighbors of query")
+    neighbors = input_coords[nbr_data["neighbors_index"]]
+    ax.scatter(
+        input_coords[:, 0], input_coords[:, 1], color="blue", label="Input coordinates"
+    )
+    ax.scatter(
+        query_point[0], query_point[1], color="red", marker="*", s=200, label="Query point"
+    )
+    ax.scatter(neighbors[:, 0], neighbors[:, 1], color="green", label="Neighbors of query")
     c = plt.Circle(query_point, radius=0.25, fill=False)
     ax.add_patch(c)
 
     ax.legend()
-    ax.set_xlim(0,1)
-    ax.set_ylim(0,1)
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
 
 
 
@@ -204,7 +224,7 @@ how the neighbor search algorithm works.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.156 seconds)
+   **Total running time of the script:** (0 minutes 0.145 seconds)
 
 
 .. _sphx_glr_download_auto_examples_layers_plot_neighbor_search.py:

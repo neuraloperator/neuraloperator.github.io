@@ -44,7 +44,7 @@ We first import our `neuralop` library and required dependencies.
     import matplotlib.pyplot as plt
     import matplotlib.animation as animation
 
-    from neuralop.losses.differentiation import FiniteDiff  
+    from neuralop.losses.differentiation import FiniteDiff
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -72,22 +72,22 @@ We aim to solve the 2D diffusion advection equation:
 Where :math:`f(x,y,t)` is a source term and :math:`c_x` and :math:`c_y` are advection speeds in x and y.
 We set simulation parameters below:
 
-.. GENERATED FROM PYTHON SOURCE LINES 41-69
+.. GENERATED FROM PYTHON SOURCE LINES 41-72
 
 .. code-block:: Python
 
 
     ## Simulation parameters
-    Lx, Ly = 2.0, 2.0   # Domain lengths
-    nx, ny = 64, 64   # Grid resolution
-    T = 1.6    # Total simulation time
+    Lx, Ly = 2.0, 2.0  # Domain lengths
+    nx, ny = 64, 64  # Grid resolution
+    T = 1.6  # Total simulation time
     dt = 0.001  # Time step
-    nu = 0.02   # diffusion coefficient
+    nu = 0.02  # diffusion coefficient
     cx, cy = 1.0, 0.6  # advection speeds
 
     ## Create grid
-    X = torch.linspace(0, Lx, nx, device=device).repeat(ny, 1).T 
-    Y = torch.linspace(0, Ly, ny, device=device).repeat(nx, 1)  
+    X = torch.linspace(0, Lx, nx, device=device).repeat(ny, 1).T
+    Y = torch.linspace(0, Ly, ny, device=device).repeat(nx, 1)
     dx = Lx / (nx - 1)
     dy = Ly / (ny - 1)
     nt = int(T / dt)
@@ -97,9 +97,12 @@ We set simulation parameters below:
 
 
     ## Initial condition and source term
-    u = (-torch.sin(2 * np.pi * Y) * torch.cos(2 * np.pi * X)
-            + 0.3 * torch.exp(-((X - 0.75)**2 + (Y - 0.5)**2) / 0.02)
-            - 0.3 * torch.exp(-((X - 1.25)**2 + (Y - 1.5)**2) / 0.02)).to(device)
+    u = (
+        -torch.sin(2 * np.pi * Y) * torch.cos(2 * np.pi * X)
+        + 0.3 * torch.exp(-((X - 0.75) ** 2 + (Y - 0.5) ** 2) / 0.02)
+        - 0.3 * torch.exp(-((X - 1.25) ** 2 + (Y - 1.5) ** 2) / 0.02)
+    ).to(device)
+
 
     def source_term(X, Y, t):
         return 0.2 * torch.sin(3 * np.pi * X) * torch.cos(3 * np.pi * Y) * torch.cos(4 * np.pi * t)
@@ -111,7 +114,7 @@ We set simulation parameters below:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 70-76
+.. GENERATED FROM PYTHON SOURCE LINES 73-79
 
 .. raw:: html
 
@@ -120,7 +123,7 @@ We set simulation parameters below:
 Simulate evolution using numerical solver
 -----------------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 76-95
+.. GENERATED FROM PYTHON SOURCE LINES 79-97
 
 .. code-block:: Python
 
@@ -128,7 +131,6 @@ Simulate evolution using numerical solver
 
     t = torch.tensor(0.0)
     for _ in range(nt):
-    
         # Compute derivatives
         u_x = fd.dx(u)
         u_y = fd.dy(u)
@@ -150,7 +152,7 @@ Simulate evolution using numerical solver
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 96-102
+.. GENERATED FROM PYTHON SOURCE LINES 98-104
 
 .. raw:: html
 
@@ -159,13 +161,15 @@ Simulate evolution using numerical solver
 Animate our solution
 --------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 102-119
+.. GENERATED FROM PYTHON SOURCE LINES 104-125
 
 .. code-block:: Python
 
 
     num_frames = 100
-    frame_indices = torch.linspace(0, len(u_evolution) - 1, num_frames, dtype=torch.int).cpu().numpy()
+    frame_indices = (
+        torch.linspace(0, len(u_evolution) - 1, num_frames, dtype=torch.int).cpu().numpy()
+    )
     u_frames = u_evolution[frame_indices]
 
     fig, ax = plt.subplots(figsize=(6, 6))
@@ -173,12 +177,14 @@ Animate our solution
     ax.set_title("Advection-Diffusion: u")
     plt.colorbar(cmap_u, ax=ax, shrink=0.75)
 
+
     def update(frame):
         cmap_u.set_data(u_frames[frame])
         ax.set_title(f"Time: {frame_indices[frame] * dt:.3f}")
         ax.set_xticks([])
         ax.set_yticks([])
-        return cmap_u,
+        return (cmap_u,)
+
 
     ani = animation.FuncAnimation(fig, update, frames=len(u_frames), interval=50, blit=False)
 
@@ -372,42 +378,42 @@ Animate our solution
      </style>
 
      <div class="animation">
-       <img id="_anim_img91ecb908cc7d4cc5ae35d5eabf6ad8ea">
+       <img id="_anim_imgfd3c681054914830b47deaa7b7d58309">
        <div class="anim-controls">
-         <input id="_anim_slider91ecb908cc7d4cc5ae35d5eabf6ad8ea" type="range" class="anim-slider"
+         <input id="_anim_sliderfd3c681054914830b47deaa7b7d58309" type="range" class="anim-slider"
                 name="points" min="0" max="1" step="1" value="0"
-                oninput="anim91ecb908cc7d4cc5ae35d5eabf6ad8ea.set_frame(parseInt(this.value));">
+                oninput="animfd3c681054914830b47deaa7b7d58309.set_frame(parseInt(this.value));">
          <div class="anim-buttons">
-           <button title="Decrease speed" aria-label="Decrease speed" onclick="anim91ecb908cc7d4cc5ae35d5eabf6ad8ea.slower()">
+           <button title="Decrease speed" aria-label="Decrease speed" onclick="animfd3c681054914830b47deaa7b7d58309.slower()">
                <i class="fa fa-minus"></i></button>
-           <button title="First frame" aria-label="First frame" onclick="anim91ecb908cc7d4cc5ae35d5eabf6ad8ea.first_frame()">
+           <button title="First frame" aria-label="First frame" onclick="animfd3c681054914830b47deaa7b7d58309.first_frame()">
              <i class="fa fa-fast-backward"></i></button>
-           <button title="Previous frame" aria-label="Previous frame" onclick="anim91ecb908cc7d4cc5ae35d5eabf6ad8ea.previous_frame()">
+           <button title="Previous frame" aria-label="Previous frame" onclick="animfd3c681054914830b47deaa7b7d58309.previous_frame()">
                <i class="fa fa-step-backward"></i></button>
-           <button title="Play backwards" aria-label="Play backwards" onclick="anim91ecb908cc7d4cc5ae35d5eabf6ad8ea.reverse_animation()">
+           <button title="Play backwards" aria-label="Play backwards" onclick="animfd3c681054914830b47deaa7b7d58309.reverse_animation()">
                <i class="fa fa-play fa-flip-horizontal"></i></button>
-           <button title="Pause" aria-label="Pause" onclick="anim91ecb908cc7d4cc5ae35d5eabf6ad8ea.pause_animation()">
+           <button title="Pause" aria-label="Pause" onclick="animfd3c681054914830b47deaa7b7d58309.pause_animation()">
                <i class="fa fa-pause"></i></button>
-           <button title="Play" aria-label="Play" onclick="anim91ecb908cc7d4cc5ae35d5eabf6ad8ea.play_animation()">
+           <button title="Play" aria-label="Play" onclick="animfd3c681054914830b47deaa7b7d58309.play_animation()">
                <i class="fa fa-play"></i></button>
-           <button title="Next frame" aria-label="Next frame" onclick="anim91ecb908cc7d4cc5ae35d5eabf6ad8ea.next_frame()">
+           <button title="Next frame" aria-label="Next frame" onclick="animfd3c681054914830b47deaa7b7d58309.next_frame()">
                <i class="fa fa-step-forward"></i></button>
-           <button title="Last frame" aria-label="Last frame" onclick="anim91ecb908cc7d4cc5ae35d5eabf6ad8ea.last_frame()">
+           <button title="Last frame" aria-label="Last frame" onclick="animfd3c681054914830b47deaa7b7d58309.last_frame()">
                <i class="fa fa-fast-forward"></i></button>
-           <button title="Increase speed" aria-label="Increase speed" onclick="anim91ecb908cc7d4cc5ae35d5eabf6ad8ea.faster()">
+           <button title="Increase speed" aria-label="Increase speed" onclick="animfd3c681054914830b47deaa7b7d58309.faster()">
                <i class="fa fa-plus"></i></button>
          </div>
-         <form title="Repetition mode" aria-label="Repetition mode" action="#n" name="_anim_loop_select91ecb908cc7d4cc5ae35d5eabf6ad8ea"
+         <form title="Repetition mode" aria-label="Repetition mode" action="#n" name="_anim_loop_selectfd3c681054914830b47deaa7b7d58309"
                class="anim-state">
-           <input type="radio" name="state" value="once" id="_anim_radio1_91ecb908cc7d4cc5ae35d5eabf6ad8ea"
+           <input type="radio" name="state" value="once" id="_anim_radio1_fd3c681054914830b47deaa7b7d58309"
                   >
-           <label for="_anim_radio1_91ecb908cc7d4cc5ae35d5eabf6ad8ea">Once</label>
-           <input type="radio" name="state" value="loop" id="_anim_radio2_91ecb908cc7d4cc5ae35d5eabf6ad8ea"
+           <label for="_anim_radio1_fd3c681054914830b47deaa7b7d58309">Once</label>
+           <input type="radio" name="state" value="loop" id="_anim_radio2_fd3c681054914830b47deaa7b7d58309"
                   checked>
-           <label for="_anim_radio2_91ecb908cc7d4cc5ae35d5eabf6ad8ea">Loop</label>
-           <input type="radio" name="state" value="reflect" id="_anim_radio3_91ecb908cc7d4cc5ae35d5eabf6ad8ea"
+           <label for="_anim_radio2_fd3c681054914830b47deaa7b7d58309">Loop</label>
+           <input type="radio" name="state" value="reflect" id="_anim_radio3_fd3c681054914830b47deaa7b7d58309"
                   >
-           <label for="_anim_radio3_91ecb908cc7d4cc5ae35d5eabf6ad8ea">Reflect</label>
+           <label for="_anim_radio3_fd3c681054914830b47deaa7b7d58309">Reflect</label>
          </form>
        </div>
      </div>
@@ -417,9 +423,9 @@ Animate our solution
        /* Instantiate the Animation class. */
        /* The IDs given should match those used in the template above. */
        (function() {
-         var img_id = "_anim_img91ecb908cc7d4cc5ae35d5eabf6ad8ea";
-         var slider_id = "_anim_slider91ecb908cc7d4cc5ae35d5eabf6ad8ea";
-         var loop_select_id = "_anim_loop_select91ecb908cc7d4cc5ae35d5eabf6ad8ea";
+         var img_id = "_anim_imgfd3c681054914830b47deaa7b7d58309";
+         var slider_id = "_anim_sliderfd3c681054914830b47deaa7b7d58309";
+         var loop_select_id = "_anim_loop_selectfd3c681054914830b47deaa7b7d58309";
          var frames = new Array(100);
     
        frames[0] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAJYCAYAAAC+ZpjcAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
@@ -38413,7 +38419,7 @@ Animate our solution
          /* set a timeout to make sure all the above elements are created before
             the object is initialized. */
          setTimeout(function() {
-             anim91ecb908cc7d4cc5ae35d5eabf6ad8ea = new Animation(frames, img_id, slider_id, 50.0,
+             animfd3c681054914830b47deaa7b7d58309 = new Animation(frames, img_id, slider_id, 50.0,
                                       loop_select_id);
          }, 0);
        })()
@@ -38427,7 +38433,7 @@ Animate our solution
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 9.657 seconds)
+   **Total running time of the script:** (0 minutes 9.313 seconds)
 
 
 .. _sphx_glr_download_auto_examples_data_gen_plot_diffusion_advection_solver.py:

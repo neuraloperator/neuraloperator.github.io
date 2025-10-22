@@ -55,7 +55,7 @@ We import the necessary modules for FLOPS counting and model creation
 
     from neuralop.models import FNO
 
-    device = 'cpu'
+    device = "cpu"
 
 
 
@@ -81,15 +81,17 @@ Creating the FNO model for analysis
 ------------------------------------
 We create a moderately-sized FNO model to demonstrate FLOPS counting
 
-.. GENERATED FROM PYTHON SOURCE LINES 45-56
+.. GENERATED FROM PYTHON SOURCE LINES 45-58
 
 .. code-block:: Python
 
-    fno = FNO(n_modes=(64,64), 
-              in_channels=1, 
-              out_channels=1, 
-              hidden_channels=64, 
-              projection_channel_ratio=1)
+    fno = FNO(
+        n_modes=(64, 64),
+        in_channels=1,
+        out_channels=1,
+        hidden_channels=64,
+        projection_channel_ratio=1,
+    )
 
     # Create a sample input tensor for FLOPS counting
     batch_size = 4
@@ -103,7 +105,7 @@ We create a moderately-sized FNO model to demonstrate FLOPS counting
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 57-64
+.. GENERATED FROM PYTHON SOURCE LINES 59-66
 
 .. raw:: html
 
@@ -113,7 +115,7 @@ Counting FLOPS for forward and backward passes
 ----------------------------------------------
 We use the FlopTensorDispatchMode to count FLOPS during both forward and backward passes
 
-.. GENERATED FROM PYTHON SOURCE LINES 64-74
+.. GENERATED FROM PYTHON SOURCE LINES 66-76
 
 .. code-block:: Python
 
@@ -121,7 +123,7 @@ We use the FlopTensorDispatchMode to count FLOPS during both forward and backwar
         # Count forward pass FLOPS
         res = fno(model_input).mean()
         fno_forward_flops = deepcopy(ftdm.flop_counts)
-    
+
         # Reset the counter and count backward pass FLOPS
         ftdm.reset()
         res.backward()
@@ -134,7 +136,7 @@ We use the FlopTensorDispatchMode to count FLOPS during both forward and backwar
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 75-83
+.. GENERATED FROM PYTHON SOURCE LINES 77-85
 
 .. raw:: html
 
@@ -145,7 +147,7 @@ Analyzing FLOPS breakdown
 The output is organized as a defaultdict object that counts the FLOPS used in each submodule.
 This gives us detailed insight into which parts of the model are computationally expensive.
 
-.. GENERATED FROM PYTHON SOURCE LINES 83-86
+.. GENERATED FROM PYTHON SOURCE LINES 85-88
 
 .. code-block:: Python
 
@@ -161,12 +163,12 @@ This gives us detailed insight into which parts of the model are computationally
  .. code-block:: none
 
     Forward pass FLOPS breakdown:
-    defaultdict(<function FlopTensorDispatchMode.__init__.<locals>.<lambda> at 0x7f09462785e0>, {'': defaultdict(<class 'int'>, {'convolution.default': 2982150144, 'bmm.default': 138412032}), 'lifting': defaultdict(<class 'int'>, {'convolution.default': 562036736}), 'lifting.fcs.0': defaultdict(<class 'int'>, {'convolution.default': 25165824}), 'lifting.fcs.1': defaultdict(<class 'int'>, {'convolution.default': 536870912}), 'fno_blocks': defaultdict(<class 'int'>, {'convolution.default': 2147483648, 'bmm.default': 138412032}), 'fno_blocks.fno_skips.0': defaultdict(<class 'int'>, {'convolution.default': 268435456}), 'fno_blocks.fno_skips.0.conv': defaultdict(<class 'int'>, {'convolution.default': 268435456}), 'fno_blocks.convs.0': defaultdict(<class 'int'>, {'bmm.default': 34603008}), 'fno_blocks.channel_mlp.0': defaultdict(<class 'int'>, {'convolution.default': 268435456}), 'fno_blocks.channel_mlp.0.fcs.0': defaultdict(<class 'int'>, {'convolution.default': 134217728}), 'fno_blocks.channel_mlp.0.fcs.1': defaultdict(<class 'int'>, {'convolution.default': 134217728}), 'fno_blocks.fno_skips.1': defaultdict(<class 'int'>, {'convolution.default': 268435456}), 'fno_blocks.fno_skips.1.conv': defaultdict(<class 'int'>, {'convolution.default': 268435456}), 'fno_blocks.convs.1': defaultdict(<class 'int'>, {'bmm.default': 34603008}), 'fno_blocks.channel_mlp.1': defaultdict(<class 'int'>, {'convolution.default': 268435456}), 'fno_blocks.channel_mlp.1.fcs.0': defaultdict(<class 'int'>, {'convolution.default': 134217728}), 'fno_blocks.channel_mlp.1.fcs.1': defaultdict(<class 'int'>, {'convolution.default': 134217728}), 'fno_blocks.fno_skips.2': defaultdict(<class 'int'>, {'convolution.default': 268435456}), 'fno_blocks.fno_skips.2.conv': defaultdict(<class 'int'>, {'convolution.default': 268435456}), 'fno_blocks.convs.2': defaultdict(<class 'int'>, {'bmm.default': 34603008}), 'fno_blocks.channel_mlp.2': defaultdict(<class 'int'>, {'convolution.default': 268435456}), 'fno_blocks.channel_mlp.2.fcs.0': defaultdict(<class 'int'>, {'convolution.default': 134217728}), 'fno_blocks.channel_mlp.2.fcs.1': defaultdict(<class 'int'>, {'convolution.default': 134217728}), 'fno_blocks.fno_skips.3': defaultdict(<class 'int'>, {'convolution.default': 268435456}), 'fno_blocks.fno_skips.3.conv': defaultdict(<class 'int'>, {'convolution.default': 268435456}), 'fno_blocks.convs.3': defaultdict(<class 'int'>, {'bmm.default': 34603008}), 'fno_blocks.channel_mlp.3': defaultdict(<class 'int'>, {'convolution.default': 268435456}), 'fno_blocks.channel_mlp.3.fcs.0': defaultdict(<class 'int'>, {'convolution.default': 134217728}), 'fno_blocks.channel_mlp.3.fcs.1': defaultdict(<class 'int'>, {'convolution.default': 134217728}), 'projection': defaultdict(<class 'int'>, {'convolution.default': 272629760}), 'projection.fcs.0': defaultdict(<class 'int'>, {'convolution.default': 268435456}), 'projection.fcs.1': defaultdict(<class 'int'>, {'convolution.default': 4194304})})
+    defaultdict(<function FlopTensorDispatchMode.__init__.<locals>.<lambda> at 0x7f945fad0400>, {'': defaultdict(<class 'int'>, {'convolution.default': 2982150144, 'bmm.default': 138412032}), 'lifting': defaultdict(<class 'int'>, {'convolution.default': 562036736}), 'lifting.fcs.0': defaultdict(<class 'int'>, {'convolution.default': 25165824}), 'lifting.fcs.1': defaultdict(<class 'int'>, {'convolution.default': 536870912}), 'fno_blocks': defaultdict(<class 'int'>, {'convolution.default': 2147483648, 'bmm.default': 138412032}), 'fno_blocks.fno_skips.0': defaultdict(<class 'int'>, {'convolution.default': 268435456}), 'fno_blocks.fno_skips.0.conv': defaultdict(<class 'int'>, {'convolution.default': 268435456}), 'fno_blocks.convs.0': defaultdict(<class 'int'>, {'bmm.default': 34603008}), 'fno_blocks.channel_mlp.0': defaultdict(<class 'int'>, {'convolution.default': 268435456}), 'fno_blocks.channel_mlp.0.fcs.0': defaultdict(<class 'int'>, {'convolution.default': 134217728}), 'fno_blocks.channel_mlp.0.fcs.1': defaultdict(<class 'int'>, {'convolution.default': 134217728}), 'fno_blocks.fno_skips.1': defaultdict(<class 'int'>, {'convolution.default': 268435456}), 'fno_blocks.fno_skips.1.conv': defaultdict(<class 'int'>, {'convolution.default': 268435456}), 'fno_blocks.convs.1': defaultdict(<class 'int'>, {'bmm.default': 34603008}), 'fno_blocks.channel_mlp.1': defaultdict(<class 'int'>, {'convolution.default': 268435456}), 'fno_blocks.channel_mlp.1.fcs.0': defaultdict(<class 'int'>, {'convolution.default': 134217728}), 'fno_blocks.channel_mlp.1.fcs.1': defaultdict(<class 'int'>, {'convolution.default': 134217728}), 'fno_blocks.fno_skips.2': defaultdict(<class 'int'>, {'convolution.default': 268435456}), 'fno_blocks.fno_skips.2.conv': defaultdict(<class 'int'>, {'convolution.default': 268435456}), 'fno_blocks.convs.2': defaultdict(<class 'int'>, {'bmm.default': 34603008}), 'fno_blocks.channel_mlp.2': defaultdict(<class 'int'>, {'convolution.default': 268435456}), 'fno_blocks.channel_mlp.2.fcs.0': defaultdict(<class 'int'>, {'convolution.default': 134217728}), 'fno_blocks.channel_mlp.2.fcs.1': defaultdict(<class 'int'>, {'convolution.default': 134217728}), 'fno_blocks.fno_skips.3': defaultdict(<class 'int'>, {'convolution.default': 268435456}), 'fno_blocks.fno_skips.3.conv': defaultdict(<class 'int'>, {'convolution.default': 268435456}), 'fno_blocks.convs.3': defaultdict(<class 'int'>, {'bmm.default': 34603008}), 'fno_blocks.channel_mlp.3': defaultdict(<class 'int'>, {'convolution.default': 268435456}), 'fno_blocks.channel_mlp.3.fcs.0': defaultdict(<class 'int'>, {'convolution.default': 134217728}), 'fno_blocks.channel_mlp.3.fcs.1': defaultdict(<class 'int'>, {'convolution.default': 134217728}), 'projection': defaultdict(<class 'int'>, {'convolution.default': 272629760}), 'projection.fcs.0': defaultdict(<class 'int'>, {'convolution.default': 268435456}), 'projection.fcs.1': defaultdict(<class 'int'>, {'convolution.default': 4194304})})
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 87-95
+.. GENERATED FROM PYTHON SOURCE LINES 89-97
 
 .. raw:: html
 
@@ -174,25 +176,28 @@ This gives us detailed insight into which parts of the model are computationally
 
 Finding maximum FLOPS usage
 ----------------------------
-To check the maximum FLOPS used during the forward pass, let's create a recursive function 
+To check the maximum FLOPS used during the forward pass, let's create a recursive function
 to search the nested dictionary structure:
 
-.. GENERATED FROM PYTHON SOURCE LINES 95-111
+.. GENERATED FROM PYTHON SOURCE LINES 97-116
 
 .. code-block:: Python
 
     from collections import defaultdict
-    def get_max_flops(flop_count_dict, max_value = 0):
+
+
+    def get_max_flops(flop_count_dict, max_value=0):
         for _, value in flop_count_dict.items():
             # If not nested, compare leaf value to max
             if isinstance(value, int):
                 max_value = max(max_value, value)
-        
+
             # Otherwise compute recursive max value below node
             elif isinstance(value, defaultdict):
                 new_val = get_max_flops(value, max_value)
                 max_value = max(max_value, new_val)
         return max_value
+
 
     print(f"Max FLOPS required for FNO.forward: {get_max_flops(fno_forward_flops)}")
     print(f"Max FLOPS required for FNO.backward: {get_max_flops(fno_backward_flops)}")
@@ -214,7 +219,7 @@ to search the nested dictionary structure:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 2.657 seconds)
+   **Total running time of the script:** (0 minutes 2.650 seconds)
 
 
 .. _sphx_glr_download_auto_examples_training_plot_count_flops.py:
