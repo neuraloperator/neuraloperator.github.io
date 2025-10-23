@@ -85,11 +85,11 @@ fundamental variables in shallow water dynamics.
 
     train_loader, test_loaders = load_spherical_swe(
         n_train=200,
-        batch_size=8,
+        batch_size=32,
         train_resolution=(32, 64),
         test_resolutions=[(32, 64), (64, 128)],
-        n_tests=[50, 50],
-        test_batch_sizes=[10, 10],
+        n_tests=[40, 40],
+        test_batch_sizes=[40, 40],
     )
 
 
@@ -101,9 +101,9 @@ fundamental variables in shallow water dynamics.
 
  .. code-block:: none
 
-    Loading train dataloader at resolution (32, 64) with 200 samples and batch-size=8
-    Loading test dataloader at resolution (32, 64) with 50 samples and batch-size=10
-    Loading test dataloader at resolution (64, 128) with 50 samples and batch-size=10
+    Loading train dataloader at resolution (32, 64) with 200 samples and batch-size=32
+    Loading test dataloader at resolution (32, 64) with 40 samples and batch-size=40
+    Loading test dataloader at resolution (64, 128) with 40 samples and batch-size=40
 
 
 
@@ -117,7 +117,7 @@ fundamental variables in shallow water dynamics.
 Creating the Spherical FNO model
 ---------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 66-83
+.. GENERATED FROM PYTHON SOURCE LINES 66-84
 
 .. code-block:: Python
 
@@ -129,6 +129,7 @@ Creating the Spherical FNO model
         out_channels=3,
         hidden_channels=64,
         domain_padding=[0.05, 0.05],
+        n_layers=2,
     )
     model = model.to(device)
 
@@ -147,12 +148,12 @@ Creating the Spherical FNO model
  .. code-block:: none
 
 
-    Our model has 575683 parameters.
+    Our model has 296707 parameters.
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 84-91
+.. GENERATED FROM PYTHON SOURCE LINES 85-92
 
 .. raw:: html
 
@@ -162,7 +163,7 @@ Creating the optimizer and scheduler
 ------------------------------------
 We use AdamW optimizer with a lower learning rate for spherical data
 
-.. GENERATED FROM PYTHON SOURCE LINES 91-94
+.. GENERATED FROM PYTHON SOURCE LINES 92-95
 
 .. code-block:: Python
 
@@ -176,7 +177,7 @@ We use AdamW optimizer with a lower learning rate for spherical data
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 95-103
+.. GENERATED FROM PYTHON SOURCE LINES 96-104
 
 .. raw:: html
 
@@ -187,7 +188,7 @@ Setting up loss functions
 For spherical data, we use L2 loss with sum reduction to handle the varying
 grid sizes across different latitudes on the sphere
 
-.. GENERATED FROM PYTHON SOURCE LINES 103-109
+.. GENERATED FROM PYTHON SOURCE LINES 104-110
 
 .. code-block:: Python
 
@@ -204,7 +205,7 @@ grid sizes across different latitudes on the sphere
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 110-121
+.. GENERATED FROM PYTHON SOURCE LINES 111-122
 
 .. code-block:: Python
 
@@ -234,7 +235,7 @@ grid sizes across different latitudes on the sphere
       (domain_padding): DomainPadding()
       (fno_blocks): FNOBlocks(
         (convs): ModuleList(
-          (0-3): 4 x SphericalConv(
+          (0-1): 2 x SphericalConv(
             (weight): ComplexDenseTensor(shape=torch.Size([64, 64, 16]), rank=None)
             (sht_handle): SHT(
               (_SHT_cache): ModuleDict()
@@ -243,12 +244,12 @@ grid sizes across different latitudes on the sphere
           )
         )
         (fno_skips): ModuleList(
-          (0-3): 4 x Flattened1dConv(
+          (0-1): 2 x Flattened1dConv(
             (conv): Conv1d(64, 64, kernel_size=(1,), stride=(1,), bias=False)
           )
         )
         (channel_mlp): ModuleList(
-          (0-3): 4 x ChannelMLP(
+          (0-1): 2 x ChannelMLP(
             (fcs): ModuleList(
               (0): Conv1d(64, 32, kernel_size=(1,), stride=(1,))
               (1): Conv1d(32, 64, kernel_size=(1,), stride=(1,))
@@ -256,7 +257,7 @@ grid sizes across different latitudes on the sphere
           )
         )
         (channel_mlp_skips): ModuleList(
-          (0-3): 4 x SoftGating()
+          (0-1): 2 x SoftGating()
         )
       )
       (lifting): ChannelMLP(
@@ -285,18 +286,18 @@ grid sizes across different latitudes on the sphere
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f948431d010>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fb7c29874d0>
 
     ### LOSSES ###
 
-     * Train: <neuralop.losses.data_losses.LpLoss object at 0x7f948431d160>
+     * Train: <neuralop.losses.data_losses.LpLoss object at 0x7fb7c2987750>
 
-     * Test: {'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f948431d160>}
-
-
+     * Test: {'l2': <neuralop.losses.data_losses.LpLoss object at 0x7fb7c2987750>}
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 122-129
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 123-130
 
 .. raw:: html
 
@@ -306,7 +307,7 @@ Creating the trainer
 ---------------------
 We create a Trainer object that handles the training loop for spherical data
 
-.. GENERATED FROM PYTHON SOURCE LINES 129-139
+.. GENERATED FROM PYTHON SOURCE LINES 130-140
 
 .. code-block:: Python
 
@@ -327,7 +328,7 @@ We create a Trainer object that handles the training loop for spherical data
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 140-149
+.. GENERATED FROM PYTHON SOURCE LINES 141-150
 
 .. raw:: html
 
@@ -339,7 +340,7 @@ We train the model on the spherical shallow water equations dataset.
 The trainer will handle the forward pass through the SFNO, compute the L2 loss,
 backpropagate, and evaluate on test data.
 
-.. GENERATED FROM PYTHON SOURCE LINES 149-161
+.. GENERATED FROM PYTHON SOURCE LINES 150-162
 
 .. code-block:: Python
 
@@ -364,30 +365,30 @@ backpropagate, and evaluate on test data.
  .. code-block:: none
 
     Training on 200 samples
-    Testing on [50, 50] samples         on resolutions [(32, 64), (64, 128)].
+    Testing on [40, 40] samples         on resolutions [(32, 64), (64, 128)].
     /opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/torch/nn/modules/module.py:1786: UserWarning: FNO.forward() received unexpected keyword arguments: ['y']. These arguments will be ignored.
       return forward_call(*args, **kwargs)
-    Raw outputs of shape torch.Size([8, 3, 32, 64])
+    Raw outputs of shape torch.Size([32, 3, 32, 64])
     /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:536: UserWarning: LpLoss.__call__() received unexpected keyword arguments: ['x']. These arguments will be ignored.
       loss += training_loss(out, **sample)
-    [0] time=6.02, avg_loss=1.7993, train_err=14.3940
-    Eval: (32, 64)_l2=1.2163, (64, 128)_l2=2.3362
-    [5] time=6.12, avg_loss=0.5140, train_err=4.1122
-    Eval: (32, 64)_l2=0.5039, (64, 128)_l2=2.3244
-    [10] time=6.12, avg_loss=0.3607, train_err=2.8857
-    Eval: (32, 64)_l2=0.3852, (64, 128)_l2=2.3896
-    [15] time=6.09, avg_loss=0.2561, train_err=2.0485
-    Eval: (32, 64)_l2=0.2831, (64, 128)_l2=2.3846
-    [20] time=6.11, avg_loss=0.2011, train_err=1.6087
-    Eval: (32, 64)_l2=0.2083, (64, 128)_l2=2.3390
-    [25] time=6.03, avg_loss=0.1652, train_err=1.3216
-    Eval: (32, 64)_l2=0.1910, (64, 128)_l2=2.3287
+    [0] time=3.53, avg_loss=2.5228, train_err=72.0788
+    Eval: (32, 64)_l2=1.8109, (64, 128)_l2=2.2560
+    [5] time=3.52, avg_loss=0.8854, train_err=25.2974
+    Eval: (32, 64)_l2=0.8866, (64, 128)_l2=2.5050
+    [10] time=3.48, avg_loss=0.6637, train_err=18.9629
+    Eval: (32, 64)_l2=0.6947, (64, 128)_l2=2.4491
+    [15] time=3.45, avg_loss=0.5366, train_err=15.3302
+    Eval: (32, 64)_l2=0.5969, (64, 128)_l2=2.3813
+    [20] time=3.48, avg_loss=0.4739, train_err=13.5407
+    Eval: (32, 64)_l2=0.5328, (64, 128)_l2=2.4176
+    [25] time=3.52, avg_loss=0.4327, train_err=12.3628
+    Eval: (32, 64)_l2=0.5153, (64, 128)_l2=2.4114
 
-    {'train_err': 1.2488742065429688, 'avg_loss': 0.1561092758178711, 'avg_lasso_loss': None, 'epoch_train_time': 6.225597188999984}
+    {'train_err': 12.268861498151507, 'avg_loss': 0.4294101524353027, 'avg_lasso_loss': None, 'epoch_train_time': 3.497745797999869}
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 162-177
+.. GENERATED FROM PYTHON SOURCE LINES 163-178
 
 .. raw:: html
 
@@ -405,12 +406,12 @@ ii) can be trained quickly on CPU
 
 In practice we would train a Neural Operator on one or multiple GPUs
 
-.. GENERATED FROM PYTHON SOURCE LINES 177-215
+.. GENERATED FROM PYTHON SOURCE LINES 178-220
 
 .. code-block:: Python
 
 
-    fig = plt.figure(figsize=(7, 7))
+    fig = plt.figure(figsize=(14, 7))
     for index, resolution in enumerate([(32, 64), (64, 128)]):
         test_samples = test_loaders[resolution].dataset
         data = test_samples[0]
@@ -430,21 +431,25 @@ In practice we would train a Neural Operator on one or multiple GPUs
         plt.xticks([], [])
         plt.yticks([], [])
 
+        # Compute the min and max to use consistent color mapping
+        vmin = y.min()
+        vmax = y.max()
+
         # Plot ground-truth fields
         ax = fig.add_subplot(2, 3, index * 3 + 2)
-        ax.imshow(y)
+        im_gt = ax.imshow(y, vmin=vmin, vmax=vmax)
         ax.set_title("Ground-truth y")
         plt.xticks([], [])
         plt.yticks([], [])
 
         # Plot model prediction
         ax = fig.add_subplot(2, 3, index * 3 + 3)
-        ax.imshow(out)
+        im_pred = ax.imshow(out, vmin=vmin, vmax=vmax)
         ax.set_title("SFNO prediction")
         plt.xticks([], [])
         plt.yticks([], [])
 
-    fig.suptitle("SFNO predictions on spherical shallow water equations", y=0.98)
+    fig.suptitle("SFNO predictions on spherical shallow water equations", y=0.98, fontsize=24)
     plt.tight_layout()
     fig.show()
 
@@ -462,7 +467,7 @@ In practice we would train a Neural Operator on one or multiple GPUs
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (3 minutes 23.086 seconds)
+   **Total running time of the script:** (1 minutes 57.135 seconds)
 
 
 .. _sphx_glr_download_auto_examples_models_plot_SFNO_swe.py:

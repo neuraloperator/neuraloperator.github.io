@@ -34,8 +34,8 @@
  
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Training an FNO on Darcy-Flow" href="plot_FNO_darcy.html" />
-    <link rel="prev" title="Training a SFNO on the spherical Shallow Water equations" href="plot_SFNO_swe.html" />
+    <link rel="next" title="Training a SFNO on the spherical Shallow Water equations" href="plot_SFNO_swe.html" />
+    <link rel="prev" title="Models" href="index.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   </head>
@@ -459,13 +459,13 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f9470cd6ad0&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fb7bcdec2f0&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f947050a270&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fb7bcdec590&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f947050a270&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f946bfede50&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fb7bcdec590&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fb7bcdec440&gt;}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -514,22 +514,22 @@ Testing on [50, 50] samples         on resolutions [16, 32].
 Raw outputs of shape torch.Size([32, 1, 16, 16])
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:536: UserWarning: H1Loss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
   loss += training_loss(out, **sample)
-[0] time=4.78, avg_loss=0.6279, train_err=19.6231
+[0] time=4.90, avg_loss=0.6815, train_err=21.2965
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:581: UserWarning: LpLoss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
   val_loss = loss(out, **sample)
-Eval: 16_h1=0.4184, 16_l2=0.2670, 32_h1=0.5756, 32_l2=0.2909
-[5] time=4.72, avg_loss=0.2509, train_err=7.8392
-Eval: 16_h1=0.2317, 16_l2=0.1560, 32_h1=0.4333, 32_l2=0.1990
-[10] time=4.82, avg_loss=0.1990, train_err=6.2181
-Eval: 16_h1=0.2916, 16_l2=0.2057, 32_h1=0.4681, 32_l2=0.2499
-[15] time=4.79, avg_loss=0.1697, train_err=5.3018
-Eval: 16_h1=0.2228, 16_l2=0.1396, 32_h1=0.4168, 32_l2=0.1796
-[20] time=4.72, avg_loss=0.1346, train_err=4.2050
-Eval: 16_h1=0.2205, 16_l2=0.1286, 32_h1=0.3854, 32_l2=0.1499
-[25] time=4.73, avg_loss=0.1012, train_err=3.1633
-Eval: 16_h1=0.2082, 16_l2=0.1227, 32_h1=0.3961, 32_l2=0.1603
+Eval: 16_h1=0.4432, 16_l2=0.3333, 32_h1=0.6444, 32_l2=0.3602
+[5] time=4.66, avg_loss=0.2197, train_err=6.8654
+Eval: 16_h1=0.3060, 16_l2=0.2268, 32_h1=0.4243, 32_l2=0.2449
+[10] time=4.67, avg_loss=0.1743, train_err=5.4477
+Eval: 16_h1=0.2215, 16_l2=0.1267, 32_h1=0.4078, 32_l2=0.1656
+[15] time=4.67, avg_loss=0.1883, train_err=5.8848
+Eval: 16_h1=0.2363, 16_l2=0.1478, 32_h1=0.4090, 32_l2=0.1827
+[20] time=4.64, avg_loss=0.1180, train_err=3.6878
+Eval: 16_h1=0.2192, 16_l2=0.1219, 32_h1=0.3685, 32_l2=0.1310
+[25] time=4.66, avg_loss=0.0984, train_err=3.0764
+Eval: 16_h1=0.1984, 16_l2=0.1088, 32_h1=0.3971, 32_l2=0.1464
 
-{&#39;train_err&#39;: 2.4650430642068386, &#39;avg_loss&#39;: 0.07888137805461884, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 4.783878876000017}
+{&#39;train_err&#39;: 2.4950771890580654, &#39;avg_loss&#39;: 0.07984247004985809, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 4.680224122000027}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -584,7 +584,7 @@ ii) can be trained quickly on CPU</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_UNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_UNO_darcy_001.png" alt="U-NO predictions on 32x32 Darcy-Flow data, Input x, Ground-truth y, U-NO prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 27.119 seconds)</p>
+<img src="../../_images/sphx_glr_plot_UNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_UNO_darcy_001.png" alt="U-NO predictions on 32x32 Darcy-Flow data, Input x, Ground-truth y, U-NO prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 25.773 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-models-plot-uno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/fee630be9801a5d2d76c0b9e3091063c/plot_UNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_UNO_darcy.ipynb</span></code></a></p>
@@ -606,16 +606,16 @@ ii) can be trained quickly on CPU</p>
       
         <nav class="pagination" role="navigation" aria-label="pagination">
     
-    <a class="button pagination-previous" href="plot_SFNO_swe.html" title="previous page" accesskey="p">
+    <a class="button pagination-previous" href="index.html" title="previous page" accesskey="p">
         <span class="icon">
             <i class="fa fa-arrow-circle-left"></i>
         </span>
-        <span>Training a SFNO on the spherical Shallow Water equations</span>
+        <span>Models</span>
     </a>
     
     
-    <a class="button pagination-next" href="plot_FNO_darcy.html" title="next page" accesskey="n">
-        <span>Training an FNO on Darcy-Flow </span>
+    <a class="button pagination-next" href="plot_SFNO_swe.html" title="next page" accesskey="n">
+        <span>Training a SFNO on the spherical Shallow Water equations </span>
         <span class="icon">
             <i class="fa fa-arrow-circle-right"></i>
         </span>

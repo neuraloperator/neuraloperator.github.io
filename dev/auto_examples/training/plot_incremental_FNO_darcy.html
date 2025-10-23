@@ -334,15 +334,15 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f9486e908a0&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fb7a92ede00&gt;
 
 ### LOSSES ###
 
 ### INCREMENTAL RESOLUTION + GRADIENT EXPLAINED ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f945fa9ca50&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fb7979a0a50&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f945fa9ca50&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f9486e90c30&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fb7979a0a50&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fb7a92edcd0&gt;}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -409,56 +409,56 @@ Testing on [50, 50] samples         on resolutions [16, 32].
 Raw outputs of shape torch.Size([16, 1, 8, 8])
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:536: UserWarning: H1Loss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
   loss += training_loss(out, **sample)
-[0] time=0.23, avg_loss=0.9318, train_err=13.3118
+[0] time=0.23, avg_loss=0.9379, train_err=13.3989
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:581: UserWarning: LpLoss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
   val_loss = loss(out, **sample)
-Eval: 16_h1=0.8827, 16_l2=0.5874, 32_h1=0.9259, 32_l2=0.5873
-[1] time=0.22, avg_loss=0.8006, train_err=11.4365
-Eval: 16_h1=0.8165, 16_l2=0.5173, 32_h1=0.9482, 32_l2=0.5280
-[2] time=0.22, avg_loss=0.7004, train_err=10.0054
+Eval: 16_h1=0.8951, 16_l2=0.5764, 32_h1=0.9397, 32_l2=0.5756
+[1] time=0.21, avg_loss=0.8235, train_err=11.7637
+Eval: 16_h1=0.8356, 16_l2=0.4704, 32_h1=1.0422, 32_l2=0.4983
+[2] time=0.21, avg_loss=0.6751, train_err=9.6441
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/incremental.py:244: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
 Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
   torch.Tensor(strength_vector),
-Eval: 16_h1=0.7950, 16_l2=0.4743, 32_h1=0.9423, 32_l2=0.4981
-[3] time=0.22, avg_loss=0.6206, train_err=8.8653
-Eval: 16_h1=0.7852, 16_l2=0.4837, 32_h1=1.0500, 32_l2=0.5271
-[4] time=0.22, avg_loss=0.5689, train_err=8.1276
-Eval: 16_h1=0.7247, 16_l2=0.4180, 32_h1=0.9306, 32_l2=0.4420
-[5] time=0.22, avg_loss=0.5335, train_err=7.6216
-Eval: 16_h1=0.8613, 16_l2=0.4858, 32_h1=1.0195, 32_l2=0.4936
-[6] time=0.22, avg_loss=0.6143, train_err=8.7755
-Eval: 16_h1=0.7839, 16_l2=0.4420, 32_h1=1.0910, 32_l2=0.4822
-[7] time=0.22, avg_loss=0.5233, train_err=7.4752
-Eval: 16_h1=0.6875, 16_l2=0.3879, 32_h1=0.9614, 32_l2=0.4019
-[8] time=0.22, avg_loss=0.4651, train_err=6.6437
-Eval: 16_h1=0.7380, 16_l2=0.4280, 32_h1=0.9908, 32_l2=0.4641
-[9] time=0.22, avg_loss=0.4921, train_err=7.0305
-Eval: 16_h1=0.6122, 16_l2=0.3301, 32_h1=0.8817, 32_l2=0.3643
+Eval: 16_h1=0.8407, 16_l2=0.4864, 32_h1=1.0523, 32_l2=0.5230
+[3] time=0.22, avg_loss=0.6172, train_err=8.8165
+Eval: 16_h1=0.7064, 16_l2=0.3904, 32_h1=0.9171, 32_l2=0.4216
+[4] time=0.21, avg_loss=0.5630, train_err=8.0428
+Eval: 16_h1=0.7321, 16_l2=0.4232, 32_h1=0.9270, 32_l2=0.4512
+[5] time=0.21, avg_loss=0.5213, train_err=7.4477
+Eval: 16_h1=0.8455, 16_l2=0.4952, 32_h1=1.0422, 32_l2=0.5151
+[6] time=0.22, avg_loss=0.5604, train_err=8.0060
+Eval: 16_h1=0.8722, 16_l2=0.4394, 32_h1=1.2960, 32_l2=0.4788
+[7] time=0.22, avg_loss=0.5087, train_err=7.2676
+Eval: 16_h1=0.6518, 16_l2=0.3533, 32_h1=0.9138, 32_l2=0.3902
+[8] time=0.21, avg_loss=0.4225, train_err=6.0350
+Eval: 16_h1=0.7022, 16_l2=0.3866, 32_h1=0.9870, 32_l2=0.4312
+[9] time=0.22, avg_loss=0.4486, train_err=6.4087
+Eval: 16_h1=0.6325, 16_l2=0.3323, 32_h1=0.9428, 32_l2=0.3703
 Incre Res Update: change index to 1
 Incre Res Update: change sub to 1
 Incre Res Update: change res to 16
-[10] time=0.30, avg_loss=0.5504, train_err=7.8630
-Eval: 16_h1=0.5325, 16_l2=0.3083, 32_h1=0.6541, 32_l2=0.3026
-[11] time=0.29, avg_loss=0.4830, train_err=6.8999
-Eval: 16_h1=0.5283, 16_l2=0.3205, 32_h1=0.6920, 32_l2=0.3283
-[12] time=0.29, avg_loss=0.4850, train_err=6.9286
-Eval: 16_h1=0.4260, 16_l2=0.2598, 32_h1=0.5716, 32_l2=0.2716
-[13] time=0.29, avg_loss=0.4050, train_err=5.7860
-Eval: 16_h1=0.4057, 16_l2=0.2474, 32_h1=0.5139, 32_l2=0.2546
-[14] time=0.29, avg_loss=0.3717, train_err=5.3094
-Eval: 16_h1=0.4374, 16_l2=0.2529, 32_h1=0.5919, 32_l2=0.2732
-[15] time=0.29, avg_loss=0.3959, train_err=5.6564
-Eval: 16_h1=0.3810, 16_l2=0.2314, 32_h1=0.4932, 32_l2=0.2315
-[16] time=0.29, avg_loss=0.3502, train_err=5.0026
-Eval: 16_h1=0.3735, 16_l2=0.2296, 32_h1=0.5418, 32_l2=0.2486
-[17] time=0.30, avg_loss=0.3359, train_err=4.7990
-Eval: 16_h1=0.4108, 16_l2=0.2454, 32_h1=0.5450, 32_l2=0.2481
-[18] time=0.29, avg_loss=0.3747, train_err=5.3524
-Eval: 16_h1=0.3694, 16_l2=0.2346, 32_h1=0.5085, 32_l2=0.2512
-[19] time=0.29, avg_loss=0.3278, train_err=4.6834
-Eval: 16_h1=0.3360, 16_l2=0.2134, 32_h1=0.4594, 32_l2=0.2243
+[10] time=0.30, avg_loss=0.5505, train_err=7.8647
+Eval: 16_h1=0.5113, 16_l2=0.2967, 32_h1=0.6253, 32_l2=0.2858
+[11] time=0.28, avg_loss=0.4654, train_err=6.6486
+Eval: 16_h1=0.5035, 16_l2=0.3235, 32_h1=0.6616, 32_l2=0.3382
+[12] time=0.29, avg_loss=0.4690, train_err=6.7004
+Eval: 16_h1=0.4196, 16_l2=0.2600, 32_h1=0.5457, 32_l2=0.2662
+[13] time=0.29, avg_loss=0.3872, train_err=5.5309
+Eval: 16_h1=0.3993, 16_l2=0.2503, 32_h1=0.5213, 32_l2=0.2664
+[14] time=0.29, avg_loss=0.3615, train_err=5.1648
+Eval: 16_h1=0.4214, 16_l2=0.2614, 32_h1=0.5556, 32_l2=0.2738
+[15] time=0.30, avg_loss=0.3779, train_err=5.3988
+Eval: 16_h1=0.3647, 16_l2=0.2222, 32_h1=0.4885, 32_l2=0.2301
+[16] time=0.29, avg_loss=0.3327, train_err=4.7523
+Eval: 16_h1=0.3624, 16_l2=0.2319, 32_h1=0.4977, 32_l2=0.2450
+[17] time=0.29, avg_loss=0.3194, train_err=4.5629
+Eval: 16_h1=0.3759, 16_l2=0.2348, 32_h1=0.4892, 32_l2=0.2361
+[18] time=0.29, avg_loss=0.3482, train_err=4.9740
+Eval: 16_h1=0.3483, 16_l2=0.2251, 32_h1=0.4770, 32_l2=0.2444
+[19] time=0.29, avg_loss=0.3083, train_err=4.4047
+Eval: 16_h1=0.3184, 16_l2=0.2044, 32_h1=0.4294, 32_l2=0.2149
 
-{&#39;train_err&#39;: 4.683351618903024, &#39;avg_loss&#39;: 0.3278346133232117, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 0.29132556599995496, &#39;16_h1&#39;: tensor(0.3360), &#39;16_l2&#39;: tensor(0.2134), &#39;32_h1&#39;: tensor(0.4594), &#39;32_l2&#39;: tensor(0.2243)}
+{&#39;train_err&#39;: 4.404683658054897, &#39;avg_loss&#39;: 0.3083278560638428, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 0.2865774350000265, &#39;16_h1&#39;: tensor(0.3184), &#39;16_l2&#39;: tensor(0.2044), &#39;32_h1&#39;: tensor(0.4294), &#39;32_l2&#39;: tensor(0.2149)}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -514,7 +514,7 @@ ii) can be trained quickly on CPU</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" alt="Incremental FNO predictions on Darcy-Flow data, Input x, Ground-truth y, Incremental FNO prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 11.231 seconds)</p>
+<img src="../../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_incremental_FNO_darcy_001.png" alt="Incremental FNO predictions on Darcy-Flow data, Input x, Ground-truth y, Incremental FNO prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 11.915 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-training-plot-incremental-fno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/cfa67f99f9c5464f9ef46d85700f3993/plot_incremental_FNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_incremental_FNO_darcy.ipynb</span></code></a></p>
