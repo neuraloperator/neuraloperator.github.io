@@ -179,18 +179,14 @@
 <dt class="sig sig-object py" id="neuralop.losses.equation_losses.ICLoss">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.losses.equation_losses.</span></span><span class="sig-name descname"><span class="pre">ICLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loss=&lt;function</span> <span class="pre">mse_loss&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/losses/equation_losses.html#ICLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.losses.equation_losses.ICLoss" title="Link to this definition"></a></dt>
 <dd><p>Computes loss for initial value problems.</p>
+<p>Extracts the initial condition and computes the loss between predicted 
+and true initial conditions for all channels.</p>
+<p>Expected input shape: (batch_size, channels, time_dim, <a href="#id1"><span class="problematic" id="id2">*</span></a>spatial_dims)</p>
 <p class="rubric">Methods</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>(y_pred, x, **kwargs)</p></td>
-<td><p>Call self as a function.</p></td>
-</tr>
-</tbody>
-</table>
-<table class="docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><strong>initial_condition_loss</strong></p></td>
-<td></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>(y_pred, y, **kwargs)</p></td>
+<td><p>Expected input shape: (batch_size, channels, time_dim, <a href="#id3"><span class="problematic" id="id4">*</span></a>spatial_dims)</p></td>
 </tr>
 </tbody>
 </table>
