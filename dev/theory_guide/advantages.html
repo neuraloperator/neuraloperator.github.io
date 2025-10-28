@@ -200,19 +200,17 @@ Consider a general differential equation:</p>
 <p>where <span class="math notranslate nohighlight">\(\mathcal{L}\)</span> is a differential operator, <span class="math notranslate nohighlight">\(f\)</span> is the input function,
 and <span class="math notranslate nohighlight">\(u\)</span> is the solution function.</p>
 <p>Neural operators are designed to approximate these true operators directly,
-rather than learning discretized approximations.
-This alignment with the underlying mathematical structure ensures that:</p>
-<ul class="simple">
-<li><p>The learned mapping respects the continuous nature of the problem</p></li>
-</ul>
-<div style="margin-top: 1em;"></div><ul class="simple">
-<li><p>The approximation error can be bounded theoretically</p></li>
-</ul>
-<div style="margin-top: 1em;"></div><ul class="simple">
-<li><p>The method converges to the true operator as the neural network capacity increases</p></li>
-</ul>
-<p>This well-posedness property is crucial for scientific applications where
-mathematical rigor is essential.</p>
+rather than learning discretized approximations. This alignment with the underlying mathematical structure
+ensures that the learned mapping respects the continuous nature of the problem.</p>
+<p>To be more precise, Fourier neural operators (and other neural operators) are universal approximators,
+in the sense that any sufficiently smooth operator can be approximated to arbitrary accuracy using a
+Fourier neural operator (see Theorem 5 in [4]).</p>
+<p>Note however that, just like universal function approximation theorems for neural networks,
+these are only theoretical guarantees, and there can be an important gap between theory and practice.
+Although a sufficiently smooth operator can, in theory, be approximated by a neural operator
+to any desired level of accuracy, achieving that accuracy in practice may not be possible because of
+errors incurred when discretizing the input and output functions, and because of challenging optimization
+landscapes which can result in suboptimally trained neural operators.</p>
 <div style="margin-top: 3em;"></div></section>
 <section id="function-representation-and-computational-flexibility">
 <h2>Function Representation and Computational Flexibility<a class="headerlink" href="#function-representation-and-computational-flexibility" title="Link to this heading"></a></h2>
@@ -470,6 +468,14 @@ Kaushik Bhattacharya, Andrew Stuart, Anima Anandkumar, 2020.</p>
 <p>Fourier Neural Operator for Parametric Partial Differential Equations,
 Zongyi Li, Nikola Kovachki, Kamyar Azizzadenesheli, Burigede Liu,
 Kaushik Bhattacharya, Andrew Stuart, Anima Anandkumar, 2020.</p>
+</aside>
+</aside>
+<div style="margin-top: 1em;"></div><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id4" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></span>
+<p>Universal Approximation and Error Bounds for Fourier Neural Operators,
+Nikola Kovachki, Samuel Lanthaler, and  Siddhartha Mishra.
+J. Mach. Learn. Res., vol. 22, no. 1, 2021.</p>
 </aside>
 </aside>
 </section>
