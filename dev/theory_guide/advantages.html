@@ -202,15 +202,6 @@ and <span class="math notranslate nohighlight">\(u\)</span> is the solution func
 <p>Neural operators are designed to approximate these true operators directly,
 rather than learning discretized approximations. This alignment with the underlying mathematical structure
 ensures that the learned mapping respects the continuous nature of the problem.</p>
-<p>To be more precise, Fourier neural operators (and other neural operators) are universal approximators,
-in the sense that any sufficiently smooth operator can be approximated to arbitrary accuracy using a
-Fourier neural operator (see Theorem 5 in [4]).</p>
-<p>Note however that, just like universal function approximation theorems for neural networks,
-these are only theoretical guarantees, and there can be an important gap between theory and practice.
-Although a sufficiently smooth operator can, in theory, be approximated by a neural operator
-to any desired level of accuracy, achieving that accuracy in practice may not be possible because of
-errors incurred when discretizing the input and output functions, and because of challenging optimization
-landscapes which can result in suboptimally trained neural operators.</p>
 <div style="margin-top: 3em;"></div></section>
 <section id="function-representation-and-computational-flexibility">
 <h2>Function Representation and Computational Flexibility<a class="headerlink" href="#function-representation-and-computational-flexibility" title="Link to this heading"></a></h2>
@@ -239,27 +230,17 @@ avoiding artifacts that might arise from discrete-to-continuous interpolation.</
 <div style="margin-top: 3em;"></div></section>
 <section id="universal-approximation-capability">
 <h2>Universal Approximation Capability<a class="headerlink" href="#universal-approximation-capability" title="Link to this heading"></a></h2>
-<p>Neural operators possess universal approximation properties, meaning they can
-approximate any continuous operator between function spaces to arbitrary accuracy,
-given sufficient network capacity. This theoretical guarantee ensures that:</p>
-<dl class="simple">
-<dt><strong>No fundamental limitations</strong></dt><dd><p>Neural operators are not restricted to specific
-types of operators or function spaces</p>
-</dd>
-</dl>
-<div style="margin-top: 2em;"></div><dl class="simple">
-<dt><strong>Convergence guarantees</strong></dt><dd><p>The approximation error can be made arbitrarily
-small with sufficient network capacity</p>
-</dd>
-</dl>
-<div style="margin-top: 2em;"></div><dl class="simple">
-<dt><strong>Broad applicability</strong></dt><dd><p>The same architecture can be applied to diverse scientific problems,
-from fluid dynamics to materials science.</p>
-</dd>
-</dl>
-<p>The universal approximation property is particularly important for complex,
-nonlinear operators that arise in real-world applications, such as turbulent
-fluid flows or multi-physics simulations.</p>
+<p>Fourier neural operators (and other neural operators) are universal operator approximators,
+in the sense that any sufficiently smooth operator can be approximated to arbitrary accuracy using a
+Fourier neural operator (see Theorem 5 in [4]).</p>
+<p>This also emphasizes the broad applicability of neural operators, as the same architecture
+can be applied to diverse scientific problems, from fluid dynamics to materials science.</p>
+<p>Note however that, just like universal function approximation theorems for neural networks,
+these are only theoretical guarantees, and there can be an important gap between theory and practice.
+Although a sufficiently smooth operator can, in theory, be approximated by a neural operator
+to any desired level of accuracy, achieving that accuracy in practice may not be possible because of
+errors incurred when discretizing the input and output functions, and because of challenging optimization
+landscapes which can result in suboptimally trained neural operators.</p>
 <div style="margin-top: 3em;"></div></section>
 <section id="solving-parametrized-pdes">
 <h2>Solving Parametrized PDEs<a class="headerlink" href="#solving-parametrized-pdes" title="Link to this heading"></a></h2>

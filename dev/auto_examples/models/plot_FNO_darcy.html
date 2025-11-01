@@ -330,13 +330,13 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fb5e77fe710&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f566015c7d0&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fb5e77fe0d0&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f566015f750&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fb5e77fe0d0&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fb5e77ff9d0&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f566015f750&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f566015ee90&gt;}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -376,9 +376,9 @@ Parameter Group 0
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Training on 1000 samples
 Testing on [50, 50] samples         on resolutions [16, 32].
-/opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:668: UserWarning: &#39;pin_memory&#39; argument is set as true but no accelerator is found, then device pinned memory won&#39;t be used.
+/opt/hostedtoolcache/Python/3.13.9/x64/lib/python3.13/site-packages/torch/utils/data/dataloader.py:668: UserWarning: &#39;pin_memory&#39; argument is set as true but no accelerator is found, then device pinned memory won&#39;t be used.
   warnings.warn(warn_msg)
-/opt/hostedtoolcache/Python/3.13.7/x64/lib/python3.13/site-packages/torch/nn/modules/module.py:1786: UserWarning: FNO.forward() received unexpected keyword arguments: [&#39;y&#39;]. These arguments will be ignored.
+/opt/hostedtoolcache/Python/3.13.9/x64/lib/python3.13/site-packages/torch/nn/modules/module.py:1786: UserWarning: FNO.forward() received unexpected keyword arguments: [&#39;y&#39;]. These arguments will be ignored.
   return forward_call(*args, **kwargs)
 Raw outputs of shape torch.Size([64, 1, 16, 16])
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:536: UserWarning: H1Loss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
@@ -389,10 +389,10 @@ Raw outputs of shape torch.Size([64, 1, 16, 16])
 Eval: 16_h1=0.5218, 16_l2=0.3231, 32_h1=0.6226, 32_l2=0.3236
 [5] time=1.00, avg_loss=0.2588, train_err=16.1757
 Eval: 16_h1=0.2487, 16_l2=0.1704, 32_h1=0.3766, 32_l2=0.1918
-[10] time=1.00, avg_loss=0.1991, train_err=12.4459
+[10] time=1.01, avg_loss=0.1991, train_err=12.4459
 Eval: 16_h1=0.2050, 16_l2=0.1331, 32_h1=0.3422, 32_l2=0.1616
 
-{&#39;train_err&#39;: 11.168464809656143, &#39;avg_loss&#39;: 0.1786954369544983, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 1.0058393670000214}
+{&#39;train_err&#39;: 11.168464809656143, &#39;avg_loss&#39;: 0.1786954369544983, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 0.9925176269999838}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -510,7 +510,7 @@ of <cite>test_resolutions</cite> to choose from.</p>
 at the same resolution at which it was trained. This is because the model hasn’t seen
 the higher-frequency patterns present in the 32x32 data during training. However, this
 demonstrates the fundamental resolution invariance of neural operators.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 16.839 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 17.109 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-models-plot-fno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/b4fadb168a06acc8c292c808f47f0e7f/plot_FNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_FNO_darcy.ipynb</span></code></a></p>
