@@ -528,7 +528,7 @@
         <span class="c1"># compute the cutoff radius based on the bandlimit of the input field</span>
         <span class="c1"># TODO: Attention - this heuristic is ad-hoc! Make sure to set it yourself!</span>
         <span class="k">if</span> <span class="n">radius_cutoff</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">radius_cutoff</span> <span class="o">=</span> <span class="n">radius_cutoff</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_out</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">radius_cutoff</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_out</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">radius_cutoff</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Error, radius_cutoff has to be positive.&quot;</span><span class="p">)</span>

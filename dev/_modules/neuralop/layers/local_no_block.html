@@ -324,10 +324,10 @@
             <span class="n">diff_layers</span> <span class="o">=</span> <span class="p">[</span><span class="n">diff_layers</span><span class="p">]</span> <span class="o">*</span> <span class="n">n_layers</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_modes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="ow">and</span> <span class="kc">True</span> <span class="ow">in</span> <span class="n">diff_layers</span><span class="p">:</span>
-            <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Differential convs not implemented for dimensions higher than 3.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Differential convs not implemented for dimensions higher than 3.&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_modes</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">and</span> <span class="kc">True</span> <span class="ow">in</span> <span class="n">disco_layers</span><span class="p">:</span>
-            <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Local conv layers only implemented for dimension 2.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Local conv layers only implemented for dimension 2.&quot;</span><span class="p">)</span>
             
         <span class="k">if</span> <span class="n">conv_padding_mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;circular&#39;</span><span class="p">,</span> <span class="s1">&#39;periodic&#39;</span><span class="p">,</span> <span class="s1">&#39;zeros&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="kc">True</span> <span class="ow">in</span> <span class="n">disco_layers</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Local conv layers only support periodic or zero padding, defaulting to zero padding for local convs.&quot;</span><span class="p">)</span>

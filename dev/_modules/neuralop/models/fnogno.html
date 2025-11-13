@@ -315,14 +315,18 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">gno_coord_dim</span> <span class="o">=</span> <span class="n">gno_coord_dim</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gno_coord_dim</span> <span class="o">!=</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">gno_use_open3d</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Warning: GNO expects </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gno_coord_dim</span><span class="si">}</span><span class="s2">-d data but Open3d expects 3-d data&quot;</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;GNO expects </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gno_coord_dim</span><span class="si">}</span><span class="s2">-d data but Open3d expects 3-d data&quot;</span><span class="p">,</span>
+                <span class="ne">UserWarning</span><span class="p">,</span>
+                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
             <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">in_coord_dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fno_n_modes</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_coord_dim</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gno_coord_dim</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Warning: FNO expects </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">in_coord_dim</span><span class="si">}</span><span class="s2">-d data while GNO expects </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gno_coord_dim</span><span class="si">}</span><span class="s2">-d data&quot;</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;FNO expects </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">in_coord_dim</span><span class="si">}</span><span class="s2">-d data while GNO expects </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gno_coord_dim</span><span class="si">}</span><span class="s2">-d data&quot;</span><span class="p">,</span>
+                <span class="ne">UserWarning</span><span class="p">,</span>
+                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
             <span class="p">)</span>
 
         <span class="c1"># these lists contain the interior dimensions of the input</span>

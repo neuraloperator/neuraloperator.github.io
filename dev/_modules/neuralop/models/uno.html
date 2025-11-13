@@ -393,8 +393,6 @@
                     <span class="n">prev_out</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">uno_out_channels</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">horizontal_skips_map</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
                 <span class="p">)</span>
 
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fno_skip</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">channel_mlp_skip</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fno_blocks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">operator_block</span><span class="p">(</span>
                     <span class="n">in_channels</span><span class="o">=</span><span class="n">prev_out</span><span class="p">,</span>
