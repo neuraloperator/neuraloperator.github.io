@@ -177,7 +177,7 @@
 <h1><a class="reference internal" href="../api.html#module-neuralop.layers.spectral_convolution" title="neuralop.layers.spectral_convolution"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.spectral_convolution</span></code></a>.SpectralConv<a class="headerlink" href="#neuralop-layers-spectral-convolution-spectralconv" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.layers.spectral_convolution.SpectralConv">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.spectral_convolution.</span></span><span class="sig-name descname"><span class="pre">SpectralConv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">complex_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_n_modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution_scaling_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fno_block_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'full'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rank</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factorization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implementation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'reconstructed'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_rank_modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decomposition_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_std</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'forward'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/spectral_convolution.html#SpectralConv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.spectral_convolution.SpectralConv" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.spectral_convolution.</span></span><span class="sig-name descname"><span class="pre">SpectralConv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">complex_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_n_modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution_scaling_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fno_block_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'full'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rank</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factorization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implementation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'reconstructed'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_rank_modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decomposition_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_std</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'forward'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/spectral_convolution.html#SpectralConv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.spectral_convolution.SpectralConv" title="Link to this definition"></a></dt>
 <dd><p>SpectralConv implements the Spectral Convolution component of a Fourier layer
 described.</p>
 <p>It is implemented as described in <a class="reference internal" href="#r17685265b205-1" id="id1">[1]</a> and <a class="reference internal" href="#r17685265b205-2" id="id2">[2]</a>.</p>
@@ -204,7 +204,10 @@ mode truncation, refer to <span class="xref std std-ref">fourier_layer_impl</spa
 </div>
 <p>This can be updated dynamically during training.</p>
 </dd>
-<dt><strong>max_n_modes</strong><span class="classifier">int tuple or None, default is None</span></dt><dd><ul class="simple">
+<dt><strong>complex_data</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether data takes on complex values in the spatial domain, by default False.
+If True, uses different logic for FFT contraction and uses full FFT instead of real-valued.</p>
+</dd>
+<dt><strong>max_n_modes</strong><span class="classifier">int tuple or None, optional</span></dt><dd><ul class="simple">
 <li><dl class="simple">
 <dt>If not None, <strong>maximum</strong> number of modes to keep in Fourier Layer, along each dim</dt><dd><p>The number of modes (<cite>n_modes</cite>) cannot be increased beyond that.</p>
 </dd>
@@ -212,27 +215,32 @@ mode truncation, refer to <span class="xref std std-ref">fourier_layer_impl</spa
 </li>
 <li><p>If None, all the n_modes are used.</p></li>
 </ul>
+<p>By default None.</p>
 </dd>
-<dt><strong>separable</strong><span class="classifier">bool, default is True</span></dt><dd><p>whether to use separable implementation of contraction
-if True, contracts factors of factorized
-tensor weight individually</p>
+<dt><strong>bias</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to add a learnable bias to the output, by default True.</p>
 </dd>
-<dt><strong>init_std</strong><span class="classifier">float or ‘auto’, default is ‘auto’</span></dt><dd><p>std to use for the init</p>
+<dt><strong>separable</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use separable implementation of contraction.
+If True, contracts factors of factorized tensor weight individually.
+By default False.</p>
 </dd>
-<dt><strong>factorization</strong><span class="classifier">str or None, {‘tucker’, ‘cp’, ‘tt’}, default is None</span></dt><dd><p>If None, a single dense weight is learned for the FNO.
+<dt><strong>resolution_scaling_factor</strong><span class="classifier">float, list of float, or None, optional</span></dt><dd><p>Scaling factor(s) for resolution scaling. If provided, the output resolution
+will be scaled by this factor along each spatial dimension.
+By default None.</p>
+</dd>
+<dt><strong>fno_block_precision</strong><span class="classifier">str, optional</span></dt><dd><p>Precision mode for FNO block operations. Options: ‘full’, ‘half’, ‘mixed’.
+By default ‘full’.</p>
+</dd>
+<dt><strong>rank</strong><span class="classifier">float, optional</span></dt><dd><p>Rank of the tensor factorization of the Fourier weights, by default 1.0.
+Ignored if <code class="docutils literal notranslate"><span class="pre">factorization</span> <span class="pre">is</span> <span class="pre">None</span></code>.</p>
+</dd>
+<dt><strong>factorization</strong><span class="classifier">str or None, optional</span></dt><dd><p>Tensor factorization type. Options: {‘tucker’, ‘cp’, ‘tt’}.
+If None, a single dense weight is learned for the FNO.
 Otherwise, that weight, used for the contraction in the Fourier domain
 is learned in factorized form. In that case, <cite>factorization</cite> is the
-tensor factorization of the parameters weight used.</p>
+tensor factorization of the parameters weight used.
+By default None.</p>
 </dd>
-<dt><strong>rank</strong><span class="classifier">float or rank, optional</span></dt><dd><p>Rank of the tensor factorization of the Fourier weights, by default 1.0
-Ignored if <code class="docutils literal notranslate"><span class="pre">factorization</span> <span class="pre">is</span> <span class="pre">None</span></code></p>
-</dd>
-<dt><strong>fixed_rank_modes</strong><span class="classifier">bool, optional</span></dt><dd><p>Modes to not factorize, by default False
-Ignored if <code class="docutils literal notranslate"><span class="pre">factorization</span> <span class="pre">is</span> <span class="pre">None</span></code></p>
-</dd>
-<dt><strong>fft_norm</strong><span class="classifier">str, optional</span></dt><dd><p>fft normalization parameter, by default ‘forward’</p>
-</dd>
-<dt><strong>implementation</strong><span class="classifier">{‘factorized’, ‘reconstructed’}, optional, default is ‘factorized’</span></dt><dd><p>If factorization is not None, forward mode to use::
+<dt><strong>implementation</strong><span class="classifier">{‘factorized’, ‘reconstructed’}, optional</span></dt><dd><p>If factorization is not None, forward mode to use:
 * <cite>reconstructed</cite> : the full weight tensor is reconstructed from the</p>
 <blockquote>
 <div><p>factorization and used for the forward pass</p>
@@ -241,13 +249,22 @@ Ignored if <code class="docutils literal notranslate"><span class="pre">factoriz
 <li><p><cite>factorized</cite> : the input is directly contracted with the factors of
 the decomposition</p></li>
 </ul>
-<p>Ignored if <code class="docutils literal notranslate"><span class="pre">factorization</span> <span class="pre">is</span> <span class="pre">None</span></code></p>
+<p>Ignored if <code class="docutils literal notranslate"><span class="pre">factorization</span> <span class="pre">is</span> <span class="pre">None</span></code>.
+By default ‘reconstructed’.</p>
 </dd>
-<dt><strong>decomposition_kwargs</strong><span class="classifier">dict, optional, default is {}</span></dt><dd><p>Optionaly additional parameters to pass to the tensor decomposition
-Ignored if <code class="docutils literal notranslate"><span class="pre">factorization</span> <span class="pre">is</span> <span class="pre">None</span></code></p>
+<dt><strong>fixed_rank_modes</strong><span class="classifier">bool, optional</span></dt><dd><p>Modes to not factorize, by default False.
+Ignored if <code class="docutils literal notranslate"><span class="pre">factorization</span> <span class="pre">is</span> <span class="pre">None</span></code>.</p>
 </dd>
-<dt><strong>complex_data: bool, optional</strong></dt><dd><p>whether data takes on complex values in the spatial domain, by default False
-if True, uses different logic for FFT contraction and uses full FFT instead of real-valued</p>
+<dt><strong>decomposition_kwargs</strong><span class="classifier">dict or None, optional</span></dt><dd><p>Optional additional parameters to pass to the tensor decomposition.
+Ignored if <code class="docutils literal notranslate"><span class="pre">factorization</span> <span class="pre">is</span> <span class="pre">None</span></code>.
+By default None.</p>
+</dd>
+<dt><strong>init_std</strong><span class="classifier">float or ‘auto’, optional</span></dt><dd><p>Standard deviation to use for weight initialization, by default ‘auto’.
+If ‘auto’, uses (2 / (in_channels + out_channels)) ** 0.5.</p>
+</dd>
+<dt><strong>fft_norm</strong><span class="classifier">str, optional</span></dt><dd><p>FFT normalization parameter, by default ‘forward’.</p>
+</dd>
+<dt><strong>device</strong><span class="classifier">torch.device or None, optional</span></dt><dd><p>Device to place the layer on, by default None.</p>
 </dd>
 </dl>
 </dd>
