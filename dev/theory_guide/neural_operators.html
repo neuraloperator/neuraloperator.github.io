@@ -175,8 +175,7 @@
 <span id="neuralop-intro"></span><h1>Neural Operators: an Introduction<a class="headerlink" href="#neural-operators-an-introduction" title="Link to this heading"></a></h1>
 <p>This guide introduces neural operators, a class of models that learn
 mappings between function spaces and solve partial differential equations.
-You can also check out the papers <a class="footnote-reference brackets" href="#id6" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id7" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id8" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> for more formal derivations,
-as well as the blog post <a class="footnote-reference brackets" href="#id9" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a>.</p>
+You can also check out the papers <a class="footnote-reference brackets" href="#id6" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id7" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id8" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id9" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> for more details.</p>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
 <p>Scientific computations are often very costly in terms of time and resources.
@@ -208,8 +207,7 @@ Overall, generalization is a fundamental challenge in machine learning.
 As a result, while machine learning-based methods can significantly speed up evaluation,
 the process of obtaining and preparing suitable training data can remain time-consuming and difficult.</p>
 <p>To address this challenge, we introduce operator learning. By encoding appropriate structures,
-we enable neural networks to learn mappings between functions and to generalize across
-ifferent discretizations.
+we enable neural networks to learn mappings between functions and to generalize across different discretizations.
 This means we can use numerical methods to generate less-accurate, low-resolution data,
 yet the trained solver can still produce accurate, high-resolution predictions.
 As a result, both training and evaluation can become significantly more efficient and straightforward.</p>
@@ -475,15 +473,17 @@ also have good performance compared to several benchmarks.</p>
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="id6" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
-<p>Neural operator: Graph kernel network for partial differential equations,
-Zongyi Li, Nikola Kovachki, Kamyar Azizzadenesheli, Burigede Liu, Kaushik Bhattacharya, Andrew Stuart, Anima Anandkumar</p>
+<p>Fourier Neural Operators Explained: A Practical Perspective
+Valentin Duruisseaux, Jean Kossaifi, Anima Anandkumar, 2025.
+<a class="reference external" href="https://arxiv.org/abs/2512.01421">https://arxiv.org/abs/2512.01421</a>.</p>
 </aside>
 </aside>
 <div style="margin-top: 1em"></div><aside class="footnote-list brackets">
 <aside class="footnote brackets" id="id7" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
-<p>Neural operator: Learning maps between function spaces,
-Nikola Kovachki, Zongyi Li, Kamyar Azizzadenesheli, Burigede Liu, Kaushik Bhattacharya, Andrew Stuart, Anima Anandkumar</p>
+<p>Neural operator: Graph kernel network for partial differential equations,
+Zongyi Li, Nikola Kovachki, Kamyar Azizzadenesheli, Burigede Liu, Kaushik Bhattacharya, Andrew Stuart, Anima Anandkumar, 2020.
+<a class="reference external" href="https://arxiv.org/abs/2003.03485">https://arxiv.org/abs/2003.03485</a></p>
 </aside>
 </aside>
 <div style="margin-top: 1em"></div><aside class="footnote-list brackets">
@@ -491,15 +491,16 @@ Nikola Kovachki, Zongyi Li, Kamyar Azizzadenesheli, Burigede Liu, Kaushik Bhatta
 <span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
 <span class="backrefs">(<a role="doc-backlink" href="#id3">1</a>,<a role="doc-backlink" href="#id5">2</a>)</span>
 <p>Principled Approaches for Extending Neural Architectures to Function Spaces for Operator Learning,
-Julius Berner, Miguel Liu-Schiaffini, Jean Kossaifi, Valentin Duruisseaux,
-Boris Bonev, Kamyar Azizzadenesheli, Anima Anandkumar, 2025.
-arXiv:2506.10973. https://arxiv.org/abs/2506.10973</p>
+Julius Berner, Miguel Liu-Schiaffini, Jean Kossaifi, Valentin Duruisseaux, Boris Bonev, Kamyar Azizzadenesheli, Anima Anandkumar, 2025.
+<a class="reference external" href="https://arxiv.org/abs/2506.10973">https://arxiv.org/abs/2506.10973</a></p>
 </aside>
 </aside>
 <div style="margin-top: 1em"></div><aside class="footnote-list brackets">
 <aside class="footnote brackets" id="id9" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">4</a><span class="fn-bracket">]</span></span>
-<p>Blog post by Zongyi Li, <a class="reference external" href="https://zongyi-li.github.io/blog/2020/graph-pde/">https://zongyi-li.github.io/blog/2020/graph-pde/</a></p>
+<p>Neural operator: Learning maps between function spaces,
+Nikola Kovachki, Zongyi Li, Kamyar Azizzadenesheli, Burigede Liu, Kaushik Bhattacharya, Andrew Stuart, Anima Anandkumar, 2023.
+<a class="reference external" href="https://arxiv.org/abs/2108.08481">https://arxiv.org/abs/2108.08481</a>.</p>
 </aside>
 </aside>
 </section>
