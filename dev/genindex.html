@@ -360,6 +360,8 @@
 </li>
         <li><a href="modules/generated/neuralop.layers.padding.DomainPadding.html#neuralop.layers.padding.DomainPadding.forward">(neuralop.layers.padding.DomainPadding method)</a>
 </li>
+        <li><a href="modules/generated/neuralop.layers.rno_block.RNOBlock.html#neuralop.layers.rno_block.RNOBlock.forward">(neuralop.layers.rno_block.RNOBlock method)</a>
+</li>
         <li><a href="modules/generated/neuralop.layers.spectral_convolution.SpectralConv.html#neuralop.layers.spectral_convolution.SpectralConv.forward">(neuralop.layers.spectral_convolution.SpectralConv method)</a>
 </li>
         <li><a href="modules/generated/neuralop.layers.spherical_convolution.SphericalConv.html#neuralop.layers.spherical_convolution.SphericalConv.forward">(neuralop.layers.spherical_convolution.SphericalConv method)</a>
@@ -377,6 +379,8 @@
         <li><a href="modules/generated/neuralop.models.GINO.html#neuralop.models.GINO.forward">(neuralop.models.GINO method)</a>
 </li>
         <li><a href="modules/generated/neuralop.models.LocalNO.html#neuralop.models.LocalNO.forward">(neuralop.models.LocalNO method)</a>
+</li>
+        <li><a href="modules/generated/neuralop.models.RNO.html#neuralop.models.RNO.forward">(neuralop.models.RNO method)</a>
 </li>
         <li><a href="modules/generated/neuralop.models.SFNO.html#neuralop.models.SFNO.forward">(neuralop.models.SFNO method)</a>
 </li>
@@ -561,6 +565,8 @@
 </li>
         <li><a href="modules/api.html#module-neuralop.layers.padding">neuralop.layers.padding</a>
 </li>
+        <li><a href="modules/api.html#module-neuralop.layers.rno_block">neuralop.layers.rno_block</a>
+</li>
         <li><a href="modules/api.html#module-neuralop.layers.skip_connections">neuralop.layers.skip_connections</a>
 </li>
         <li><a href="modules/api.html#module-neuralop.layers.spectral_convolution">neuralop.layers.spectral_convolution</a>
@@ -727,8 +733,6 @@
         <li><a href="modules/api.html#module-neuralop.layers.integral_transform">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     neuralop.layers.local_no_block
 
@@ -736,6 +740,8 @@
         <li><a href="modules/api.html#module-neuralop.layers.local_no_block">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     neuralop.layers.neighbor_search
 
@@ -755,6 +761,13 @@
 
       <ul>
         <li><a href="modules/api.html#module-neuralop.layers.padding">module</a>
+</li>
+      </ul></li>
+      <li>
+    neuralop.layers.rno_block
+
+      <ul>
+        <li><a href="modules/api.html#module-neuralop.layers.rno_block">module</a>
 </li>
       </ul></li>
       <li>
@@ -885,10 +898,10 @@
 </li>
       <li><a href="modules/generated/neuralop.losses.equation_losses.PoissonBoundaryLoss.html#neuralop.losses.equation_losses.PoissonBoundaryLoss">PoissonBoundaryLoss (class in neuralop.losses.equation_losses)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/generated/neuralop.losses.equation_losses.PoissonEqnLoss.html#neuralop.losses.equation_losses.PoissonEqnLoss">PoissonEqnLoss (class in neuralop.losses.equation_losses)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/generated/neuralop.losses.equation_losses.PoissonInteriorLoss.html#neuralop.losses.equation_losses.PoissonInteriorLoss">PoissonInteriorLoss (class in neuralop.losses.equation_losses)</a>
 </li>
       <li><a href="modules/generated/neuralop.data.transforms.data_processors.DefaultDataProcessor.html#neuralop.data.transforms.data_processors.DefaultDataProcessor.postprocess">postprocess() (neuralop.data.transforms.data_processors.DefaultDataProcessor method)</a>
@@ -897,6 +910,8 @@
         <li><a href="modules/generated/neuralop.data.transforms.data_processors.MGPatchingDataProcessor.html#neuralop.data.transforms.data_processors.MGPatchingDataProcessor.postprocess">(neuralop.data.transforms.data_processors.MGPatchingDataProcessor method)</a>
 </li>
       </ul></li>
+      <li><a href="modules/generated/neuralop.models.RNO.html#neuralop.models.RNO.predict">predict() (neuralop.models.RNO method)</a>
+</li>
       <li><a href="modules/generated/neuralop.data.transforms.data_processors.DefaultDataProcessor.html#neuralop.data.transforms.data_processors.DefaultDataProcessor.preprocess">preprocess() (neuralop.data.transforms.data_processors.DefaultDataProcessor method)</a>
 
       <ul>
@@ -919,8 +934,6 @@
         <li><a href="modules/generated/neuralop.losses.data_losses.PointwiseQuantileLoss.html#neuralop.losses.data_losses.PointwiseQuantileLoss.reduce_all">(neuralop.losses.data_losses.PointwiseQuantileLoss method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/generated/neuralop.losses.data_losses.H1Loss.html#neuralop.losses.data_losses.H1Loss.rel">rel() (neuralop.losses.data_losses.H1Loss method)</a>
 
       <ul>
@@ -929,9 +942,15 @@
         <li><a href="modules/generated/neuralop.losses.data_losses.LpLoss.html#neuralop.losses.data_losses.LpLoss.rel">(neuralop.losses.data_losses.LpLoss method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/generated/neuralop.losses.meta_losses.Relobralo.html#neuralop.losses.meta_losses.Relobralo">Relobralo (class in neuralop.losses.meta_losses)</a>
 </li>
       <li><a href="modules/generated/neuralop.training.Trainer.html#neuralop.training.Trainer.resume_state_from_dir">resume_state_from_dir() (neuralop.training.Trainer method)</a>
+</li>
+      <li><a href="modules/generated/neuralop.models.RNO.html#neuralop.models.RNO">RNO (class in neuralop.models)</a>
+</li>
+      <li><a href="modules/generated/neuralop.layers.rno_block.RNOBlock.html#neuralop.layers.rno_block.RNOBlock">RNOBlock (class in neuralop.layers.rno_block)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1051,7 +1070,7 @@
         <footer class="footer">
     <div class="content has-text-centered">
         <div class="block">
-          &copy; Copyright 2025, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+          &copy; Copyright 2026, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
         </div>
     </div>
   </footer>

@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>neuralop.layers.rno_block &#8212; neuraloperator 2.0.0 documentation</title> 
+<link rel="stylesheet" href="../../../_static/tensorly_style.css">
+<link rel="apple-touch-icon" sizes="180x180" href="../../../_static/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../../_static/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../../_static/favicon/favicon-16x16.png">
+<link rel="manifest" href="../../../_static/favicon/site.webmanifest">
+<link rel="mask-icon" href="../../../_static/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="../../../_static/favicon/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=5126dfd5" />
+
+  
+    <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+ <script src="../../../_static/navbar_burger.js"></script>
+ <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+ 
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  </head>
+<body  class="has-navbar-fixed-top">
+
+  <header>
+    <navbar>
+      <nav class="navbar top-navbar is-fixed-top has-shadow is-flex-wrap-wrap" role="navigation" aria-label="main top navigation">
+        <div class="navbar-brand">
+        
+
+          <a class="navbar-item" href="../../../index.html">
+            <img src="../../../_static/neuraloperator_logo.png" height="28">
+          </a>
+          <a class="navbar-item is-hidden-desktop" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon"><i class="fab fa-github"></i></span>
+          </a>
+
+          <a role="button" class="navbar-burger" data-target="top-nav-menu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+
+        </div>
+        
+        <div class="navbar-menu" id="top-nav-menu">
+        
+
+          <div class="navbar-start">
+            
+              <a class="navbar-item" href="../../../install.html">
+              Install
+            </a>
+              <a class="navbar-item" href="../../../theory_guide/index.html">
+              Theory Guide
+            </a>
+              <a class="navbar-item" href="../../../user_guide/index.html">
+              User Guide
+            </a>
+              <a class="navbar-item" href="../../../modules/api.html">
+              API
+            </a>
+              <a class="navbar-item" href="../../../auto_examples/index.html">
+              Examples
+            </a>
+              <a class="navbar-item" href="../../../dev_guide/index.html">
+              Developer's Guide
+            </a>
+          </div>
+        
+          <div class="navbar-end">
+            <div class="navbar-item">
+            
+            <a class="button is-hidden-touch is-dark" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon-text">
+                <span class="icon is-large">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Github</span>
+              </span>
+            </a>
+
+            </div> 
+          </div> 
+        </div> 
+
+      </nav>
+      
+    </navbar>
+  </header>
+
+
+  <div id="column-container">
+  <div class="columns is-mobile is-centered">
+	
+  
+
+  <div class="column main-column">
+
+    
+    <div class="main-section">
+
+      
+      
+
+      <div class="container content main-content">
+        
+  <h1>Source code for neuralop.layers.rno_block</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn.functional</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">F</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..layers.spectral_convolution</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpectralConv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..layers.fno_block</span><span class="w"> </span><span class="kn">import</span> <span class="n">FNOBlocks</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..layers.complex</span><span class="w"> </span><span class="kn">import</span> <span class="n">cselu</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RNOCell</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;N-Dimensional Recurrent Neural Operator cell. The RNO cell takes in an</span>
+<span class="sd">    input and history function, and it outputs the next step of the hidden function.</span>
+
+<span class="sd">    The RNO cell implements the GRU-like recurrence relation with Fourier layers:</span>
+<span class="sd">        z_t = σ(f1(x_t) + f2(h_{t-1}) + b1)            [update gate]</span>
+<span class="sd">        r_t = σ(f3(x_t) + f4(h_{t-1}) + b2)            [reset gate]</span>
+<span class="sd">        h̃_t = selu(f5(x_t) + f6(r_t ⊙ h_{t-1}) + b3)  [candidate state]</span>
+<span class="sd">        h_t = (1 - z_t) ⊙ h_{t-1} + z_t ⊙ h̃_t         [next state]</span>
+
+<span class="sd">    where σ is the sigmoid function, ⊙ is element-wise multiplication,</span>
+<span class="sd">    and f1-f6 are FNO blocks (Fourier neural operators).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n_modes : int tuple</span>
+<span class="sd">        number of modes to keep in Fourier Layer, along each dimension</span>
+<span class="sd">        The dimensionality of the RNO is inferred from ``len(n_modes)``</span>
+<span class="sd">    hidden_channels : int</span>
+<span class="sd">        number of hidden channels in the RNO</span>
+
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    resolution_scaling_factor : Union[Number, List[Number]], optional</span>
+<span class="sd">        Factor by which to scale outputs for super-resolution, by default None</span>
+<span class="sd">    max_n_modes : int or List[int], optional</span>
+<span class="sd">        Maximum number of modes to keep along each dimension, by default None</span>
+<span class="sd">    fno_block_precision : str, optional</span>
+<span class="sd">        Floating point precision to use for computations. Options: &quot;full&quot;, &quot;half&quot;, &quot;mixed&quot;, by default &quot;full&quot;</span>
+<span class="sd">    use_channel_mlp : bool, optional</span>
+<span class="sd">        Whether to use an MLP layer after each FNO block, by default True</span>
+<span class="sd">    channel_mlp_dropout : float, optional</span>
+<span class="sd">        Dropout parameter for self.channel_mlp, by default 0</span>
+<span class="sd">    channel_mlp_expansion : float, optional</span>
+<span class="sd">        Expansion parameter for self.channel_mlp, by default 0.5</span>
+<span class="sd">    non_linearity : torch.nn.F module, optional</span>
+<span class="sd">        Nonlinear activation function to use between layers, by default F.gelu</span>
+<span class="sd">    stabilizer : Literal[&quot;tanh&quot;], optional</span>
+<span class="sd">        Stabilizing module to use between certain layers. Options: &quot;tanh&quot;, None, by default None</span>
+<span class="sd">    norm : Literal[&quot;ada_in&quot;, &quot;group_norm&quot;, &quot;instance_norm&quot;, &quot;batch_norm&quot;], optional</span>
+<span class="sd">        Normalization layer to use. Options: &quot;ada_in&quot;, &quot;group_norm&quot;, &quot;instance_norm&quot;, &quot;batch_norm&quot;, None, by default None</span>
+<span class="sd">    ada_in_features : int, optional</span>
+<span class="sd">        Number of features for adaptive instance norm above, by default None</span>
+<span class="sd">    preactivation : bool, optional</span>
+<span class="sd">        Whether to call forward pass with pre-activation, by default False</span>
+<span class="sd">        If True, call nonlinear activation and norm before Fourier convolution</span>
+<span class="sd">        If False, call activation and norms after Fourier convolutions</span>
+<span class="sd">    fno_skip : str, optional</span>
+<span class="sd">        Module to use for FNO skip connections. Options: &quot;linear&quot;, &quot;soft-gating&quot;, &quot;identity&quot;, None, by default &quot;linear&quot;</span>
+<span class="sd">        If None, no skip connection is added. See layers.skip_connections for more details</span>
+<span class="sd">    channel_mlp_skip : str, optional</span>
+<span class="sd">        Module to use for ChannelMLP skip connections. Options: &quot;linear&quot;, &quot;soft-gating&quot;, &quot;identity&quot;, None, by default &quot;soft-gating&quot;</span>
+<span class="sd">        If None, no skip connection is added. See layers.skip_connections for more details</span>
+<span class="sd">    complex_data : bool, optional</span>
+<span class="sd">        Whether the FNO&#39;s data takes on complex values in space, by default False</span>
+<span class="sd">    separable : bool, optional</span>
+<span class="sd">        Separable parameter for SpectralConv, by default False</span>
+<span class="sd">    factorization : str, optional</span>
+<span class="sd">        Factorization parameter for SpectralConv. Options: &quot;tucker&quot;, &quot;cp&quot;, &quot;tt&quot;, None, by default None</span>
+<span class="sd">    rank : float, optional</span>
+<span class="sd">        Rank parameter for SpectralConv, by default 1.0</span>
+<span class="sd">    conv_module : BaseConv, optional</span>
+<span class="sd">        Module to use for convolutions in FNO block, by default SpectralConv</span>
+<span class="sd">    joint_factorization : bool, optional</span>
+<span class="sd">        Whether to factorize all spectralConv weights as one tensor, by default False</span>
+<span class="sd">    fixed_rank_modes : bool, optional</span>
+<span class="sd">        Fixed_rank_modes parameter for SpectralConv, by default False</span>
+<span class="sd">    implementation : str, optional</span>
+<span class="sd">        Implementation parameter for SpectralConv. Options: &quot;factorized&quot;, &quot;reconstructed&quot;, by default &quot;factorized&quot;</span>
+<span class="sd">    decomposition_kwargs : dict, optional</span>
+<span class="sd">        Kwargs for tensor decomposition in SpectralConv, by default dict()</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Paper: https://arxiv.org/abs/2308.08794</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">n_modes</span><span class="p">,</span>
+        <span class="n">hidden_channels</span><span class="p">,</span>
+        <span class="n">resolution_scaling_factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+        <span class="n">max_n_modes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">fno_block_precision</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">,</span>
+        <span class="n">use_channel_mlp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">channel_mlp_dropout</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">channel_mlp_expansion</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">non_linearity</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">gelu</span><span class="p">,</span>
+        <span class="n">stabilizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">ada_in_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">preactivation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">fno_skip</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
+        <span class="n">channel_mlp_skip</span><span class="o">=</span><span class="s2">&quot;soft-gating&quot;</span><span class="p">,</span>
+        <span class="n">complex_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">separable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">factorization</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">rank</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">conv_module</span><span class="o">=</span><span class="n">SpectralConv</span><span class="p">,</span>
+        <span class="n">fixed_rank_modes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">implementation</span><span class="o">=</span><span class="s2">&quot;factorized&quot;</span><span class="p">,</span>
+        <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_channels</span> <span class="o">=</span> <span class="n">hidden_channels</span>
+        <span class="n">scaling_factor</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">resolution_scaling_factor</span> <span class="k">else</span> <span class="p">[</span><span class="n">resolution_scaling_factor</span><span class="p">]</span>
+        <span class="n">fno_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;n_layers&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&quot;max_n_modes&quot;</span><span class="p">:</span> <span class="n">max_n_modes</span><span class="p">,</span>
+            <span class="s2">&quot;fno_block_precision&quot;</span><span class="p">:</span> <span class="n">fno_block_precision</span><span class="p">,</span>
+            <span class="s2">&quot;use_channel_mlp&quot;</span><span class="p">:</span> <span class="n">use_channel_mlp</span><span class="p">,</span>
+            <span class="s2">&quot;channel_mlp_dropout&quot;</span><span class="p">:</span> <span class="n">channel_mlp_dropout</span><span class="p">,</span>
+            <span class="s2">&quot;channel_mlp_expansion&quot;</span><span class="p">:</span> <span class="n">channel_mlp_expansion</span><span class="p">,</span>
+            <span class="s2">&quot;non_linearity&quot;</span><span class="p">:</span> <span class="n">non_linearity</span><span class="p">,</span>
+            <span class="s2">&quot;stabilizer&quot;</span><span class="p">:</span> <span class="n">stabilizer</span><span class="p">,</span>
+            <span class="s2">&quot;norm&quot;</span><span class="p">:</span> <span class="n">norm</span><span class="p">,</span>
+            <span class="s2">&quot;preactivation&quot;</span><span class="p">:</span> <span class="n">preactivation</span><span class="p">,</span>
+            <span class="s2">&quot;fno_skip&quot;</span><span class="p">:</span> <span class="n">fno_skip</span><span class="p">,</span>
+            <span class="s2">&quot;channel_mlp_skip&quot;</span><span class="p">:</span> <span class="n">channel_mlp_skip</span><span class="p">,</span>
+            <span class="s2">&quot;complex_data&quot;</span><span class="p">:</span> <span class="n">complex_data</span><span class="p">,</span>
+            <span class="s2">&quot;separable&quot;</span><span class="p">:</span> <span class="n">separable</span><span class="p">,</span>
+            <span class="s2">&quot;factorization&quot;</span><span class="p">:</span> <span class="n">factorization</span><span class="p">,</span>
+            <span class="s2">&quot;rank&quot;</span><span class="p">:</span> <span class="n">rank</span><span class="p">,</span>
+            <span class="s2">&quot;conv_module&quot;</span><span class="p">:</span> <span class="n">conv_module</span><span class="p">,</span>
+            <span class="s2">&quot;fixed_rank_modes&quot;</span><span class="p">:</span> <span class="n">fixed_rank_modes</span><span class="p">,</span>
+            <span class="s2">&quot;implementation&quot;</span><span class="p">:</span> <span class="n">implementation</span><span class="p">,</span>
+            <span class="s2">&quot;decomposition_kwargs&quot;</span><span class="p">:</span> <span class="n">decomposition_kwargs</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="c1"># For super-resolution: the hidden state h is always stored at the scaled resolution,</span>
+        <span class="c1"># while input x remains at the original resolution. Therefore, only f1, f3, and f5</span>
+        <span class="c1"># (which process x) need resolution scaling, while f2, f4, and f6 (which process h)</span>
+        <span class="c1"># operate at the already-scaled resolution.</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_gates</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_gates</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">biases</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ParameterList</span><span class="p">()</span>
+
+        <span class="c1"># 3 gates: Update (z), Reset (r), Candidate (h_tilde)</span>
+        <span class="c1"># Each gate involves one FNOBlock processing x (input_gate)</span>
+        <span class="c1"># and one FNOBlock processing h (hidden_gate)</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_gates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">FNOBlocks</span><span class="p">(</span>
+                    <span class="n">in_channels</span><span class="o">=</span><span class="n">hidden_channels</span><span class="p">,</span>
+                    <span class="n">out_channels</span><span class="o">=</span><span class="n">hidden_channels</span><span class="p">,</span>
+                    <span class="n">n_modes</span><span class="o">=</span><span class="n">n_modes</span><span class="p">,</span>
+                    <span class="n">resolution_scaling_factor</span><span class="o">=</span><span class="n">scaling_factor</span><span class="p">,</span>
+                    <span class="o">**</span><span class="n">fno_kwargs</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hidden_gates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">FNOBlocks</span><span class="p">(</span>
+                    <span class="n">in_channels</span><span class="o">=</span><span class="n">hidden_channels</span><span class="p">,</span>
+                    <span class="n">out_channels</span><span class="o">=</span><span class="n">hidden_channels</span><span class="p">,</span>
+                    <span class="n">n_modes</span><span class="o">=</span><span class="n">n_modes</span><span class="p">,</span>
+                    <span class="n">resolution_scaling_factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="o">**</span><span class="n">fno_kwargs</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">complex_data</span><span class="p">:</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">biases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(())</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(())))</span>
+            <span class="k">else</span><span class="p">:</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">biases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(())))</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Forward pass for RNO cell.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : torch.Tensor</span>
+<span class="sd">            Input function at current timestep with shape (batch, hidden_channels, *spatial_dims)</span>
+<span class="sd">        h : torch.Tensor</span>
+<span class="sd">            Hidden state from previous timestep with shape (batch, hidden_channels, *spatial_dims_h)</span>
+<span class="sd">            where spatial_dims_h may differ from spatial_dims if resolution_scaling_factor is set</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        torch.Tensor</span>
+<span class="sd">            Updated hidden state with shape (batch, hidden_channels, *spatial_dims_h)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Update gate</span>
+        <span class="n">update_gate</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_gates</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_gates</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="n">h</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">biases</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        
+        <span class="c1"># Reset gate</span>
+        <span class="n">reset_gate</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_gates</span><span class="p">[</span><span class="mi">1</span><span class="p">](</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_gates</span><span class="p">[</span><span class="mi">1</span><span class="p">](</span><span class="n">h</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">biases</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        
+        <span class="c1"># Candidate state</span>
+        <span class="n">h_combined</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_gates</span><span class="p">[</span><span class="mi">2</span><span class="p">](</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_gates</span><span class="p">[</span><span class="mi">2</span><span class="p">](</span><span class="n">reset_gate</span> <span class="o">*</span> <span class="n">h</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">biases</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">torch</span><span class="o">.</span><span class="n">cfloat</span><span class="p">:</span>
+            <span class="n">candidate_state</span> <span class="o">=</span> <span class="n">cselu</span><span class="p">(</span><span class="n">h_combined</span><span class="p">)</span>  <span class="c1"># complex SELU for complex data</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">candidate_state</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">selu</span><span class="p">(</span><span class="n">h_combined</span><span class="p">)</span>  <span class="c1"># regular SELU for real data</span>
+
+        <span class="n">h_next</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">update_gate</span><span class="p">)</span> <span class="o">*</span> <span class="n">h</span> <span class="o">+</span> <span class="n">update_gate</span> <span class="o">*</span> <span class="n">candidate_state</span>
+
+        <span class="k">return</span> <span class="n">h_next</span>
+
+<div class="viewcode-block" id="RNOBlock">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.rno_block.RNOBlock.html#neuralop.layers.rno_block.RNOBlock">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RNOBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;N-Dimensional Recurrent Neural Operator layer. The RNO layer extends the</span>
+<span class="sd">    action of the RNO cell to take in some sequence of time-steps as input</span>
+<span class="sd">    and output the next output function.</span>
+
+<span class="sd">    The layer applies the RNO cell recurrently over a sequence of inputs:</span>
+<span class="sd">        For t = 1 to T:</span>
+<span class="sd">            h_t = RNOCell(x_t, h_{t-1})</span>
+
+<span class="sd">    where the cell implements:</span>
+<span class="sd">        z_t = σ(f1(x_t) + f2(h_{t-1}) + b1)            [update gate]</span>
+<span class="sd">        r_t = σ(f3(x_t) + f4(h_{t-1}) + b2)            [reset gate]</span>
+<span class="sd">        h̃_t = selu(f5(x_t) + f6(r_t ⊙ h_{t-1}) + b3)  [candidate state]</span>
+<span class="sd">        h_t = (1 - z_t) ⊙ h_{t-1} + z_t ⊙ h̃_t         [next state]</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n_modes : int tuple</span>
+<span class="sd">        number of modes to keep in Fourier Layer, along each dimension</span>
+<span class="sd">        The dimensionality of the RNO is inferred from ``len(n_modes)``</span>
+<span class="sd">    hidden_channels : int</span>
+<span class="sd">        number of hidden channels in the RNO</span>
+<span class="sd">    return_sequences : boolean, optional</span>
+<span class="sd">        Whether to return the sequence of hidden states associated with processing</span>
+<span class="sd">        the inputs sequence of functions. Default: False</span>
+
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    resolution_scaling_factor : Union[Number, List[Number]], optional</span>
+<span class="sd">        Factor by which to scale outputs for super-resolution, by default None</span>
+<span class="sd">    max_n_modes : int or List[int], optional</span>
+<span class="sd">        Maximum number of modes to keep along each dimension, by default None</span>
+<span class="sd">    fno_block_precision : str, optional</span>
+<span class="sd">        Floating point precision to use for computations. Options: &quot;full&quot;, &quot;half&quot;, &quot;mixed&quot;, by default &quot;full&quot;</span>
+<span class="sd">    use_channel_mlp : bool, optional</span>
+<span class="sd">        Whether to use an MLP layer after each FNO block, by default True</span>
+<span class="sd">    channel_mlp_dropout : float, optional</span>
+<span class="sd">        Dropout parameter for self.channel_mlp, by default 0</span>
+<span class="sd">    channel_mlp_expansion : float, optional</span>
+<span class="sd">        Expansion parameter for self.channel_mlp, by default 0.5</span>
+<span class="sd">    non_linearity : torch.nn.F module, optional</span>
+<span class="sd">        Nonlinear activation function to use between layers, by default F.gelu</span>
+<span class="sd">    stabilizer : Literal[&quot;tanh&quot;], optional</span>
+<span class="sd">        Stabilizing module to use between certain layers. Options: &quot;tanh&quot;, None, by default None</span>
+<span class="sd">    norm : Literal[&quot;ada_in&quot;, &quot;group_norm&quot;, &quot;instance_norm&quot;, &quot;batch_norm&quot;], optional</span>
+<span class="sd">        Normalization layer to use. Options: &quot;ada_in&quot;, &quot;group_norm&quot;, &quot;instance_norm&quot;, &quot;batch_norm&quot;, None, by default None</span>
+<span class="sd">    ada_in_features : int, optional</span>
+<span class="sd">        Number of features for adaptive instance norm above, by default None</span>
+<span class="sd">    preactivation : bool, optional</span>
+<span class="sd">        Whether to call forward pass with pre-activation, by default False</span>
+<span class="sd">        If True, call nonlinear activation and norm before Fourier convolution</span>
+<span class="sd">        If False, call activation and norms after Fourier convolutions</span>
+<span class="sd">    fno_skip : str, optional</span>
+<span class="sd">        Module to use for FNO skip connections. Options: &quot;linear&quot;, &quot;soft-gating&quot;, &quot;identity&quot;, None, by default &quot;linear&quot;</span>
+<span class="sd">        If None, no skip connection is added. See layers.skip_connections for more details</span>
+<span class="sd">    channel_mlp_skip : str, optional</span>
+<span class="sd">        Module to use for ChannelMLP skip connections. Options: &quot;linear&quot;, &quot;soft-gating&quot;, &quot;identity&quot;, None, by default &quot;soft-gating&quot;</span>
+<span class="sd">        If None, no skip connection is added. See layers.skip_connections for more details</span>
+<span class="sd">    complex_data : bool, optional</span>
+<span class="sd">        Whether the FNO&#39;s data takes on complex values in space, by default False</span>
+<span class="sd">    separable : bool, optional</span>
+<span class="sd">        Separable parameter for SpectralConv, by default False</span>
+<span class="sd">    factorization : str, optional</span>
+<span class="sd">        Factorization parameter for SpectralConv. Options: &quot;tucker&quot;, &quot;cp&quot;, &quot;tt&quot;, None, by default None</span>
+<span class="sd">    rank : float, optional</span>
+<span class="sd">        Rank parameter for SpectralConv, by default 1.0</span>
+<span class="sd">    conv_module : BaseConv, optional</span>
+<span class="sd">        Module to use for convolutions in FNO block, by default SpectralConv</span>
+<span class="sd">    joint_factorization : bool, optional</span>
+<span class="sd">        Whether to factorize all spectralConv weights as one tensor, by default False</span>
+<span class="sd">    fixed_rank_modes : bool, optional</span>
+<span class="sd">        Fixed_rank_modes parameter for SpectralConv, by default False</span>
+<span class="sd">    implementation : str, optional</span>
+<span class="sd">        Implementation parameter for SpectralConv. Options: &quot;factorized&quot;, &quot;reconstructed&quot;, by default &quot;factorized&quot;</span>
+<span class="sd">    decomposition_kwargs : dict, optional</span>
+<span class="sd">        Kwargs for tensor decomposition in SpectralConv, by default dict()</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Paper: https://arxiv.org/abs/2308.08794</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">n_modes</span><span class="p">,</span>
+        <span class="n">hidden_channels</span><span class="p">,</span>
+        <span class="n">return_sequences</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+        <span class="n">resolution_scaling_factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+        <span class="n">max_n_modes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">fno_block_precision</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">,</span>
+        <span class="n">use_channel_mlp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">channel_mlp_dropout</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">channel_mlp_expansion</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">non_linearity</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">gelu</span><span class="p">,</span>
+        <span class="n">stabilizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">ada_in_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">preactivation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">fno_skip</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
+        <span class="n">channel_mlp_skip</span><span class="o">=</span><span class="s2">&quot;soft-gating&quot;</span><span class="p">,</span>
+        <span class="n">complex_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">separable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">factorization</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">rank</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">conv_module</span><span class="o">=</span><span class="n">SpectralConv</span><span class="p">,</span>
+        <span class="n">fixed_rank_modes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">implementation</span><span class="o">=</span><span class="s2">&quot;factorized&quot;</span><span class="p">,</span>
+        <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_channels</span> <span class="o">=</span> <span class="n">hidden_channels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">return_sequences</span> <span class="o">=</span> <span class="n">return_sequences</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resolution_scaling_factor</span> <span class="o">=</span> <span class="n">resolution_scaling_factor</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="n">RNOCell</span><span class="p">(</span>
+            <span class="n">n_modes</span><span class="p">,</span>
+            <span class="n">hidden_channels</span><span class="p">,</span> 
+            <span class="n">resolution_scaling_factor</span><span class="o">=</span><span class="n">resolution_scaling_factor</span><span class="p">,</span>
+            <span class="n">max_n_modes</span><span class="o">=</span><span class="n">max_n_modes</span><span class="p">,</span>
+            <span class="n">fno_block_precision</span><span class="o">=</span><span class="n">fno_block_precision</span><span class="p">,</span>
+            <span class="n">use_channel_mlp</span><span class="o">=</span><span class="n">use_channel_mlp</span><span class="p">,</span>
+            <span class="n">channel_mlp_dropout</span><span class="o">=</span><span class="n">channel_mlp_dropout</span><span class="p">,</span>
+            <span class="n">channel_mlp_expansion</span><span class="o">=</span><span class="n">channel_mlp_expansion</span><span class="p">,</span>
+            <span class="n">non_linearity</span><span class="o">=</span><span class="n">non_linearity</span><span class="p">,</span>
+            <span class="n">stabilizer</span><span class="o">=</span><span class="n">stabilizer</span><span class="p">,</span>
+            <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
+            <span class="n">preactivation</span><span class="o">=</span><span class="n">preactivation</span><span class="p">,</span>
+            <span class="n">fno_skip</span><span class="o">=</span><span class="n">fno_skip</span><span class="p">,</span>
+            <span class="n">channel_mlp_skip</span><span class="o">=</span><span class="n">channel_mlp_skip</span><span class="p">,</span>
+            <span class="n">complex_data</span><span class="o">=</span><span class="n">complex_data</span><span class="p">,</span>
+            <span class="n">separable</span><span class="o">=</span><span class="n">separable</span><span class="p">,</span>
+            <span class="n">factorization</span><span class="o">=</span><span class="n">factorization</span><span class="p">,</span>
+            <span class="n">rank</span><span class="o">=</span><span class="n">rank</span><span class="p">,</span>
+            <span class="n">conv_module</span><span class="o">=</span><span class="n">conv_module</span><span class="p">,</span>
+            <span class="n">fixed_rank_modes</span><span class="o">=</span><span class="n">fixed_rank_modes</span><span class="p">,</span>
+            <span class="n">implementation</span><span class="o">=</span><span class="n">implementation</span><span class="p">,</span>
+            <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="n">decomposition_kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">complex_data</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bias_h</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(())</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(()))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bias_h</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(()))</span>
+
+<div class="viewcode-block" id="RNOBlock.forward">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.layers.rno_block.RNOBlock.html#neuralop.layers.rno_block.RNOBlock.forward">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Forward pass for RNO layer.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : torch.Tensor</span>
+<span class="sd">            Input sequence with shape (batch, timesteps, hidden_channels, *spatial_dims)</span>
+<span class="sd">        h : torch.Tensor, optional</span>
+<span class="sd">            Initial hidden state with shape (batch, hidden_channels, *spatial_dims_h).</span>
+<span class="sd">            If None, initialized to zeros with added bias. Default: None</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        torch.Tensor</span>
+<span class="sd">            If return_sequences=True: hidden states for all timesteps with shape</span>
+<span class="sd">                (batch, timesteps, hidden_channels, *spatial_dims_h)</span>
+<span class="sd">            If return_sequences=False: final hidden state with shape</span>
+<span class="sd">                (batch, hidden_channels, *spatial_dims_h)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">batch_size</span><span class="p">,</span> <span class="n">timesteps</span><span class="p">,</span> <span class="n">dim</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">dom_sizes</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span>
+
+        <span class="c1"># Initialize hidden state if not provided</span>
+        <span class="k">if</span> <span class="n">h</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Compute the spatial dimensions for h (scaled if resolution_scaling_factor is set)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution_scaling_factor</span><span class="p">:</span>
+                <span class="n">h_shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_channels</span><span class="p">,</span> <span class="o">*</span><span class="n">dom_sizes</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">scaled_sizes</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resolution_scaling_factor</span><span class="o">*</span><span class="n">s</span><span class="p">))</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">dom_sizes</span><span class="p">])</span>
+                <span class="n">h_shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_channels</span><span class="p">,</span> <span class="o">*</span><span class="n">scaled_sizes</span><span class="p">)</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">h_shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">h</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_h</span>
+
+        <span class="n">outputs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># Process each timestep sequentially through the RNO cell</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">timesteps</span><span class="p">):</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">h</span><span class="p">)</span>  <span class="c1"># Update hidden state with current input</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_sequences</span><span class="p">:</span>
+                <span class="n">outputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_sequences</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">h</span></div>
+</div>
+
+</pre></div>
+
+      </div>
+
+      
+
+        <footer class="footer">
+    <div class="content has-text-centered">
+        <div class="block">
+          &copy; Copyright 2026, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+        </div>
+    </div>
+  </footer>
+
+    </div>
+
+  </div>  
+
+	
+
+  </div>  
+  </div> 
+
+  
+  <script>
+    function toggle_sidebar() {
+        var element = document.getElementById("sidebar");
+        var container = document.getElementById("column-container");
+        var localtoccolumn = document.getElementById("localtoc-column");
+        element.classList.toggle("hide-tablet");
+        element.classList.toggle("is-hidden-mobile");
+        container.classList.toggle("sidemenu-hidden");
+        localtoccolumn.classList.toggle("is-one-fifth-widescreen");
+        localtoccolumn.classList.toggle("is-2-desktop");
+        localtoccolumn.classList.toggle("is-3-desktop");
+    }
+  </script> 
+
+
+
+  </body>
+</html>

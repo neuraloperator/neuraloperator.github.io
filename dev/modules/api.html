@@ -248,6 +248,17 @@
 </table>
 <hr class="docutils" />
 </section>
+<section id="recurrent-neural-operators-rno">
+<span id="rno-api"></span><h3>Recurrent Neural Operators (RNO)<a class="headerlink" href="#recurrent-neural-operators-rno" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.models.RNO.html#neuralop.models.RNO" title="neuralop.models.RNO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RNO</span></code></a>(*args, **kwargs)</p></td>
+<td><p>N-Dimensional Recurrent Neural Operator.</p></td>
+</tr>
+</tbody>
+</table>
+<hr class="docutils" />
+</section>
 <section id="uncertainty-quantification-neural-operators-uqno">
 <span id="uqno-api"></span><h3>Uncertainty Quantification Neural Operators (UQNO)<a class="headerlink" href="#uncertainty-quantification-neural-operators-uqno" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
@@ -293,6 +304,17 @@ in the form of PyTorch layers, that you can use to build your own models:</p>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.layers.fno_block.FNOBlocks.html#neuralop.layers.fno_block.FNOBlocks" title="neuralop.layers.fno_block.FNOBlocks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FNOBlocks</span></code></a>(in_channels, out_channels, n_modes)</p></td>
 <td><p>FNOBlocks implements a sequence of Fourier layers.</p></td>
+</tr>
+</tbody>
+</table>
+<hr class="docutils" />
+</section>
+<section id="module-neuralop.layers.rno_block">
+<span id="rno-blocks"></span><span id="rno-block-api"></span><h3>RNO Blocks<a class="headerlink" href="#module-neuralop.layers.rno_block" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.layers.rno_block.RNOBlock.html#neuralop.layers.rno_block.RNOBlock" title="neuralop.layers.rno_block.RNOBlock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RNOBlock</span></code></a>(n_modes, hidden_channels[, ...])</p></td>
+<td><p>N-Dimensional Recurrent Neural Operator layer.</p></td>
 </tr>
 </tbody>
 </table>
@@ -809,7 +831,7 @@ loss functions:</p>
         <footer class="footer">
     <div class="content has-text-centered">
         <div class="block">
-          &copy; Copyright 2025, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+          &copy; Copyright 2026, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
         </div>
     </div>
   </footer>
@@ -840,6 +862,7 @@ loss functions:</p>
 <li><a class="reference internal" href="#geometry-informed-neural-operators-gino">Geometry-Informed Neural Operators (GINO)</a></li>
 <li><a class="reference internal" href="#local-neural-operators-localno">Local Neural Operators (LocalNO)</a></li>
 <li><a class="reference internal" href="#u-shaped-neural-operators-u-no">U-shaped Neural Operators (U-NO)</a></li>
+<li><a class="reference internal" href="#recurrent-neural-operators-rno">Recurrent Neural Operators (RNO)</a></li>
 <li><a class="reference internal" href="#uncertainty-quantification-neural-operators-uqno">Uncertainty Quantification Neural Operators (UQNO)</a></li>
 <li><a class="reference internal" href="#fourier-geometry-neural-operators-fnogno">Fourier/Geometry Neural Operators (FNOGNO)</a></li>
 <li><a class="reference internal" href="#codomain-attention-neural-operators-codano">Codomain Attention Neural Operators (CODANO)</a></li>
@@ -847,6 +870,7 @@ loss functions:</p>
 </li>
 <li><a class="reference internal" href="#module-neuralop.layers">Layers</a><ul>
 <li><a class="reference internal" href="#module-neuralop.layers.fno_block">FNO Blocks</a></li>
+<li><a class="reference internal" href="#module-neuralop.layers.rno_block">RNO Blocks</a></li>
 <li><a class="reference internal" href="#module-neuralop.layers.spectral_convolution">Fourier Convolutions</a></li>
 <li><a class="reference internal" href="#module-neuralop.layers.spherical_convolution">Spherical Convolutions</a></li>
 <li><a class="reference internal" href="#module-neuralop.layers.gno_block">Graph convolutions and kernel integration</a><ul>
