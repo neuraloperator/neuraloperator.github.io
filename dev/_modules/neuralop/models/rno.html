@@ -144,9 +144,10 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">..layers.embeddings</span><span class="w"> </span><span class="kn">import</span> <span class="n">GridEmbeddingND</span><span class="p">,</span> <span class="n">GridEmbedding2D</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.base_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
 
+
 <div class="viewcode-block" id="RNO">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.models.RNO.html#neuralop.models.RNO">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">RNO</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;RNO&#39;</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RNO</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;RNO&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    N-Dimensional Recurrent Neural Operator.</span>
 
@@ -165,9 +166,9 @@
 <span class="sd">    linear Fourier layers.</span>
 
 <span class="sd">    Paper:</span>
-<span class="sd">    .. [RNO] Liu-Schiaffini, M., Singer, C. E., Kovachki, N., Schneider, T., </span>
-<span class="sd">        Azizzadenesheli, K., &amp; Anandkumar, A. (2023). Tipping point forecasting </span>
-<span class="sd">        in non-stationary dynamics on function spaces. arXiv preprint </span>
+<span class="sd">    .. [RNO] Liu-Schiaffini, M., Singer, C. E., Kovachki, N., Schneider, T.,</span>
+<span class="sd">        Azizzadenesheli, K., &amp; Anandkumar, A. (2023). Tipping point forecasting</span>
+<span class="sd">        in non-stationary dynamics on function spaces. arXiv preprint</span>
 <span class="sd">        arXiv:2308.08794.</span>
 
 <span class="sd">    Main Parameters</span>
@@ -281,6 +282,7 @@
 <span class="sd">    conv_module : nn.Module, optional</span>
 <span class="sd">        Module to use for FNOBlock&#39;s convolutions. Default: SpectralConv</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">n_modes</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
@@ -323,7 +325,7 @@
         <span class="c1"># n_modes is a special property - see the class&#39; property for underlying mechanism</span>
         <span class="c1"># When updated, change should be reflected in fno blocks</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_modes</span> <span class="o">=</span> <span class="n">n_modes</span>
-        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">hidden_channels</span> <span class="o">=</span> <span class="n">hidden_channels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span> <span class="o">=</span> <span class="n">in_channels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span> <span class="o">=</span> <span class="n">out_channels</span>
@@ -333,7 +335,7 @@
         <span class="c1"># init lifting and projection channels using ratios w.r.t hidden channels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lifting_channel_ratio</span> <span class="o">=</span> <span class="n">lifting_channel_ratio</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lifting_channels</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">lifting_channel_ratio</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_channels</span><span class="p">)</span>
-        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">projection_channel_ratio</span> <span class="o">=</span> <span class="n">projection_channel_ratio</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">projection_channels</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">projection_channel_ratio</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_channels</span><span class="p">)</span>
 
@@ -361,7 +363,7 @@
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">domain_padding</span> <span class="o">=</span> <span class="kc">None</span>
-        
+
         <span class="c1">## Positional embedding</span>
         <span class="k">if</span> <span class="n">positional_embedding</span> <span class="o">==</span> <span class="s2">&quot;grid&quot;</span><span class="p">:</span>
             <span class="n">spatial_grid_boundaries</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span>
@@ -386,7 +388,7 @@
                 <span class="sa">f</span><span class="s2">&quot;Error: tried to instantiate RNO positional embedding with </span><span class="si">{</span><span class="n">positional_embedding</span><span class="si">}</span><span class="s2">, &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;expected one of &#39;grid&#39;, GridEmbeddingND, GridEmbedding2D, or None&quot;</span>
             <span class="p">)</span>
-        
+
         <span class="c1">## Resolution scaling factor</span>
         <span class="k">if</span> <span class="n">resolution_scaling_factor</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">resolution_scaling_factor</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
@@ -426,7 +428,8 @@
                 <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="n">decomposition_kwargs</span><span class="p">,</span>
                 <span class="n">conv_module</span><span class="o">=</span><span class="n">conv_module</span><span class="p">,</span>
             <span class="p">)</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span><span class="p">)]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span><span class="p">)</span>
+        <span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span><span class="n">module_list</span><span class="p">)</span>
 
         <span class="c1">## Lifting layer</span>
@@ -632,12 +635,9 @@
 
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_steps</span><span class="p">):</span>
             <span class="n">pred</span><span class="p">,</span> <span class="n">states</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span>
-                <span class="n">x</span><span class="p">,</span> 
-                <span class="n">states</span><span class="p">,</span> 
-                <span class="n">return_hidden_states</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
-                <span class="n">keep_states_padded</span><span class="o">=</span><span class="kc">True</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">return_hidden_states</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_states_padded</span><span class="o">=</span><span class="kc">True</span>
             <span class="p">)</span>
-            
+
             <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">pred</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">pred</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="n">pred</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
             <span class="k">if</span> <span class="n">grid_function</span><span class="p">:</span>

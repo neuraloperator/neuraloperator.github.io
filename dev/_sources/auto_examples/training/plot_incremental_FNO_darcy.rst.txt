@@ -317,15 +317,15 @@ to verify our incremental training setup
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fa363a7c2b0>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f4ae1f442b0>
 
     ### LOSSES ###
 
     ### INCREMENTAL RESOLUTION + GRADIENT EXPLAINED ###
 
-     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7fa363a34cd0>
+     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7f4ab4924cd0>
 
-     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7fa363a34cd0>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7fa363a7c050>}
+     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7f4ab4924cd0>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f4ae1f44050>}
 
 
 
@@ -429,56 +429,56 @@ We train the model using incremental meta-learning. The trainer will:
     Raw outputs of shape torch.Size([16, 1, 8, 8])
     /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:536: UserWarning: H1Loss.__call__() received unexpected keyword arguments: ['x']. These arguments will be ignored.
       loss += training_loss(out, **sample)
-    [0] time=0.25, avg_loss=0.9304, train_err=13.2921
+    [0] time=0.23, avg_loss=0.9304, train_err=13.2921
     /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:581: UserWarning: LpLoss.__call__() received unexpected keyword arguments: ['x']. These arguments will be ignored.
       val_loss = loss(out, **sample)
     Eval: 16_h1=0.8721, 16_l2=0.6645, 32_h1=0.9786, 32_l2=0.6792
     [1] time=0.22, avg_loss=0.7344, train_err=10.4912
     Eval: 16_h1=0.7733, 16_l2=0.4229, 32_h1=0.9898, 32_l2=0.4441
-    [2] time=0.23, avg_loss=0.6269, train_err=8.9551
+    [2] time=0.21, avg_loss=0.6269, train_err=8.9551
     /home/runner/work/neuraloperator/neuraloperator/neuralop/training/incremental.py:244: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
     Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
       torch.Tensor(strength_vector),
     Eval: 16_h1=0.8184, 16_l2=0.4816, 32_h1=0.9968, 32_l2=0.5036
     [3] time=0.23, avg_loss=0.6245, train_err=8.9212
     Eval: 16_h1=0.7108, 16_l2=0.3728, 32_h1=0.8679, 32_l2=0.3919
-    [4] time=0.23, avg_loss=0.5684, train_err=8.1204
+    [4] time=0.21, avg_loss=0.5684, train_err=8.1204
     Eval: 16_h1=0.8178, 16_l2=0.4753, 32_h1=1.1135, 32_l2=0.5132
-    [5] time=0.23, avg_loss=0.5520, train_err=7.8863
+    [5] time=0.22, avg_loss=0.5520, train_err=7.8863
     Eval: 16_h1=0.7876, 16_l2=0.4661, 32_h1=1.0540, 32_l2=0.4857
-    [6] time=0.23, avg_loss=0.5694, train_err=8.1350
+    [6] time=0.22, avg_loss=0.5694, train_err=8.1350
     Eval: 16_h1=0.7870, 16_l2=0.4602, 32_h1=1.1319, 32_l2=0.5039
-    [7] time=0.23, avg_loss=0.4907, train_err=7.0101
+    [7] time=0.22, avg_loss=0.4907, train_err=7.0101
     Eval: 16_h1=0.6249, 16_l2=0.3236, 32_h1=0.8469, 32_l2=0.3518
-    [8] time=0.23, avg_loss=0.4256, train_err=6.0796
+    [8] time=0.22, avg_loss=0.4256, train_err=6.0796
     Eval: 16_h1=0.7237, 16_l2=0.4238, 32_h1=0.9182, 32_l2=0.4555
-    [9] time=0.23, avg_loss=0.4811, train_err=6.8729
+    [9] time=0.22, avg_loss=0.4811, train_err=6.8729
     Eval: 16_h1=0.5829, 16_l2=0.3504, 32_h1=0.8236, 32_l2=0.3849
     Incre Res Update: change index to 1
     Incre Res Update: change sub to 1
     Incre Res Update: change res to 16
-    [10] time=0.32, avg_loss=0.5237, train_err=7.4809
+    [10] time=0.30, avg_loss=0.5237, train_err=7.4809
     Eval: 16_h1=0.5012, 16_l2=0.2913, 32_h1=0.6084, 32_l2=0.2829
-    [11] time=0.30, avg_loss=0.4472, train_err=6.3879
+    [11] time=0.28, avg_loss=0.4472, train_err=6.3879
     Eval: 16_h1=0.5117, 16_l2=0.3063, 32_h1=0.6778, 32_l2=0.3257
     [12] time=0.30, avg_loss=0.4627, train_err=6.6098
     Eval: 16_h1=0.4777, 16_l2=0.2868, 32_h1=0.6316, 32_l2=0.2877
     [13] time=0.30, avg_loss=0.4132, train_err=5.9028
     Eval: 16_h1=0.4291, 16_l2=0.2652, 32_h1=0.5632, 32_l2=0.2735
-    [14] time=0.31, avg_loss=0.3869, train_err=5.5269
+    [14] time=0.29, avg_loss=0.3869, train_err=5.5269
     Eval: 16_h1=0.4190, 16_l2=0.2472, 32_h1=0.5287, 32_l2=0.2527
-    [15] time=0.31, avg_loss=0.3951, train_err=5.6450
+    [15] time=0.29, avg_loss=0.3951, train_err=5.6450
     Eval: 16_h1=0.3830, 16_l2=0.2399, 32_h1=0.5248, 32_l2=0.2600
     [16] time=0.30, avg_loss=0.3452, train_err=4.9310
     Eval: 16_h1=0.3463, 16_l2=0.2178, 32_h1=0.4691, 32_l2=0.2275
-    [17] time=0.31, avg_loss=0.3202, train_err=4.5746
+    [17] time=0.29, avg_loss=0.3202, train_err=4.5746
     Eval: 16_h1=0.4641, 16_l2=0.2897, 32_h1=0.6054, 32_l2=0.2965
-    [18] time=0.31, avg_loss=0.3974, train_err=5.6767
+    [18] time=0.29, avg_loss=0.3974, train_err=5.6767
     Eval: 16_h1=0.3880, 16_l2=0.2649, 32_h1=0.4860, 32_l2=0.2759
-    [19] time=0.31, avg_loss=0.3456, train_err=4.9377
+    [19] time=0.29, avg_loss=0.3456, train_err=4.9377
     Eval: 16_h1=0.3415, 16_l2=0.2211, 32_h1=0.4778, 32_l2=0.2343
 
-    {'train_err': 4.937735336167472, 'avg_loss': 0.34564147353172303, 'avg_lasso_loss': None, 'epoch_train_time': 0.31068845199990847, '16_h1': tensor(0.3415), '16_l2': tensor(0.2211), '32_h1': tensor(0.4778), '32_l2': tensor(0.2343)}
+    {'train_err': 4.937735336167472, 'avg_loss': 0.34564147353172303, 'avg_lasso_loss': None, 'epoch_train_time': 0.2885747039999842, '16_h1': tensor(0.3415), '16_l2': tensor(0.2211), '32_h1': tensor(0.4778), '32_l2': tensor(0.2343)}
 
 
 
@@ -561,7 +561,7 @@ In practice we would train a Neural Operator on one or multiple GPUs
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 11.197 seconds)
+   **Total running time of the script:** (0 minutes 10.754 seconds)
 
 
 .. _sphx_glr_download_auto_examples_training_plot_incremental_FNO_darcy.py:
