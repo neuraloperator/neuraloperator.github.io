@@ -406,13 +406,13 @@ We print the model architecture, optimizer, scheduler, and loss functions
     )
 
     ### SCHEDULER ###
-     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f3063b40590>
+     <torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fb7ddb44590>
 
     ### LOSSES ###
 
-     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7f3063b40830>
+     * Train: <neuralop.losses.data_losses.H1Loss object at 0x7fb7ddb44830>
 
-     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7f3063b40830>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7f3063b406e0>}
+     * Test: {'h1': <neuralop.losses.data_losses.H1Loss object at 0x7fb7ddb44830>, 'l2': <neuralop.losses.data_losses.LpLoss object at 0x7fb7ddb446e0>}
 
 
 
@@ -498,22 +498,22 @@ We train the model on our Darcy-Flow dataset. The trainer will:
     Raw outputs of shape torch.Size([32, 1, 16, 16])
     /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:536: UserWarning: H1Loss.__call__() received unexpected keyword arguments: ['x']. These arguments will be ignored.
       loss += training_loss(out, **sample)
-    [0] time=4.09, avg_loss=0.6413, train_err=20.0396
+    [0] time=4.15, avg_loss=0.6413, train_err=20.0396
     /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:581: UserWarning: LpLoss.__call__() received unexpected keyword arguments: ['x']. These arguments will be ignored.
       val_loss = loss(out, **sample)
     Eval: 16_h1=0.4022, 16_l2=0.2731, 32_h1=0.6125, 32_l2=0.3017
-    [5] time=4.08, avg_loss=0.2208, train_err=6.9006
+    [5] time=4.09, avg_loss=0.2208, train_err=6.9006
     Eval: 16_h1=0.2547, 16_l2=0.1777, 32_h1=0.4186, 32_l2=0.2127
-    [10] time=4.05, avg_loss=0.1816, train_err=5.6739
+    [10] time=4.10, avg_loss=0.1816, train_err=5.6739
     Eval: 16_h1=0.2441, 16_l2=0.1535, 32_h1=0.4204, 32_l2=0.1916
-    [15] time=4.04, avg_loss=0.1844, train_err=5.7641
+    [15] time=4.08, avg_loss=0.1844, train_err=5.7641
     Eval: 16_h1=0.2480, 16_l2=0.1506, 32_h1=0.3855, 32_l2=0.1756
-    [20] time=4.06, avg_loss=0.1212, train_err=3.7884
+    [20] time=4.11, avg_loss=0.1212, train_err=3.7884
     Eval: 16_h1=0.2236, 16_l2=0.1320, 32_h1=0.3791, 32_l2=0.1439
-    [25] time=4.06, avg_loss=0.0990, train_err=3.0922
+    [25] time=4.11, avg_loss=0.0990, train_err=3.0922
     Eval: 16_h1=0.1977, 16_l2=0.1096, 32_h1=0.3933, 32_l2=0.1509
 
-    {'train_err': 2.525248534977436, 'avg_loss': 0.08080795311927795, 'avg_lasso_loss': None, 'epoch_train_time': 4.068503604999989}
+    {'train_err': 2.525248534977436, 'avg_loss': 0.08080795311927795, 'avg_lasso_loss': None, 'epoch_train_time': 4.073046050000016}
 
 
 
@@ -595,7 +595,7 @@ In practice we would train a Neural Operator on one or multiple GPUs
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (2 minutes 6.801 seconds)
+   **Total running time of the script:** (2 minutes 7.556 seconds)
 
 
 .. _sphx_glr_download_auto_examples_models_plot_UNO_darcy.py:
