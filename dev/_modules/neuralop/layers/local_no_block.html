@@ -25,8 +25,8 @@
 
   
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
@@ -233,7 +233,7 @@
 <span class="sd">        If None, no skip connection is added. See layers.skip_connections for more details</span>
 
 <span class="sd">    Other Parameters</span>
-<span class="sd">    ---------------</span>
+<span class="sd">    ----------------</span>
 <span class="sd">    complex_data : bool, optional</span>
 <span class="sd">        Whether the data takes complex values in space, by default False</span>
 <span class="sd">    separable : bool, optional</span>
@@ -253,6 +253,13 @@
 <span class="sd">        Implementation method for SpectralConv, by default &quot;factorized&quot;</span>
 <span class="sd">    decomposition_kwargs : dict, optional</span>
 <span class="sd">        Keyword arguments for tensor decomposition in SpectralConv, by default dict()</span>
+<span class="sd">    enforce_hermitian_symmetry : bool, optional</span>
+<span class="sd">        Whether to enforce Hermitian symmetry conditions when performing inverse FFT</span>
+<span class="sd">        for real-valued data. Only used when ``conv_module`` is :class:`SpectralConv`</span>
+<span class="sd">        or a subclass; ignored otherwise. When True, explicitly enforces that the 0th</span>
+<span class="sd">        frequency and Nyquist frequency are real-valued before calling irfft. When False,</span>
+<span class="sd">        relies on cuFFT&#39;s irfftn to handle symmetry automatically, which may fail on</span>
+<span class="sd">        certain GPUs or input sizes, causing line artifacts. By default True.</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
@@ -309,6 +316,7 @@
         <span class="n">implementation</span><span class="o">=</span><span class="s2">&quot;factorized&quot;</span><span class="p">,</span>
         <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span>
         <span class="n">fft_norm</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span>
+        <span class="n">enforce_hermitian_symmetry</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_modes</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
@@ -359,6 +367,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">separable</span> <span class="o">=</span> <span class="n">separable</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">preactivation</span> <span class="o">=</span> <span class="n">preactivation</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ada_in_features</span> <span class="o">=</span> <span class="n">ada_in_features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enforce_hermitian_symmetry</span> <span class="o">=</span> <span class="n">enforce_hermitian_symmetry</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">diff_layers</span> <span class="o">=</span> <span class="n">diff_layers</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">conv_padding_mode</span> <span class="o">=</span> <span class="n">conv_padding_mode</span>
@@ -383,13 +392,19 @@
         <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;disco_layers must either provide a single bool value or a list of booleans of length n_layers,</span><span class="se">\</span>
 <span class="s2">                    got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">disco_layers</span><span class="p">)</span><span class="si">=}</span><span class="s2">&quot;</span>
 
+        <span class="c1"># One conv per layer. Only resolution_scaling_factor varies by layer index</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">convs</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
             <span class="p">[</span>
                 <span class="n">conv_module</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span><span class="p">,</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span><span class="p">,</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">n_modes</span><span class="p">,</span>
-                    <span class="n">resolution_scaling_factor</span><span class="o">=</span><span class="kc">None</span> <span class="k">if</span> <span class="n">resolution_scaling_factor</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution_scaling_factor</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="c1"># Per-layer scaling for super-resolution, or None if disabled</span>
+                    <span class="n">resolution_scaling_factor</span><span class="o">=</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">resolution_scaling_factor</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">resolution_scaling_factor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                        <span class="k">else</span> <span class="kc">None</span>
+                    <span class="p">),</span>
                     <span class="n">max_n_modes</span><span class="o">=</span><span class="n">max_n_modes</span><span class="p">,</span>
                     <span class="n">rank</span><span class="o">=</span><span class="n">rank</span><span class="p">,</span>
                     <span class="n">fixed_rank_modes</span><span class="o">=</span><span class="n">fixed_rank_modes</span><span class="p">,</span>
@@ -397,6 +412,12 @@
                     <span class="n">separable</span><span class="o">=</span><span class="n">separable</span><span class="p">,</span>
                     <span class="n">factorization</span><span class="o">=</span><span class="n">factorization</span><span class="p">,</span>
                     <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="n">decomposition_kwargs</span><span class="p">,</span>
+                    <span class="c1"># Only SpectralConv (and subclasses) accept enforce_hermitian_symmetry. Others ignore it</span>
+                    <span class="o">**</span><span class="p">(</span>
+                        <span class="p">{</span><span class="s2">&quot;enforce_hermitian_symmetry&quot;</span><span class="p">:</span> <span class="n">enforce_hermitian_symmetry</span><span class="p">}</span>
+                        <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">conv_module</span><span class="p">,</span> <span class="n">SpectralConv</span><span class="p">)</span>
+                        <span class="k">else</span> <span class="p">{}</span>
+                    <span class="p">),</span>
                 <span class="p">)</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span><span class="p">)</span>
             <span class="p">]</span>

@@ -26,10 +26,10 @@
 
   
     <script src="../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
  <script src="../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
  
@@ -253,7 +253,7 @@ Rather than working directly with operators on infinite-dimensional function spa
 the standard approach is to discretize the physical domain and reformulate the problem in a finite-dimensional Euclidean setting.
 Over the past century, this has led to the development of powerful numerical methods,
 such as the finite element method and the finite difference method, which remain the cornerstone tools for PDE solution.</p>
-<a class="reference internal image-reference" href="../_images/grids.jpg"><img alt="../_images/grids.jpg" src="../_images/grids.jpg" style="width: 800px;" />
+<a class="reference internal image-reference" href="../_images/grids.jpg"><img alt="../_images/grids.jpg" src="../_images/grids.jpg" width="800" />
 </a>
 <p>Three examples of discretization:
 The left one is a regular grid used in the finite difference method;
@@ -392,7 +392,7 @@ and a graph <span class="math notranslate nohighlight">\(G\)</span>, the message
 taking edge features as input and as output
 a matrix in <span class="math notranslate nohighlight">\(\mathbb{R}^{n \times n}\)</span>.
 Relating to our kernel formulation, <span class="math notranslate nohighlight">\(e(x,y) = (x,y,a(x),a(y))\)</span>.</p>
-<a class="reference internal image-reference" href="../_images/graph.jpg"><img alt="../_images/graph.jpg" src="../_images/graph.jpg" style="width: 800px;" />
+<a class="reference internal image-reference" href="../_images/graph.jpg"><img alt="../_images/graph.jpg" src="../_images/graph.jpg" width="800" />
 </a>
 <div style="margin-top: 3em;"></div></section>
 <section id="nystrom-approximation">
@@ -423,7 +423,7 @@ leading to greater accuracy where it matters most.</p>
 to learn the operator <span class="math notranslate nohighlight">\(\mathcal{F}: f \mapsto u\)</span>.</p>
 <div style="margin-top: 3em;"></div><section id="poisson-equation">
 <h3>Poisson equation<a class="headerlink" href="#poisson-equation" title="Link to this heading"></a></h3>
-<a class="reference internal image-reference" href="../_images/nik_kernel.jpg"><img alt="../_images/nik_kernel.jpg" src="../_images/nik_kernel.jpg" style="width: 800px;" />
+<a class="reference internal image-reference" href="../_images/nik_kernel.jpg"><img alt="../_images/nik_kernel.jpg" src="../_images/nik_kernel.jpg" width="800" />
 </a>
 <p>As shown in the figure above, we compare the true analytic Green’s function <span class="math notranslate nohighlight">\(G(x,y)\)</span> (left)
 with the learned kernel <span class="math notranslate nohighlight">\(\kappa_{\phi}(x,y)\)</span>  (right).
@@ -432,7 +432,7 @@ which means our neural network formulation matches the Green’s function expres
 <div style="margin-top: 3em;"></div></section>
 <section id="d-poisson-equation">
 <h3>2D Poisson equation<a class="headerlink" href="#d-poisson-equation" title="Link to this heading"></a></h3>
-<a class="reference internal image-reference" href="../_images/GKN_compare.jpg"><img alt="../_images/GKN_compare.jpg" src="../_images/GKN_compare.jpg" style="width: 800px;" />
+<a class="reference internal image-reference" href="../_images/GKN_compare.jpg"><img alt="../_images/GKN_compare.jpg" src="../_images/GKN_compare.jpg" width="800" />
 </a>
 <p>By assuming the kernel structure,
 graph kernel networks need only a few training examples to learn the shape of the solution <span class="math notranslate nohighlight">\(u\)</span>.
@@ -456,7 +456,7 @@ the test errors on different resolutions are about the same,
 which means the graph kernel network can also
 generalize in the semi-supervised setting.
 A figure for <span class="math notranslate nohighlight">\(s=16, s'=241\)</span> is shown below (where the error is the absolute squared error):</p>
-<a class="reference internal image-reference" href="../_images/uai_16to241.jpg"><img alt="../_images/uai_16to241.jpg" src="../_images/uai_16to241.jpg" style="width: 800px;" />
+<a class="reference internal image-reference" href="../_images/uai_16to241.jpg"><img alt="../_images/uai_16to241.jpg" src="../_images/uai_16to241.jpg" width="800" />
 </a>
 <div style="margin-top: 3em;"></div></section>
 <section id="conclusion">

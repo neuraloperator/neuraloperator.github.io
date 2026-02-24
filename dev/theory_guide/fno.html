@@ -26,10 +26,10 @@
 
   
     <script src="../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
  <script src="../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
  
@@ -264,7 +264,7 @@ So it is usually more efficient to represent them in Fourier space.</p>
 <p>Convolution in the spatial domain is equivalent to a pointwise multiplication in the Fourier domain. To implement the (global) convolution operator,
 we first do a Fourier transform, then a linear transform, and an inverse Fourier transform.
 As shown in the top part of the figure:</p>
-<a class="reference internal image-reference" href="../_images/fourier_layer.jpg"><img alt="../_images/fourier_layer.jpg" src="../_images/fourier_layer.jpg" style="width: 800px;" />
+<a class="reference internal image-reference" href="../_images/fourier_layer.jpg"><img alt="../_images/fourier_layer.jpg" src="../_images/fourier_layer.jpg" width="800" />
 </a>
 <dl class="simple">
 <dt>The Fourier layer just consists of three steps:</dt><dd><ul class="simple">
@@ -382,7 +382,7 @@ one axis. Therefore it is sufficient to keep only two of the four corners of the
 to the center of the FFT matrix, such that the matrix would be indexed with modes <code class="code docutils literal notranslate"><span class="pre">-n//2,</span> <span class="pre">-n//2</span> <span class="pre">+</span> <span class="pre">1,</span> <span class="pre">...-1,</span> <span class="pre">0,</span> <span class="pre">1,</span> <span class="pre">...</span></code>
 as shown below:</p>
 <figure class="align-default" id="id7">
-<a class="reference internal image-reference" href="../_images/fft_shift.png"><img alt="../_images/fft_shift.png" src="../_images/fft_shift.png" style="width: 800px;" />
+<a class="reference internal image-reference" href="../_images/fft_shift.png"><img alt="../_images/fft_shift.png" src="../_images/fft_shift.png" width="800" />
 </a>
 <figcaption>
 <p><span class="caption-text">Visualizing the Fourier coefficients as returned by the Real Fast Fourier Transform implementation in PyTorch.
@@ -394,7 +394,7 @@ transform. For more details, see the source paper <a class="footnote-reference b
 <div style="margin-top: 3em;"></div></section>
 <section id="convolutional-filters-in-fourier-space">
 <h3>Convolutional Filters in Fourier Space<a class="headerlink" href="#convolutional-filters-in-fourier-space" title="Link to this heading"></a></h3>
-<a class="reference internal image-reference" href="../_images/filters.jpg"><img alt="../_images/filters.jpg" src="../_images/filters.jpg" style="width: 800px;" />
+<a class="reference internal image-reference" href="../_images/filters.jpg"><img alt="../_images/filters.jpg" src="../_images/filters.jpg" width="800" />
 </a>
 <p>Filters in convolution neural networks are usually local.
 They are good for capturing local patterns such as edges and shapes.
@@ -558,7 +558,7 @@ defined by <span class="math notranslate nohighlight">\(a \mapsto u\)</span>. No
 </tbody>
 </table>
 </div></blockquote>
-<a class="reference internal image-reference" href="../_images/fourier_error.jpg"><img alt="../_images/fourier_error.jpg" src="../_images/fourier_error.jpg" style="width: 800px;" />
+<a class="reference internal image-reference" href="../_images/fourier_error.jpg"><img alt="../_images/fourier_error.jpg" src="../_images/fourier_error.jpg" width="800" />
 </a>
 <div style="margin-top: 3em;"></div></section>
 <section id="benchmarks-for-time-independent-problems-burgers-and-darcy">
@@ -647,7 +647,7 @@ decreasing the final time <span class="math notranslate nohighlight">\(T\)</span
 </tbody>
 </table>
 </div></blockquote>
-<a class="reference internal image-reference" href="../_images/fourier_ns1e4.jpg"><img alt="../_images/fourier_ns1e4.jpg" src="../_images/fourier_ns1e4.jpg" style="width: 800px;" />
+<a class="reference internal image-reference" href="../_images/fourier_ns1e4.jpg"><img alt="../_images/fourier_ns1e4.jpg" src="../_images/fourier_ns1e4.jpg" width="800" />
 </a>
 <div style="margin-top: 3em;"></div><p>Benchmarks for time-dependent problems (Navier-Stokes):</p>
 <blockquote>
@@ -681,7 +681,7 @@ We compare the Fourier neural operator acting as a surrogate model
 with the traditional solvers used to generate our train-test data (both run on GPU).
 We generate 25,000 samples from the posterior (with a 5,000 sample burn-in period),
 requiring 30,000 evaluations of the forward operator.</p>
-<a class="reference internal image-reference" href="../_images/fourier_bayesian.jpg"><img alt="../_images/fourier_bayesian.jpg" src="../_images/fourier_bayesian.jpg" style="width: 800px;" />
+<a class="reference internal image-reference" href="../_images/fourier_bayesian.jpg"><img alt="../_images/fourier_bayesian.jpg" src="../_images/fourier_bayesian.jpg" width="800" />
 </a>
 <p>The top left panel shows the true initial vorticity while the bottom left panel shows
 the true observed vorticity at <span class="math notranslate nohighlight">\(T=50\)</span> with black dots indicating

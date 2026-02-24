@@ -26,8 +26,8 @@
 
   
     <script src="../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
@@ -177,7 +177,7 @@
 <h1><a class="reference internal" href="../api.html#module-neuralop.layers.embeddings" title="neuralop.layers.embeddings"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.embeddings</span></code></a>.GridEmbeddingND<a class="headerlink" href="#neuralop-layers-embeddings-gridembeddingnd" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.layers.embeddings.GridEmbeddingND">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.embeddings.</span></span><span class="sig-name descname"><span class="pre">GridEmbeddingND</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_boundaries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[[0,</span> <span class="pre">1],</span> <span class="pre">[0,</span> <span class="pre">1]]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/embeddings.html#GridEmbeddingND"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.embeddings.GridEmbeddingND" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neuralop.layers.embeddings.</span></span><span class="sig-name descname"><span class="pre">GridEmbeddingND</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_boundaries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[[0,</span> <span class="pre">1],</span> <span class="pre">[0,</span> <span class="pre">1]]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/embeddings.html#GridEmbeddingND"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.embeddings.GridEmbeddingND" title="Link to this definition"></a></dt>
 <dd><p>GridEmbeddingND applies a simple positional embedding as a regular ND grid.</p>
 <p>It expects inputs of shape (batch, channels, d_1, …, d_n)</p>
 <dl class="field-list simple">
@@ -213,14 +213,14 @@
 <span class="sig-name descname"><span class="pre">grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spatial_dims</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dtype</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/embeddings.html#GridEmbeddingND.grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.embeddings.GridEmbeddingND.grid" title="Link to this definition"></a></dt>
 <dd><p>grid generates ND grid needed for pos encoding
 and caches the grid associated with MRU resolution</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl>
-<dt><strong>spatial_dims</strong><span class="classifier">torch.Size</span></dt><dd><p>sizes of spatial resolution</p>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>spatial_dims</strong><span class="classifier">torch.Size</span></dt><dd><p>Sizes of spatial resolution.</p>
 </dd>
-<dt><strong>device</strong><span class="classifier">literal ‘cpu’ or ‘cuda:<a href="#id1"><span class="problematic" id="id2">*</span></a>’</span></dt><dd><p>where to load data</p>
+<dt><strong>device</strong><span class="classifier">str</span></dt><dd><p>Device to load data (e.g. ‘cpu’ or ‘cuda:<a href="#id1"><span class="problematic" id="id2">*</span></a>’).</p>
 </dd>
-<dt><strong>dtype</strong><span class="classifier">str</span></dt><dd><p>dtype to encode data</p>
+<dt><strong>dtype</strong><span class="classifier">str</span></dt><dd><p>dtype to encode data.</p>
 </dd>
 </dl>
 </dd>
@@ -236,7 +236,17 @@ and caches the grid associated with MRU resolution</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="neuralop.layers.embeddings.GridEmbeddingND.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batched</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/embeddings.html#GridEmbeddingND.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.embeddings.GridEmbeddingND.forward" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data: torch.Tensor</strong></dt><dd><p>assumes shape (batch (optional), channels, x_1, x_2, …x_n)</p>
+</dd>
+<dt><strong>batched: bool</strong></dt><dd><p>whether data has a batch dim</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 

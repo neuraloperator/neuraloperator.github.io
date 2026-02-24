@@ -90,18 +90,20 @@ Preparation
 
 Let's start by loading an example image
 
-.. GENERATED FROM PYTHON SOURCE LINES 61-75
+.. GENERATED FROM PYTHON SOURCE LINES 61-77
 
 .. code-block:: Python
 
-    os.system(
-        "curl https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Albert_Einstein_Head.jpg/360px-Albert_Einstein_Head.jpg -o ./einstein.jpg"
-    )
+    try:
+        _script_dir = os.path.dirname(os.path.abspath(__file__))
+    except NameError:
+        _script_dir = os.getcwd()
+    einstein_path = os.path.join(_script_dir, "einstein.jpg")
 
     nx = 90
     ny = 120
 
-    img = image.imread("./einstein.jpg")
+    img = image.imread(einstein_path)
     data = nn.functional.interpolate(
         torch.from_numpy(img).unsqueeze(0).unsqueeze(0), size=(ny, nx)
     ).squeeze()
@@ -121,13 +123,13 @@ Let's start by loading an example image
 
  .. code-block:: none
 
-    /home/runner/work/neuraloperator/neuraloperator/examples/layers/plot_DISCO_convolutions.py:70: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:206.)
+    /home/runner/work/neuraloperator/neuraloperator/examples/layers/plot_DISCO_convolutions.py:72: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:213.)
       torch.from_numpy(img).unsqueeze(0).unsqueeze(0), size=(ny, nx)
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 76-81
+.. GENERATED FROM PYTHON SOURCE LINES 78-83
 
 .. raw:: html
 
@@ -135,7 +137,7 @@ Let's start by loading an example image
 
 Let's create a grid on which the data lives
 
-.. GENERATED FROM PYTHON SOURCE LINES 81-94
+.. GENERATED FROM PYTHON SOURCE LINES 83-96
 
 .. code-block:: Python
 
@@ -159,7 +161,7 @@ Let's create a grid on which the data lives
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 95-100
+.. GENERATED FROM PYTHON SOURCE LINES 97-102
 
 .. raw:: html
 
@@ -167,7 +169,7 @@ Let's create a grid on which the data lives
 
 Visualize the grid
 
-.. GENERATED FROM PYTHON SOURCE LINES 100-110
+.. GENERATED FROM PYTHON SOURCE LINES 102-112
 
 .. code-block:: Python
 
@@ -193,7 +195,7 @@ Visualize the grid
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 111-116
+.. GENERATED FROM PYTHON SOURCE LINES 113-118
 
 .. raw:: html
 
@@ -201,7 +203,7 @@ Visualize the grid
 
 Format data into the same format and plot it on the grid
 
-.. GENERATED FROM PYTHON SOURCE LINES 116-126
+.. GENERATED FROM PYTHON SOURCE LINES 118-128
 
 .. code-block:: Python
 
@@ -227,7 +229,7 @@ Format data into the same format and plot it on the grid
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 127-132
+.. GENERATED FROM PYTHON SOURCE LINES 129-134
 
 .. raw:: html
 
@@ -235,7 +237,7 @@ Format data into the same format and plot it on the grid
 
 For the convolution output we require an output mesh
 
-.. GENERATED FROM PYTHON SOURCE LINES 132-146
+.. GENERATED FROM PYTHON SOURCE LINES 134-148
 
 .. code-block:: Python
 
@@ -260,7 +262,7 @@ For the convolution output we require an output mesh
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 147-152
+.. GENERATED FROM PYTHON SOURCE LINES 149-154
 
 .. raw:: html
 
@@ -268,7 +270,7 @@ For the convolution output we require an output mesh
 
 Initialize the convolution and set the weights to something resembling an edge filter/finit differences
 
-.. GENERATED FROM PYTHON SOURCE LINES 152-170
+.. GENERATED FROM PYTHON SOURCE LINES 154-172
 
 .. code-block:: Python
 
@@ -297,7 +299,7 @@ Initialize the convolution and set the weights to something resembling an edge f
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 171-177
+.. GENERATED FROM PYTHON SOURCE LINES 173-179
 
 .. raw:: html
 
@@ -306,7 +308,7 @@ Initialize the convolution and set the weights to something resembling an edge f
 Apply the DISCO convolution to the data and plot it
 in order to compute the convolved image, we need to first bring it into the right shape with `batch_size x n_channels x n_grid_points`
 
-.. GENERATED FROM PYTHON SOURCE LINES 177-188
+.. GENERATED FROM PYTHON SOURCE LINES 179-190
 
 .. code-block:: Python
 
@@ -339,7 +341,7 @@ in order to compute the convolved image, we need to first bring it into the righ
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 189-194
+.. GENERATED FROM PYTHON SOURCE LINES 191-196
 
 .. raw:: html
 
@@ -347,7 +349,7 @@ in order to compute the convolved image, we need to first bring it into the righ
 
 Do the same but on an equidistant grid
 
-.. GENERATED FROM PYTHON SOURCE LINES 194-227
+.. GENERATED FROM PYTHON SOURCE LINES 196-229
 
 .. code-block:: Python
 
@@ -403,7 +405,7 @@ Do the same but on an equidistant grid
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 228-233
+.. GENERATED FROM PYTHON SOURCE LINES 230-235
 
 .. raw:: html
 
@@ -411,7 +413,7 @@ Do the same but on an equidistant grid
 
 Visualize the local filter matrix
 
-.. GENERATED FROM PYTHON SOURCE LINES 233-238
+.. GENERATED FROM PYTHON SOURCE LINES 235-240
 
 .. code-block:: Python
 
@@ -434,11 +436,11 @@ Visualize the local filter matrix
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7f4ac64c2350>
+    <matplotlib.colorbar.Colorbar object at 0x7f3076b86990>
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 239-244
+.. GENERATED FROM PYTHON SOURCE LINES 241-246
 
 .. raw:: html
 
@@ -446,7 +448,7 @@ Visualize the local filter matrix
 
 Test the transpose convolution
 
-.. GENERATED FROM PYTHON SOURCE LINES 244-280
+.. GENERATED FROM PYTHON SOURCE LINES 246-282
 
 .. code-block:: Python
 
@@ -504,7 +506,7 @@ Test the transpose convolution
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 281-286
+.. GENERATED FROM PYTHON SOURCE LINES 283-288
 
 .. raw:: html
 
@@ -512,7 +514,7 @@ Test the transpose convolution
 
 Test the equidistant transpose convolution
 
-.. GENERATED FROM PYTHON SOURCE LINES 286-315
+.. GENERATED FROM PYTHON SOURCE LINES 288-317
 
 .. code-block:: Python
 
@@ -566,7 +568,7 @@ Test the equidistant transpose convolution
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 29.311 seconds)
+   **Total running time of the script:** (0 minutes 28.172 seconds)
 
 
 .. _sphx_glr_download_auto_examples_layers_plot_DISCO_convolutions.py:

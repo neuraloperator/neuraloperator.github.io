@@ -26,8 +26,8 @@
 
   
     <script src="../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
@@ -177,23 +177,35 @@
 <h1><a class="reference internal" href="../api.html#module-neuralop.models" title="neuralop.models"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.models</span></code></a>.CODANO<a class="headerlink" href="#neuralop-models-codano" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.models.CODANO">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.models.</span></span><span class="sig-name descname"><span class="pre">CODANO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_variable_codimension=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lifting_channels:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_variable_codimension=32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">projection_channels:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_positional_encoding=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positional_encoding_dim=8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positional_encoding_modes=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static_channel_dim=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable_ids=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_horizontal_skip_connection=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">horizontal_skips_map=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_layers=4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_modes=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">per_layer_scaling_factors=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_heads=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention_scaling_factors=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conv_module=&lt;class</span> <span class="pre">'neuralop.layers.spectral_convolution.SpectralConv'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonlinear_attention=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">non_linearity=&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention_token_dim=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">per_channel_attention=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_kwargs={}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain_padding=0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_cls_token=False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/models/codano.html#CODANO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.models.CODANO" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neuralop.models.</span></span><span class="sig-name descname"><span class="pre">CODANO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_variable_codimension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lifting_channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_variable_codimension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">projection_channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_positional_encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positional_encoding_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positional_encoding_modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static_channel_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_horizontal_skip_connection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">horizontal_skips_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">per_layer_scaling_factors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_heads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention_scaling_factors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conv_module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'neuralop.layers.spectral_convolution.SpectralConv'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonlinear_attention</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">non_linearity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention_token_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">per_channel_attention</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_cls_token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforce_hermitian_symmetry</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/models/codano.html#CODANO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.models.CODANO" title="Link to this definition"></a></dt>
 <dd><p>Codomain Attention Neural Operators (CoDA-NO)</p>
 <p>It uses a specialized attention mechanism in the codomain space for data in
 infinite dimensional spaces as described in <a class="reference internal" href="#rc0acb03256ea-1" id="id1">[1]</a>. The model treats each input channel as a variable of the physical system
 and uses attention mechanism to model the interactions between the variables. The model uses lifting and projection modules
 to map the input variables to a higher-dimensional space and then back to the output space. The model also supports positional
 encoding and static channel information for additional context of the physical system such as external force or inlet condition.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl>
+<dd class="field-odd"><dl class="simple">
 <dt><strong>n_layers</strong><span class="classifier">int</span></dt><dd><p>The number of codomain attention layers. Default: 4</p>
 </dd>
 <dt><strong>n_modes</strong><span class="classifier">list</span></dt><dd><p>The number of Fourier modes to use in integral operators in the CoDA-NO block along each dimension.
 Example: For a 5-layer 2D CoDA-NO, n_modes=[[16, 16], [16, 16], [16, 16], [16, 16], [16, 16]]</p>
 </dd>
-<dt><strong>Other parameters</strong></dt><dd></dd>
-<dt><strong>—————</strong></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.models.CODANO.forward" title="neuralop.models.CODANO.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>(x[, static_channel, input_variable_ids])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="field-list">
+<dt class="field-odd">Other Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
 <dt><strong>output_variable_codimension</strong><span class="classifier">int, optional</span></dt><dd><p>The number of output channels (or output codomain dimension) corresponding to each input variable (or input channel).
 Example: For an input with 3 variables (channels) and output_variable_codimension=2, the output will have 6 channels (3 variables × 2 codimension). Default: 1</p>
 </dd>
@@ -285,29 +297,26 @@ Example: For a 5-layer architecture, horizontal_skips_map={4: 0, 3: 1} creates s
 </dd>
 <dt><strong>layer_kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>Additional arguments for the CoDA blocks. Default: {}</p>
 </dd>
+<dt><strong>enforce_hermitian_symmetry</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to enforce Hermitian symmetry conditions when performing inverse FFT
+for real-valued data. Only used when the convolution module is <code class="xref py py-class docutils literal notranslate"><span class="pre">SpectralConv</span></code>
+or a subclass; ignored otherwise. When True, explicitly enforces that the 0th
+frequency and Nyquist frequency are real-valued before calling irfft. When False,
+relies on cuFFT’s irfftn to handle symmetry automatically, which may fail on
+certain GPUs or input sizes, causing line artifacts. By default True.</p>
+</dd>
 </dl>
 </dd>
 </dl>
-<p class="rubric">Methods</p>
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#neuralop.models.CODANO.forward" title="neuralop.models.CODANO.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>(x[, static_channel, input_variable_ids])</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
 <p class="rubric">References</p>
 <div role="list" class="citation-list">
 <div class="citation" id="rc0acb03256ea-1" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
-<p>: Rahman, Md Ashiqur, et al. “Pretraining codomain attention neural operators for solving multiphysics pdes.” (2024).</p>
+<p>Rahman, Md Ashiqur, et al. “Pretraining codomain attention neural operators for solving multiphysics pdes.” (2024).
+NeurIPS 2024. <a class="reference external" href="https://arxiv.org/pdf/2403.12553">https://arxiv.org/pdf/2403.12553</a>.</p>
 </div>
-</div>
-<p>NeurIPS 2024. <a class="reference external" href="https://arxiv.org/pdf/2403.12553">https://arxiv.org/pdf/2403.12553</a>.</p>
-<div role="list" class="citation-list">
 <div class="citation" id="rc0acb03256ea-2" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
-<p>: Devlin, Jacob, et al. BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding.</p>
+<p>Devlin, Jacob, et al. BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding.</p>
 </div>
 </div>
 <dl class="py method">

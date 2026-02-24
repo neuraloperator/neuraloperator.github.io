@@ -26,8 +26,8 @@
 
   
     <script src="../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
@@ -177,7 +177,7 @@
 <h1><a class="reference internal" href="../api.html#module-neuralop.models" title="neuralop.models"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.models</span></code></a>.GINO<a class="headerlink" href="#neuralop-models-gino" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.models.GINO">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.models.</span></span><span class="sig-name descname"><span class="pre">GINO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/models/gino.html#GINO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.models.GINO" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neuralop.models.</span></span><span class="sig-name descname"><span class="pre">GINO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/models/gino.html#GINO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.models.GINO" title="Link to this definition"></a></dt>
 <dd><p>GINO: Geometry-informed Neural Operator - learns a mapping between
 functions presented over arbitrary coordinate meshes. The model carries
 global integration through spectral convolution layers in an intermediate
@@ -306,6 +306,13 @@ Options: “reconstructed”, “factorized”. Default: “factorized”</p>
 <dt><strong>fno_decomposition_kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>Additional parameters to pass to the tensor decomposition. Default: {}</p>
 </dd>
 <dt><strong>fno_conv_module</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>Spectral convolution module to use. Default: SpectralConv</p>
+</dd>
+<dt><strong>fno_enforce_hermitian_symmetry</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to enforce Hermitian symmetry conditions when performing inverse FFT
+for real-valued data in the FNO branch. Only used in <code class="xref py py-class docutils literal notranslate"><span class="pre">SpectralConv</span></code>;
+ignored otherwise. When True, explicitly enforces that the 0th frequency and
+Nyquist frequency are real-valued before calling irfft. When False, relies on
+cuFFT’s irfftn to handle symmetry automatically, which may fail on certain
+GPUs or input sizes, causing line artifacts. By default True.</p>
 </dd>
 </dl>
 </dd>

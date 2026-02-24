@@ -26,8 +26,8 @@
 
   
     <script src="../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
@@ -177,7 +177,7 @@
 <h1><a class="reference internal" href="../api.html#module-neuralop.layers.gno_block" title="neuralop.layers.gno_block"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.gno_block</span></code></a>.GNOBlock<a class="headerlink" href="#neuralop-layers-gno-block-gnoblock" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.layers.gno_block.GNOBlock">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.gno_block.</span></span><span class="sig-name descname"><span class="pre">GNOBlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">in_channels:</span> <span class="pre">int,</span> <span class="pre">out_channels:</span> <span class="pre">int,</span> <span class="pre">coord_dim:</span> <span class="pre">int,</span> <span class="pre">radius:</span> <span class="pre">float,</span> <span class="pre">transform_type='linear',</span> <span class="pre">weighting_fn:</span> <span class="pre">~typing.Callable</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">reduction:</span> <span class="pre">~typing.Literal['sum',</span> <span class="pre">'mean']</span> <span class="pre">=</span> <span class="pre">'sum',</span> <span class="pre">pos_embedding_type:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'transformer',</span> <span class="pre">pos_embedding_channels:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">32,</span> <span class="pre">pos_embedding_max_positions:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">10000,</span> <span class="pre">channel_mlp_layers:</span> <span class="pre">~typing.List[int]</span> <span class="pre">=</span> <span class="pre">[128,</span> <span class="pre">256,</span> <span class="pre">128],</span> <span class="pre">channel_mlp_non_linearity=&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;,</span> <span class="pre">channel_mlp:</span> <span class="pre">~torch.nn.modules.module.Module</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">use_torch_scatter_reduce:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">use_open3d_neighbor_search:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/gno_block.html#GNOBlock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.gno_block.GNOBlock" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neuralop.layers.gno_block.</span></span><span class="sig-name descname"><span class="pre">GNOBlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">in_channels:</span> <span class="pre">int,</span> <span class="pre">out_channels:</span> <span class="pre">int,</span> <span class="pre">coord_dim:</span> <span class="pre">int,</span> <span class="pre">radius:</span> <span class="pre">float,</span> <span class="pre">transform_type='linear',</span> <span class="pre">weighting_fn:</span> <span class="pre">~typing.Callable</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">reduction:</span> <span class="pre">~typing.Literal['sum',</span> <span class="pre">'mean']</span> <span class="pre">=</span> <span class="pre">'sum',</span> <span class="pre">pos_embedding_type:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'transformer',</span> <span class="pre">pos_embedding_channels:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">32,</span> <span class="pre">pos_embedding_max_positions:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">10000,</span> <span class="pre">channel_mlp_layers:</span> <span class="pre">~typing.List[int]</span> <span class="pre">=</span> <span class="pre">[128,</span> <span class="pre">256,</span> <span class="pre">128],</span> <span class="pre">channel_mlp_non_linearity=&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;,</span> <span class="pre">channel_mlp:</span> <span class="pre">~torch.nn.modules.module.Module</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">use_torch_scatter_reduce:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">use_open3d_neighbor_search:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/gno_block.html#GNOBlock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.gno_block.GNOBlock" title="Link to this definition"></a></dt>
 <dd><p>Graph Neural Operator layer</p>
 <p>It is a resolution-invariant operator that maps a function defined
 over one coordinate mesh to another defined over another coordinate mesh using
@@ -186,16 +186,11 @@ within a graph constructed via neighbor search with a specified radius.
 The exact implementation details of the GNO layer architecture are discussed in <a class="reference internal" href="#r61402ca715ea-1" id="id1">[1]</a>.</p>
 <p>Optionally, if provided, the input and output queries can have a positional embedding
 applied using the argument pos_embedding.</p>
-<p>The kernel integral computed in IntegralTransform
-computes one of the following:</p>
-<blockquote>
-<div><ol class="loweralpha simple">
-<li><p>int_{A(x)} k(x, y) dy</p></li>
-<li><p>int_{A(x)} k(x, y) * f(y) dy</p></li>
-<li><p>int_{A(x)} k(x, y, f(y)) dy</p></li>
-<li><p>int_{A(x)} k(x, y, f(y)) * f(y) dy</p></li>
-</ol>
-</div></blockquote>
+<p>The kernel integral computed in IntegralTransform computes one of:
+(a) int_{A(x)} k(x, y) dy
+(b) int_{A(x)} k(x, y) * f(y) dy
+(c) int_{A(x)} k(x, y, f(y)) dy
+(d) int_{A(x)} k(x, y, f(y)) * f(y) dy</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -281,7 +276,7 @@ uses PyTorch native fallback neighbor search.</p>
 <div role="list" class="citation-list">
 <div class="citation" id="r61402ca715ea-1" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
-<p>: Zongyi Li, Kamyar Azizzadenesheli, Burigede Liu, Kaushik Bhattacharya,
+<p>Zongyi Li, Kamyar Azizzadenesheli, Burigede Liu, Kaushik Bhattacharya,
 Anima Anandkumar (2020). “Neural Operator: Graph Kernel Network for
 Partial Differential Equations.” ArXiV, <a class="reference external" href="https://arxiv.org/pdf/2003.03485">https://arxiv.org/pdf/2003.03485</a>.</p>
 </div>
@@ -327,6 +322,13 @@ with y</p>
 on the points y. The kernel is assumed diagonal
 hence its output shape must be d3 for the transforms
 (b) or (d). If None, (a) is computed.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>out_features</strong><span class="classifier">torch.Tensor of shape [batch, m, d3] or [m, d3]</span></dt><dd><p>Output function given on the points x.
+d4 is the output size of the kernel k.</p>
 </dd>
 </dl>
 </dd>

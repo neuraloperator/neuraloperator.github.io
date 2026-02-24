@@ -25,8 +25,8 @@
 
   
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
@@ -148,12 +148,11 @@
 <span class="sd">    Optionally, if provided, the input and output queries can have a positional embedding</span>
 <span class="sd">    applied using the argument pos_embedding.</span>
 
-<span class="sd">    The kernel integral computed in IntegralTransform</span>
-<span class="sd">    computes one of the following:</span>
-<span class="sd">        (a) \\int_{A(x)} k(x, y) dy</span>
-<span class="sd">        (b) \\int_{A(x)} k(x, y) * f(y) dy</span>
-<span class="sd">        (c) \\int_{A(x)} k(x, y, f(y)) dy</span>
-<span class="sd">        (d) \\int_{A(x)} k(x, y, f(y)) * f(y) dy</span>
+<span class="sd">    The kernel integral computed in IntegralTransform computes one of:</span>
+<span class="sd">    (a) \\int_{A(x)} k(x, y) dy</span>
+<span class="sd">    (b) \\int_{A(x)} k(x, y) * f(y) dy</span>
+<span class="sd">    (c) \\int_{A(x)} k(x, y, f(y)) dy</span>
+<span class="sd">    (d) \\int_{A(x)} k(x, y, f(y)) * f(y) dy</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -174,7 +173,7 @@
 <span class="sd">        integral transform by summing (&#39;sum&#39;) or averaging (&#39;mean&#39;), by default &#39;sum&#39;</span>
 
 <span class="sd">    Other Parameters</span>
-<span class="sd">    -----------------</span>
+<span class="sd">    ----------------</span>
 <span class="sd">    transform_type : str, optional</span>
 <span class="sd">        Which integral transform to compute. Options: &#39;linear_kernelonly&#39;, &#39;linear&#39;, &#39;nonlinear_kernelonly&#39;, &#39;nonlinear&#39;.</span>
 <span class="sd">        The mapping is:</span>
@@ -222,7 +221,7 @@
 <span class="sd">            uses PyTorch native fallback neighbor search.</span>
 
 <span class="sd">    Examples</span>
-<span class="sd">    ---------</span>
+<span class="sd">    --------</span>
 <span class="sd">    ```</span>
 <span class="sd">    &gt;&gt;&gt; gno = GNOBlock(in_channels=2, out_channels=12, coord_dim=3, radius=0.035)</span>
 
@@ -244,8 +243,8 @@
 <span class="sd">    ```</span>
 
 <span class="sd">    References</span>
-<span class="sd">    -----------</span>
-<span class="sd">    .. [1] : Zongyi Li, Kamyar Azizzadenesheli, Burigede Liu, Kaushik Bhattacharya,</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Zongyi Li, Kamyar Azizzadenesheli, Burigede Liu, Kaushik Bhattacharya,</span>
 <span class="sd">        Anima Anandkumar (2020). &quot;Neural Operator: Graph Kernel Network for</span>
 <span class="sd">        Partial Differential Equations.&quot; ArXiV, https://arxiv.org/pdf/2003.03485.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -356,8 +355,8 @@
 <span class="sd">            hence its output shape must be d3 for the transforms</span>
 <span class="sd">            (b) or (d). If None, (a) is computed.</span>
 
-<span class="sd">        Output</span>
-<span class="sd">        ----------</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
 <span class="sd">        out_features : torch.Tensor of shape [batch, m, d3] or [m, d3]</span>
 <span class="sd">            Output function given on the points x.</span>
 <span class="sd">            d4 is the output size of the kernel k.</span>

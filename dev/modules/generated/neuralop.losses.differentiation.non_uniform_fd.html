@@ -26,8 +26,8 @@
 
   
     <script src="../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
@@ -179,6 +179,28 @@
 <dt class="sig sig-object py" id="neuralop.losses.differentiation.non_uniform_fd">
 <span class="sig-prename descclassname"><span class="pre">neuralop.losses.differentiation.</span></span><span class="sig-name descname"><span class="pre">non_uniform_fd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">derivative_indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regularize_lstsq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/losses/differentiation.html#non_uniform_fd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.losses.differentiation.non_uniform_fd" title="Link to this definition"></a></dt>
 <dd><p>Finite difference approximation of first order derivatives on unstructured point clouds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>points</strong><span class="classifier">torch tensor of shape (N, d) containing the d coordinates of the N points</span></dt><dd></dd>
+<dt><strong>values</strong><span class="classifier">torch tensor of shape (N) containing the values of the function at the N points</span></dt><dd></dd>
+<dt><strong>radius</strong><span class="classifier">float, the cutoff distance to use a neighbor as radius</span></dt><dd><p>Neighbors with distances beyond this value are not used (their weights are set to zero)
+Always keep at least 3 neighbors (including the point itself)</p>
+</dd>
+<dt><strong>num_neighbors: int for the number of nearest neighbors to include in the stencil (including the point itself)</strong></dt><dd></dd>
+<dt><strong>derivative_indices</strong><span class="classifier">indices of the derivatives to compute, e.g. in 2D, [0] for x, [1] for y, [0, 1] for x and y</span></dt><dd></dd>
+<dt><strong>regularize_lstsq</strong><span class="classifier">bool, whether to regularize the least squares system</span></dt><dd><p>Sometimes torch.linalg.lstsq(A, b).solution creates artifacts so can add regularizer
+But regularizer can deteriorate performance when system is well-conditioned</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>derivatives: tensor of shape (len(derivative_indices), N) of derivatives</dt><dd><p>e.g. in 2D with derivative_indices=[0, 1], derivatives[0] is df(x,y)/dx and derivatives[1] is df(x,y)/dy</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <div class="clearer"></div></section>

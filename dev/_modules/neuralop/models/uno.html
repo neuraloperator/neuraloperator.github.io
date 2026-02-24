@@ -25,8 +25,8 @@
 
   
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
@@ -226,9 +226,16 @@
 <span class="sd">        Percentage of padding to use. If not None, percentage of padding to use. Default: None</span>
 <span class="sd">    fft_norm : str, optional</span>
 <span class="sd">        FFT normalization mode. Default: &quot;forward&quot;</span>
+<span class="sd">    enforce_hermitian_symmetry : bool, optional</span>
+<span class="sd">        Whether to enforce Hermitian symmetry conditions when performing inverse FFT</span>
+<span class="sd">        for real-valued data. Only used when the convolution module is :class:`SpectralConv`</span>
+<span class="sd">        or a subclass; ignored otherwise. When True, explicitly enforces that the 0th</span>
+<span class="sd">        frequency and Nyquist frequency are real-valued before calling irfft. When False,</span>
+<span class="sd">        relies on cuFFT&#39;s irfftn to handle symmetry automatically, which may fail on</span>
+<span class="sd">        certain GPUs or input sizes, causing line artifacts. By default True.</span>
 
 <span class="sd">    References</span>
-<span class="sd">    -----------</span>
+<span class="sd">    ----------</span>
 <span class="sd">    .. [1] :</span>
 
 <span class="sd">    Rahman, M.A., Ross, Z., Azizzadenesheli, K. &quot;U-NO: U-shaped</span>
@@ -266,6 +273,7 @@
         <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span>
         <span class="n">domain_padding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">enforce_hermitian_symmetry</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_layers</span> <span class="o">=</span> <span class="n">n_layers</span>
@@ -412,6 +420,8 @@
                     <span class="n">separable</span><span class="o">=</span><span class="n">separable</span><span class="p">,</span>
                     <span class="n">factorization</span><span class="o">=</span><span class="n">factorization</span><span class="p">,</span>
                     <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="n">decomposition_kwargs</span><span class="p">,</span>
+                    <span class="n">conv_module</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">integral_operator</span><span class="p">,</span>
+                    <span class="n">enforce_hermitian_symmetry</span><span class="o">=</span><span class="n">enforce_hermitian_symmetry</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">)</span>
 

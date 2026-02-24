@@ -25,8 +25,8 @@
 
   
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
@@ -154,8 +154,8 @@
 <span class="sd">        The number of Fourier modes to use in integral operators in the CoDA-NO block along each dimension.</span>
 <span class="sd">        Example: For a 5-layer 2D CoDA-NO, n_modes=[[16, 16], [16, 16], [16, 16], [16, 16], [16, 16]]</span>
 
-<span class="sd">    Other parameters</span>
-<span class="sd">    ---------------</span>
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
 <span class="sd">    output_variable_codimension : int, optional</span>
 <span class="sd">        The number of output channels (or output codomain dimension) corresponding to each input variable (or input channel).</span>
 <span class="sd">        Example: For an input with 3 variables (channels) and output_variable_codimension=2, the output will have 6 channels (3 variables × 2 codimension). Default: 1</span>
@@ -251,13 +251,20 @@
 <span class="sd">        The padding factor for each input channel. It zero pads each of the channel. Default: 0.25</span>
 <span class="sd">    layer_kwargs : dict, optional</span>
 <span class="sd">        Additional arguments for the CoDA blocks. Default: {}</span>
+<span class="sd">    enforce_hermitian_symmetry : bool, optional</span>
+<span class="sd">        Whether to enforce Hermitian symmetry conditions when performing inverse FFT</span>
+<span class="sd">        for real-valued data. Only used when the convolution module is :class:`SpectralConv`</span>
+<span class="sd">        or a subclass; ignored otherwise. When True, explicitly enforces that the 0th</span>
+<span class="sd">        frequency and Nyquist frequency are real-valued before calling irfft. When False,</span>
+<span class="sd">        relies on cuFFT&#39;s irfftn to handle symmetry automatically, which may fail on</span>
+<span class="sd">        certain GPUs or input sizes, causing line artifacts. By default True.</span>
 
 <span class="sd">    References</span>
-<span class="sd">    -----------</span>
-<span class="sd">    .. [1] : Rahman, Md Ashiqur, et al. &quot;Pretraining codomain attention neural operators for solving multiphysics pdes.&quot; (2024).</span>
-<span class="sd">    NeurIPS 2024. https://arxiv.org/pdf/2403.12553.</span>
-
-<span class="sd">    .. [2] : Devlin, Jacob, et al. BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding.</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Rahman, Md Ashiqur, et al. &quot;Pretraining codomain attention neural operators for solving multiphysics pdes.&quot; (2024).</span>
+<span class="sd">        NeurIPS 2024. https://arxiv.org/pdf/2403.12553.</span>
+<span class="sd">        </span>
+<span class="sd">    .. [2] Devlin, Jacob, et al. BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -287,20 +294,21 @@
         <span class="n">layer_kwargs</span><span class="o">=</span><span class="p">{},</span>
         <span class="n">domain_padding</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
         <span class="n">enable_cls_token</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">enforce_hermitian_symmetry</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_layers</span> <span class="o">=</span> <span class="n">n_layers</span>
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_modes</span><span class="p">)</span> <span class="o">==</span> <span class="n">n_layers</span><span class="p">,</span> <span class="s2">&quot;number of modes for all layers are not given&quot;</span>
         <span class="k">assert</span> <span class="p">(</span>
-            <span class="nb">len</span><span class="p">(</span><span class="n">n_heads</span><span class="p">)</span> <span class="o">==</span> <span class="n">n_layers</span> <span class="ow">or</span> <span class="n">n_heads</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="n">n_heads</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_heads</span><span class="p">)</span> <span class="o">==</span> <span class="n">n_layers</span>
         <span class="p">),</span> <span class="s2">&quot;number of Attention head for all layers are not given&quot;</span>
         <span class="k">assert</span> <span class="p">(</span>
-            <span class="nb">len</span><span class="p">(</span><span class="n">per_layer_scaling_factors</span><span class="p">)</span> <span class="o">==</span> <span class="n">n_layers</span>
-            <span class="ow">or</span> <span class="n">per_layer_scaling_factors</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="n">per_layer_scaling_factors</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">per_layer_scaling_factors</span><span class="p">)</span> <span class="o">==</span> <span class="n">n_layers</span>
         <span class="p">),</span> <span class="s2">&quot;scaling for all layers are not given&quot;</span>
         <span class="k">assert</span> <span class="p">(</span>
-            <span class="nb">len</span><span class="p">(</span><span class="n">attention_scaling_factors</span><span class="p">)</span> <span class="o">==</span> <span class="n">n_layers</span>
-            <span class="ow">or</span> <span class="n">attention_scaling_factors</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="n">attention_scaling_factors</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">attention_scaling_factors</span><span class="p">)</span> <span class="o">==</span> <span class="n">n_layers</span>
         <span class="p">),</span> <span class="s2">&quot;attention scaling for all layers are not given&quot;</span>
         <span class="k">if</span> <span class="n">use_positional_encoding</span><span class="p">:</span>
             <span class="k">assert</span> <span class="n">positional_encoding_dim</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;positional encoding dim is not given&quot;</span>
@@ -356,7 +364,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">attention_scalings</span> <span class="o">=</span> <span class="n">attention_scaling_factors</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">positional_encoding_modes</span> <span class="o">=</span> <span class="n">positional_encoding_modes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">static_channel_dim</span> <span class="o">=</span> <span class="n">static_channel_dim</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">layer_kwargs</span> <span class="o">=</span> <span class="n">layer_kwargs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layer_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">layer_kwargs</span><span class="p">,</span> <span class="s2">&quot;enforce_hermitian_symmetry&quot;</span><span class="p">:</span> <span class="n">enforce_hermitian_symmetry</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">use_positional_encoding</span> <span class="o">=</span> <span class="n">use_positional_encoding</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">use_horizontal_skip_connection</span> <span class="o">=</span> <span class="n">use_horizontal_skip_connection</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">horizontal_skips_map</span> <span class="o">=</span> <span class="n">horizontal_skips_map</span>

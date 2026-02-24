@@ -26,8 +26,8 @@
 
   
     <script src="../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
@@ -177,7 +177,7 @@
 <h1><a class="reference internal" href="../api.html#module-neuralop.layers.local_no_block" title="neuralop.layers.local_no_block"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.local_no_block</span></code></a>.LocalNOBlocks<a class="headerlink" href="#neuralop-layers-local-no-block-localnoblocks" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.layers.local_no_block.LocalNOBlocks">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.local_no_block.</span></span><span class="sig-name descname"><span class="pre">LocalNOBlocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">in_channels,</span> <span class="pre">out_channels,</span> <span class="pre">n_modes,</span> <span class="pre">default_in_shape,</span> <span class="pre">resolution_scaling_factor=None,</span> <span class="pre">n_layers=1,</span> <span class="pre">disco_layers=True,</span> <span class="pre">disco_kernel_shape=[2,</span> <span class="pre">4],</span> <span class="pre">radius_cutoff=None,</span> <span class="pre">domain_length=[2,</span> <span class="pre">2],</span> <span class="pre">disco_groups=1,</span> <span class="pre">disco_bias=True,</span> <span class="pre">diff_layers=True,</span> <span class="pre">conv_padding_mode='periodic',</span> <span class="pre">fin_diff_kernel_size=3,</span> <span class="pre">mix_derivatives=True,</span> <span class="pre">max_n_modes=None,</span> <span class="pre">local_no_block_precision='full',</span> <span class="pre">use_channel_mlp=False,</span> <span class="pre">channel_mlp_dropout=0,</span> <span class="pre">channel_mlp_expansion=0.5,</span> <span class="pre">non_linearity=&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;,</span> <span class="pre">stabilizer=None,</span> <span class="pre">norm=None,</span> <span class="pre">ada_in_features=None,</span> <span class="pre">preactivation=False,</span> <span class="pre">local_no_skip='linear',</span> <span class="pre">channel_mlp_skip='soft-gating',</span> <span class="pre">separable=False,</span> <span class="pre">factorization=None,</span> <span class="pre">rank=1.0,</span> <span class="pre">conv_module=&lt;class</span> <span class="pre">'neuralop.layers.spectral_convolution.SpectralConv'&gt;,</span> <span class="pre">fixed_rank_modes=False,</span> <span class="pre">implementation='factorized',</span> <span class="pre">decomposition_kwargs={},</span> <span class="pre">fft_norm='forward'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/local_no_block.html#LocalNOBlocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.local_no_block.LocalNOBlocks" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neuralop.layers.local_no_block.</span></span><span class="sig-name descname"><span class="pre">LocalNOBlocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">in_channels,</span> <span class="pre">out_channels,</span> <span class="pre">n_modes,</span> <span class="pre">default_in_shape,</span> <span class="pre">resolution_scaling_factor=None,</span> <span class="pre">n_layers=1,</span> <span class="pre">disco_layers=True,</span> <span class="pre">disco_kernel_shape=[2,</span> <span class="pre">4],</span> <span class="pre">radius_cutoff=None,</span> <span class="pre">domain_length=[2,</span> <span class="pre">2],</span> <span class="pre">disco_groups=1,</span> <span class="pre">disco_bias=True,</span> <span class="pre">diff_layers=True,</span> <span class="pre">conv_padding_mode='periodic',</span> <span class="pre">fin_diff_kernel_size=3,</span> <span class="pre">mix_derivatives=True,</span> <span class="pre">max_n_modes=None,</span> <span class="pre">local_no_block_precision='full',</span> <span class="pre">use_channel_mlp=False,</span> <span class="pre">channel_mlp_dropout=0,</span> <span class="pre">channel_mlp_expansion=0.5,</span> <span class="pre">non_linearity=&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;,</span> <span class="pre">stabilizer=None,</span> <span class="pre">norm=None,</span> <span class="pre">ada_in_features=None,</span> <span class="pre">preactivation=False,</span> <span class="pre">local_no_skip='linear',</span> <span class="pre">channel_mlp_skip='soft-gating',</span> <span class="pre">separable=False,</span> <span class="pre">factorization=None,</span> <span class="pre">rank=1.0,</span> <span class="pre">conv_module=&lt;class</span> <span class="pre">'neuralop.layers.spectral_convolution.SpectralConv'&gt;,</span> <span class="pre">fixed_rank_modes=False,</span> <span class="pre">implementation='factorized',</span> <span class="pre">decomposition_kwargs={},</span> <span class="pre">fft_norm='forward',</span> <span class="pre">enforce_hermitian_symmetry=True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/local_no_block.html#LocalNOBlocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.local_no_block.LocalNOBlocks" title="Link to this definition"></a></dt>
 <dd><p>Local Neural Operator blocks with localized integral and differential kernels.</p>
 <p>It is implemented as described in <a class="reference internal" href="#r367398f5802a-3" id="id1">[3]</a>.</p>
 <p>This class implements neural operator blocks that combine Fourier neural operators
@@ -265,27 +265,6 @@ If None, no skip connection is added. See layers.skip_connections for more detai
 Options: “linear”, “identity”, “soft-gating”, None.
 If None, no skip connection is added. See layers.skip_connections for more details</p>
 </dd>
-<dt><strong>Other Parameters</strong></dt><dd></dd>
-<dt><strong>—————</strong></dt><dd></dd>
-<dt><strong>complex_data</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether the data takes complex values in space, by default False</p>
-</dd>
-<dt><strong>separable</strong><span class="classifier">bool, optional</span></dt><dd><p>Separable parameter for SpectralConv, by default False</p>
-</dd>
-<dt><strong>factorization</strong><span class="classifier">str, optional</span></dt><dd><p>Factorization method for SpectralConv, by default None
-Options: “factorized”, “reconstructed”.</p>
-</dd>
-<dt><strong>rank</strong><span class="classifier">float, optional</span></dt><dd><p>Rank parameter for SpectralConv, by default 1.0</p>
-</dd>
-<dt><strong>conv_module</strong><span class="classifier">BaseConv, optional</span></dt><dd><p>Convolution module for Local NO block, by default SpectralConv</p>
-</dd>
-<dt><strong>joint_factorization</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to factorize all SpectralConv weights as one tensor, by default False</p>
-</dd>
-<dt><strong>fixed_rank_modes</strong><span class="classifier">bool, optional</span></dt><dd><p>Fixed rank modes parameter for SpectralConv, by default False</p>
-</dd>
-<dt><strong>implementation</strong><span class="classifier">str, optional</span></dt><dd><p>Implementation method for SpectralConv, by default “factorized”</p>
-</dd>
-<dt><strong>decomposition_kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>Keyword arguments for tensor decomposition in SpectralConv, by default dict()</p>
-</dd>
 </dl>
 </dd>
 <dt class="field-even">Attributes<span class="colon">:</span></dt>
@@ -318,6 +297,38 @@ Options: “factorized”, “reconstructed”.</p>
 </tr>
 </tbody>
 </table>
+<dl class="field-list simple">
+<dt class="field-odd">Other Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>complex_data</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether the data takes complex values in space, by default False</p>
+</dd>
+<dt><strong>separable</strong><span class="classifier">bool, optional</span></dt><dd><p>Separable parameter for SpectralConv, by default False</p>
+</dd>
+<dt><strong>factorization</strong><span class="classifier">str, optional</span></dt><dd><p>Factorization method for SpectralConv, by default None
+Options: “factorized”, “reconstructed”.</p>
+</dd>
+<dt><strong>rank</strong><span class="classifier">float, optional</span></dt><dd><p>Rank parameter for SpectralConv, by default 1.0</p>
+</dd>
+<dt><strong>conv_module</strong><span class="classifier">BaseConv, optional</span></dt><dd><p>Convolution module for Local NO block, by default SpectralConv</p>
+</dd>
+<dt><strong>joint_factorization</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to factorize all SpectralConv weights as one tensor, by default False</p>
+</dd>
+<dt><strong>fixed_rank_modes</strong><span class="classifier">bool, optional</span></dt><dd><p>Fixed rank modes parameter for SpectralConv, by default False</p>
+</dd>
+<dt><strong>implementation</strong><span class="classifier">str, optional</span></dt><dd><p>Implementation method for SpectralConv, by default “factorized”</p>
+</dd>
+<dt><strong>decomposition_kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>Keyword arguments for tensor decomposition in SpectralConv, by default dict()</p>
+</dd>
+<dt><strong>enforce_hermitian_symmetry</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to enforce Hermitian symmetry conditions when performing inverse FFT
+for real-valued data. Only used when <code class="docutils literal notranslate"><span class="pre">conv_module</span></code> is <code class="xref py py-class docutils literal notranslate"><span class="pre">SpectralConv</span></code>
+or a subclass; ignored otherwise. When True, explicitly enforces that the 0th
+frequency and Nyquist frequency are real-valued before calling irfft. When False,
+relies on cuFFT’s irfftn to handle symmetry automatically, which may fail on
+certain GPUs or input sizes, causing line artifacts. By default True.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <p class="rubric">Notes</p>
 <ul class="simple">
 <li><p>Differential kernels are only implemented for dimensions ≤ 3</p></li>

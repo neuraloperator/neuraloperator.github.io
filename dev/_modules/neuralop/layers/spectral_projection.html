@@ -25,8 +25,8 @@
 
   
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
@@ -149,43 +149,16 @@
 <span class="sd">    torch.Tensor</span>
 <span class="sd">        Divergence-free projected velocity field with [batch, 2, height, width] shape.</span>
 <span class="sd">        The output maintains the same shape as the input while satisfying ∇·u = 0.</span>
-<span class="sd">    </span>
-<span class="sd">    </span>
 
-<span class="sd">    Mathematical formulation:</span>
-<span class="sd">    -------------------------</span>
-<span class="sd">    </span>
-<span class="sd">    This method implements a Helmholtz-Hodge projection in the spectral domain</span>
-<span class="sd">    to project velocity fields onto the space of divergence-free functions.</span>
-<span class="sd">    </span>
-<span class="sd">    The Helmholtz-Hodge projection is given by:</span>
-<span class="sd">        û_proj = û - (k·û)/|k|² * k</span>
-<span class="sd">    where û is the Fourier transform of the velocity field, k is the wavenumber vector, </span>
-<span class="sd">    and û_proj is the projected divergence-free field.</span>
-<span class="sd">    </span>
-<span class="sd">    The projection enforces ∇·u = 0 in the spectral domain by removing the</span>
-<span class="sd">    irrotational component of the velocity field.</span>
-<span class="sd">    </span>
-<span class="sd">        </span>
-<span class="sd">    Periodicity Assumption:</span>
-<span class="sd">    -----------------------</span>
-<span class="sd">    Just like most spectral methods, this spectral projection assumes the given and </span>
-<span class="sd">    desired velocity fields are periodic. </span>
-<span class="sd">    </span>
-<span class="sd">    If the velocity fields are not periodic, </span>
-<span class="sd">    one way to apply this spectral projection is to proceed as follows:</span>
-<span class="sd">      1) extend the velocity fields to periodic velocity fields on a larger domain, using </span>
-<span class="sd">          Fourier continuation for instance (see neuralop.layers.fourier_continuation) </span>
-<span class="sd">      2) apply the spectral projection to the periodic fields on the extended domain.</span>
-<span class="sd">      3) truncate the result back to the original domain.</span>
-<span class="sd">      </span>
-<span class="sd">    This is similar to how Fourier/spectral differentiation can still be performed </span>
-<span class="sd">    on non-periodic fields (see neuralop.losses.fourier_diff for implementation details).</span>
-<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    **Mathematical formulation:** Helmholtz-Hodge projection in spectral domain:</span>
+<span class="sd">    û_proj = û - (k·û)/|k|² * k. Enforces ∇·u = 0 by removing the irrotational component.</span>
+<span class="sd">    **Periodicity:** Velocity fields are assumed periodic. For non-periodic fields, extend</span>
+<span class="sd">    via Fourier continuation (neuralop.layers.fourier_continuation), project, then truncate.</span>
 
-<span class="sd">    References:</span>
-<span class="sd">    -----------</span>
-<span class="sd">    </span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
 <span class="sd">    The method is based on the spectral projection approach described in:</span>
 <span class="sd">    </span>
 <span class="sd">        [1] Towards Enforcing Hard Physics Constraints in Operator Learning Frameworks</span>

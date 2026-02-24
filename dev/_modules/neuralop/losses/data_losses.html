@@ -25,8 +25,8 @@
 
   
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
@@ -149,7 +149,7 @@
 <span class="sd">    </span>
 <span class="sd">    Note that LpLoss always averages over the spatial dimensions.</span>
 
-<span class="sd">    .. note ::</span>
+<span class="sd">    .. note::</span>
 <span class="sd">        In function space, the Lp norm is an integral over the</span>
 <span class="sd">        entire domain. To ensure the norm converges to the integral,</span>
 <span class="sd">        we scale the matrix norm by quadrature weights along each spatial dimension.</span>
@@ -169,17 +169,15 @@
 <span class="sd">        either single scalar for each dim, or one per dim</span>
 
 <span class="sd">        .. note::</span>
-
-<span class="sd">        To perform quadrature, ``LpLoss`` scales ``measure`` by the size</span>
-<span class="sd">        of each spatial dimension of ``x``, and multiplies them with</span>
-<span class="sd">        ||x-y||, such that the final norm is a scaled average over the spatial</span>
-<span class="sd">        dimensions of ``x``.</span>
+<span class="sd">            To perform quadrature, ``LpLoss`` scales ``measure`` by the size</span>
+<span class="sd">            of each spatial dimension of ``x``, and multiplies them with</span>
+<span class="sd">            ||x-y||, such that the final norm is a scaled average over the spatial</span>
+<span class="sd">            dimensions of ``x``.</span>
 <span class="sd">    reduction : str, optional</span>
 <span class="sd">        whether to reduce across the batch and channel dimensions</span>
 <span class="sd">        by summing (&#39;sum&#39;) or averaging (&#39;mean&#39;)</span>
 
 <span class="sd">        .. warning::</span>
-
 <span class="sd">            ``LpLoss`` always reduces over the spatial dimensions according to ``self.measure``.</span>
 <span class="sd">            `reduction` only applies to the batch and channel dimensions.</span>
 <span class="sd">    eps : float, optional</span>
@@ -187,8 +185,7 @@
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-
-<span class="sd">    ```</span>
+<span class="sd">    See the module docstring or the user guide for usage examples.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">measure</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;sum&quot;</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">):</span>
@@ -244,8 +241,8 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        reduce x across the batch according to `self.reduction`</span>
 
-<span class="sd">        Params</span>
-<span class="sd">        ------</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
 <span class="sd">        x: torch.Tensor</span>
 <span class="sd">            inputs</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -359,7 +356,7 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">H1Loss</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;H1 Sobolev norm between two d-dimensional discretized functions.</span>
 
-<span class="sd">    .. note ::</span>
+<span class="sd">    .. note::</span>
 <span class="sd">        In function space, the Sobolev norm is an integral over the</span>
 <span class="sd">        entire domain. To ensure the norm converges to the integral,</span>
 <span class="sd">        we scale the matrix norm by quadrature weights along each spatial dimension.</span>
@@ -376,18 +373,16 @@
 <span class="sd">        either single scalar for each dim, or one per dim</span>
 
 <span class="sd">        .. note::</span>
-
-<span class="sd">        To perform quadrature, ``H1Loss`` scales ``measure`` by the size</span>
-<span class="sd">        of each spatial dimension of ``x``, and multiplies them with</span>
-<span class="sd">        ||x-y||, such that the final norm is a scaled average over the spatial</span>
-<span class="sd">        dimensions of ``x``.</span>
+<span class="sd">            To perform quadrature, ``H1Loss`` scales ``measure`` by the size</span>
+<span class="sd">            of each spatial dimension of ``x``, and multiplies them with</span>
+<span class="sd">            ||x-y||, such that the final norm is a scaled average over the spatial</span>
+<span class="sd">            dimensions of ``x``.</span>
 
 <span class="sd">    reduction : str, optional</span>
 <span class="sd">        whether to reduce across the batch and channel dimension</span>
 <span class="sd">        by summing (&#39;sum&#39;) or averaging (&#39;mean&#39;)</span>
 
-<span class="sd">        .. warning :</span>
-
+<span class="sd">        .. warning::</span>
 <span class="sd">            H1Loss always averages over the spatial dimensions.</span>
 <span class="sd">            `reduction` only applies to the batch and channel dimensions.</span>
 <span class="sd">    eps : float, optional</span>
@@ -535,8 +530,8 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        reduce x across the batch according to `self.reduction`</span>
 
-<span class="sd">        Params</span>
-<span class="sd">        ------</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
 <span class="sd">        x: torch.Tensor</span>
 <span class="sd">            inputs</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -657,7 +652,7 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">HdivLoss</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Hdiv Sobolev norm between two d-dimensional discretized functions.</span>
 
-<span class="sd">    .. note ::</span>
+<span class="sd">    .. note::</span>
 <span class="sd">        In function space, the Sobolev norm is an integral over the</span>
 <span class="sd">        entire domain. To ensure the norm converges to the integral,</span>
 <span class="sd">        we scale the matrix norm by quadrature weights along each spatial dimension.</span>
@@ -674,18 +669,16 @@
 <span class="sd">        either single scalar for each dim, or one per dim</span>
 
 <span class="sd">        .. note::</span>
-
-<span class="sd">        To perform quadrature, ``HdivLoss`` scales ``measure`` by the size</span>
-<span class="sd">        of each spatial dimension of ``x``, and multiplies them with</span>
-<span class="sd">        ||x-y||, such that the final norm is a scaled average over the spatial</span>
-<span class="sd">        dimensions of ``x``.</span>
+<span class="sd">            To perform quadrature, ``HdivLoss`` scales ``measure`` by the size</span>
+<span class="sd">            of each spatial dimension of ``x``, and multiplies them with</span>
+<span class="sd">            ||x-y||, such that the final norm is a scaled average over the spatial</span>
+<span class="sd">            dimensions of ``x``.</span>
 
 <span class="sd">    reduction : str, optional</span>
 <span class="sd">        whether to reduce across the batch and channel dimension</span>
 <span class="sd">        by summing (&#39;sum&#39;) or averaging (&#39;mean&#39;)</span>
 
-<span class="sd">        .. warning :</span>
-
+<span class="sd">        .. warning::</span>
 <span class="sd">            HdivLoss always averages over the spatial dimensions.</span>
 <span class="sd">            `reduction` only applies to the batch and channel dimensions.</span>
 <span class="sd">    eps : float, optional</span>
@@ -831,8 +824,8 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        reduce x across the batch according to `self.reduction`</span>
 
-<span class="sd">        Params</span>
-<span class="sd">        ------</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
 <span class="sd">        x: torch.Tensor</span>
 <span class="sd">            inputs</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -959,17 +952,16 @@
 <span class="sd">        value, between 0 and 1, of the proportion of points</span>
 <span class="sd">        in the output domain expected to fall within predicted quantiles</span>
 <span class="sd">    reduction : str, optional</span>
-<span class="sd">    whether to reduce across the batch and channel dimensions</span>
-<span class="sd">    by summing (&#39;sum&#39;) or averaging (&#39;mean&#39;)</span>
+<span class="sd">        whether to reduce across the batch and channel dimensions</span>
+<span class="sd">        by summing (&#39;sum&#39;) or averaging (&#39;mean&#39;)</span>
 
-<span class="sd">    .. warning :</span>
-
+<span class="sd">    .. warning::</span>
 <span class="sd">        PointwiseQuantileLoss always averages over the spatial dimensions.</span>
 <span class="sd">        `reduction` only applies to the batch and channel dimensions.</span>
 
 <span class="sd">    References</span>
-<span class="sd">    -----------</span>
-<span class="sd">    .. _[1] : Ma, Z., Pitt, D., Azizzadenesheli, K., Anandkumar, A., (2024).</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Ma, Z., Pitt, D., Azizzadenesheli, K., Anandkumar, A., (2024).</span>
 <span class="sd">        Calibrated Uncertainty Quantification for Operator Learning via Conformal Prediction</span>
 <span class="sd">        TMLR 2024, https://openreview.net/pdf?id=cGpegxy12T</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -991,8 +983,8 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        reduce x across the batch according to `self.reduction`</span>
 
-<span class="sd">        Params</span>
-<span class="sd">        ------</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
 <span class="sd">        x: torch.Tensor</span>
 <span class="sd">            inputs</span>
 <span class="sd">        &quot;&quot;&quot;</span>

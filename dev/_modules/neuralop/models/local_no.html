@@ -25,8 +25,8 @@
 
   
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
@@ -155,7 +155,7 @@
 <span class="sd">    Fourier layers as detailed in [1]_.</span>
 
 <span class="sd">    Parameters</span>
-<span class="sd">    ---------------</span>
+<span class="sd">    ----------</span>
 <span class="sd">    n_modes : Tuple[int]</span>
 <span class="sd">        Number of modes to keep in Fourier Layer, along each dimension.</span>
 <span class="sd">        The dimensionality of the Local NO is inferred from len(n_modes).</span>
@@ -279,9 +279,16 @@
 <span class="sd">        Whether to compute LocalNO forward pass with ResNet-style preactivation. Default: False</span>
 <span class="sd">    conv_module : nn.Module, optional</span>
 <span class="sd">        Module to use for LocalNOBlock&#39;s convolutions. Default: SpectralConv</span>
+<span class="sd">    enforce_hermitian_symmetry : bool, optional</span>
+<span class="sd">        Whether to enforce Hermitian symmetry conditions when performing inverse FFT</span>
+<span class="sd">        for real-valued data. Only used when ``conv_module`` is :class:`SpectralConv`</span>
+<span class="sd">        or a subclass; ignored otherwise. When True, explicitly enforces that the 0th</span>
+<span class="sd">        frequency and Nyquist frequency are real-valued before calling irfft. When False,</span>
+<span class="sd">        relies on cuFFT&#39;s irfftn to handle symmetry automatically, which may fail on</span>
+<span class="sd">        certain GPUs or input sizes, causing line artifacts. By default True.</span>
 
 <span class="sd">    Examples</span>
-<span class="sd">    ---------</span>
+<span class="sd">    --------</span>
 
 <span class="sd">    &gt;&gt;&gt; from neuralop.models import LocalNO</span>
 <span class="sd">    &gt;&gt;&gt; model = LocalNO(n_modes=(12,12), in_channels=1, out_channels=1, hidden_channels=64)</span>
@@ -297,7 +304,7 @@
 <span class="sd">            ... torch.nn.Module printout truncated ...</span>
 
 <span class="sd">    References</span>
-<span class="sd">    -----------</span>
+<span class="sd">    ----------</span>
 <span class="sd">    .. [1] Liu-Schiaffini M., Berner J., Bonev B., Kurth T., Azizzadenesheli K., Anandkumar A.;</span>
 <span class="sd">        &quot;Neural Operators with Localized Integral and Differential Kernels&quot; (2024).</span>
 <span class="sd">        ICML 2024, https://arxiv.org/pdf/2402.16845.</span>
@@ -346,6 +353,7 @@
         <span class="n">separable</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">preactivation</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">conv_module</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span> <span class="o">=</span> <span class="n">SpectralConv</span><span class="p">,</span>
+        <span class="n">enforce_hermitian_symmetry</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_modes</span><span class="p">)</span>
@@ -454,6 +462,7 @@
             <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="n">decomposition_kwargs</span><span class="p">,</span>
             <span class="n">conv_module</span><span class="o">=</span><span class="n">conv_module</span><span class="p">,</span>
             <span class="n">n_layers</span><span class="o">=</span><span class="n">n_layers</span><span class="p">,</span>
+            <span class="n">enforce_hermitian_symmetry</span><span class="o">=</span><span class="n">enforce_hermitian_symmetry</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="c1"># if adding a positional embedding, add those channels to lifting</span>

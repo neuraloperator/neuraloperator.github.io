@@ -26,8 +26,8 @@
 
   
     <script src="../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
@@ -179,6 +179,32 @@
 <dt class="sig sig-object py" id="neuralop.utils.spectrum_2d">
 <span class="sig-prename descclassname"><span class="pre">neuralop.utils.</span></span><span class="sig-name descname"><span class="pre">spectrum_2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_observations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/utils.html#spectrum_2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.utils.spectrum_2d" title="Link to this definition"></a></dt>
 <dd><p>This function computes the spectrum of a 2D signal using the Fast Fourier Transform (FFT).</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>signal</strong><span class="classifier">a tensor of shape (T * n_observations * n_observations)</span></dt><dd><p>A 2D discretized signal represented as a 1D tensor with shape
+(T * n_observations * n_observations), where T is the number of time
+steps and n_observations is the spatial size of the signal.</p>
+<p>T can be any number of channels that we reshape into and
+n_observations * n_observations is the spatial resolution.</p>
+</dd>
+<dt><strong>n_observations: an integer</strong></dt><dd><p>Number of discretized points. Basically the resolution of the signal.</p>
+</dd>
+<dt><strong>normalize: bool</strong></dt><dd><p>whether to apply normalization to the output of the 2D FFT.
+If True, normalizes the outputs by <code class="docutils literal notranslate"><span class="pre">1/n_observations</span></code>
+(actually <code class="docutils literal notranslate"><span class="pre">1/sqrt(n_observations</span> <span class="pre">*</span> <span class="pre">n_observations)</span></code>).</p>
+</dd>
+<dt><strong>Returns</strong></dt><dd></dd>
+<dt><strong>——–</strong></dt><dd></dd>
+<dt><strong>spectrum: a tensor</strong></dt><dd><p>A 1D tensor of shape (s,) representing the computed spectrum.
+The spectrum is computed using a square approximation to radial
+binning, meaning that the wavenumber ‘bin’ into which a particular
+coefficient is the coefficient’s location along the diagonal, indexed
+from the top-left corner of the 2d FFT output.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <div class="clearer"></div></section>

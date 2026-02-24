@@ -26,8 +26,8 @@
 
   
     <script src="../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
@@ -177,7 +177,7 @@
 <h1><a class="reference internal" href="../api.html#module-neuralop.models" title="neuralop.models"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.models</span></code></a>.FNO<a class="headerlink" href="#neuralop-models-fno" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.models.FNO">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.models.</span></span><span class="sig-name descname"><span class="pre">FNO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/models/fno.html#FNO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.models.FNO" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neuralop.models.</span></span><span class="sig-name descname"><span class="pre">FNO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/models/fno.html#FNO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.models.FNO" title="Link to this definition"></a></dt>
 <dd><p>N-Dimensional Fourier Neural Operator. The FNO learns a mapping between
 spaces of functions discretized over regular grids using Fourier convolutions,
 as described in <a class="reference internal" href="#ra1828dcd7949-1" id="id1">[1]</a>.</p>
@@ -186,8 +186,27 @@ as described in <a class="reference internal" href="#ra1828dcd7949-1" id="id1">[
 conv layer but operates in the frequency domain.</p>
 <p>For a deeper dive into the FNO architecture, refer to <a class="reference internal" href="../../theory_guide/fno.html#fno-intro"><span class="std std-ref">Fourier Neural Operators</span></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
+<dt><strong>n_modes</strong><span class="classifier">Tuple[int, …]</span></dt><dd><p>Number of modes to keep in Fourier Layer, along each dimension.
+The dimensionality of the FNO is inferred from len(n_modes).
+n_modes must be larger enough but smaller than max_resolution//2 (Nyquist frequency)</p>
+</dd>
+<dt><strong>in_channels</strong><span class="classifier">int</span></dt><dd><p>Number of channels in input function. Determined by the problem.</p>
+</dd>
+<dt><strong>out_channels</strong><span class="classifier">int</span></dt><dd><p>Number of channels in output function. Determined by the problem.</p>
+</dd>
+<dt><strong>hidden_channels</strong><span class="classifier">int</span></dt><dd><p>Width of the FNO (i.e. number of channels).
+This significantly affects the number of parameters of the FNO.
+Good starting point can be 64, and then increased if more expressivity is needed.
+Update lifting_channel_ratio and projection_channel_ratio accordingly since they are proportional to hidden_channels.</p>
+</dd>
+<dt><strong>n_layers</strong><span class="classifier">int, optional</span></dt><dd><p>Number of Fourier Layers. Default: 4</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
 <dt><strong>n_modes</strong></dt><dd></dd>
 </dl>
 </dd>
@@ -200,6 +219,105 @@ conv layer but operates in the frequency domain.</p>
 </tr>
 </tbody>
 </table>
+<dl class="field-list">
+<dt class="field-odd">Other Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>lifting_channel_ratio</strong><span class="classifier">Number, optional</span></dt><dd><p>Ratio of lifting channels to hidden_channels.
+The number of lifting channels in the lifting block of the FNO is
+lifting_channel_ratio * hidden_channels (e.g. default 2 * hidden_channels).</p>
+</dd>
+<dt><strong>projection_channel_ratio</strong><span class="classifier">Number, optional</span></dt><dd><p>Ratio of projection channels to hidden_channels.
+The number of projection channels in the projection block of the FNO is
+projection_channel_ratio * hidden_channels (e.g. default 2 * hidden_channels).</p>
+</dd>
+<dt><strong>positional_embedding</strong><span class="classifier">Union[str, nn.Module], optional</span></dt><dd><p>Positional embedding to apply to last channels of raw input
+before being passed through the FNO.
+Options:
+- “grid”: Appends a grid positional embedding with default settings to the last channels of raw input.</p>
+<blockquote>
+<div><p>Assumes the inputs are discretized over a grid with entry [0,0,…] at the origin and side lengths of 1.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>GridEmbeddingND: Uses this module directly (see <code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.embeddings.GridEmbeddingND</span></code> for details).</p></li>
+<li><p>GridEmbedding2D: Uses this module directly for 2D cases.</p></li>
+<li><p>None: Does nothing.</p></li>
+</ul>
+<p>Default: “grid”</p>
+</dd>
+<dt><strong>non_linearity</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>Non-Linear activation function module to use. Default: F.gelu</p>
+</dd>
+<dt><strong>norm</strong><span class="classifier">Literal[“ada_in”, “group_norm”, “instance_norm”], optional</span></dt><dd><p>Normalization layer to use. Options: “ada_in”, “group_norm”, “instance_norm”, None. Default: None</p>
+</dd>
+<dt><strong>complex_data</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether the data is complex-valued. If True, initializes complex-valued modules. Default: False</p>
+</dd>
+<dt><strong>use_channel_mlp</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use an MLP layer after each FNO block. Default: True</p>
+</dd>
+<dt><strong>channel_mlp_dropout</strong><span class="classifier">float, optional</span></dt><dd><p>Dropout parameter for ChannelMLP in FNO Block. Default: 0</p>
+</dd>
+<dt><strong>channel_mlp_expansion</strong><span class="classifier">float, optional</span></dt><dd><p>Expansion parameter for ChannelMLP in FNO Block. Default: 0.5</p>
+</dd>
+<dt><strong>channel_mlp_skip</strong><span class="classifier">Literal[“linear”, “identity”, “soft-gating”, None], optional</span></dt><dd><p>Type of skip connection to use in channel-mixing mlp. Options: “linear”, “identity”, “soft-gating”, None.
+Default: “soft-gating”</p>
+</dd>
+<dt><strong>fno_skip</strong><span class="classifier">Literal[“linear”, “identity”, “soft-gating”, None], optional</span></dt><dd><p>Type of skip connection to use in FNO layers. Options: “linear”, “identity”, “soft-gating”, None.
+Default: “linear”</p>
+</dd>
+<dt><strong>resolution_scaling_factor</strong><span class="classifier">Union[Number, List[Number]], optional</span></dt><dd><p>Layer-wise factor by which to scale the domain resolution of function.
+Options:
+- None: No scaling
+- Single number n: Scales resolution by n at each layer
+- List of numbers [n_0, n_1,…]: Scales layer i’s resolution by n_i
+Default: None</p>
+</dd>
+<dt><strong>domain_padding</strong><span class="classifier">Union[Number, List[Number]], optional</span></dt><dd><p>Percentage of padding to use.
+Options:
+- None: No padding
+- Single number: Percentage of padding to use along all dimensions
+- List of numbers [p1, p2, …, pN]: Percentage of padding along each dimension
+Default: None</p>
+</dd>
+<dt><strong>fno_block_precision</strong><span class="classifier">str, optional</span></dt><dd><p>Precision mode in which to perform spectral convolution.
+Options: “full”, “half”, “mixed”. Default: “full”. Default: “full”</p>
+</dd>
+<dt><strong>stabilizer</strong><span class="classifier">str, optional</span></dt><dd><p>Whether to use a stabilizer in FNO block. Options: “tanh”, None. Default: None.
+stabilizer greatly improves performance in the case <cite>fno_block_precision=’mixed’</cite>.</p>
+</dd>
+<dt><strong>max_n_modes</strong><span class="classifier">Tuple[int, …], optional</span></dt><dd><p>Maximum number of modes to use in Fourier domain during training.
+None means that all the n_modes are used.
+Tuple of integers: Incrementally increase the number of modes during training.
+This can be updated dynamically during training.</p>
+</dd>
+<dt><strong>factorization</strong><span class="classifier">str, optional</span></dt><dd><p>Tensor factorization of the FNO layer weights to use.
+Options: “None”, “Tucker”, “CP”, “TT”
+Other factorization methods supported by tltorch. Default: None</p>
+</dd>
+<dt><strong>rank</strong><span class="classifier">float, optional</span></dt><dd><p>Tensor rank to use in factorization. Default: 1.0
+Set to float &lt;1.0 when using TFNO (i.e. when factorization is not None).
+A TFNO with rank 0.1 has roughly 10% of the parameters of a dense FNO.</p>
+</dd>
+<dt><strong>fixed_rank_modes</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to not factorize certain modes. Default: False</p>
+</dd>
+<dt><strong>implementation</strong><span class="classifier">str, optional</span></dt><dd><p>Implementation method for factorized tensors.
+Options: “factorized”, “reconstructed”. Default: “factorized”</p>
+</dd>
+<dt><strong>decomposition_kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>Extra kwargs for tensor decomposition (see <cite>tltorch.FactorizedTensor</cite>). Default: {}</p>
+</dd>
+<dt><strong>separable</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use a separable spectral convolution. Default: False</p>
+</dd>
+<dt><strong>preactivation</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to compute FNO forward pass with resnet-style preactivation. Default: False</p>
+</dd>
+<dt><strong>conv_module</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>Module to use for FNOBlock’s convolutions. Default: SpectralConv</p>
+</dd>
+<dt><strong>enforce_hermitian_symmetry</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to enforce Hermitian symmetry conditions when performing inverse FFT
+for real-valued data. Only used when <code class="docutils literal notranslate"><span class="pre">conv_module</span></code> is <code class="xref py py-class docutils literal notranslate"><span class="pre">SpectralConv</span></code>
+or a subclass; ignored otherwise. When True, explicitly enforces that the 0th
+frequency and Nyquist frequency are real-valued before calling irfft. When False,
+relies on cuFFT’s irfftn to handle symmetry automatically, which may fail on
+certain GPUs or input sizes, causing line artifacts. By default True.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <p class="rubric">References</p>
 <div role="list" class="citation-list">
 <div class="citation" id="ra1828dcd7949-1" role="doc-biblioentry">

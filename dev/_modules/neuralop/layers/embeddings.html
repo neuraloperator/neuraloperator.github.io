@@ -25,8 +25,8 @@
 
   
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
@@ -175,10 +175,10 @@
 <span class="sd">        ----------</span>
 <span class="sd">        spatial_dims : torch.size</span>
 <span class="sd">             sizes of spatial resolution</span>
-<span class="sd">        device : literal &#39;cpu&#39; or &#39;cuda:*&#39;</span>
-<span class="sd">            where to load data</span>
+<span class="sd">        device : str</span>
+<span class="sd">            Device to load data (e.g. &#39;cpu&#39; or &#39;cuda:*&#39;).</span>
 <span class="sd">        dtype : str</span>
-<span class="sd">            dtype to encode data</span>
+<span class="sd">            dtype to encode data.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -260,11 +260,11 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        spatial_dims : torch.Size</span>
-<span class="sd">             sizes of spatial resolution</span>
-<span class="sd">        device : literal &#39;cpu&#39; or &#39;cuda:*&#39;</span>
-<span class="sd">            where to load data</span>
+<span class="sd">            Sizes of spatial resolution.</span>
+<span class="sd">        device : str</span>
+<span class="sd">            Device to load data (e.g. &#39;cpu&#39; or &#39;cuda:*&#39;).</span>
 <span class="sd">        dtype : str</span>
-<span class="sd">            dtype to encode data</span>
+<span class="sd">            dtype to encode data.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -286,8 +286,8 @@
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.embeddings.GridEmbeddingND.html#neuralop.layers.embeddings.GridEmbeddingND.forward">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">batched</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Params</span>
-<span class="sd">        --------</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
 <span class="sd">        data: torch.Tensor</span>
 <span class="sd">            assumes shape (batch (optional), channels, x_1, x_2, ...x_n)</span>
 <span class="sd">        batched: bool</span>
@@ -404,7 +404,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
-<span class="sd">        -----------</span>
+<span class="sd">        ----------</span>
 <span class="sd">        x: torch.Tensor</span>
 <span class="sd">            shape (n_in, self.in_channels) or (batch, n_in, self.in_channels)</span>
 <span class="sd">        &quot;&quot;&quot;</span>

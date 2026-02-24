@@ -25,8 +25,8 @@
 
   
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
@@ -203,6 +203,13 @@
 <span class="sd">        Implementation parameter for SpectralConv. Options: &quot;factorized&quot;, &quot;reconstructed&quot;, by default &quot;factorized&quot;</span>
 <span class="sd">    decomposition_kwargs : dict, optional</span>
 <span class="sd">        Kwargs for tensor decomposition in SpectralConv, by default dict()</span>
+<span class="sd">    enforce_hermitian_symmetry : bool, optional</span>
+<span class="sd">        Whether to enforce Hermitian symmetry conditions when performing inverse FFT</span>
+<span class="sd">        for real-valued data. Only used when ``conv_module`` is :class:`SpectralConv`</span>
+<span class="sd">        or a subclass; ignored otherwise. When True, explicitly enforces that the 0th</span>
+<span class="sd">        frequency and Nyquist frequency are real-valued before calling irfft. When False,</span>
+<span class="sd">        relies on cuFFT&#39;s irfftn to handle symmetry automatically, which may fail on</span>
+<span class="sd">        certain GPUs or input sizes, causing line artifacts. By default True.</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -234,6 +241,7 @@
         <span class="n">fixed_rank_modes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">implementation</span><span class="o">=</span><span class="s2">&quot;factorized&quot;</span><span class="p">,</span>
         <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span>
+        <span class="n">enforce_hermitian_symmetry</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hidden_channels</span> <span class="o">=</span> <span class="n">hidden_channels</span>
@@ -261,6 +269,7 @@
             <span class="s2">&quot;fixed_rank_modes&quot;</span><span class="p">:</span> <span class="n">fixed_rank_modes</span><span class="p">,</span>
             <span class="s2">&quot;implementation&quot;</span><span class="p">:</span> <span class="n">implementation</span><span class="p">,</span>
             <span class="s2">&quot;decomposition_kwargs&quot;</span><span class="p">:</span> <span class="n">decomposition_kwargs</span><span class="p">,</span>
+            <span class="s2">&quot;enforce_hermitian_symmetry&quot;</span><span class="p">:</span> <span class="n">enforce_hermitian_symmetry</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="c1"># For super-resolution: the hidden state h is always stored at the scaled resolution,</span>
@@ -416,6 +425,13 @@
 <span class="sd">        Implementation parameter for SpectralConv. Options: &quot;factorized&quot;, &quot;reconstructed&quot;, by default &quot;factorized&quot;</span>
 <span class="sd">    decomposition_kwargs : dict, optional</span>
 <span class="sd">        Kwargs for tensor decomposition in SpectralConv, by default dict()</span>
+<span class="sd">    enforce_hermitian_symmetry : bool, optional</span>
+<span class="sd">        Whether to enforce Hermitian symmetry conditions when performing inverse FFT</span>
+<span class="sd">        for real-valued data. Only used when ``conv_module`` is :class:`SpectralConv`</span>
+<span class="sd">        or a subclass; ignored otherwise. When True, explicitly enforces that the 0th</span>
+<span class="sd">        frequency and Nyquist frequency are real-valued before calling irfft. When False,</span>
+<span class="sd">        relies on cuFFT&#39;s irfftn to handle symmetry automatically, which may fail on</span>
+<span class="sd">        certain GPUs or input sizes, causing line artifacts. By default True.</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -448,6 +464,7 @@
         <span class="n">fixed_rank_modes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">implementation</span><span class="o">=</span><span class="s2">&quot;factorized&quot;</span><span class="p">,</span>
         <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span>
+        <span class="n">enforce_hermitian_symmetry</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
@@ -478,6 +495,7 @@
             <span class="n">fixed_rank_modes</span><span class="o">=</span><span class="n">fixed_rank_modes</span><span class="p">,</span>
             <span class="n">implementation</span><span class="o">=</span><span class="n">implementation</span><span class="p">,</span>
             <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="n">decomposition_kwargs</span><span class="p">,</span>
+            <span class="n">enforce_hermitian_symmetry</span><span class="o">=</span><span class="n">enforce_hermitian_symmetry</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">complex_data</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">bias_h</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(())</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(()))</span>

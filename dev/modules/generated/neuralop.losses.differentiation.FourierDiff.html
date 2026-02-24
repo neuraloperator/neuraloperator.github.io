@@ -26,8 +26,8 @@
 
   
     <script src="../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
@@ -177,14 +177,14 @@
 <h1><a class="reference internal" href="../api.html#module-neuralop.losses.differentiation" title="neuralop.losses.differentiation"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.losses.differentiation</span></code></a>.FourierDiff<a class="headerlink" href="#neuralop-losses-differentiation-fourierdiff" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.losses.differentiation.FourierDiff">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.losses.differentiation.</span></span><span class="sig-name descname"><span class="pre">FourierDiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_fc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc_degree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc_n_additional_pts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_pass_filter_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/losses/differentiation.html#FourierDiff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.losses.differentiation.FourierDiff" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neuralop.losses.differentiation.</span></span><span class="sig-name descname"><span class="pre">FourierDiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_fc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc_degree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc_n_additional_pts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_pass_filter_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/losses/differentiation.html#FourierDiff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.losses.differentiation.FourierDiff" title="Link to this definition"></a></dt>
 <dd><p>A unified class for computing Fourier/spectral derivatives in 1D, 2D, 3D.</p>
 <p>This class provides comprehensive methods for computing derivatives using Fourier/spectral
 methods with support for both periodic and non-periodic functions through Fourier continuation:
 - Periodic functions: Direct Fourier differentiation using FFT
-- Non-periodic functions: Fourier continuation (FC) is used to extend functions to larger domain</p>
+- Non-periodic functions: Fourier continuation (FC) is used to extend functions to a larger</p>
 <blockquote>
-<div><p>on which the functions are periodic before applying Fourier differentiation with FFT.</p>
+<div><p>domain on which the functions are periodic before applying Fourier differentiation with FFT.</p>
 </div></blockquote>
 <p>The class also provides gradient, divergence, curl, and Laplacian operations.</p>
 <dl class="field-list simple">

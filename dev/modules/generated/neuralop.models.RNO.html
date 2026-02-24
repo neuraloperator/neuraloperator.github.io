@@ -26,8 +26,8 @@
 
   
     <script src="../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
@@ -177,7 +177,7 @@
 <h1><a class="reference internal" href="../api.html#module-neuralop.models" title="neuralop.models"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.models</span></code></a>.RNO<a class="headerlink" href="#neuralop-models-rno" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.models.RNO">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.models.</span></span><span class="sig-name descname"><span class="pre">RNO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/models/rno.html#RNO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.models.RNO" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neuralop.models.</span></span><span class="sig-name descname"><span class="pre">RNO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/models/rno.html#RNO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.models.RNO" title="Link to this definition"></a></dt>
 <dd><p>N-Dimensional Recurrent Neural Operator.</p>
 <p>The RNO has an identical architecture to the finite-dimensional GRU, with
 the exception that linear matrix-vector multiplications are replaced by
@@ -190,13 +190,35 @@ hat h_t = selu(W_h x_t + U_h (r_t * h_{t-1}) + b_h)
 h_t = (1 - z_t) * h_{t-1} + z_t * hat h_t,</p>
 <p>where * is element-wise, the b_i’s are bias functions, and W_i, U_i are
 linear Fourier layers.</p>
-<p>Paper:
-.. [R943463ff80d7-RNO] Liu-Schiaffini, M., Singer, C. E., Kovachki, N., Schneider, T.,</p>
-<blockquote>
-<div><p>Azizzadenesheli, K., &amp; Anandkumar, A. (2023). Tipping point forecasting
-in non-stationary dynamics on function spaces. arXiv preprint
-arXiv:2308.08794.</p>
-</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_modes</strong><span class="classifier">Tuple[int, …]</span></dt><dd><p>Number of modes to keep in Fourier Layer, along each dimension.
+The dimensionality of the RNO is inferred from <code class="docutils literal notranslate"><span class="pre">len(n_modes)</span></code>.
+n_modes must be larger enough but smaller than max_resolution//2 (Nyquist frequency)</p>
+</dd>
+<dt><strong>in_channels</strong><span class="classifier">int</span></dt><dd><p>Number of input channels in input function. Determined by the problem.</p>
+</dd>
+<dt><strong>out_channels</strong><span class="classifier">int</span></dt><dd><p>Number of output channels in output function. Determined by the problem.</p>
+</dd>
+<dt><strong>hidden_channels</strong><span class="classifier">int</span></dt><dd><p>Width of the RNO (i.e. number of channels).
+This significantly affects the number of parameters of the RNO.
+For 1D problems, 24-48 channels are typically sufficient. For 2D/3D problems
+without Tucker/CP/TT factorization, start with 16-32 channels to avoid
+excessive parameters. Increase if more expressivity is needed.
+Update lifting_channel_ratio and projection_channel_ratio accordingly since they are proportional to hidden_channels.</p>
+</dd>
+<dt><strong>n_layers</strong><span class="classifier">int, optional</span></dt><dd><p>Number of RNO layers to use. Default: 4</p>
+</dd>
+<dt><strong>rno_skip</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use skip connections between RNO layers. When True, adds
+the input to each layer’s output: x_{l+1} = x_l + RNOBlock(x_l).
+Default: False. Unlike FNO where skip connections improve gradient flow,
+RNO’s recurrent structure already provides temporal gradient pathways,
+so skip connections are optional and may not always improve performance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <p class="rubric">Methods</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
@@ -208,6 +230,111 @@ arXiv:2308.08794.</p>
 </tr>
 </tbody>
 </table>
+<dl class="field-list simple">
+<dt class="field-odd">Other Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>lifting_channel_ratio</strong><span class="classifier">Number, optional</span></dt><dd><p>Ratio of lifting channels to hidden_channels.
+The number of lifting channels in the lifting block of the RNO is
+lifting_channel_ratio * hidden_channels (e.g. default 2 * hidden_channels).</p>
+</dd>
+<dt><strong>projection_channel_ratio</strong><span class="classifier">Number, optional</span></dt><dd><p>Ratio of projection channels to hidden_channels.
+The number of projection channels in the projection block of the RNO is
+projection_channel_ratio * hidden_channels (e.g. default 2 * hidden_channels).</p>
+</dd>
+<dt><strong>positional_embedding</strong><span class="classifier">Union[str, nn.Module], optional</span></dt><dd><p>Type of positional embedding to use. Options:
+- “grid”: Use default grid-based positional embedding
+- GridEmbeddingND: Custom N-dimensional grid embedding
+- GridEmbedding2D: Custom 2D grid embedding (only for 2D problems)
+- None: No positional embedding
+Default: None</p>
+</dd>
+<dt><strong>non_linearity</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>Non-Linear activation function module to use. Default: F.gelu</p>
+</dd>
+<dt><strong>norm</strong><span class="classifier">Literal[“ada_in”, “group_norm”, “instance_norm”], optional</span></dt><dd><p>Normalization layer to use. Options: “ada_in”, “group_norm”, “instance_norm”, None. Default: None</p>
+</dd>
+<dt><strong>complex_data</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether the data is complex-valued. If True, initializes complex-valued modules. Default: False</p>
+</dd>
+<dt><strong>use_channel_mlp</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use an MLP layer after each FNO block. Default: True</p>
+</dd>
+<dt><strong>channel_mlp_dropout</strong><span class="classifier">float, optional</span></dt><dd><p>Dropout parameter for ChannelMLP in FNO Block. Default: 0</p>
+</dd>
+<dt><strong>channel_mlp_expansion</strong><span class="classifier">float, optional</span></dt><dd><p>Expansion parameter for ChannelMLP in FNO Block. Default: 0.5</p>
+</dd>
+<dt><strong>channel_mlp_skip</strong><span class="classifier">Literal[“linear”, “identity”, “soft-gating”, None], optional</span></dt><dd><p>Type of skip connection to use in channel-mixing mlp. Options: “linear”, “identity”, “soft-gating”, None.
+Default: “soft-gating”</p>
+</dd>
+<dt><strong>fno_skip</strong><span class="classifier">Literal[“linear”, “identity”, “soft-gating”, None], optional</span></dt><dd><p>Type of skip connection to use in FNO layers. Options: “linear”, “identity”, “soft-gating”, None.
+Default: “linear”</p>
+</dd>
+<dt><strong>return_sequences</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether the final RNO layer returns the full sequence of hidden states or just the final state.
+Intermediate layers always return sequences. Default: False</p>
+</dd>
+<dt><strong>resolution_scaling_factor</strong><span class="classifier">Union[Number, List[Number]], optional</span></dt><dd><p>Layer-wise factor by which to scale the domain resolution of function.
+Options:
+- None: No scaling
+- Single number n: Scales resolution by n at each layer
+- List of numbers [n_0, n_1,…]: Scales layer i’s resolution by n_i
+Default: None</p>
+</dd>
+<dt><strong>domain_padding</strong><span class="classifier">Union[Number, List[Number]], optional</span></dt><dd><p>Percentage of padding to use.
+Options:
+- None: No padding
+- Single number: Percentage of padding to use along all dimensions
+- List of numbers [p1, p2, …, pN]: Percentage of padding along each dimension
+Default: None</p>
+</dd>
+<dt><strong>fno_block_precision</strong><span class="classifier">str, optional</span></dt><dd><p>Precision mode in which to perform spectral convolution.
+Options: “full”, “half”, “mixed”. Default: “full”.</p>
+</dd>
+<dt><strong>stabilizer</strong><span class="classifier">str, optional</span></dt><dd><p>Whether to use a stabilizer in FNO block. Options: “tanh”, None. Default: None.
+stabilizer greatly improves performance in the case <cite>fno_block_precision=’mixed’</cite>.</p>
+</dd>
+<dt><strong>max_n_modes</strong><span class="classifier">Tuple[int, …], optional</span></dt><dd><p>Maximum number of modes to use in Fourier domain during training.
+None means that all the n_modes are used.
+Tuple of integers: Incrementally increase the number of modes during training.
+This can be updated dynamically during training.</p>
+</dd>
+<dt><strong>factorization</strong><span class="classifier">str, optional</span></dt><dd><p>Tensor factorization of the FNO layer weights to use.
+Options: “None”, “Tucker”, “CP”, “TT”
+Other factorization methods supported by tltorch. Default: None</p>
+</dd>
+<dt><strong>rank</strong><span class="classifier">float, optional</span></dt><dd><p>Tensor rank to use in factorization. Default: 1.0
+Set to float &lt;1.0 when using TFNO (i.e. when factorization is not None).
+A TFNO with rank 0.1 has roughly 10% of the parameters of a dense FNO.</p>
+</dd>
+<dt><strong>fixed_rank_modes</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to not factorize certain modes. Default: False</p>
+</dd>
+<dt><strong>implementation</strong><span class="classifier">str, optional</span></dt><dd><p>Implementation method for factorized tensors.
+Options: “factorized”, “reconstructed”. Default: “factorized”</p>
+</dd>
+<dt><strong>decomposition_kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>Extra kwargs for tensor decomposition (see <cite>tltorch.FactorizedTensor</cite>). Default: {}</p>
+</dd>
+<dt><strong>separable</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to use a separable spectral convolution. Default: False</p>
+</dd>
+<dt><strong>preactivation</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to compute FNO forward pass with resnet-style preactivation. Default: False</p>
+</dd>
+<dt><strong>conv_module</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>Module to use for FNOBlock’s convolutions. Default: SpectralConv</p>
+</dd>
+<dt><strong>enforce_hermitian_symmetry</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to enforce Hermitian symmetry conditions when performing inverse FFT
+for real-valued data. Only used in <code class="xref py py-class docutils literal notranslate"><span class="pre">SpectralConv</span></code>; ignored otherwise.
+When True, explicitly enforces that the 0th frequency and Nyquist frequency
+are real-valued before calling irfft. When False, relies on cuFFT’s irfftn
+to handle symmetry automatically, which may fail on certain GPUs or input
+sizes, causing line artifacts. By default True.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="r943463ff80d7-rno" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>RNO<span class="fn-bracket">]</span></span>
+<p>Liu-Schiaffini, M., Singer, C. E., Kovachki, N., Schneider, T.,
+Azizzadenesheli, K., &amp; Anandkumar, A. (2023). Tipping point forecasting
+in non-stationary dynamics on function spaces. arXiv preprint
+arXiv:2308.08794.</p>
+</div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="neuralop.models.RNO.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_hidden_states</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_hidden_states</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_states_padded</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/models/rno.html#RNO.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.models.RNO.forward" title="Link to this definition"></a></dt>
@@ -215,12 +342,12 @@ arXiv:2308.08794.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>x</strong><span class="classifier">torch.Tensor</span></dt><dd><p>Input tensor with shape (batch, timesteps, in_channels, <a href="#id1"><span class="problematic" id="id2">*</span></a>spatial_dims),
+<dt><strong>x</strong><span class="classifier">torch.Tensor</span></dt><dd><p>Input tensor with shape (batch, timesteps, in_channels, <a href="#id2"><span class="problematic" id="id3">*</span></a>spatial_dims),
 where len(spatial_dims) == self.n_dim. The channel dimension MUST be at
 index 2 and the time dimension MUST be at index 1.</p>
 </dd>
 <dt><strong>init_hidden_states</strong><span class="classifier">list[torch.Tensor] | None</span></dt><dd><p>Optional list of per-layer initial hidden states. Each tensor should have
-shape (batch, hidden_channels, <a href="#id3"><span class="problematic" id="id4">*</span></a>spatial_dims_h), where spatial_dims_h are
+shape (batch, hidden_channels, <a href="#id4"><span class="problematic" id="id5">*</span></a>spatial_dims_h), where spatial_dims_h are
 the unpadded spatial dimensions at each layer (accounting for resolution
 scaling). If domain_padding is enabled, hidden states will be automatically
 padded like the input x, unless keep_states_padded is True.
@@ -238,7 +365,7 @@ Default: False</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>pred</strong><span class="classifier">torch.Tensor</span></dt><dd><p>Output tensor with shape (batch, out_channels, <a href="#id5"><span class="problematic" id="id6">*</span></a>spatial_dims_out).</p>
+<dt><strong>pred</strong><span class="classifier">torch.Tensor</span></dt><dd><p>Output tensor with shape (batch, out_channels, <a href="#id6"><span class="problematic" id="id7">*</span></a>spatial_dims_out).</p>
 </dd>
 <dt><strong>final_hidden_states</strong><span class="classifier">list[torch.Tensor], optional</span></dt><dd><p>Returned only if return_hidden_states=True.</p>
 </dd>
@@ -257,7 +384,7 @@ then uses that prediction as input for the subsequent prediction.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>x</strong><span class="classifier">torch.Tensor</span></dt><dd><p>Initial input sequence with shape (batch, timesteps, in_channels, <a href="#id7"><span class="problematic" id="id8">*</span></a>spatial_dims).
+<dt><strong>x</strong><span class="classifier">torch.Tensor</span></dt><dd><p>Initial input sequence with shape (batch, timesteps, in_channels, <a href="#id8"><span class="problematic" id="id9">*</span></a>spatial_dims).
 The last time step of this sequence serves as the starting point for predictions.</p>
 </dd>
 <dt><strong>num_steps</strong><span class="classifier">int</span></dt><dd><p>Number of future time steps to predict autoregressively.</p>
@@ -272,7 +399,7 @@ was trained with concatenated positional information. Default: None</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>torch.Tensor</dt><dd><p>Predicted sequence with shape (batch, num_steps, out_channels, <a href="#id9"><span class="problematic" id="id10">*</span></a>spatial_dims),
+<dt>torch.Tensor</dt><dd><p>Predicted sequence with shape (batch, num_steps, out_channels, <a href="#id10"><span class="problematic" id="id11">*</span></a>spatial_dims),
 containing the autoregressively generated future states.</p>
 </dd>
 </dl>

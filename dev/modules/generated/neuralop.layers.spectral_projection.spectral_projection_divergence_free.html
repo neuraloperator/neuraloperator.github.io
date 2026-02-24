@@ -26,8 +26,8 @@
 
   
     <script src="../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
@@ -201,6 +201,23 @@ The output maintains the same shape as the input while satisfying ∇·u = 0.</p
 </dl>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<p><strong>Mathematical formulation:</strong> Helmholtz-Hodge projection in spectral domain:
+û_proj = û - (k·û)/<a href="#id1"><span class="problematic" id="id2">|</span></a>k|² * k. Enforces ∇·u = 0 by removing the irrotational component.
+<strong>Periodicity:</strong> Velocity fields are assumed periodic. For non-periodic fields, extend
+via Fourier continuation (neuralop.layers.fourier_continuation), project, then truncate.</p>
+<p class="rubric">References</p>
+<p>The method is based on the spectral projection approach described in:</p>
+<blockquote>
+<div><p>[1] Towards Enforcing Hard Physics Constraints in Operator Learning Frameworks
+V. Duruisseaux, M. Liu-Schiaffini, J. Berner, and A. Anandkumar
+ICML 2024 AI for Science Workshop
+<a class="reference external" href="https://openreview.net/pdf?id=Zvxm14Rd1F">https://openreview.net/pdf?id=Zvxm14Rd1F</a></p>
+<p>[2] Enforcing physical constraints in CNNs through differentiable PDE layer. 
+C. M. Jiang, K. Kashinath, P. Prabhat, and P. Marcus
+ICLR 2020 Workshop on Integration of Deep Neural Models and Differential Equations, 2020.
+<a class="reference external" href="https://openreview.net/pdf?id=q2noHUqMkK">https://openreview.net/pdf?id=q2noHUqMkK</a></p>
+</div></blockquote>
 </dd></dl>
 
 <div class="clearer"></div></section>

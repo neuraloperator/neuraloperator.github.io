@@ -25,8 +25,8 @@
 
   
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
@@ -250,7 +250,7 @@
 <span class="sd">            If batched, these must remain constant</span>
 <span class="sd">            over the whole batch so no batch dim is needed.</span>
 <span class="sd">        neighbors : dict</span>
-<span class="sd">            The sets A(x) given in CRS format. The</span>
+<span class="sd">            The sets :math:`A(x)` given in CRS format. The</span>
 <span class="sd">            dict must contain the keys &quot;neighbors_index&quot;</span>
 <span class="sd">            and &quot;neighbors_row_splits.&quot; For descriptions</span>
 <span class="sd">            of the two, see NeighborSearch.</span>
@@ -271,10 +271,10 @@
 <span class="sd">            suppose d1=1 and let y_1 &lt; y_2 &lt; ... &lt; y_{n+1}</span>
 <span class="sd">            be some points. Then, for a Riemann sum,</span>
 <span class="sd">            the weights are y_{j+1} - y_j. If None,</span>
-<span class="sd">            1/|A(x)| is used.</span>
+<span class="sd">            :math:`1/|A(x)|` is used.</span>
 
-<span class="sd">        Output</span>
-<span class="sd">        ----------</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
 <span class="sd">        out_features : torch.Tensor of shape [batch, m, d4] or [m, d4]</span>
 <span class="sd">            Output function given on the points x.</span>
 <span class="sd">            d4 is the output size of the kernel k.</span>

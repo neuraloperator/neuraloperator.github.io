@@ -26,9 +26,10 @@
 
   
     <script src="../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
  <script src="../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
  
@@ -177,7 +178,7 @@
 <h1><a class="reference internal" href="../api.html#module-neuralop.layers.integral_transform" title="neuralop.layers.integral_transform"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.layers.integral_transform</span></code></a>.IntegralTransform<a class="headerlink" href="#neuralop-layers-integral-transform-integraltransform" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.layers.integral_transform.IntegralTransform">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.layers.integral_transform.</span></span><span class="sig-name descname"><span class="pre">IntegralTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_mlp=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_mlp_layers=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_mlp_non_linearity=&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform_type='linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weighting_fn=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction='sum'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_torch_scatter=True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/integral_transform.html#IntegralTransform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.integral_transform.IntegralTransform" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neuralop.layers.integral_transform.</span></span><span class="sig-name descname"><span class="pre">IntegralTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_mlp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_mlp_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_mlp_non_linearity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">gelu&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weighting_fn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sum'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_torch_scatter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/layers/integral_transform.html#IntegralTransform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.layers.integral_transform.IntegralTransform" title="Link to this definition"></a></dt>
 <dd><p>Integral Kernel Transform (GNO).</p>
 <dl class="simple">
 <dt>It computes one of the following:</dt><dd><ol class="loweralpha simple">
@@ -262,7 +263,7 @@ the space to integrate over.
 If batched, these must remain constant
 over the whole batch so no batch dim is needed.</p>
 </dd>
-<dt><strong>neighbors</strong><span class="classifier">dict</span></dt><dd><p>The sets A(x) given in CRS format. The
+<dt><strong>neighbors</strong><span class="classifier">dict</span></dt><dd><p>The sets <span class="math notranslate nohighlight">\(A(x)\)</span> given in CRS format. The
 dict must contain the keys “neighbors_index”
 and “neighbors_row_splits.” For descriptions
 of the two, see NeighborSearch.
@@ -283,7 +284,14 @@ volume around f(y) being integrated. For example,
 suppose d1=1 and let y_1 &lt; y_2 &lt; … &lt; y_{n+1}
 be some points. Then, for a Riemann sum,
 the weights are y_{j+1} - y_j. If None,
-1/<a href="#id1"><span class="problematic" id="id2">|A(x)|</span></a> is used.</p>
+<span class="math notranslate nohighlight">\(1/|A(x)|\)</span> is used.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>out_features</strong><span class="classifier">torch.Tensor of shape [batch, m, d4] or [m, d4]</span></dt><dd><p>Output function given on the points x.
+d4 is the output size of the kernel k.</p>
 </dd>
 </dl>
 </dd>

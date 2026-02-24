@@ -26,8 +26,8 @@
 
   
     <script src="../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
@@ -177,19 +177,19 @@
 <h1><a class="reference internal" href="../api.html#module-neuralop.losses.data_losses" title="neuralop.losses.data_losses"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neuralop.losses.data_losses</span></code></a>.PointwiseQuantileLoss<a class="headerlink" href="#neuralop-losses-data-losses-pointwisequantileloss" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="neuralop.losses.data_losses.PointwiseQuantileLoss">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neuralop.losses.data_losses.</span></span><span class="sig-name descname"><span class="pre">PointwiseQuantileLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sum'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/losses/data_losses.html#PointwiseQuantileLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.losses.data_losses.PointwiseQuantileLoss" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neuralop.losses.data_losses.</span></span><span class="sig-name descname"><span class="pre">PointwiseQuantileLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sum'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/losses/data_losses.html#PointwiseQuantileLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.losses.data_losses.PointwiseQuantileLoss" title="Link to this definition"></a></dt>
 <dd><p>PointwiseQuantileLoss computes Quantile Loss.</p>
-<p>It is used for uncertainty quantification of Neural Operators, as described in <a href="#id3"><span class="problematic" id="id1">[1]_</span></a>.</p>
+<p>It is used for uncertainty quantification of Neural Operators, as described in <a class="reference internal" href="#r6002333bd5dc-1" id="id1">[1]</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>alpha</strong><span class="classifier">float</span></dt><dd><p>value, between 0 and 1, of the proportion of points
 in the output domain expected to fall within predicted quantiles</p>
 </dd>
-<dt><strong>reduction</strong><span class="classifier">str, optional</span></dt><dd></dd>
-<dt><strong>whether to reduce across the batch and channel dimensions</strong></dt><dd></dd>
-<dt><strong>by summing (‘sum’) or averaging (‘mean’)</strong></dt><dd></dd>
-<dt><strong>.. warning</strong></dt><dd><p>PointwiseQuantileLoss always averages over the spatial dimensions.
+<dt><strong>reduction</strong><span class="classifier">str, optional</span></dt><dd><p>whether to reduce across the batch and channel dimensions
+by summing (‘sum’) or averaging (‘mean’)</p>
+</dd>
+<dt><strong>.. warning::</strong></dt><dd><p>PointwiseQuantileLoss always averages over the spatial dimensions.
 <cite>reduction</cite> only applies to the batch and channel dimensions.</p>
 </dd>
 </dl>
@@ -207,10 +207,26 @@ in the output domain expected to fall within predicted quantiles</p>
 </tbody>
 </table>
 <p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="r6002333bd5dc-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Ma, Z., Pitt, D., Azizzadenesheli, K., Anandkumar, A., (2024).
+Calibrated Uncertainty Quantification for Operator Learning via Conformal Prediction
+TMLR 2024, <a class="reference external" href="https://openreview.net/pdf?id=cGpegxy12T">https://openreview.net/pdf?id=cGpegxy12T</a></p>
+</div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="neuralop.losses.data_losses.PointwiseQuantileLoss.reduce_all">
 <span class="sig-name descname"><span class="pre">reduce_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neuralop/losses/data_losses.html#PointwiseQuantileLoss.reduce_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralop.losses.data_losses.PointwiseQuantileLoss.reduce_all" title="Link to this definition"></a></dt>
 <dd><p>reduce x across the batch according to <cite>self.reduction</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x: torch.Tensor</strong></dt><dd><p>inputs</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
