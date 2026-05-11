@@ -17,7 +17,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/tensorly_style.css?v=a02e9698" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=fd6457a4" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -28,6 +28,7 @@
     <script src="../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
@@ -251,6 +252,8 @@ Default: None</p>
 <dt><strong>non_linearity</strong><span class="classifier">nn.Module, optional</span></dt><dd><p>Non-Linear activation function module to use. Default: F.gelu</p>
 </dd>
 <dt><strong>norm</strong><span class="classifier">Literal[“ada_in”, “group_norm”, “instance_norm”], optional</span></dt><dd><p>Normalization layer to use. Options: “ada_in”, “group_norm”, “instance_norm”, None. Default: None</p>
+</dd>
+<dt><strong>norm_groups</strong><span class="classifier">int, optional</span></dt><dd><p>Number of groups for GroupNorm, by default 1</p>
 </dd>
 <dt><strong>complex_data</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether the data is complex-valued. If True, initializes complex-valued modules. Default: False</p>
 </dd>

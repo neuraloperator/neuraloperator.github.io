@@ -16,7 +16,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=fd6457a4" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -27,6 +27,7 @@
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/sg-tags.js?v=d80f6fa4"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
  <script src="../../../_static/navbar_burger.js"></script>
  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
@@ -173,6 +174,8 @@
 <span class="sd">        Stabilizing module to use between certain layers. Options: &quot;tanh&quot;, None, by default None</span>
 <span class="sd">    norm : Literal[&quot;ada_in&quot;, &quot;group_norm&quot;, &quot;instance_norm&quot;, &quot;batch_norm&quot;], optional</span>
 <span class="sd">        Normalization layer to use. Options: &quot;ada_in&quot;, &quot;group_norm&quot;, &quot;instance_norm&quot;, &quot;batch_norm&quot;, None, by default None</span>
+<span class="sd">    norm_groups : int, optional</span>
+<span class="sd">        Number of groups for GroupNorm, by default 1</span>
 <span class="sd">    ada_in_features : int, optional</span>
 <span class="sd">        Number of features for adaptive instance norm above, by default None</span>
 <span class="sd">    preactivation : bool, optional</span>
@@ -229,6 +232,7 @@
         <span class="n">non_linearity</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">gelu</span><span class="p">,</span>
         <span class="n">stabilizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">norm_groups</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">ada_in_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">preactivation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">fno_skip</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
@@ -258,6 +262,7 @@
             <span class="s2">&quot;non_linearity&quot;</span><span class="p">:</span> <span class="n">non_linearity</span><span class="p">,</span>
             <span class="s2">&quot;stabilizer&quot;</span><span class="p">:</span> <span class="n">stabilizer</span><span class="p">,</span>
             <span class="s2">&quot;norm&quot;</span><span class="p">:</span> <span class="n">norm</span><span class="p">,</span>
+            <span class="s2">&quot;norm_groups&quot;</span><span class="p">:</span> <span class="n">norm_groups</span><span class="p">,</span>
             <span class="s2">&quot;preactivation&quot;</span><span class="p">:</span> <span class="n">preactivation</span><span class="p">,</span>
             <span class="s2">&quot;fno_skip&quot;</span><span class="p">:</span> <span class="n">fno_skip</span><span class="p">,</span>
             <span class="s2">&quot;channel_mlp_skip&quot;</span><span class="p">:</span> <span class="n">channel_mlp_skip</span><span class="p">,</span>
@@ -395,6 +400,8 @@
 <span class="sd">        Stabilizing module to use between certain layers. Options: &quot;tanh&quot;, None, by default None</span>
 <span class="sd">    norm : Literal[&quot;ada_in&quot;, &quot;group_norm&quot;, &quot;instance_norm&quot;, &quot;batch_norm&quot;], optional</span>
 <span class="sd">        Normalization layer to use. Options: &quot;ada_in&quot;, &quot;group_norm&quot;, &quot;instance_norm&quot;, &quot;batch_norm&quot;, None, by default None</span>
+<span class="sd">    norm_groups : int, optional</span>
+<span class="sd">        Number of groups for GroupNorm, by default 1</span>
 <span class="sd">    ada_in_features : int, optional</span>
 <span class="sd">        Number of features for adaptive instance norm above, by default None</span>
 <span class="sd">    preactivation : bool, optional</span>
@@ -452,6 +459,7 @@
         <span class="n">non_linearity</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">gelu</span><span class="p">,</span>
         <span class="n">stabilizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">norm_groups</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">ada_in_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">preactivation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">fno_skip</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
@@ -484,6 +492,7 @@
             <span class="n">non_linearity</span><span class="o">=</span><span class="n">non_linearity</span><span class="p">,</span>
             <span class="n">stabilizer</span><span class="o">=</span><span class="n">stabilizer</span><span class="p">,</span>
             <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
+            <span class="n">norm_groups</span><span class="o">=</span><span class="n">norm_groups</span><span class="p">,</span>
             <span class="n">preactivation</span><span class="o">=</span><span class="n">preactivation</span><span class="p">,</span>
             <span class="n">fno_skip</span><span class="o">=</span><span class="n">fno_skip</span><span class="p">,</span>
             <span class="n">channel_mlp_skip</span><span class="o">=</span><span class="n">channel_mlp_skip</span><span class="p">,</span>
