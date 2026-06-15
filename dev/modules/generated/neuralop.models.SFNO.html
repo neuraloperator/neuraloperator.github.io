@@ -260,6 +260,10 @@ Default: “soft-gating”</p>
 <dt><strong>sfno_skip</strong><span class="classifier">Literal[“linear”, “identity”, “soft-gating”, None], optional</span></dt><dd><p>Type of skip connection to use in SFNO layers. Options: “linear”, “identity”, “soft-gating”, None.
 Default: “linear”</p>
 </dd>
+<dt><strong>conv_bias_kernel</strong><span class="classifier">int, optional</span></dt><dd><p>Kernel size for the local convolutional bias term used when <code class="docutils literal notranslate"><span class="pre">sfno_skip=&quot;linear&quot;</span></code>.
+<code class="docutils literal notranslate"><span class="pre">1</span></code> preserves the default pointwise bias term, while larger kernels add a
+local convolution alongside the global spectral convolution. Default: 1</p>
+</dd>
 <dt><strong>resolution_scaling_factor</strong><span class="classifier">Union[Number, List[Number]], optional</span></dt><dd><p>Layer-wise factor by which to scale the domain resolution of function.
 Options:
 - None: No scaling
