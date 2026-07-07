@@ -144,7 +144,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../index.html#data-generation">Data Generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#layers">Layers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#models">Models</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../index.html#training-and-meta-algorithms">Training and Meta-Algorithms</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#training-and-meta-learning-algorithms">Training and Meta-Learning Algorithms</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../dev_guide/index.html">Development guide</a></li>
@@ -449,13 +449,13 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f64737c5010&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7fbc7cf53380&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f647aa24ec0&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fbc841946e0&gt;
 
- * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f647aa24ec0&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7f64737c6660&gt;}
+ * Test: {&#39;h1&#39;: &lt;neuralop.losses.data_losses.H1Loss object at 0x7fbc841946e0&gt;, &#39;l2&#39;: &lt;neuralop.losses.data_losses.LpLoss object at 0x7fbc7cf530e0&gt;}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -504,22 +504,22 @@ Testing on [50, 50] samples         on resolutions [16, 32].
 Raw outputs of shape torch.Size([32, 1, 16, 16])
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:536: UserWarning: H1Loss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
   loss += training_loss(out, **sample)
-[0] time=4.28, avg_loss=0.6413, train_err=20.0396
+[0] time=4.24, avg_loss=0.6413, train_err=20.0396
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:581: UserWarning: LpLoss.__call__() received unexpected keyword arguments: [&#39;x&#39;]. These arguments will be ignored.
   val_loss = loss(out, **sample)
 Eval: 16_h1=0.4022, 16_l2=0.2731, 32_h1=0.6125, 32_l2=0.3017
 [5] time=4.25, avg_loss=0.2208, train_err=6.9006
 Eval: 16_h1=0.2547, 16_l2=0.1777, 32_h1=0.4186, 32_l2=0.2127
-[10] time=4.27, avg_loss=0.1816, train_err=5.6739
+[10] time=4.24, avg_loss=0.1816, train_err=5.6739
 Eval: 16_h1=0.2441, 16_l2=0.1535, 32_h1=0.4204, 32_l2=0.1916
-[15] time=4.33, avg_loss=0.1844, train_err=5.7641
+[15] time=4.24, avg_loss=0.1844, train_err=5.7641
 Eval: 16_h1=0.2480, 16_l2=0.1506, 32_h1=0.3855, 32_l2=0.1756
-[20] time=4.47, avg_loss=0.1212, train_err=3.7884
+[20] time=4.17, avg_loss=0.1212, train_err=3.7884
 Eval: 16_h1=0.2236, 16_l2=0.1320, 32_h1=0.3791, 32_l2=0.1439
-[25] time=4.31, avg_loss=0.0990, train_err=3.0922
+[25] time=4.18, avg_loss=0.0990, train_err=3.0922
 Eval: 16_h1=0.1977, 16_l2=0.1096, 32_h1=0.3933, 32_l2=0.1509
 
-{&#39;train_err&#39;: 2.525248534977436, &#39;avg_loss&#39;: 0.08080795311927795, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 4.334991264999985}
+{&#39;train_err&#39;: 2.525248534977436, &#39;avg_loss&#39;: 0.08080795311927795, &#39;avg_lasso_loss&#39;: None, &#39;epoch_train_time&#39;: 4.162183186999982}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -574,7 +574,7 @@ ii) can be trained quickly on CPU</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_UNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_UNO_darcy_001.png" alt="U-NO predictions on 32x32 Darcy-Flow data, Input x, Ground-truth y, U-NO prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 14.663 seconds)</p>
+<img src="../../_images/sphx_glr_plot_UNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_UNO_darcy_001.png" alt="U-NO predictions on 32x32 Darcy-Flow data, Input x, Ground-truth y, U-NO prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 11.213 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-models-plot-uno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/fee630be9801a5d2d76c0b9e3091063c/plot_UNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_UNO_darcy.ipynb</span></code></a></p>

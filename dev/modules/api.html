@@ -557,6 +557,30 @@ training a machine learning model to minimize a loss function on a dataset:</p>
 </tbody>
 </table>
 <hr class="docutils" />
+<section id="module-neuralop.training.tensorgrad">
+<span id="optimizers"></span><h3>Optimizers<a class="headerlink" href="#module-neuralop.training.tensorgrad" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.training.tensorgrad.TensorGRaD.html#neuralop.training.tensorgrad.TensorGRaD" title="neuralop.training.tensorgrad.TensorGRaD"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TensorGRaD</span></code></a>(params[, lr, betas, eps, ...])</p></td>
+<td><p>AdamW with optional low-rank and sparse gradient projection.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/neuralop.training.tensorgrad.TensorGRaDProjector.html#neuralop.training.tensorgrad.TensorGRaDProjector" title="neuralop.training.tensorgrad.TensorGRaDProjector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TensorGRaDProjector</span></code></a>(rank[, update_proj_gap, ...])</p></td>
+<td><p>Low-rank gradient projector used by TensorGRaD.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.training.tensorgrad.UnstructuredSparseProjector.html#neuralop.training.tensorgrad.UnstructuredSparseProjector" title="neuralop.training.tensorgrad.UnstructuredSparseProjector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UnstructuredSparseProjector</span></code></a>(sparse_ratio[, ...])</p></td>
+<td><p>Project gradients by keeping a sparse set of entries in flattened order.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/neuralop.training.tensorgrad.fno_tensorgrad_param_groups.html#neuralop.training.tensorgrad.fno_tensorgrad_param_groups" title="neuralop.training.tensorgrad.fno_tensorgrad_param_groups"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fno_tensorgrad_param_groups</span></code></a>(model[, rank, ...])</p></td>
+<td><p>Return AdamW and TensorGRaD parameter groups for FNO spectral weights.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<hr class="docutils" />
 <section id="module-neuralop.training.torch_setup">
 <span id="training-utilities"></span><h3>Training Utilities<a class="headerlink" href="#module-neuralop.training.torch_setup" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
@@ -902,6 +926,9 @@ loss functions:</p>
 </li>
 <li><a class="reference internal" href="#model-dispatching">Model Dispatching</a></li>
 <li><a class="reference internal" href="#training">Training</a><ul>
+<li><a class="reference internal" href="#module-neuralop.training.tensorgrad">Optimizers</a><ul>
+</ul>
+</li>
 <li><a class="reference internal" href="#module-neuralop.training.torch_setup">Training Utilities</a></li>
 <li><a class="reference internal" href="#module-neuralop.training.patching">Multi-Grid Patching</a></li>
 </ul>

@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>neuralop.training.tensorgrad &#8212; neuraloperator 2.0.0 documentation</title> 
+<link rel="stylesheet" href="../../../_static/tensorly_style.css">
+<link rel="apple-touch-icon" sizes="180x180" href="../../../_static/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../../_static/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../../_static/favicon/favicon-16x16.png">
+<link rel="manifest" href="../../../_static/favicon/site.webmanifest">
+<link rel="mask-icon" href="../../../_static/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="../../../_static/favicon/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=5126dfd5" />
+
+  
+    <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+ <script src="../../../_static/navbar_burger.js"></script>
+ <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+ 
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  </head>
+<body  class="has-navbar-fixed-top">
+
+  <header>
+    <navbar>
+      <nav class="navbar top-navbar is-fixed-top has-shadow is-flex-wrap-wrap" role="navigation" aria-label="main top navigation">
+        <div class="navbar-brand">
+        
+
+          <a class="navbar-item" href="../../../index.html">
+            <img src="../../../_static/neuraloperator_logo.png" height="28">
+          </a>
+          <a class="navbar-item is-hidden-desktop" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon"><i class="fab fa-github"></i></span>
+          </a>
+
+          <a role="button" class="navbar-burger" data-target="top-nav-menu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+
+        </div>
+        
+        <div class="navbar-menu" id="top-nav-menu">
+        
+
+          <div class="navbar-start">
+            
+              <a class="navbar-item" href="../../../install.html">
+              Install
+            </a>
+              <a class="navbar-item" href="../../../theory_guide/index.html">
+              Theory Guide
+            </a>
+              <a class="navbar-item" href="../../../user_guide/index.html">
+              User Guide
+            </a>
+              <a class="navbar-item" href="../../../modules/api.html">
+              API
+            </a>
+              <a class="navbar-item" href="../../../auto_examples/index.html">
+              Examples
+            </a>
+              <a class="navbar-item" href="../../../dev_guide/index.html">
+              Developer's Guide
+            </a>
+          </div>
+        
+          <div class="navbar-end">
+            <div class="navbar-item">
+            
+            <a class="button is-hidden-touch is-dark" href="https://github.com/neuraloperator/neuraloperator" target="_blank">
+              <span class="icon-text">
+                <span class="icon is-large">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Github</span>
+              </span>
+            </a>
+
+            </div> 
+          </div> 
+        </div> 
+
+      </nav>
+      
+    </navbar>
+  </header>
+
+
+  <div id="column-container">
+  <div class="columns is-mobile is-centered">
+	
+  
+
+  <div class="column main-column">
+
+    
+    <div class="main-section">
+
+      
+      
+
+      <div class="container content main-content">
+        
+  <h1>Source code for neuralop.training.tensorgrad</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tensorly</span><span class="w"> </span><span class="kn">import</span> <span class="n">tenalg</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tensorly.decomposition</span><span class="w"> </span><span class="kn">import</span> <span class="n">tucker</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.optim</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optimizer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.checkpoint</span><span class="w"> </span><span class="kn">import</span> <span class="n">checkpoint</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tensorly.tucker_tensor</span><span class="w"> </span><span class="kn">import</span> <span class="n">validate_tucker_rank</span>
+
+
+<div class="viewcode-block" id="TensorGRaDProjector">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.training.tensorgrad.TensorGRaDProjector.html#neuralop.training.tensorgrad.TensorGRaDProjector">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TensorGRaDProjector</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Low-rank gradient projector used by TensorGRaD.</span>
+
+<span class="sd">    The original tensor is projected into a low-rank subspace using low-rank</span>
+<span class="sd">    mode-wise factors obtained by Tucker decomposition. The parameters are</span>
+<span class="sd">    optimized in this space to save memory and are then projected back into the</span>
+<span class="sd">    full-rank space for use in a model.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    rank : float, int or tuple[int, ...]</span>
+<span class="sd">        Goal rank of the transformed gradient tensor. A float is interpreted as</span>
+<span class="sd">        a target fraction of parameters to preserve.</span>
+<span class="sd">    update_proj_gap : int, optional</span>
+<span class="sd">        Number of optimizer steps between projection-tensor updates.</span>
+<span class="sd">    scale : float, optional</span>
+<span class="sd">        Scalar applied after projecting low-rank updates back to full size.</span>
+<span class="sd">    warm_restart : bool, optional</span>
+<span class="sd">        If ``True``, uses the previous projection tensor as the initializer for</span>
+<span class="sd">        the next Tucker decomposition.</span>
+<span class="sd">    activation_checkpoint : bool, optional</span>
+<span class="sd">        Whether to use activation checkpointing for Tucker decomposition.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. _[1] : Loeschcke, S., Pitt, D., George, R., Zhao, J., Luo, C.,</span>
+<span class="sd">        Tian, Y., Kossaifi, J., Anandkumar, A. (2025).</span>
+<span class="sd">        TensorGRaD: Tensor Gradient Robust Decomposition for Memory-Efficient</span>
+<span class="sd">        Neural Operator Training. arXiv preprint,</span>
+<span class="sd">        https://arxiv.org/abs/2501.02379.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">rank</span><span class="p">,</span>
+        <span class="n">update_proj_gap</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span>
+        <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">tucker_n_iter_max</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="n">warm_restart</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">activation_checkpoint</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">=</span> <span class="n">rank</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_proj_gap</span> <span class="o">=</span> <span class="n">update_proj_gap</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">warm_restart</span> <span class="o">=</span> <span class="n">warm_restart</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tucker_n_iter_max</span> <span class="o">=</span> <span class="n">tucker_n_iter_max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">activation_checkpoint</span> <span class="o">=</span> <span class="n">activation_checkpoint</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">proj_tensor</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">full_rank_grad</span><span class="p">,</span> <span class="nb">iter</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">proj_tensor</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">iter</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_proj_gap</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">proj_tensor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_projection_tensor</span><span class="p">(</span><span class="n">full_rank_grad</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">proj_tensor</span><span class="p">,</span> <span class="n">full_rank_grad</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">project_back</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">low_rank_grad</span><span class="p">):</span>
+        <span class="n">full_rank_grad</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">proj_tensor</span><span class="p">,</span> <span class="n">low_rank_grad</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">full_rank_grad</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_projection_tensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">rank</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">is_complex</span><span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="ow">and</span> <span class="n">weights</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cfloat</span><span class="p">:</span>
+            <span class="n">matrix</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">cfloat</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">matrix</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">data</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">warm_restart</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">proj_tensor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">init_factors</span> <span class="o">=</span> <span class="p">[</span><span class="n">factor</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">matrix</span><span class="o">.</span><span class="n">device</span><span class="p">)</span> <span class="k">for</span> <span class="n">factor</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proj_tensor</span><span class="p">]</span>
+            <span class="n">init_core</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">init_factors</span><span class="p">,</span> <span class="n">matrix</span><span class="p">)</span>
+            <span class="n">init</span> <span class="o">=</span> <span class="p">(</span><span class="n">init_core</span><span class="p">,</span> <span class="n">init_factors</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">init</span> <span class="o">=</span> <span class="s2">&quot;svd&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation_checkpoint</span><span class="p">:</span>
+            <span class="n">core</span><span class="p">,</span> <span class="n">factors</span> <span class="o">=</span> <span class="n">checkpoint</span><span class="p">(</span><span class="n">tucker</span><span class="p">,</span> <span class="n">matrix</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="n">rank</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="n">init</span><span class="p">,</span> <span class="n">n_iter_max</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tucker_n_iter_max</span><span class="p">,</span> <span class="n">use_reentrant</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">core</span><span class="p">,</span> <span class="n">factors</span> <span class="o">=</span> <span class="n">tucker</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="n">rank</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="n">init</span><span class="p">,</span> <span class="n">n_iter_max</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tucker_n_iter_max</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">core</span>
+        <span class="k">return</span> <span class="n">factors</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factors</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation_checkpoint</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">checkpoint</span><span class="p">(</span><span class="n">tenalg</span><span class="o">.</span><span class="n">multi_mode_dot</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">factors</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">use_reentrant</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tenalg</span><span class="o">.</span><span class="n">multi_mode_dot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">factors</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">inverse_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factors</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation_checkpoint</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">checkpoint</span><span class="p">(</span><span class="n">tenalg</span><span class="o">.</span><span class="n">multi_mode_dot</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">factors</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tenalg</span><span class="o">.</span><span class="n">multi_mode_dot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">factors</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="UnstructuredSparseProjector">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.training.tensorgrad.UnstructuredSparseProjector.html#neuralop.training.tensorgrad.UnstructuredSparseProjector">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">UnstructuredSparseProjector</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Project gradients by keeping a sparse set of entries in flattened order.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sparse_ratio : float</span>
+<span class="sd">        Fraction of entries to keep in the sparse gradient.</span>
+<span class="sd">    update_proj_gap : int, optional</span>
+<span class="sd">        Number of optimizer steps between sparse mask updates.</span>
+<span class="sd">    sparse_type : {&quot;randk&quot;, &quot;randomk&quot;, &quot;topk&quot;}, optional</span>
+<span class="sd">        Strategy used to choose sparse entries. ``topk`` keeps entries with the</span>
+<span class="sd">        largest absolute gradient values, while ``randk``/``randomk`` sample</span>
+<span class="sd">        entries uniformly at random.</span>
+<span class="sd">    scale : float, optional</span>
+<span class="sd">        Scalar applied after projecting the sparse update back to full size.</span>
+<span class="sd">    scale_by_mask_ratio : bool, optional</span>
+<span class="sd">        If ``True``, additionally scales by the square root of the inverse</span>
+<span class="sd">        sparse mask ratio after projection back.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">sparse_ratio</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">update_proj_gap</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+        <span class="n">sparse_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;randk&quot;</span><span class="p">,</span>
+        <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">scale_by_mask_ratio</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">sparse_ratio</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected sparse_ratio in (0, 1], got </span><span class="si">{</span><span class="n">sparse_ratio</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">update_proj_gap</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected update_proj_gap &gt;= 1, got </span><span class="si">{</span><span class="n">update_proj_gap</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">sparse_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;randk&quot;</span><span class="p">,</span> <span class="s2">&quot;randomk&quot;</span><span class="p">,</span> <span class="s2">&quot;topk&quot;</span><span class="p">}:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported sparse_type=</span><span class="si">{</span><span class="n">sparse_type</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sparse_ratio</span> <span class="o">=</span> <span class="n">sparse_ratio</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_proj_gap</span> <span class="o">=</span> <span class="n">update_proj_gap</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sparse_type</span> <span class="o">=</span> <span class="n">sparse_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale_by_mask_ratio</span> <span class="o">=</span> <span class="n">scale_by_mask_ratio</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">orig_shape</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grad</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">step</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">orig_shape</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">orig_shape</span> <span class="o">=</span> <span class="n">grad</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">indices</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">step</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_proj_gap</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_indices</span><span class="p">(</span><span class="n">grad</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">grad</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">project_back</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sparse_grad</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">orig_shape</span><span class="p">,</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="n">sparse_grad</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+            <span class="n">device</span><span class="o">=</span><span class="n">sparse_grad</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">sparse_grad</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_by_mask_ratio</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">values</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span> <span class="o">/</span> <span class="n">sparse_grad</span><span class="o">.</span><span class="n">numel</span><span class="p">())</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">scatter_</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span> <span class="n">values</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">dtype</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_build_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grad</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+        <span class="n">flat</span> <span class="o">=</span> <span class="n">grad</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sparse_ratio</span> <span class="o">*</span> <span class="n">flat</span><span class="o">.</span><span class="n">numel</span><span class="p">()))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sparse_type</span> <span class="o">==</span> <span class="s2">&quot;topk&quot;</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">topk</span><span class="p">(</span><span class="n">flat</span><span class="o">.</span><span class="n">abs</span><span class="p">(),</span> <span class="n">k</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randperm</span><span class="p">(</span><span class="n">flat</span><span class="o">.</span><span class="n">numel</span><span class="p">(),</span> <span class="n">device</span><span class="o">=</span><span class="n">grad</span><span class="o">.</span><span class="n">device</span><span class="p">)[:</span><span class="n">k</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">indices</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span><span class="o">.</span><span class="n">values</span></div>
+
+
+
+<div class="viewcode-block" id="TensorGRaD">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.training.tensorgrad.TensorGRaD.html#neuralop.training.tensorgrad.TensorGRaD">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TensorGRaD</span><span class="p">(</span><span class="n">Optimizer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;AdamW with optional low-rank and sparse gradient projection.</span>
+
+<span class="sd">    Parameters with a ``tensorgrad`` parameter-group flag are optimized in a</span>
+<span class="sd">    compressed gradient space. Groups with only ``rank`` use a single</span>
+<span class="sd">    TensorGRaD/Tucker low-rank branch. Groups that also set</span>
+<span class="sd">    ``sparse_ratio`` use a TensorGRaD-style residual branch: low-rank project</span>
+<span class="sd">    the gradient, sparse-project the low-rank residual, run Adam on both</span>
+<span class="sd">    compressed states, then project both updates back and combine them.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    params : iterable</span>
+<span class="sd">        Iterable of parameters or parameter groups. Parameter groups with</span>
+<span class="sd">        ``tensorgrad=True`` use compressed-gradient updates.</span>
+<span class="sd">    lr : float, optional</span>
+<span class="sd">        Learning rate.</span>
+<span class="sd">    betas : tuple[float, float], optional</span>
+<span class="sd">        Adam exponential moving average coefficients.</span>
+<span class="sd">    eps : float, optional</span>
+<span class="sd">        Epsilon added to the denominator for numerical stability.</span>
+<span class="sd">    weight_decay : float, optional</span>
+<span class="sd">        Decoupled weight decay.</span>
+<span class="sd">    correct_bias : bool, optional</span>
+<span class="sd">        Whether to apply Adam bias correction.</span>
+
+<span class="sd">    TensorGRaD parameter-group options</span>
+<span class="sd">    ----------------------------------</span>
+<span class="sd">    rank : float or tuple[int, ...]</span>
+<span class="sd">        Tucker low-rank budget for the low-rank branch. A float gives the</span>
+<span class="sd">        target fraction of low-rank gradient entries.</span>
+<span class="sd">    sparse_ratio : float, optional</span>
+<span class="sd">        If provided, enables the sparse residual branch with this entry budget.</span>
+<span class="sd">    update_proj_gap : int, optional</span>
+<span class="sd">        Number of optimizer steps between low-rank basis and sparse mask</span>
+<span class="sd">        updates.</span>
+<span class="sd">    scale : float, optional</span>
+<span class="sd">        Scalar applied to the projected-back low-rank update.</span>
+<span class="sd">    sparse_scale : float, optional</span>
+<span class="sd">        Scalar applied to the projected-back sparse update.</span>
+<span class="sd">    lambda_sparse : float, optional</span>
+<span class="sd">        Weight used when adding the sparse update to the low-rank update.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">params</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">],</span>
+        <span class="n">lr</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-3</span><span class="p">,</span>
+        <span class="n">betas</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.999</span><span class="p">),</span>
+        <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-6</span><span class="p">,</span>
+        <span class="n">weight_decay</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">correct_bias</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="n">lr</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid learning rate: </span><span class="si">{</span><span class="n">lr</span><span class="si">}</span><span class="s2"> - should be &gt;= 0.0&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">betas</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Invalid beta parameter: </span><span class="si">{</span><span class="n">betas</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> - should be in [0.0, 1.0)&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">betas</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Invalid beta parameter: </span><span class="si">{</span><span class="n">betas</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> - should be in [0.0, 1.0)&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">eps</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid epsilon value: </span><span class="si">{</span><span class="n">eps</span><span class="si">}</span><span class="s2"> - should be &gt;= 0.0&quot;</span><span class="p">)</span>
+
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;lr&quot;</span><span class="p">:</span> <span class="n">lr</span><span class="p">,</span>
+            <span class="s2">&quot;betas&quot;</span><span class="p">:</span> <span class="n">betas</span><span class="p">,</span>
+            <span class="s2">&quot;eps&quot;</span><span class="p">:</span> <span class="n">eps</span><span class="p">,</span>
+            <span class="s2">&quot;weight_decay&quot;</span><span class="p">:</span> <span class="n">weight_decay</span><span class="p">,</span>
+            <span class="s2">&quot;correct_bias&quot;</span><span class="p">:</span> <span class="n">correct_bias</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">defaults</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TensorGRaD.step">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.training.tensorgrad.TensorGRaD.html#neuralop.training.tensorgrad.TensorGRaD.step">[docs]</a>
+    <span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">closure</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">closure</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">closure</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_groups</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">group</span><span class="p">[</span><span class="s2">&quot;params&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">grad</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">grad</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">grad</span>
+                <span class="k">if</span> <span class="n">grad</span><span class="o">.</span><span class="n">is_sparse</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;TensorGRaD does not support sparse gradients.&quot;</span><span class="p">)</span>
+
+                <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">param</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s2">&quot;step&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">state</span><span class="p">:</span>
+                    <span class="n">state</span><span class="p">[</span><span class="s2">&quot;step&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+                <span class="n">step</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;step&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">group</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tensorgrad&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+                    <span class="n">update</span><span class="p">,</span> <span class="n">step_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensorgrad_update</span><span class="p">(</span>
+                        <span class="n">param</span><span class="p">,</span>
+                        <span class="n">grad</span><span class="p">,</span>
+                        <span class="n">group</span><span class="p">,</span>
+                        <span class="n">state</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">update</span><span class="p">,</span> <span class="n">step_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_adamw_update</span><span class="p">(</span>
+                        <span class="n">grad</span><span class="p">,</span>
+                        <span class="n">group</span><span class="p">,</span>
+                        <span class="n">state</span><span class="p">,</span>
+                        <span class="s2">&quot;exp_avg&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;exp_avg_sq&quot;</span><span class="p">,</span>
+                        <span class="n">step</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                <span class="n">param</span><span class="o">.</span><span class="n">add_</span><span class="p">(</span><span class="n">update</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=-</span><span class="n">step_size</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">group</span><span class="p">[</span><span class="s2">&quot;weight_decay&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">param</span><span class="o">.</span><span class="n">add_</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=-</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;lr&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">group</span><span class="p">[</span><span class="s2">&quot;weight_decay&quot;</span><span class="p">])</span>
+                <span class="n">state</span><span class="p">[</span><span class="s2">&quot;step&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">step</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">loss</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_tensorgrad_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">grad</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;low_rank_projector&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">state</span><span class="p">:</span>
+            <span class="n">state</span><span class="p">[</span><span class="s2">&quot;low_rank_projector&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_low_rank_projector</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">group</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">group</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sparse_ratio&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">state</span><span class="p">[</span><span class="s2">&quot;sparse_projector&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_sparse_projector</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+
+        <span class="n">low_rank_projector</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;low_rank_projector&quot;</span><span class="p">]</span>
+        <span class="n">low_rank_grad</span> <span class="o">=</span> <span class="n">low_rank_projector</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="n">grad</span><span class="p">,</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;step&quot;</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="s2">&quot;sparse_projector&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">state</span><span class="p">:</span>
+            <span class="n">update</span><span class="p">,</span> <span class="n">step_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_adamw_update</span><span class="p">(</span>
+                <span class="n">low_rank_grad</span><span class="p">,</span>
+                <span class="n">group</span><span class="p">,</span>
+                <span class="n">state</span><span class="p">,</span>
+                <span class="s2">&quot;low_rank_exp_avg&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;low_rank_exp_avg_sq&quot;</span><span class="p">,</span>
+                <span class="n">state</span><span class="p">[</span><span class="s2">&quot;step&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">low_rank_projector</span><span class="o">.</span><span class="n">project_back</span><span class="p">(</span><span class="n">update</span><span class="p">),</span> <span class="n">step_size</span>
+
+        <span class="c1"># Build the sparse branch from the residual left by the unscaled</span>
+        <span class="c1"># low-rank reconstruction. Scaling is applied only to the final update.</span>
+        <span class="n">low_rank_reconstruction</span> <span class="o">=</span> <span class="n">low_rank_projector</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span>
+            <span class="n">low_rank_projector</span><span class="o">.</span><span class="n">proj_tensor</span><span class="p">,</span>
+            <span class="n">low_rank_grad</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">residual</span> <span class="o">=</span> <span class="n">grad</span> <span class="o">-</span> <span class="n">low_rank_reconstruction</span>
+        <span class="n">sparse_projector</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;sparse_projector&quot;</span><span class="p">]</span>
+        <span class="n">sparse_grad</span> <span class="o">=</span> <span class="n">sparse_projector</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;step&quot;</span><span class="p">])</span>
+
+        <span class="n">low_rank_update</span><span class="p">,</span> <span class="n">step_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_adamw_update</span><span class="p">(</span>
+            <span class="n">low_rank_grad</span><span class="p">,</span>
+            <span class="n">group</span><span class="p">,</span>
+            <span class="n">state</span><span class="p">,</span>
+            <span class="s2">&quot;low_rank_exp_avg&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;low_rank_exp_avg_sq&quot;</span><span class="p">,</span>
+            <span class="n">state</span><span class="p">[</span><span class="s2">&quot;step&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">sparse_update</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_adamw_update</span><span class="p">(</span>
+            <span class="n">sparse_grad</span><span class="p">,</span>
+            <span class="n">group</span><span class="p">,</span>
+            <span class="n">state</span><span class="p">,</span>
+            <span class="s2">&quot;sparse_exp_avg&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;sparse_exp_avg_sq&quot;</span><span class="p">,</span>
+            <span class="n">state</span><span class="p">[</span><span class="s2">&quot;step&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">sparse_weight</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lambda_sparse&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">full_update</span> <span class="o">=</span> <span class="n">low_rank_projector</span><span class="o">.</span><span class="n">project_back</span><span class="p">(</span><span class="n">low_rank_update</span><span class="p">)</span>
+        <span class="n">full_update</span><span class="o">.</span><span class="n">add_</span><span class="p">(</span>
+            <span class="n">sparse_projector</span><span class="o">.</span><span class="n">project_back</span><span class="p">(</span><span class="n">sparse_update</span><span class="p">),</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">sparse_weight</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">full_update</span><span class="p">,</span> <span class="n">step_size</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_adamw_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grad</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">exp_avg_key</span><span class="p">,</span> <span class="n">exp_avg_sq_key</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">exp_avg_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">state</span><span class="p">:</span>
+            <span class="n">state</span><span class="p">[</span><span class="n">exp_avg_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">grad</span><span class="p">)</span>
+            <span class="n">state</span><span class="p">[</span><span class="n">exp_avg_sq_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">grad</span><span class="p">)</span>
+
+        <span class="n">exp_avg</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="n">exp_avg_key</span><span class="p">]</span>
+        <span class="n">exp_avg_sq</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="n">exp_avg_sq_key</span><span class="p">]</span>
+        <span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span> <span class="o">=</span> <span class="n">group</span><span class="p">[</span><span class="s2">&quot;betas&quot;</span><span class="p">]</span>
+
+        <span class="n">exp_avg</span><span class="o">.</span><span class="n">mul_</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span><span class="o">.</span><span class="n">add_</span><span class="p">(</span><span class="n">grad</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span> <span class="n">beta1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">is_complex</span><span class="p">(</span><span class="n">grad</span><span class="p">):</span>
+            <span class="n">exp_avg_sq</span><span class="o">.</span><span class="n">mul_</span><span class="p">(</span><span class="n">beta2</span><span class="p">)</span><span class="o">.</span><span class="n">addcmul_</span><span class="p">(</span><span class="n">grad</span><span class="p">,</span> <span class="n">grad</span><span class="o">.</span><span class="n">conj</span><span class="p">(),</span> <span class="n">value</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span> <span class="n">beta2</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">exp_avg_sq</span><span class="o">.</span><span class="n">mul_</span><span class="p">(</span><span class="n">beta2</span><span class="p">)</span><span class="o">.</span><span class="n">addcmul_</span><span class="p">(</span><span class="n">grad</span><span class="p">,</span> <span class="n">grad</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span> <span class="n">beta2</span><span class="p">)</span>
+
+        <span class="n">denom</span> <span class="o">=</span> <span class="n">exp_avg_sq</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span><span class="o">.</span><span class="n">add_</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;eps&quot;</span><span class="p">])</span>
+        <span class="n">step_size</span> <span class="o">=</span> <span class="n">group</span><span class="p">[</span><span class="s2">&quot;lr&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">group</span><span class="p">[</span><span class="s2">&quot;correct_bias&quot;</span><span class="p">]:</span>
+            <span class="n">bias_correction1</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">beta1</span> <span class="o">**</span> <span class="n">step</span>
+            <span class="n">bias_correction2</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">beta2</span> <span class="o">**</span> <span class="n">step</span>
+            <span class="n">step_size</span> <span class="o">*=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">bias_correction2</span><span class="p">)</span> <span class="o">/</span> <span class="n">bias_correction1</span>
+        <span class="k">return</span> <span class="n">exp_avg</span> <span class="o">/</span> <span class="n">denom</span><span class="p">,</span> <span class="n">step_size</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_make_low_rank_projector</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
+        <span class="n">rank</span> <span class="o">=</span> <span class="n">validate_tucker_rank</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">group</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rank&quot;</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">TensorGRaDProjector</span><span class="p">(</span>
+            <span class="n">rank</span><span class="o">=</span><span class="n">rank</span><span class="p">,</span>
+            <span class="n">update_proj_gap</span><span class="o">=</span><span class="n">group</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;update_proj_gap&quot;</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>
+            <span class="n">scale</span><span class="o">=</span><span class="n">group</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;scale&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+            <span class="n">warm_restart</span><span class="o">=</span><span class="n">group</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;warm_restart&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+            <span class="n">tucker_n_iter_max</span><span class="o">=</span><span class="n">group</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tucker_n_iter_max&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+            <span class="n">activation_checkpoint</span><span class="o">=</span><span class="n">group</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;activation_checkpoint&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_make_sparse_projector</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">UnstructuredSparseProjector</span><span class="p">(</span>
+            <span class="n">sparse_ratio</span><span class="o">=</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;sparse_ratio&quot;</span><span class="p">],</span>
+            <span class="n">update_proj_gap</span><span class="o">=</span><span class="n">group</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;update_proj_gap&quot;</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>
+            <span class="n">sparse_type</span><span class="o">=</span><span class="n">group</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sparse_type&quot;</span><span class="p">,</span> <span class="s2">&quot;randk&quot;</span><span class="p">),</span>
+            <span class="n">scale</span><span class="o">=</span><span class="n">group</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sparse_scale&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+            <span class="n">scale_by_mask_ratio</span><span class="o">=</span><span class="n">group</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;scale_by_mask_ratio&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="fno_tensorgrad_param_groups">
+<a class="viewcode-back" href="../../../modules/generated/neuralop.training.tensorgrad.fno_tensorgrad_param_groups.html#neuralop.training.tensorgrad.fno_tensorgrad_param_groups">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">fno_tensorgrad_param_groups</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+    <span class="n">rank</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.25</span><span class="p">,</span>
+    <span class="n">sparse_ratio</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">min_params</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+    <span class="n">update_proj_gap</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+    <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">sparse_scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">sparse_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;randk&quot;</span><span class="p">,</span>
+    <span class="n">lambda_sparse</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">warm_restart</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return AdamW and TensorGRaD parameter groups for FNO spectral weights.</span>
+
+<span class="sd">    The returned groups put large parameters from ``model.fno_blocks.convs`` in</span>
+<span class="sd">    a TensorGRaD group and all remaining trainable parameters in a regular</span>
+<span class="sd">    AdamW-style group.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : nn.Module</span>
+<span class="sd">        FNO-like model with ``fno_blocks.convs``.</span>
+<span class="sd">    rank : float, optional</span>
+<span class="sd">        Tucker low-rank budget for selected spectral-convolution parameters.</span>
+<span class="sd">    sparse_ratio : float, optional</span>
+<span class="sd">        Sparse residual budget. If ``None``, only the low-rank branch is used.</span>
+<span class="sd">    min_params : int, optional</span>
+<span class="sd">        Minimum number of entries a spectral-convolution parameter must have to</span>
+<span class="sd">        be optimized with TensorGRaD.</span>
+<span class="sd">    update_proj_gap : int, optional</span>
+<span class="sd">        Number of optimizer steps between projection updates.</span>
+<span class="sd">    scale : float, optional</span>
+<span class="sd">        Scalar applied to projected-back low-rank updates.</span>
+<span class="sd">    sparse_scale : float, optional</span>
+<span class="sd">        Scalar applied to projected-back sparse updates.</span>
+<span class="sd">    sparse_type : {&quot;randk&quot;, &quot;randomk&quot;, &quot;topk&quot;}, optional</span>
+<span class="sd">        Strategy used by the sparse residual projector.</span>
+<span class="sd">    lambda_sparse : float, optional</span>
+<span class="sd">        Weight used when adding the sparse update to the low-rank update.</span>
+<span class="sd">    warm_restart : bool, optional</span>
+<span class="sd">        Whether Tucker decomposition reuses the previous projection factors</span>
+<span class="sd">        when updating the low-rank basis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">module</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">module</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;module&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">model</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="s2">&quot;fno_blocks&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">fno_blocks</span><span class="p">,</span> <span class="s2">&quot;convs&quot;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected an FNO-like model with fno_blocks.convs.&quot;</span><span class="p">)</span>
+
+    <span class="n">tensorgrad_params</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">param</span>
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">module</span><span class="o">.</span><span class="n">fno_blocks</span><span class="o">.</span><span class="n">convs</span><span class="o">.</span><span class="n">parameters</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">requires_grad</span> <span class="ow">and</span> <span class="n">param</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">min_params</span>
+    <span class="p">]</span>
+    <span class="n">tensorgrad_param_ids</span> <span class="o">=</span> <span class="p">{</span><span class="nb">id</span><span class="p">(</span><span class="n">param</span><span class="p">)</span> <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">tensorgrad_params</span><span class="p">}</span>
+    <span class="n">regular_params</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">param</span>
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">requires_grad</span> <span class="ow">and</span> <span class="nb">id</span><span class="p">(</span><span class="n">param</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tensorgrad_param_ids</span>
+    <span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">tensorgrad_params</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;No FNO spectral convolution parameters matched TensorGRaD filtering.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">tensorgrad_group</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="n">tensorgrad_params</span><span class="p">,</span>
+        <span class="s2">&quot;tensorgrad&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;rank&quot;</span><span class="p">:</span> <span class="n">rank</span><span class="p">,</span>
+        <span class="s2">&quot;update_proj_gap&quot;</span><span class="p">:</span> <span class="n">update_proj_gap</span><span class="p">,</span>
+        <span class="s2">&quot;scale&quot;</span><span class="p">:</span> <span class="n">scale</span><span class="p">,</span>
+        <span class="s2">&quot;warm_restart&quot;</span><span class="p">:</span> <span class="n">warm_restart</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">sparse_ratio</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">tensorgrad_group</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;sparse_ratio&quot;</span><span class="p">:</span> <span class="n">sparse_ratio</span><span class="p">,</span>
+                <span class="s2">&quot;sparse_type&quot;</span><span class="p">:</span> <span class="n">sparse_type</span><span class="p">,</span>
+                <span class="s2">&quot;sparse_scale&quot;</span><span class="p">:</span> <span class="n">sparse_scale</span><span class="p">,</span>
+                <span class="s2">&quot;lambda_sparse&quot;</span><span class="p">:</span> <span class="n">lambda_sparse</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="p">[{</span><span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="n">regular_params</span><span class="p">},</span> <span class="n">tensorgrad_group</span><span class="p">]</span></div>
+
+</pre></div>
+
+      </div>
+
+      
+
+        <footer class="footer">
+    <div class="content has-text-centered">
+        <div class="block">
+          &copy; Copyright 2026, Jean Kossaifi, David Pitt, Nikola Kovachki, Zongyi Li and Anima Anandkumar.<br/>
+        </div>
+    </div>
+  </footer>
+
+    </div>
+
+  </div>  
+
+	
+
+  </div>  
+  </div> 
+
+  
+  <script>
+    function toggle_sidebar() {
+        var element = document.getElementById("sidebar");
+        var container = document.getElementById("column-container");
+        var localtoccolumn = document.getElementById("localtoc-column");
+        element.classList.toggle("hide-tablet");
+        element.classList.toggle("is-hidden-mobile");
+        container.classList.toggle("sidemenu-hidden");
+        localtoccolumn.classList.toggle("is-one-fifth-widescreen");
+        localtoccolumn.classList.toggle("is-2-desktop");
+        localtoccolumn.classList.toggle("is-3-desktop");
+    }
+  </script> 
+
+
+
+  </body>
+</html>
