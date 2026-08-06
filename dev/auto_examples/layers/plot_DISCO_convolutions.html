@@ -237,7 +237,7 @@ in neural operator architectures.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_DISCO_convolutions_001.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_001.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/neuraloperator/neuraloperator/examples/layers/plot_DISCO_convolutions.py:72: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:213.)
+<img src="../../_images/sphx_glr_plot_DISCO_convolutions_001.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_001.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/neuraloperator/neuraloperator/examples/layers/plot_DISCO_convolutions.py:72: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:213.)
   torch.from_numpy(img).unsqueeze(0).unsqueeze(0), size=(ny, nx)
 </pre></div>
 </div>
@@ -312,7 +312,7 @@ in neural operator architectures.</p>
 <span class="n">psi</span> <span class="o">=</span> <span class="n">conv</span><span class="o">.</span><span class="n">get_local_filter_matrix</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/neuraloperator/neuraloperator/neuralop/layers/discrete_continuous_convolution.py:439: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:760.)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/neuraloperator/neuraloperator/neuralop/layers/discrete_continuous_convolution.py:439: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /__w/pytorch/pytorch/aten/src/ATen/Context.cpp:816.)
   psi = torch.sparse_coo_tensor(
 </pre></div>
 </div>
@@ -378,7 +378,7 @@ torch.Size([119, 89])
 <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_DISCO_convolutions_006.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_006.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7fbc9729a490&gt;
+<img src="../../_images/sphx_glr_plot_DISCO_convolutions_006.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_006.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7f53c2ecb610&gt;
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div><p>Test the transpose convolution</p>
@@ -456,7 +456,7 @@ torch.Size([119, 89])
 <img src="../../_images/sphx_glr_plot_DISCO_convolutions_008.png" srcset="../../_images/sphx_glr_plot_DISCO_convolutions_008.png" alt="plot DISCO convolutions" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>torch.Size([1, 1, 120, 90])
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 28.079 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 35.088 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-layers-plot-disco-convolutions-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/3f74a91662afa758e3d845617240e471/plot_DISCO_convolutions.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_DISCO_convolutions.ipynb</span></code></a></p>
