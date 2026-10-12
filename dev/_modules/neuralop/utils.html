@@ -16,7 +16,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/tensorly_style.css?v=a02e9698" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -141,12 +141,12 @@
 <div class="viewcode-block" id="count_model_params">
 <a class="viewcode-back" href="../../modules/generated/neuralop.utils.count_model_params.html#neuralop.utils.count_model_params">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">count_model_params</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the total number of parameters of a PyTorch model</span>
+<span class="w">    </span><span class="sd">"""Returns the total number of parameters of a PyTorch model</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    One complex number is counted as two parameters (we count real and imaginary parts)&#39;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    One complex number is counted as two parameters (we count real and imaginary parts)'</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span>
         <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">is_complex</span><span class="p">()</span> <span class="k">else</span> <span class="n">p</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">()]</span>
     <span class="p">)</span></div>
@@ -156,7 +156,7 @@
 <div class="viewcode-block" id="count_tensor_params">
 <a class="viewcode-back" href="../../modules/generated/neuralop.utils.count_tensor_params.html#neuralop.utils.count_tensor_params">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">count_tensor_params</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the number of parameters (elements) in a single tensor, optionally, along certain dimensions only</span>
+<span class="w">    </span><span class="sd">"""Returns the number of parameters (elements) in a single tensor, optionally, along certain dimensions only</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -166,8 +166,8 @@
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    One complex number is counted as two parameters (we count real and imaginary parts)&#39;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    One complex number is counted as two parameters (we count real and imaginary parts)'</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">dims</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">dims</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -179,31 +179,31 @@
 
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">wandb_login</span><span class="p">(</span><span class="n">api_key_file</span><span class="o">=</span><span class="s2">&quot;../config/wandb_api_key.txt&quot;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">wandb_login</span><span class="p">(</span><span class="n">api_key_file</span><span class="o">=</span><span class="s2">"../config/wandb_api_key.txt"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">key</span> <span class="o">=</span> <span class="n">get_wandb_api_key</span><span class="p">(</span><span class="n">api_key_file</span><span class="p">)</span>
 
     <span class="n">wandb</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">set_wandb_api_key</span><span class="p">(</span><span class="n">api_key_file</span><span class="o">=</span><span class="s2">&quot;../config/wandb_api_key.txt&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_wandb_api_key</span><span class="p">(</span><span class="n">api_key_file</span><span class="o">=</span><span class="s2">"../config/wandb_api_key.txt"</span><span class="p">):</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;WANDB_API_KEY&quot;</span><span class="p">]</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"WANDB_API_KEY"</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">api_key_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">api_key_file</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">key</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;WANDB_API_KEY&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"WANDB_API_KEY"</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">get_wandb_api_key</span><span class="p">(</span><span class="n">api_key_file</span><span class="o">=</span><span class="s2">&quot;../config/wandb_api_key.txt&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_wandb_api_key</span><span class="p">(</span><span class="n">api_key_file</span><span class="o">=</span><span class="s2">"../config/wandb_api_key.txt"</span><span class="p">):</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;WANDB_API_KEY&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"WANDB_API_KEY"</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">api_key_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">api_key_file</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">key</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">key</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
@@ -212,7 +212,7 @@
 <div class="viewcode-block" id="spectrum_2d">
 <a class="viewcode-back" href="../../modules/generated/neuralop.utils.spectrum_2d.html#neuralop.utils.spectrum_2d">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">spectrum_2d</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">n_observations</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;This function computes the spectrum of a 2D signal using the Fast Fourier Transform (FFT).</span>
+<span class="w">    </span><span class="sd">"""This function computes the spectrum of a 2D signal using the Fast Fourier Transform (FFT).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -234,18 +234,18 @@
 <span class="sd">    spectrum: a tensor</span>
 <span class="sd">        A 1D tensor of shape (s,) representing the computed spectrum.</span>
 <span class="sd">        The spectrum is computed using a square approximation to radial</span>
-<span class="sd">        binning, meaning that the wavenumber &#39;bin&#39; into which a particular</span>
-<span class="sd">        coefficient is the coefficient&#39;s location along the diagonal, indexed</span>
+<span class="sd">        binning, meaning that the wavenumber 'bin' into which a particular</span>
+<span class="sd">        coefficient is the coefficient's location along the diagonal, indexed</span>
 <span class="sd">        from the top-left corner of the 2d FFT output.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">T</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">signal</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">n_observations</span><span class="p">,</span> <span class="n">n_observations</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
-        <span class="n">signal</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s2">&quot;ortho&quot;</span><span class="p">)</span>
+        <span class="n">signal</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s2">"ortho"</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">signal</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfft2</span><span class="p">(</span>
-            <span class="n">signal</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="p">(</span><span class="n">n_observations</span><span class="p">,</span> <span class="n">n_observations</span><span class="p">),</span> <span class="n">norm</span><span class="o">=</span><span class="s2">&quot;backward&quot;</span>
+            <span class="n">signal</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="p">(</span><span class="n">n_observations</span><span class="p">,</span> <span class="n">n_observations</span><span class="p">),</span> <span class="n">norm</span><span class="o">=</span><span class="s2">"backward"</span>
         <span class="p">)</span>
 
     <span class="c1"># 2d wavenumbers following PyTorch fft convention</span>
@@ -287,7 +287,7 @@
     <span class="n">n_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">n_layers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    scaling_factor : None OR float OR list[float] Or list[list[float]]</span>
@@ -295,7 +295,7 @@
 <span class="sd">    n_layers : int or None; defaults to None</span>
 <span class="sd">        If None, return a single list (rather than a list of lists)</span>
 <span class="sd">        with `factor` repeated `dim` times.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">scaling_factor</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scaling_factor</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
@@ -345,7 +345,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_stable_rank</span><span class="p">(</span><span class="n">tensor</span><span class="p">):</span>
     <span class="c1"># Compute the stable rank of a tensor</span>
     <span class="n">tensor</span> <span class="o">=</span> <span class="n">tensor</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
-    <span class="n">fro_norm</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="nb">ord</span><span class="o">=</span><span class="s2">&quot;fro&quot;</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="n">fro_norm</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="nb">ord</span><span class="o">=</span><span class="s2">"fro"</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
     <span class="n">l2_norm</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="nb">ord</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
     <span class="n">rank</span> <span class="o">=</span> <span class="n">fro_norm</span> <span class="o">/</span> <span class="n">l2_norm</span>
     <span class="n">rank</span> <span class="o">=</span> <span class="n">rank</span>

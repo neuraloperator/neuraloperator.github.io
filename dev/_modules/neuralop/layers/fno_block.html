@@ -16,7 +16,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -141,29 +141,29 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_make_conv_bias</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">n_dim</span><span class="p">,</span> <span class="n">kernel_size</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create the local convolutional bias term used alongside SpectralConv.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Create the local convolutional bias term used alongside SpectralConv."""</span>
     <span class="k">if</span> <span class="n">kernel_size</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;conv_bias_kernel must be &gt;= 1, got </span><span class="si">{</span><span class="n">kernel_size</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"conv_bias_kernel must be &gt;= 1, got </span><span class="si">{</span><span class="n">kernel_size</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">kernel_size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">skip_connection</span><span class="p">(</span>
             <span class="n">in_channels</span><span class="p">,</span>
             <span class="n">out_channels</span><span class="p">,</span>
-            <span class="n">skip_type</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
+            <span class="n">skip_type</span><span class="o">=</span><span class="s2">"linear"</span><span class="p">,</span>
             <span class="n">n_dim</span><span class="o">=</span><span class="n">n_dim</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">n_dim</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-            <span class="s2">&quot;conv_bias_kernel &gt; 1 is only implemented for 1D, 2D, and 3D FNO blocks.&quot;</span>
+            <span class="s2">"conv_bias_kernel &gt; 1 is only implemented for 1D, 2D, and 3D FNO blocks."</span>
         <span class="p">)</span>
 
-    <span class="n">conv_module</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">nn</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Conv</span><span class="si">{</span><span class="n">n_dim</span><span class="si">}</span><span class="s2">d&quot;</span><span class="p">)</span>
+    <span class="n">conv_module</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">nn</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Conv</span><span class="si">{</span><span class="n">n_dim</span><span class="si">}</span><span class="s2">d"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">conv_module</span><span class="p">(</span>
         <span class="n">in_channels</span><span class="p">,</span>
         <span class="n">out_channels</span><span class="p">,</span>
         <span class="n">kernel_size</span><span class="o">=</span><span class="n">kernel_size</span><span class="p">,</span>
-        <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">,</span>
+        <span class="n">padding</span><span class="o">=</span><span class="s2">"same"</span><span class="p">,</span>
         <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span>
 
@@ -171,7 +171,7 @@
 <div class="viewcode-block" id="FNOBlocks">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.fno_block.FNOBlocks.html#neuralop.layers.fno_block.FNOBlocks">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">FNOBlocks</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;FNOBlocks implements a sequence of Fourier layers.</span>
+<span class="w">    </span><span class="sd">"""FNOBlocks implements a sequence of Fourier layers.</span>
 <span class="sd">    </span>
 <span class="sd">    The Fourier layers are first described in [1]_, and the exact implementation details </span>
 <span class="sd">    of the Fourier layer architecture are discussed in [2]_.</span>
@@ -193,7 +193,7 @@
 <span class="sd">    max_n_modes : int or List[int], optional</span>
 <span class="sd">        Maximum number of modes to keep along each dimension, by default None</span>
 <span class="sd">    fno_block_precision : str, optional</span>
-<span class="sd">        Floating point precision to use for computations. Options: &quot;full&quot;, &quot;half&quot;, &quot;mixed&quot;, by default &quot;full&quot;</span>
+<span class="sd">        Floating point precision to use for computations. Options: "full", "half", "mixed", by default "full"</span>
 <span class="sd">    use_channel_mlp : bool, optional</span>
 <span class="sd">        Whether to use an MLP layer after each FNO block, by default True</span>
 <span class="sd">    channel_mlp_dropout : float, optional</span>
@@ -202,10 +202,10 @@
 <span class="sd">        Expansion parameter for self.channel_mlp, by default 0.5</span>
 <span class="sd">    non_linearity : torch.nn.F module, optional</span>
 <span class="sd">        Nonlinear activation function to use between layers, by default F.gelu</span>
-<span class="sd">    stabilizer : Literal[&quot;tanh&quot;], optional</span>
-<span class="sd">        Stabilizing module to use between certain layers. Options: &quot;tanh&quot;, None, by default None</span>
-<span class="sd">    norm : Literal[&quot;ada_in&quot;, &quot;group_norm&quot;, &quot;instance_norm&quot;, &quot;batch_norm&quot;], optional</span>
-<span class="sd">        Normalization layer to use. Options: &quot;ada_in&quot;, &quot;group_norm&quot;, &quot;instance_norm&quot;, &quot;batch_norm&quot;, None, by default None</span>
+<span class="sd">    stabilizer : Literal["tanh"], optional</span>
+<span class="sd">        Stabilizing module to use between certain layers. Options: "tanh", None, by default None</span>
+<span class="sd">    norm : Literal["ada_in", "group_norm", "instance_norm", "batch_norm"], optional</span>
+<span class="sd">        Normalization layer to use. Options: "ada_in", "group_norm", "instance_norm", "batch_norm", None, by default None</span>
 <span class="sd">    norm_groups : int, optional</span>
 <span class="sd">        Number of groups for GroupNorm, by default 1</span>
 <span class="sd">    ada_in_features : int, optional</span>
@@ -215,24 +215,24 @@
 <span class="sd">        If True, call nonlinear activation and norm before Fourier convolution</span>
 <span class="sd">        If False, call activation and norms after Fourier convolutions</span>
 <span class="sd">    fno_skip : str, optional</span>
-<span class="sd">        Module to use for FNO skip connections. Options: &quot;linear&quot;, &quot;soft-gating&quot;, &quot;identity&quot;, None, by default &quot;linear&quot;</span>
+<span class="sd">        Module to use for FNO skip connections. Options: "linear", "soft-gating", "identity", None, by default "linear"</span>
 <span class="sd">        If None, no skip connection is added. See layers.skip_connections for more details</span>
 <span class="sd">    conv_bias_kernel : int, optional</span>
-<span class="sd">        Kernel size for the local convolutional bias term used when ``fno_skip=&quot;linear&quot;``.</span>
+<span class="sd">        Kernel size for the local convolutional bias term used when ``fno_skip="linear"``.</span>
 <span class="sd">        ``1`` preserves the default pointwise bias term, while larger kernels add a</span>
 <span class="sd">        local convolution alongside the global spectral convolution. Default: 1</span>
 <span class="sd">    channel_mlp_skip : str, optional</span>
-<span class="sd">        Module to use for ChannelMLP skip connections. Options: &quot;linear&quot;, &quot;soft-gating&quot;, &quot;identity&quot;, None, by default &quot;soft-gating&quot;</span>
+<span class="sd">        Module to use for ChannelMLP skip connections. Options: "linear", "soft-gating", "identity", None, by default "soft-gating"</span>
 <span class="sd">        If None, no skip connection is added. See layers.skip_connections for more details</span>
 
 <span class="sd">    Other Parameters</span>
 <span class="sd">    ----------------</span>
 <span class="sd">    complex_data : bool, optional</span>
-<span class="sd">        Whether the FNO&#39;s data takes on complex values in space, by default False</span>
+<span class="sd">        Whether the FNO's data takes on complex values in space, by default False</span>
 <span class="sd">    separable : bool, optional</span>
 <span class="sd">        Separable parameter for SpectralConv, by default False</span>
 <span class="sd">    factorization : str, optional</span>
-<span class="sd">        Factorization parameter for SpectralConv. Options: &quot;tucker&quot;, &quot;cp&quot;, &quot;tt&quot;, None, by default None</span>
+<span class="sd">        Factorization parameter for SpectralConv. Options: "tucker", "cp", "tt", None, by default None</span>
 <span class="sd">    rank : float, optional</span>
 <span class="sd">        Rank parameter for SpectralConv, by default 1.0</span>
 <span class="sd">    conv_module : BaseConv, optional</span>
@@ -242,7 +242,7 @@
 <span class="sd">    fixed_rank_modes : bool, optional</span>
 <span class="sd">        Fixed_rank_modes parameter for SpectralConv, by default False</span>
 <span class="sd">    implementation : str, optional</span>
-<span class="sd">        Implementation parameter for SpectralConv. Options: &quot;factorized&quot;, &quot;reconstructed&quot;, by default &quot;factorized&quot;</span>
+<span class="sd">        Implementation parameter for SpectralConv. Options: "factorized", "reconstructed", by default "factorized"</span>
 <span class="sd">    decomposition_kwargs : dict, optional</span>
 <span class="sd">        Kwargs for tensor decomposition in SpectralConv, by default dict()</span>
 <span class="sd">    enforce_hermitian_symmetry : bool, optional</span>
@@ -250,17 +250,17 @@
 <span class="sd">        for real-valued data. Only used when ``conv_module`` is :class:`SpectralConv`</span>
 <span class="sd">        or a subclass; ignored otherwise. When True, explicitly enforces that the 0th</span>
 <span class="sd">        frequency and Nyquist frequency are real-valued before calling irfft. When False,</span>
-<span class="sd">        relies on cuFFT&#39;s irfftn to handle symmetry automatically, which may fail on</span>
+<span class="sd">        relies on cuFFT's irfftn to handle symmetry automatically, which may fail on</span>
 <span class="sd">        certain GPUs or input sizes, causing line artifacts. By default True.</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
-<span class="sd">    .. [1] Li, Z. et al. &quot;Fourier Neural Operator for Parametric Partial Differential</span>
-<span class="sd">           Equations&quot; (2021). ICLR 2021, https://arxiv.org/pdf/2010.08895.</span>
-<span class="sd">    .. [2] Kossaifi, J., Kovachki, N., Azizzadenesheli, K., Anandkumar, A. &quot;Multi-Grid</span>
-<span class="sd">           Tensorized Fourier Neural Operator for High-Resolution PDEs&quot; (2024).</span>
+<span class="sd">    .. [1] Li, Z. et al. "Fourier Neural Operator for Parametric Partial Differential</span>
+<span class="sd">           Equations" (2021). ICLR 2021, https://arxiv.org/pdf/2010.08895.</span>
+<span class="sd">    .. [2] Kossaifi, J., Kovachki, N., Azizzadenesheli, K., Anandkumar, A. "Multi-Grid</span>
+<span class="sd">           Tensorized Fourier Neural Operator for High-Resolution PDEs" (2024).</span>
 <span class="sd">           TMLR 2024, https://openreview.net/pdf?id=AWiDlO63bH.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -270,7 +270,7 @@
         <span class="n">resolution_scaling_factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">n_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">max_n_modes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">fno_block_precision</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">,</span>
+        <span class="n">fno_block_precision</span><span class="o">=</span><span class="s2">"full"</span><span class="p">,</span>
         <span class="n">use_channel_mlp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">channel_mlp_dropout</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="n">channel_mlp_expansion</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
@@ -280,16 +280,16 @@
         <span class="n">norm_groups</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">ada_in_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">preactivation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">fno_skip</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
+        <span class="n">fno_skip</span><span class="o">=</span><span class="s2">"linear"</span><span class="p">,</span>
         <span class="n">conv_bias_kernel</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-        <span class="n">channel_mlp_skip</span><span class="o">=</span><span class="s2">&quot;soft-gating&quot;</span><span class="p">,</span>
+        <span class="n">channel_mlp_skip</span><span class="o">=</span><span class="s2">"soft-gating"</span><span class="p">,</span>
         <span class="n">complex_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">separable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">factorization</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">rank</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
         <span class="n">conv_module</span><span class="o">=</span><span class="n">SpectralConv</span><span class="p">,</span>
         <span class="n">fixed_rank_modes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">implementation</span><span class="o">=</span><span class="s2">&quot;factorized&quot;</span><span class="p">,</span>
+        <span class="n">implementation</span><span class="o">=</span><span class="s2">"factorized"</span><span class="p">,</span>
         <span class="n">decomposition_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span>
         <span class="n">enforce_hermitian_symmetry</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
@@ -357,7 +357,7 @@
                     <span class="n">complex_data</span><span class="o">=</span><span class="n">complex_data</span><span class="p">,</span>
                     <span class="c1"># Only SpectralConv (and subclasses) accept enforce_hermitian_symmetry. Others ignore it</span>
                     <span class="o">**</span><span class="p">(</span>
-                        <span class="p">{</span><span class="s2">&quot;enforce_hermitian_symmetry&quot;</span><span class="p">:</span> <span class="n">enforce_hermitian_symmetry</span><span class="p">}</span>
+                        <span class="p">{</span><span class="s2">"enforce_hermitian_symmetry"</span><span class="p">:</span> <span class="n">enforce_hermitian_symmetry</span><span class="p">}</span>
                         <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">conv_module</span><span class="p">,</span> <span class="n">SpectralConv</span><span class="p">)</span>
                         <span class="k">else</span> <span class="p">{}</span>
                     <span class="p">),</span>
@@ -367,7 +367,7 @@
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">fno_skip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">fno_skip</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;linear&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">fno_skip</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"linear"</span><span class="p">:</span>
                 <span class="c1"># FourCastNet v3-like local + global convolutions: the spectral</span>
                 <span class="c1"># path is global, while larger kernels give this bias term locality.</span>
                 <span class="n">fno_skip_modules</span> <span class="o">=</span> <span class="p">[</span>
@@ -382,7 +382,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">conv_bias_kernel</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                        <span class="s2">&quot;conv_bias_kernel can only differ from 1 when fno_skip=&#39;linear&#39;.&quot;</span>
+                        <span class="s2">"conv_bias_kernel can only differ from 1 when fno_skip='linear'."</span>
                     <span class="p">)</span>
                 <span class="n">fno_skip_modules</span> <span class="o">=</span> <span class="p">[</span>
                     <span class="n">skip_connection</span><span class="p">(</span>
@@ -397,7 +397,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">conv_bias_kernel</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;conv_bias_kernel can only differ from 1 when fno_skip=&#39;linear&#39;.&quot;</span>
+                    <span class="s2">"conv_bias_kernel can only differ from 1 when fno_skip='linear'."</span>
                 <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fno_skips</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">complex_data</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">fno_skips</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -442,11 +442,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">n_norms</span> <span class="o">=</span> <span class="mi">2</span>
         <span class="k">if</span> <span class="n">norm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">elif</span> <span class="n">norm</span> <span class="o">==</span> <span class="s2">&quot;instance_norm&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">norm</span> <span class="o">==</span> <span class="s2">"instance_norm"</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
                 <span class="p">[</span><span class="n">InstanceNorm</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_norms</span><span class="p">)]</span>
             <span class="p">)</span>
-        <span class="k">elif</span> <span class="n">norm</span> <span class="o">==</span> <span class="s2">&quot;group_norm&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">norm</span> <span class="o">==</span> <span class="s2">"group_norm"</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
                 <span class="p">[</span>
                     <span class="n">nn</span><span class="o">.</span><span class="n">GroupNorm</span><span class="p">(</span><span class="n">num_groups</span><span class="o">=</span><span class="n">norm_groups</span><span class="p">,</span> <span class="n">num_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span><span class="p">)</span>
@@ -454,7 +454,7 @@
                 <span class="p">]</span>
             <span class="p">)</span>
 
-        <span class="k">elif</span> <span class="n">norm</span> <span class="o">==</span> <span class="s2">&quot;batch_norm&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">norm</span> <span class="o">==</span> <span class="s2">"batch_norm"</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
                 <span class="p">[</span>
                     <span class="n">BatchNorm</span><span class="p">(</span><span class="n">n_dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">,</span> <span class="n">num_features</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span><span class="p">)</span>
@@ -462,7 +462,7 @@
                 <span class="p">]</span>
             <span class="p">)</span>
 
-        <span class="k">elif</span> <span class="n">norm</span> <span class="o">==</span> <span class="s2">&quot;ada_in&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">norm</span> <span class="o">==</span> <span class="s2">"ada_in"</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
                 <span class="p">[</span>
                     <span class="n">AdaIN</span><span class="p">(</span><span class="n">ada_in_features</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">)</span>
@@ -471,8 +471,8 @@
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Got norm=</span><span class="si">{</span><span class="n">norm</span><span class="si">}</span><span class="s2"> but expected None or one of &quot;</span>
-                <span class="s2">&quot;[instance_norm, group_norm, batch_norm, ada_in]&quot;</span>
+                <span class="sa">f</span><span class="s2">"Got norm=</span><span class="si">{</span><span class="n">norm</span><span class="si">}</span><span class="s2"> but expected None or one of "</span>
+                <span class="s2">"[instance_norm, group_norm, batch_norm, ada_in]"</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">complex_data</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -481,14 +481,14 @@
 <div class="viewcode-block" id="FNOBlocks.set_ada_in_embeddings">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.fno_block.FNOBlocks.html#neuralop.layers.fno_block.FNOBlocks.set_ada_in_embeddings">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_ada_in_embeddings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">embeddings</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets the embeddings of each Ada-IN norm layers</span>
+<span class="w">        </span><span class="sd">"""Sets the embeddings of each Ada-IN norm layers</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        embeddings : tensor or list of tensor</span>
 <span class="sd">            if a single embedding is given, it will be used for each norm layer</span>
 <span class="sd">            otherwise, each embedding will be used for the corresponding norm layer</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">embeddings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">norm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span><span class="p">:</span>
@@ -516,7 +516,7 @@
             <span class="n">x_skip_channel_mlp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_mlp_skips</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">)</span>
             <span class="n">x_skip_channel_mlp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convs</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x_skip_channel_mlp</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stabilizer</span> <span class="o">==</span> <span class="s2">&quot;tanh&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stabilizer</span> <span class="o">==</span> <span class="s2">"tanh"</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">complex_data</span><span class="p">:</span>
                 <span class="n">x</span> <span class="o">=</span> <span class="n">ctanh</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -548,7 +548,7 @@
 
     <span class="k">def</span><span class="w"> </span><span class="nf">forward_with_preactivation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="c1"># Apply non-linear activation (and norm)</span>
-        <span class="c1"># before this block&#39;s convolution/forward pass:</span>
+        <span class="c1"># before this block's convolution/forward pass:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">non_linearity</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -562,7 +562,7 @@
             <span class="n">x_skip_channel_mlp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_mlp_skips</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="n">x</span><span class="p">)</span>
             <span class="n">x_skip_channel_mlp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convs</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x_skip_channel_mlp</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="n">output_shape</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stabilizer</span> <span class="o">==</span> <span class="s2">&quot;tanh&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stabilizer</span> <span class="o">==</span> <span class="s2">"tanh"</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">complex_data</span><span class="p">:</span>
                 <span class="n">x</span> <span class="o">=</span> <span class="n">ctanh</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -599,13 +599,13 @@
 <div class="viewcode-block" id="FNOBlocks.get_block">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.fno_block.FNOBlocks.html#neuralop.layers.fno_block.FNOBlocks.get_block">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a sub-FNO Block layer from the jointly parametrized main block</span>
+<span class="w">        </span><span class="sd">"""Returns a sub-FNO Block layer from the jointly parametrized main block</span>
 
 <span class="sd">        The parametrization of an FNOBlock layer is shared with the main one.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_layers</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;A single layer is parametrized, directly use the main class.&quot;</span>
+                <span class="s2">"A single layer is parametrized, directly use the main class."</span>
             <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">SubModule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span></div>
@@ -617,14 +617,14 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">SubModule</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing one of the sub_module from the mother joint module</span>
+<span class="w">    </span><span class="sd">"""Class representing one of the sub_module from the mother joint module</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    This relies on the fact that nn.Parameters are not duplicated:</span>
 <span class="sd">    if the same nn.Parameter is assigned to multiple modules,</span>
 <span class="sd">    they all point to the same data, which is shared.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">main_module</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>

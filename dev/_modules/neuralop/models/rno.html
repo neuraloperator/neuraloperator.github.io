@@ -16,7 +16,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -134,7 +134,7 @@
 <span class="c1"># Set warning filter to show each warning only once</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
-<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;once&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">"once"</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..layers.rno_block</span><span class="w"> </span><span class="kn">import</span> <span class="n">RNOBlock</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..layers.padding</span><span class="w"> </span><span class="kn">import</span> <span class="n">DomainPadding</span>
@@ -148,8 +148,8 @@
 
 <div class="viewcode-block" id="RNO">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.models.RNO.html#neuralop.models.RNO">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">RNO</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;RNO&quot;</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RNO</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"RNO"</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    N-Dimensional Recurrent Neural Operator.</span>
 
 <span class="sd">    The RNO has an identical architecture to the finite-dimensional GRU, with</span>
@@ -163,7 +163,7 @@
 <span class="sd">    \hat h_t = selu(W_h x_t + U_h (r_t * h_{t-1}) + b_h)</span>
 <span class="sd">    h_t = (1 - z_t) * h_{t-1} + z_t * \hat h_t,</span>
 
-<span class="sd">    where * is element-wise, the b_i&#39;s are bias functions, and W_i, U_i are</span>
+<span class="sd">    where * is element-wise, the b_i's are bias functions, and W_i, U_i are</span>
 <span class="sd">    linear Fourier layers.</span>
 
 <span class="sd">    References</span>
@@ -194,9 +194,9 @@
 <span class="sd">        Number of RNO layers to use. Default: 4</span>
 <span class="sd">    rno_skip : bool, optional</span>
 <span class="sd">        Whether to use skip connections between RNO layers. When True, adds</span>
-<span class="sd">        the input to each layer&#39;s output: x_{l+1} = x_l + RNOBlock(x_l).</span>
+<span class="sd">        the input to each layer's output: x_{l+1} = x_l + RNOBlock(x_l).</span>
 <span class="sd">        Default: False. Unlike FNO where skip connections improve gradient flow,</span>
-<span class="sd">        RNO&#39;s recurrent structure already provides temporal gradient pathways,</span>
+<span class="sd">        RNO's recurrent structure already provides temporal gradient pathways,</span>
 <span class="sd">        so skip connections are optional and may not always improve performance.</span>
 
 <span class="sd">    Other Parameters</span>
@@ -211,15 +211,15 @@
 <span class="sd">        projection_channel_ratio * hidden_channels (e.g. default 2 * hidden_channels).</span>
 <span class="sd">    positional_embedding : Union[str, nn.Module], optional</span>
 <span class="sd">        Type of positional embedding to use. Options:</span>
-<span class="sd">        - &quot;grid&quot;: Use default grid-based positional embedding</span>
+<span class="sd">        - "grid": Use default grid-based positional embedding</span>
 <span class="sd">        - GridEmbeddingND: Custom N-dimensional grid embedding</span>
 <span class="sd">        - GridEmbedding2D: Custom 2D grid embedding (only for 2D problems)</span>
 <span class="sd">        - None: No positional embedding</span>
 <span class="sd">        Default: None</span>
 <span class="sd">    non_linearity : nn.Module, optional</span>
 <span class="sd">        Non-Linear activation function module to use. Default: F.gelu</span>
-<span class="sd">    norm : Literal[&quot;ada_in&quot;, &quot;group_norm&quot;, &quot;instance_norm&quot;], optional</span>
-<span class="sd">        Normalization layer to use. Options: &quot;ada_in&quot;, &quot;group_norm&quot;, &quot;instance_norm&quot;, None. Default: None</span>
+<span class="sd">    norm : Literal["ada_in", "group_norm", "instance_norm"], optional</span>
+<span class="sd">        Normalization layer to use. Options: "ada_in", "group_norm", "instance_norm", None. Default: None</span>
 <span class="sd">    norm_groups : int, optional</span>
 <span class="sd">        Number of groups for GroupNorm, by default 1</span>
 <span class="sd">    complex_data : bool, optional</span>
@@ -230,12 +230,12 @@
 <span class="sd">        Dropout parameter for ChannelMLP in FNO Block. Default: 0</span>
 <span class="sd">    channel_mlp_expansion : float, optional</span>
 <span class="sd">        Expansion parameter for ChannelMLP in FNO Block. Default: 0.5</span>
-<span class="sd">    channel_mlp_skip : Literal[&quot;linear&quot;, &quot;identity&quot;, &quot;soft-gating&quot;, None], optional</span>
-<span class="sd">        Type of skip connection to use in channel-mixing mlp. Options: &quot;linear&quot;, &quot;identity&quot;, &quot;soft-gating&quot;, None.</span>
-<span class="sd">        Default: &quot;soft-gating&quot;</span>
-<span class="sd">    fno_skip : Literal[&quot;linear&quot;, &quot;identity&quot;, &quot;soft-gating&quot;, None], optional</span>
-<span class="sd">        Type of skip connection to use in FNO layers. Options: &quot;linear&quot;, &quot;identity&quot;, &quot;soft-gating&quot;, None.</span>
-<span class="sd">        Default: &quot;linear&quot;</span>
+<span class="sd">    channel_mlp_skip : Literal["linear", "identity", "soft-gating", None], optional</span>
+<span class="sd">        Type of skip connection to use in channel-mixing mlp. Options: "linear", "identity", "soft-gating", None.</span>
+<span class="sd">        Default: "soft-gating"</span>
+<span class="sd">    fno_skip : Literal["linear", "identity", "soft-gating", None], optional</span>
+<span class="sd">        Type of skip connection to use in FNO layers. Options: "linear", "identity", "soft-gating", None.</span>
+<span class="sd">        Default: "linear"</span>
 <span class="sd">    return_sequences : bool, optional</span>
 <span class="sd">        Whether the final RNO layer returns the full sequence of hidden states or just the final state.</span>
 <span class="sd">        Intermediate layers always return sequences. Default: False</span>
@@ -244,7 +244,7 @@
 <span class="sd">        Options:</span>
 <span class="sd">        - None: No scaling</span>
 <span class="sd">        - Single number n: Scales resolution by n at each layer</span>
-<span class="sd">        - List of numbers [n_0, n_1,...]: Scales layer i&#39;s resolution by n_i</span>
+<span class="sd">        - List of numbers [n_0, n_1,...]: Scales layer i's resolution by n_i</span>
 <span class="sd">        Default: None</span>
 <span class="sd">    domain_padding : Union[Number, List[Number]], optional</span>
 <span class="sd">        Percentage of padding to use.</span>
@@ -255,10 +255,10 @@
 <span class="sd">        Default: None</span>
 <span class="sd">    fno_block_precision : str, optional</span>
 <span class="sd">        Precision mode in which to perform spectral convolution.</span>
-<span class="sd">        Options: &quot;full&quot;, &quot;half&quot;, &quot;mixed&quot;. Default: &quot;full&quot;.</span>
+<span class="sd">        Options: "full", "half", "mixed". Default: "full".</span>
 <span class="sd">    stabilizer : str, optional</span>
-<span class="sd">        Whether to use a stabilizer in FNO block. Options: &quot;tanh&quot;, None. Default: None.</span>
-<span class="sd">        stabilizer greatly improves performance in the case `fno_block_precision=&#39;mixed&#39;`.</span>
+<span class="sd">        Whether to use a stabilizer in FNO block. Options: "tanh", None. Default: None.</span>
+<span class="sd">        stabilizer greatly improves performance in the case `fno_block_precision='mixed'`.</span>
 <span class="sd">    max_n_modes : Tuple[int, ...], optional</span>
 <span class="sd">        Maximum number of modes to use in Fourier domain during training.</span>
 <span class="sd">        None means that all the n_modes are used.</span>
@@ -266,7 +266,7 @@
 <span class="sd">        This can be updated dynamically during training.</span>
 <span class="sd">    factorization : str, optional</span>
 <span class="sd">        Tensor factorization of the FNO layer weights to use.</span>
-<span class="sd">        Options: &quot;None&quot;, &quot;Tucker&quot;, &quot;CP&quot;, &quot;TT&quot;</span>
+<span class="sd">        Options: "None", "Tucker", "CP", "TT"</span>
 <span class="sd">        Other factorization methods supported by tltorch. Default: None</span>
 <span class="sd">    rank : float, optional</span>
 <span class="sd">        Tensor rank to use in factorization. Default: 1.0</span>
@@ -276,7 +276,7 @@
 <span class="sd">        Whether to not factorize certain modes. Default: False</span>
 <span class="sd">    implementation : str, optional</span>
 <span class="sd">        Implementation method for factorized tensors.</span>
-<span class="sd">        Options: &quot;factorized&quot;, &quot;reconstructed&quot;. Default: &quot;factorized&quot;</span>
+<span class="sd">        Options: "factorized", "reconstructed". Default: "factorized"</span>
 <span class="sd">    decomposition_kwargs : dict, optional</span>
 <span class="sd">        Extra kwargs for tensor decomposition (see `tltorch.FactorizedTensor`). Default: {}</span>
 <span class="sd">    separable : bool, optional</span>
@@ -284,15 +284,15 @@
 <span class="sd">    preactivation : bool, optional</span>
 <span class="sd">        Whether to compute FNO forward pass with resnet-style preactivation. Default: False</span>
 <span class="sd">    conv_module : nn.Module, optional</span>
-<span class="sd">        Module to use for FNOBlock&#39;s convolutions. Default: SpectralConv</span>
+<span class="sd">        Module to use for FNOBlock's convolutions. Default: SpectralConv</span>
 <span class="sd">    enforce_hermitian_symmetry : bool, optional</span>
 <span class="sd">        Whether to enforce Hermitian symmetry conditions when performing inverse FFT</span>
 <span class="sd">        for real-valued data. Only used in :class:`SpectralConv`; ignored otherwise.</span>
 <span class="sd">        When True, explicitly enforces that the 0th frequency and Nyquist frequency</span>
-<span class="sd">        are real-valued before calling irfft. When False, relies on cuFFT&#39;s irfftn</span>
+<span class="sd">        are real-valued before calling irfft. When False, relies on cuFFT's irfftn</span>
 <span class="sd">        to handle symmetry automatically, which may fail on certain GPUs or input</span>
 <span class="sd">        sizes, causing line artifacts. By default True.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -304,26 +304,26 @@
         <span class="n">rno_skip</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">lifting_channel_ratio</span><span class="p">:</span> <span class="n">Number</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
         <span class="n">projection_channel_ratio</span><span class="p">:</span> <span class="n">Number</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
-        <span class="n">positional_embedding</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;grid&quot;</span><span class="p">,</span>
+        <span class="n">positional_embedding</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"grid"</span><span class="p">,</span>
         <span class="n">non_linearity</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">gelu</span><span class="p">,</span>
-        <span class="n">norm</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;ada_in&quot;</span><span class="p">,</span> <span class="s2">&quot;group_norm&quot;</span><span class="p">,</span> <span class="s2">&quot;instance_norm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">norm</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"ada_in"</span><span class="p">,</span> <span class="s2">"group_norm"</span><span class="p">,</span> <span class="s2">"instance_norm"</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">norm_groups</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
         <span class="n">complex_data</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">use_channel_mlp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">channel_mlp_dropout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
         <span class="n">channel_mlp_expansion</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
-        <span class="n">channel_mlp_skip</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span> <span class="s2">&quot;identity&quot;</span><span class="p">,</span> <span class="s2">&quot;soft-gating&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;soft-gating&quot;</span><span class="p">,</span>
-        <span class="n">fno_skip</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span> <span class="s2">&quot;identity&quot;</span><span class="p">,</span> <span class="s2">&quot;soft-gating&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;linear&quot;</span><span class="p">,</span>
+        <span class="n">channel_mlp_skip</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"linear"</span><span class="p">,</span> <span class="s2">"identity"</span><span class="p">,</span> <span class="s2">"soft-gating"</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"soft-gating"</span><span class="p">,</span>
+        <span class="n">fno_skip</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"linear"</span><span class="p">,</span> <span class="s2">"identity"</span><span class="p">,</span> <span class="s2">"soft-gating"</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"linear"</span><span class="p">,</span>
         <span class="n">return_sequences</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">resolution_scaling_factor</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Number</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Number</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">domain_padding</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Number</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Number</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">fno_block_precision</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;full&quot;</span><span class="p">,</span>
+        <span class="n">fno_block_precision</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"full"</span><span class="p">,</span>
         <span class="n">stabilizer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">max_n_modes</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">factorization</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">rank</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="n">fixed_rank_modes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">implementation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;factorized&quot;</span><span class="p">,</span>
+        <span class="n">implementation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"factorized"</span><span class="p">,</span>
         <span class="n">decomposition_kwargs</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">separable</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">preactivation</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -335,7 +335,7 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_modes</span><span class="p">)</span>
 
-        <span class="c1"># n_modes is a special property - see the class&#39; property for underlying mechanism</span>
+        <span class="c1"># n_modes is a special property - see the class' property for underlying mechanism</span>
         <span class="c1"># When updated, change should be reflected in fno blocks</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_modes</span> <span class="o">=</span> <span class="n">n_modes</span>
 
@@ -378,7 +378,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">domain_padding</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1">## Positional embedding</span>
-        <span class="k">if</span> <span class="n">positional_embedding</span> <span class="o">==</span> <span class="s2">&quot;grid&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">positional_embedding</span> <span class="o">==</span> <span class="s2">"grid"</span><span class="p">:</span>
             <span class="n">spatial_grid_boundaries</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">positional_embedding</span> <span class="o">=</span> <span class="n">GridEmbeddingND</span><span class="p">(</span>
                 <span class="n">in_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span><span class="p">,</span>
@@ -390,7 +390,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">positional_embedding</span> <span class="o">=</span> <span class="n">positional_embedding</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Error: expected </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="si">}</span><span class="s2">-d positional embeddings, got </span><span class="si">{</span><span class="n">positional_embedding</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">"Error: expected </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="si">}</span><span class="s2">-d positional embeddings, got </span><span class="si">{</span><span class="n">positional_embedding</span><span class="si">}</span><span class="s2">"</span>
                 <span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">positional_embedding</span><span class="p">,</span> <span class="n">GridEmbeddingND</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">positional_embedding</span> <span class="o">=</span> <span class="n">positional_embedding</span>
@@ -398,8 +398,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">positional_embedding</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Error: tried to instantiate RNO positional embedding with </span><span class="si">{</span><span class="n">positional_embedding</span><span class="si">}</span><span class="s2">, &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;expected one of &#39;grid&#39;, GridEmbeddingND, GridEmbedding2D, or None&quot;</span>
+                <span class="sa">f</span><span class="s2">"Error: tried to instantiate RNO positional embedding with </span><span class="si">{</span><span class="n">positional_embedding</span><span class="si">}</span><span class="s2">, "</span>
+                <span class="sa">f</span><span class="s2">"expected one of 'grid', GridEmbeddingND, GridEmbedding2D, or None"</span>
             <span class="p">)</span>
 
         <span class="c1">## Resolution scaling factor</span>
@@ -498,7 +498,7 @@
         <span class="n">return_hidden_states</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">keep_states_padded</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Forward pass for the Recurrent Neural Operator.</span>
 
 <span class="sd">        Parameters</span>
@@ -529,18 +529,18 @@
 <span class="sd">            Output tensor with shape (batch, out_channels, *spatial_dims_out).</span>
 <span class="sd">        final_hidden_states : list[torch.Tensor], optional</span>
 <span class="sd">            Returned only if return_hidden_states=True.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># Strict input validation to avoid silent errors from resolution invariance</span>
         <span class="n">expected_rank</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span>
         <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="n">expected_rank</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;RNO.forward expected input of rank </span><span class="si">{</span><span class="n">expected_rank</span><span class="si">}</span><span class="s2"> = &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;(batch, timesteps, channels, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="si">}</span><span class="s2"> spatial dims), got rank </span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2"> with shape </span><span class="si">{</span><span class="nb">tuple</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"RNO.forward expected input of rank </span><span class="si">{</span><span class="n">expected_rank</span><span class="si">}</span><span class="s2"> = "</span>
+                <span class="sa">f</span><span class="s2">"(batch, timesteps, channels, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="si">}</span><span class="s2"> spatial dims), got rank </span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2"> with shape </span><span class="si">{</span><span class="nb">tuple</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;RNO.forward expected x.shape[2] == in_channels (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span><span class="si">}</span><span class="s2">); &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2">. Input must be shaped as (batch, timesteps, in_channels, *spatial_dims).&quot;</span>
+                <span class="sa">f</span><span class="s2">"RNO.forward expected x.shape[2] == in_channels (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span><span class="si">}</span><span class="s2">); "</span>
+                <span class="sa">f</span><span class="s2">"got </span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2">. Input must be shaped as (batch, timesteps, in_channels, *spatial_dims)."</span>
             <span class="p">)</span>
         <span class="c1"># x shape (batch, timesteps, in_channels, *spatial_dims)</span>
         <span class="n">batch_size</span><span class="p">,</span> <span class="n">timesteps</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
@@ -592,7 +592,7 @@
             <span class="c1"># DomainPadding.unpad expects (batch, channels, *spatial_dims)</span>
             <span class="c1"># h comes from the last layer, which is padded logic.</span>
 
-            <span class="c1"># We ALWAYS unpad &#39;h&#39; for the projection layer to produce the correct output size</span>
+            <span class="c1"># We ALWAYS unpad 'h' for the projection layer to produce the correct output size</span>
             <span class="c1"># (Computation continues in unpadded space for projection)</span>
             <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain_padding</span><span class="o">.</span><span class="n">unpad</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
 
@@ -614,7 +614,7 @@
 <div class="viewcode-block" id="RNO.predict">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.models.RNO.html#neuralop.models.RNO.predict">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">num_steps</span><span class="p">,</span> <span class="n">grid_function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Autoregressively predict future time steps.</span>
+<span class="w">        </span><span class="sd">"""Autoregressively predict future time steps.</span>
 
 <span class="sd">        Performs autoregressive rollout by iteratively feeding predictions back as input.</span>
 <span class="sd">        At each step, the model predicts the next time step from the current input,</span>
@@ -644,7 +644,7 @@
 <span class="sd">        -----</span>
 <span class="sd">        This method maintains hidden states across prediction steps, enabling the RNO</span>
 <span class="sd">        to leverage its recurrent structure during autoregressive generation.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">states</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_layers</span>
 

@@ -16,7 +16,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -133,17 +133,17 @@
 <span class="c1"># Set warning filter to show each warning only once</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
-<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;once&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">"once"</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="BurgersEqnLoss">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.losses.equation_losses.BurgersEqnLoss.html#neuralop.losses.equation_losses.BurgersEqnLoss">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">BurgersEqnLoss</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Computes loss for Burgers&#39; equation.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Computes loss for Burgers' equation.</span>
+<span class="sd">    """</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visc</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fdm&quot;</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">,</span> <span class="n">domain_length</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visc</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">"fdm"</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">,</span> <span class="n">domain_length</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">visc</span> <span class="o">=</span> <span class="n">visc</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
@@ -171,18 +171,18 @@
         <span class="c1"># right hand side</span>
         <span class="n">right_hand_side</span> <span class="o">=</span> <span class="o">-</span><span class="n">dudx</span> <span class="o">*</span> <span class="n">u</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">visc</span> <span class="o">*</span> <span class="n">dudxx</span>
 
-        <span class="c1"># compute the loss of the left and right hand sides of Burgers&#39; equation</span>
+        <span class="c1"># compute the loss of the left and right hand sides of Burgers' equation</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">dudt</span><span class="p">,</span> <span class="n">right_hand_side</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;BurgersLoss.__call__() received unexpected keyword arguments: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">. &quot;</span>
-                <span class="s2">&quot;These arguments will be ignored.&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">"BurgersLoss.__call__() received unexpected keyword arguments: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">. "</span>
+                <span class="s2">"These arguments will be ignored."</span><span class="p">,</span>
                 <span class="ne">UserWarning</span><span class="p">,</span>
                 <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
             <span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;fdm&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">"fdm"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fdm</span><span class="p">(</span><span class="n">u</span><span class="o">=</span><span class="n">y_pred</span><span class="p">)</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
 
@@ -191,25 +191,25 @@
 <div class="viewcode-block" id="ICLoss">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.losses.equation_losses.ICLoss.html#neuralop.losses.equation_losses.ICLoss">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ICLoss</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Computes loss for initial value problems.</span>
 
 <span class="sd">    Extracts the initial condition and computes the loss between predicted </span>
 <span class="sd">    and true initial conditions for all channels.</span>
 <span class="sd">    </span>
 <span class="sd">    Expected input shape: (batch_size, channels, time_dim, *spatial_dims)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span>
         
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Expected input shape: (batch_size, channels, time_dim, *spatial_dims)&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Expected input shape: (batch_size, channels, time_dim, *spatial_dims)"""</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;ICLoss.__call__() received unexpected keyword arguments: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">. &quot;</span>
-                <span class="s2">&quot;These arguments will be ignored.&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">"ICLoss.__call__() received unexpected keyword arguments: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">. "</span>
+                <span class="s2">"These arguments will be ignored."</span><span class="p">,</span>
                 <span class="ne">UserWarning</span><span class="p">,</span>
                 <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
             <span class="p">)</span>
@@ -220,23 +220,23 @@
 <div class="viewcode-block" id="PoissonInteriorLoss">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.losses.equation_losses.PoissonInteriorLoss.html#neuralop.losses.equation_losses.PoissonInteriorLoss">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PoissonInteriorLoss</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    PoissonInteriorLoss computes the loss on the interior points of model outputs</span>
-<span class="sd">    according to Poisson&#39;s equation in 2d: ∇·((1 + 0.1u^2)∇u(x)) = f(x)</span>
+<span class="sd">    according to Poisson's equation in 2d: ∇·((1 + 0.1u^2)∇u(x)) = f(x)</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    method : Literal[&#39;autograd&#39;] only (for now)</span>
+<span class="sd">    method : Literal['autograd'] only (for now)</span>
 <span class="sd">        How to compute derivatives for equation loss.</span>
 
-<span class="sd">        * If &#39;autograd&#39;, differentiates using torch.autograd.grad. This can be used with outputs with any irregular</span>
+<span class="sd">        * If 'autograd', differentiates using torch.autograd.grad. This can be used with outputs with any irregular</span>
 <span class="sd">        point cloud structure.</span>
 <span class="sd">    loss: Callable, optional</span>
 <span class="sd">        Base loss class to compute distances between expected and true values,</span>
 <span class="sd">        by default torch.nn.functional.mse_loss</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;autograd&quot;</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">"autograd"</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span>
@@ -244,9 +244,9 @@
 <div class="viewcode-block" id="PoissonInteriorLoss.autograd">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.losses.equation_losses.PoissonInteriorLoss.html#neuralop.losses.equation_losses.PoissonInteriorLoss.autograd">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">autograd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">output_queries</span><span class="p">,</span> <span class="n">output_source_terms_domain</span><span class="p">,</span> <span class="n">num_boundary</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Compute loss between the left-hand side and right-hand side of</span>
-<span class="sd">        nonlinear Poisson&#39;s equation: ∇·((1 + 0.1u^2)∇u(x)) = f(x)</span>
+<span class="sd">        nonlinear Poisson's equation: ∇·((1 + 0.1u^2)∇u(x)) = f(x)</span>
 
 <span class="sd">        u: torch.Tensor | dict</span>
 <span class="sd">            output of the model.</span>
@@ -264,12 +264,12 @@
 <span class="sd">            output_queries[:, 0:num_boundary, :] are boundary points and output_queries[:, num_boundary:, :]</span>
 <span class="sd">            are interior points.</span>
 <span class="sd">        output_source_terms_domain: torch.Tensor</span>
-<span class="sd">            source terms f(x) defined for this specific instance of Poisson&#39;s equation.</span>
+<span class="sd">            source terms f(x) defined for this specific instance of Poisson's equation.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">output_queries</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-            <span class="n">output_queries_domain</span> <span class="o">=</span> <span class="n">output_queries</span><span class="p">[</span><span class="s2">&quot;domain&quot;</span><span class="p">]</span>
+            <span class="n">output_queries_domain</span> <span class="o">=</span> <span class="n">output_queries</span><span class="p">[</span><span class="s2">"domain"</span><span class="p">]</span>
             <span class="n">u_prime</span> <span class="o">=</span> <span class="n">grad</span><span class="p">(</span>
                 <span class="n">outputs</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
                 <span class="n">inputs</span><span class="o">=</span><span class="n">output_queries_domain</span><span class="p">,</span>
@@ -346,14 +346,14 @@
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;PoissonInteriorLoss.__call__() received unexpected keyword arguments: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">. &quot;</span>
-                <span class="s2">&quot;These arguments will be ignored.&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">"PoissonInteriorLoss.__call__() received unexpected keyword arguments: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">. "</span>
+                <span class="s2">"These arguments will be ignored."</span><span class="p">,</span>
                 <span class="ne">UserWarning</span><span class="p">,</span>
                 <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
             <span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;autograd&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">"autograd"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">autograd</span><span class="p">(</span><span class="n">u</span><span class="o">=</span><span class="n">y_pred</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;finite_difference&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">"finite_difference"</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
@@ -371,8 +371,8 @@
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">num_boundary</span><span class="p">,</span> <span class="n">out_sub_level</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">output_queries</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;PoissonBoundaryLoss.__call__() received unexpected keyword arguments: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">. &quot;</span>
-                <span class="s2">&quot;These arguments will be ignored.&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">"PoissonBoundaryLoss.__call__() received unexpected keyword arguments: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">. "</span>
+                <span class="s2">"These arguments will be ignored."</span><span class="p">,</span>
                 <span class="ne">UserWarning</span><span class="p">,</span>
                 <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
             <span class="p">)</span>
@@ -388,7 +388,7 @@
 <div class="viewcode-block" id="PoissonEqnLoss">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.losses.equation_losses.PoissonEqnLoss.html#neuralop.losses.equation_losses.PoissonEqnLoss">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PoissonEqnLoss</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;PoissonEqnLoss computes a weighted sum of equation loss computed on the interior points of a model&#39;s output</span>
+<span class="w">    </span><span class="sd">"""PoissonEqnLoss computes a weighted sum of equation loss computed on the interior points of a model's output</span>
 <span class="sd">    and a boundary loss computed on the boundary points.</span>
 
 <span class="sd">    Parameters</span>
@@ -397,12 +397,12 @@
 <span class="sd">        weight by which to multiply boundary loss</span>
 <span class="sd">    interior_weight : float</span>
 <span class="sd">        weight by which to multiply interior loss</span>
-<span class="sd">    diff_method : Literal[&#39;autograd&#39;, &#39;finite_difference&#39;], optional</span>
-<span class="sd">        method to use to compute derivatives, by default &#39;autograd&#39;</span>
+<span class="sd">    diff_method : Literal['autograd', 'finite_difference'], optional</span>
+<span class="sd">        method to use to compute derivatives, by default 'autograd'</span>
 <span class="sd">    base_loss : Callable, optional</span>
 <span class="sd">        base loss class to use inside equation and boundary loss, by default F.mse_loss</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boundary_weight</span><span class="p">,</span> <span class="n">interior_weight</span><span class="p">,</span> <span class="n">diff_method</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;autograd&quot;</span><span class="p">,</span> <span class="n">base_loss</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">):</span> 
+<span class="sd">    """</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boundary_weight</span><span class="p">,</span> <span class="n">interior_weight</span><span class="p">,</span> <span class="n">diff_method</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">"autograd"</span><span class="p">,</span> <span class="n">base_loss</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">):</span> 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">boundary_weight</span> <span class="o">=</span> <span class="n">boundary_weight</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">boundary_loss</span> <span class="o">=</span> <span class="n">PoissonBoundaryLoss</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="n">base_loss</span><span class="p">)</span>
@@ -413,14 +413,14 @@
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;PoissonEqnLoss.__call__() received unexpected keyword arguments: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">. &quot;</span>
-                <span class="s2">&quot;These arguments will be ignored.&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">"PoissonEqnLoss.__call__() received unexpected keyword arguments: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">. "</span>
+                <span class="s2">"These arguments will be ignored."</span><span class="p">,</span>
                 <span class="ne">UserWarning</span><span class="p">,</span>
                 <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-            <span class="n">interior_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interior_weight</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">interior_loss</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;domain&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-            <span class="n">bc_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary_weight</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary_loss</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;boundary&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">[</span><span class="s1">&#39;boundary&#39;</span><span class="p">],</span>  <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">interior_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interior_weight</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">interior_loss</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s1">'domain'</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">bc_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary_weight</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary_loss</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s1">'boundary'</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">[</span><span class="s1">'boundary'</span><span class="p">],</span>  <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">interior_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interior_weight</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">interior_loss</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="n">bc_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary_weight</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary_loss</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>

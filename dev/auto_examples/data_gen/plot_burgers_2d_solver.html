@@ -17,7 +17,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/tensorly_style.css?v=a02e9698" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -185,15 +185,14 @@ its use to create a simple numerical solver for Burgers’ equation in 2d.</p>
 <div style="margin-top: 3em;"></div><section id="import-the-library">
 <h2>Import the library<a class="headerlink" href="#import-the-library" title="Link to this heading"></a></h2>
 <p>We first import our <cite>neuralop</cite> library and required dependencies.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.animation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">animation</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.losses.differentiation</span><span class="w"> </span><span class="kn">import</span> <span class="n">FiniteDiff</span>
-
-<span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="nn">.</span><span class="nn">pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="nn">.</span><span class="nn">animation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">animation</span><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">neuralop</span><span class="nn">.</span><span class="nn">losses</span><span class="nn">.</span><span class="nn">differentiation</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-neuralop sphx-glr-backref-type-py-class reference internal" href="../../modules/generated/neuralop.losses.differentiation.FiniteDiff.html#neuralop.losses.differentiation.FiniteDiff" title="neuralop.FiniteDiff"><span class="n">FiniteDiff</span></a><span class="w">
+</span><span class="w">
+</span><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;</span><span class="s2">cuda</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">(</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;</span><span class="s2">cpu</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div style="margin-top: 3em;"></div></section>
 <section id="defining-our-problem">
 <h2>Defining our problem<a class="headerlink" href="#defining-our-problem" title="Link to this heading"></a></h2>
@@ -202,92 +201,89 @@ its use to create a simple numerical solver for Burgers’ equation in 2d.</p>
 \[\frac{\partial u}{\partial t} + u \frac{\partial u}{\partial x} + v \frac{\partial u}{\partial y} = \nu \left(\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2}\right)\]</div>
 <div class="math notranslate nohighlight">
 \[\frac{\partial v}{\partial t} + u \frac{\partial v}{\partial x} + v \frac{\partial v}{\partial y} = \nu \left(\frac{\partial^2 v}{\partial x^2} + \frac{\partial^2 v}{\partial y^2}\right)\]</div>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1">## Simulation parameters</span>
-<span class="n">Lx</span><span class="p">,</span> <span class="n">Ly</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span>  <span class="c1"># Domain lengths</span>
-<span class="n">nx</span><span class="p">,</span> <span class="n">ny</span> <span class="o">=</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span>  <span class="c1"># Grid resolution</span>
-<span class="n">T</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># Total simulation time</span>
-<span class="n">dt</span> <span class="o">=</span> <span class="mf">0.001</span>  <span class="c1"># Time step</span>
-<span class="n">nu</span> <span class="o">=</span> <span class="mf">0.04</span>  <span class="c1"># Viscosity</span>
-
-<span class="c1">## Create grid</span>
-<span class="n">X</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Lx</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
-<span class="n">Y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Ly</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">dx</span> <span class="o">=</span> <span class="n">Lx</span> <span class="o">/</span> <span class="p">(</span><span class="n">nx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">dy</span> <span class="o">=</span> <span class="n">Ly</span> <span class="o">/</span> <span class="p">(</span><span class="n">ny</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">nt</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="n">dt</span><span class="p">)</span>
-
-<span class="c1">## Initialize finite difference operator</span>
-<span class="n">fd</span> <span class="o">=</span> <span class="n">FiniteDiff</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">))</span>
-
-<span class="c1">## Initial condition</span>
-<span class="n">u</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">Y</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
-<span class="n">v</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="c1">## Simulation parameters</span><span class="w">
+</span><span class="n">Lx</span><span class="p">,</span> <span class="n">Ly</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span>  <span class="c1"># Domain lengths</span><span class="w">
+</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span> <span class="o">=</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span>  <span class="c1"># Grid resolution</span><span class="w">
+</span><span class="n">T</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># Total simulation time</span><span class="w">
+</span><span class="n">dt</span> <span class="o">=</span> <span class="mf">0.001</span>  <span class="c1"># Time step</span><span class="w">
+</span><span class="n">nu</span> <span class="o">=</span> <span class="mf">0.04</span>  <span class="c1"># Viscosity</span><span class="w">
+</span><span class="w">
+</span><span class="c1">## Create grid</span><span class="w">
+</span><span class="n">X</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Lx</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="w">
+</span><span class="n">Y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Ly</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="w">
+</span><span class="n">dx</span> <span class="o">=</span> <span class="n">Lx</span> <span class="o">/</span> <span class="p">(</span><span class="n">nx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="w">
+</span><span class="n">dy</span> <span class="o">=</span> <span class="n">Ly</span> <span class="o">/</span> <span class="p">(</span><span class="n">ny</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="w">
+</span><span class="n">nt</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="n">dt</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1">## Initialize finite difference operator</span><span class="w">
+</span><a class="sphx-glr-backref-module-neuralop sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../modules/generated/neuralop.losses.differentiation.FiniteDiff.html#neuralop.losses.differentiation.FiniteDiff" title="neuralop.FiniteDiff"><span class="n">fd</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-neuralop sphx-glr-backref-type-py-class reference internal" href="../../modules/generated/neuralop.losses.differentiation.FiniteDiff.html#neuralop.losses.differentiation.FiniteDiff" title="neuralop.FiniteDiff"><span class="n">FiniteDiff</span></a><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1">## Initial condition</span><span class="w">
+</span><span class="n">u</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">Y</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span><span class="w">
+</span><span class="n">v</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div style="margin-top: 3em;"></div></section>
 <section id="simulate-evolution-using-numerical-solver">
 <h2>Simulate evolution using numerical solver<a class="headerlink" href="#simulate-evolution-using-numerical-solver" title="Link to this heading"></a></h2>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">u_evolution</span> <span class="o">=</span> <span class="p">[</span><span class="n">u</span><span class="o">.</span><span class="n">clone</span><span class="p">()]</span>
-<span class="n">v_evolution</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">clone</span><span class="p">()]</span>
-
-<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nt</span><span class="p">):</span>
-    <span class="c1"># Compute first-order derivatives</span>
-    <span class="n">u_x</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">dx</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
-    <span class="n">u_y</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">dy</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
-    <span class="n">v_x</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">dx</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-    <span class="n">v_y</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">dy</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-
-    <span class="c1"># Compute second-order derivatives</span>
-    <span class="n">u_xx</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">dx</span><span class="p">(</span><span class="n">u_x</span><span class="p">)</span>
-    <span class="n">u_yy</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">dy</span><span class="p">(</span><span class="n">u_y</span><span class="p">)</span>
-    <span class="n">v_xx</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">dx</span><span class="p">(</span><span class="n">v_x</span><span class="p">)</span>
-    <span class="n">v_yy</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">dy</span><span class="p">(</span><span class="n">v_y</span><span class="p">)</span>
-
-    <span class="c1"># Evolve in time using Euler&#39;s method</span>
-    <span class="n">u_next</span> <span class="o">=</span> <span class="n">u</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">u</span> <span class="o">*</span> <span class="n">u_x</span> <span class="o">-</span> <span class="n">v</span> <span class="o">*</span> <span class="n">u_y</span> <span class="o">+</span> <span class="n">nu</span> <span class="o">*</span> <span class="p">(</span><span class="n">u_xx</span> <span class="o">+</span> <span class="n">u_yy</span><span class="p">))</span>
-    <span class="n">v_next</span> <span class="o">=</span> <span class="n">v</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">u</span> <span class="o">*</span> <span class="n">v_x</span> <span class="o">-</span> <span class="n">v</span> <span class="o">*</span> <span class="n">v_y</span> <span class="o">+</span> <span class="n">nu</span> <span class="o">*</span> <span class="p">(</span><span class="n">v_xx</span> <span class="o">+</span> <span class="n">v_yy</span><span class="p">))</span>
-
-    <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">u_next</span><span class="o">.</span><span class="n">clone</span><span class="p">(),</span> <span class="n">v_next</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
-    <span class="n">u_evolution</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">clone</span><span class="p">())</span>
-    <span class="n">v_evolution</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">clone</span><span class="p">())</span>
-
-<span class="n">u_evolution</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">u_evolution</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
-<span class="n">v_evolution</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">v_evolution</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">u_evolution</span> <span class="o">=</span> <span class="p">[</span><span class="n">u</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="p">)</span><span class="p">]</span><span class="w">
+</span><span class="n">v_evolution</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="p">)</span><span class="p">]</span><span class="w">
+</span><span class="w">
+</span><span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nt</span><span class="p">)</span><span class="p">:</span><span class="w">
+</span>    <span class="c1"># Compute first-order derivatives</span><span class="w">
+</span>    <span class="n">u_x</span> <span class="o">=</span> <a class="sphx-glr-backref-module-neuralop sphx-glr-backref-type-py-method reference internal" href="../../modules/generated/neuralop.losses.differentiation.FiniteDiff.html#neuralop.losses.differentiation.FiniteDiff.dx" title="neuralop.FiniteDiff.dx"><span class="n">fd</span><span class="o">.</span><span class="n">dx</span></a><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="w">
+</span>    <span class="n">u_y</span> <span class="o">=</span> <a class="sphx-glr-backref-module-neuralop sphx-glr-backref-type-py-method reference internal" href="../../modules/generated/neuralop.losses.differentiation.FiniteDiff.html#neuralop.losses.differentiation.FiniteDiff.dy" title="neuralop.FiniteDiff.dy"><span class="n">fd</span><span class="o">.</span><span class="n">dy</span></a><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="w">
+</span>    <span class="n">v_x</span> <span class="o">=</span> <a class="sphx-glr-backref-module-neuralop sphx-glr-backref-type-py-method reference internal" href="../../modules/generated/neuralop.losses.differentiation.FiniteDiff.html#neuralop.losses.differentiation.FiniteDiff.dx" title="neuralop.FiniteDiff.dx"><span class="n">fd</span><span class="o">.</span><span class="n">dx</span></a><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="w">
+</span>    <span class="n">v_y</span> <span class="o">=</span> <a class="sphx-glr-backref-module-neuralop sphx-glr-backref-type-py-method reference internal" href="../../modules/generated/neuralop.losses.differentiation.FiniteDiff.html#neuralop.losses.differentiation.FiniteDiff.dy" title="neuralop.FiniteDiff.dy"><span class="n">fd</span><span class="o">.</span><span class="n">dy</span></a><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>    <span class="c1"># Compute second-order derivatives</span><span class="w">
+</span>    <span class="n">u_xx</span> <span class="o">=</span> <a class="sphx-glr-backref-module-neuralop sphx-glr-backref-type-py-method reference internal" href="../../modules/generated/neuralop.losses.differentiation.FiniteDiff.html#neuralop.losses.differentiation.FiniteDiff.dx" title="neuralop.FiniteDiff.dx"><span class="n">fd</span><span class="o">.</span><span class="n">dx</span></a><span class="p">(</span><span class="n">u_x</span><span class="p">)</span><span class="w">
+</span>    <span class="n">u_yy</span> <span class="o">=</span> <a class="sphx-glr-backref-module-neuralop sphx-glr-backref-type-py-method reference internal" href="../../modules/generated/neuralop.losses.differentiation.FiniteDiff.html#neuralop.losses.differentiation.FiniteDiff.dy" title="neuralop.FiniteDiff.dy"><span class="n">fd</span><span class="o">.</span><span class="n">dy</span></a><span class="p">(</span><span class="n">u_y</span><span class="p">)</span><span class="w">
+</span>    <span class="n">v_xx</span> <span class="o">=</span> <a class="sphx-glr-backref-module-neuralop sphx-glr-backref-type-py-method reference internal" href="../../modules/generated/neuralop.losses.differentiation.FiniteDiff.html#neuralop.losses.differentiation.FiniteDiff.dx" title="neuralop.FiniteDiff.dx"><span class="n">fd</span><span class="o">.</span><span class="n">dx</span></a><span class="p">(</span><span class="n">v_x</span><span class="p">)</span><span class="w">
+</span>    <span class="n">v_yy</span> <span class="o">=</span> <a class="sphx-glr-backref-module-neuralop sphx-glr-backref-type-py-method reference internal" href="../../modules/generated/neuralop.losses.differentiation.FiniteDiff.html#neuralop.losses.differentiation.FiniteDiff.dy" title="neuralop.FiniteDiff.dy"><span class="n">fd</span><span class="o">.</span><span class="n">dy</span></a><span class="p">(</span><span class="n">v_y</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>    <span class="c1"># Evolve in time using Euler's method</span><span class="w">
+</span>    <span class="n">u_next</span> <span class="o">=</span> <span class="n">u</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">u</span> <span class="o">*</span> <span class="n">u_x</span> <span class="o">-</span> <span class="n">v</span> <span class="o">*</span> <span class="n">u_y</span> <span class="o">+</span> <span class="n">nu</span> <span class="o">*</span> <span class="p">(</span><span class="n">u_xx</span> <span class="o">+</span> <span class="n">u_yy</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span>    <span class="n">v_next</span> <span class="o">=</span> <span class="n">v</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">u</span> <span class="o">*</span> <span class="n">v_x</span> <span class="o">-</span> <span class="n">v</span> <span class="o">*</span> <span class="n">v_y</span> <span class="o">+</span> <span class="n">nu</span> <span class="o">*</span> <span class="p">(</span><span class="n">v_xx</span> <span class="o">+</span> <span class="n">v_yy</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>    <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">u_next</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="p">)</span><span class="p">,</span> <span class="n">v_next</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span>    <span class="n">u_evolution</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span>    <span class="n">v_evolution</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="n">u_evolution</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">u_evolution</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">(</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span><span class="n">v_evolution</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">v_evolution</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">(</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div style="margin-top: 3em;"></div></section>
 <section id="animating-the-solution">
 <h2>Animating the solution<a class="headerlink" href="#animating-the-solution" title="Link to this heading"></a></h2>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">num_frames</span> <span class="o">=</span> <span class="mi">100</span>
-<span class="n">frame_indices</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">u_evolution</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_frames</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
-<span class="p">)</span>
-<span class="n">u_frames</span> <span class="o">=</span> <span class="n">u_evolution</span><span class="p">[</span><span class="n">frame_indices</span><span class="p">]</span>
-<span class="n">v_frames</span> <span class="o">=</span> <span class="n">v_evolution</span><span class="p">[</span><span class="n">frame_indices</span><span class="p">]</span>
-
-<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="n">cmap_u</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">u_frames</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">Lx</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Ly</span><span class="p">],</span> <span class="n">origin</span><span class="o">=</span><span class="s2">&quot;lower&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;plasma&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Velocity u&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cmap_u</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
-<span class="n">cmap_v</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">v_frames</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">Lx</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Ly</span><span class="p">],</span> <span class="n">origin</span><span class="o">=</span><span class="s2">&quot;lower&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;plasma&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Velocity v&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cmap_v</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">frame</span><span class="p">):</span>
-    <span class="n">cmap_u</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">u_frames</span><span class="p">[</span><span class="n">frame</span><span class="p">])</span>
-    <span class="n">cmap_v</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">v_frames</span><span class="p">[</span><span class="n">frame</span><span class="p">])</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Velocity u (Time: </span><span class="si">{</span><span class="n">frame_indices</span><span class="p">[</span><span class="n">frame</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dt</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Velocity v (Time: </span><span class="si">{</span><span class="n">frame_indices</span><span class="p">[</span><span class="n">frame</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dt</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
-    <span class="k">return</span> <span class="n">cmap_u</span><span class="p">,</span> <span class="n">cmap_v</span>
-
-<span class="n">ani</span> <span class="o">=</span> <span class="n">animation</span><span class="o">.</span><span class="n">FuncAnimation</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">update</span><span class="p">,</span> <span class="n">frames</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">u_frames</span><span class="p">),</span> <span class="n">interval</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">blit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">num_frames</span> <span class="o">=</span> <span class="mi">100</span><span class="w">
+</span><span class="n">frame_indices</span> <span class="o">=</span> <span class="p">(</span><span class="w">
+</span>    <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">u_evolution</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_frames</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">(</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span><span class="n">u_frames</span> <span class="o">=</span> <span class="n">u_evolution</span><span class="p">[</span><span class="n">frame_indices</span><span class="p">]</span><span class="w">
+</span><span class="n">v_frames</span> <span class="o">=</span> <span class="n">v_evolution</span><span class="p">[</span><span class="n">frame_indices</span><span class="p">]</span><span class="w">
+</span><span class="w">
+</span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><span class="n">cmap_u</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">u_frames</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">Lx</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Ly</span><span class="p">]</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">lower</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">plasma</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;</span><span class="s2">Velocity u</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cmap_u</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span><span class="w">
+</span><span class="n">cmap_v</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">v_frames</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">Lx</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Ly</span><span class="p">]</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">lower</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">plasma</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;</span><span class="s2">Velocity v</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cmap_v</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span><span class="p">:</span><span class="w">
+</span>    <span class="n">cmap_u</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">u_frames</span><span class="p">[</span><span class="n">frame</span><span class="p">]</span><span class="p">)</span><span class="w">
+</span>    <span class="n">cmap_v</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">v_frames</span><span class="p">[</span><span class="n">frame</span><span class="p">]</span><span class="p">)</span><span class="w">
+</span>    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="s2">Velocity u (Time: </span><span class="si">{</span><span class="n">frame_indices</span><span class="p">[</span><span class="n">frame</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dt</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">)</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span>    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="s2">Velocity v (Time: </span><span class="si">{</span><span class="n">frame_indices</span><span class="p">[</span><span class="n">frame</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dt</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">)</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span>    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="p">[</span><span class="p">]</span><span class="p">)</span><span class="w">
+</span>    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="p">[</span><span class="p">]</span><span class="p">)</span><span class="w">
+</span>    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="p">[</span><span class="p">]</span><span class="p">)</span><span class="w">
+</span>    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="p">[</span><span class="p">]</span><span class="p">)</span><span class="w">
+</span>    <span class="k">return</span> <span class="n">cmap_u</span><span class="p">,</span> <span class="n">cmap_v</span><span class="w">
+</span><span class="w">
+</span><span class="n">ani</span> <span class="o">=</span> <span class="n">animation</span><span class="o">.</span><span class="n">FuncAnimation</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">update</span><span class="p">,</span> <span class="n">frames</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">u_frames</span><span class="p">)</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">blit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-animation docutils container">
 <link rel="stylesheet"
 href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
@@ -473,42 +469,42 @@ input[type=range].anim-slider {
 </style>
 
 <div class="animation">
-  <img id="_anim_img07e51326470f4ebe957f96bce5429375">
+  <img id="_anim_img0c8e3777c92f4ae1901410b33f3ae8c3">
   <div class="anim-controls">
-    <input id="_anim_slider07e51326470f4ebe957f96bce5429375" type="range" class="anim-slider"
+    <input id="_anim_slider0c8e3777c92f4ae1901410b33f3ae8c3" type="range" class="anim-slider"
            name="points" min="0" max="1" step="1" value="0"
-           oninput="anim07e51326470f4ebe957f96bce5429375.set_frame(parseInt(this.value));">
+           oninput="anim0c8e3777c92f4ae1901410b33f3ae8c3.set_frame(parseInt(this.value));">
     <div class="anim-buttons">
-      <button title="Decrease speed" aria-label="Decrease speed" onclick="anim07e51326470f4ebe957f96bce5429375.slower()">
+      <button title="Decrease speed" aria-label="Decrease speed" onclick="anim0c8e3777c92f4ae1901410b33f3ae8c3.slower()">
           <i class="fa fa-minus"></i></button>
-      <button title="First frame" aria-label="First frame" onclick="anim07e51326470f4ebe957f96bce5429375.first_frame()">
+      <button title="First frame" aria-label="First frame" onclick="anim0c8e3777c92f4ae1901410b33f3ae8c3.first_frame()">
         <i class="fa fa-fast-backward"></i></button>
-      <button title="Previous frame" aria-label="Previous frame" onclick="anim07e51326470f4ebe957f96bce5429375.previous_frame()">
+      <button title="Previous frame" aria-label="Previous frame" onclick="anim0c8e3777c92f4ae1901410b33f3ae8c3.previous_frame()">
           <i class="fa fa-step-backward"></i></button>
-      <button title="Play backwards" aria-label="Play backwards" onclick="anim07e51326470f4ebe957f96bce5429375.reverse_animation()">
+      <button title="Play backwards" aria-label="Play backwards" onclick="anim0c8e3777c92f4ae1901410b33f3ae8c3.reverse_animation()">
           <i class="fa fa-play fa-flip-horizontal"></i></button>
-      <button title="Pause" aria-label="Pause" onclick="anim07e51326470f4ebe957f96bce5429375.pause_animation()">
+      <button title="Pause" aria-label="Pause" onclick="anim0c8e3777c92f4ae1901410b33f3ae8c3.pause_animation()">
           <i class="fa fa-pause"></i></button>
-      <button title="Play" aria-label="Play" onclick="anim07e51326470f4ebe957f96bce5429375.play_animation()">
+      <button title="Play" aria-label="Play" onclick="anim0c8e3777c92f4ae1901410b33f3ae8c3.play_animation()">
           <i class="fa fa-play"></i></button>
-      <button title="Next frame" aria-label="Next frame" onclick="anim07e51326470f4ebe957f96bce5429375.next_frame()">
+      <button title="Next frame" aria-label="Next frame" onclick="anim0c8e3777c92f4ae1901410b33f3ae8c3.next_frame()">
           <i class="fa fa-step-forward"></i></button>
-      <button title="Last frame" aria-label="Last frame" onclick="anim07e51326470f4ebe957f96bce5429375.last_frame()">
+      <button title="Last frame" aria-label="Last frame" onclick="anim0c8e3777c92f4ae1901410b33f3ae8c3.last_frame()">
           <i class="fa fa-fast-forward"></i></button>
-      <button title="Increase speed" aria-label="Increase speed" onclick="anim07e51326470f4ebe957f96bce5429375.faster()">
+      <button title="Increase speed" aria-label="Increase speed" onclick="anim0c8e3777c92f4ae1901410b33f3ae8c3.faster()">
           <i class="fa fa-plus"></i></button>
     </div>
-    <form title="Repetition mode" aria-label="Repetition mode" action="#n" name="_anim_loop_select07e51326470f4ebe957f96bce5429375"
+    <form title="Repetition mode" aria-label="Repetition mode" action="#n" name="_anim_loop_select0c8e3777c92f4ae1901410b33f3ae8c3"
           class="anim-state">
-      <input type="radio" name="state" value="once" id="_anim_radio1_07e51326470f4ebe957f96bce5429375"
+      <input type="radio" name="state" value="once" id="_anim_radio1_0c8e3777c92f4ae1901410b33f3ae8c3"
              >
-      <label for="_anim_radio1_07e51326470f4ebe957f96bce5429375">Once</label>
-      <input type="radio" name="state" value="loop" id="_anim_radio2_07e51326470f4ebe957f96bce5429375"
+      <label for="_anim_radio1_0c8e3777c92f4ae1901410b33f3ae8c3">Once</label>
+      <input type="radio" name="state" value="loop" id="_anim_radio2_0c8e3777c92f4ae1901410b33f3ae8c3"
              checked>
-      <label for="_anim_radio2_07e51326470f4ebe957f96bce5429375">Loop</label>
-      <input type="radio" name="state" value="reflect" id="_anim_radio3_07e51326470f4ebe957f96bce5429375"
+      <label for="_anim_radio2_0c8e3777c92f4ae1901410b33f3ae8c3">Loop</label>
+      <input type="radio" name="state" value="reflect" id="_anim_radio3_0c8e3777c92f4ae1901410b33f3ae8c3"
              >
-      <label for="_anim_radio3_07e51326470f4ebe957f96bce5429375">Reflect</label>
+      <label for="_anim_radio3_0c8e3777c92f4ae1901410b33f3ae8c3">Reflect</label>
     </form>
   </div>
 </div>
@@ -518,13 +514,13 @@ input[type=range].anim-slider {
   /* Instantiate the Animation class. */
   /* The IDs given should match those used in the template above. */
   (function() {
-    var img_id = "_anim_img07e51326470f4ebe957f96bce5429375";
-    var slider_id = "_anim_slider07e51326470f4ebe957f96bce5429375";
-    var loop_select_id = "_anim_loop_select07e51326470f4ebe957f96bce5429375";
+    var img_id = "_anim_img0c8e3777c92f4ae1901410b33f3ae8c3";
+    var slider_id = "_anim_slider0c8e3777c92f4ae1901410b33f3ae8c3";
+    var loop_select_id = "_anim_loop_select0c8e3777c92f4ae1901410b33f3ae8c3";
     var frames = new Array(100);
 
   frames[0] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAbJtJREFUeJzt3Xd8VMX+//H3bhohJKFLSWgiAipFREGwASoICFhBRUUBlRCx\
 K5YLioJev1awIEW9KAioqKhYQZoFVEBAEUF6B4EU0nd+f2D257qbkOTskpM9r+d9nPsgc2ZmZzcr\
 n8PnzMxxGWOMAAAAAAAAAJtyl/cAAAAAAAAAgOKQwAIAAAAAAICtkcACAAAAAACArZHAAgAAAAAA\
@@ -1016,7 +1012,7 @@ AAAAAICtkcACAAAAAACArZHAAgAAAAAAgK2RwAIAAAAAAICtkcACAAAAAACArZHAAgAAAAAAgK39\
 P7jX+qHlG72uAAAAAElFTkSuQmCC\
 "
   frames[1] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAmZhJREFUeJzs3XecFEX+//H3zC67pF2SIBKMqIgKKAYMZ+QUI2IEFTMmwBzO\
 0zs8PfU8f2c4OT0VUM+IqJgjipgFEycoBkSCIgKi5GV3p39/cDtfZ+fTS/X2zGzvzOv5fez3cdZW\
 VffM1HY1NdWfT8zzPE8AAAAAAABARMUb+gQAAAAAAACAurCABQAAAAAAgEhjAQsAAAAAAACRxgIW\
@@ -1710,7 +1706,7 @@ AAAAAAAAEGksYAEAAAAAACDSWMACAAAAAABApLGABQD/vx07FgAAAAAY5G89jR2FEQAAAGsCCwAA\
 AIC1ACO0IqAkN5HFAAAAAElFTkSuQmCC\
 "
   frames[2] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAqeNJREFUeJzs3XecFFXa9vGru2eGOENQUAmKiooJUAyY4yoqihgxYMYEmMMa\
 dnF11XV917CwukpQHwMiKuacMAsmFJTFgARBFAzkYbq73j/Y6bWn7wNVU91D0f37Pp95PuuZqurq\
 6Xv6FGeqrzvmeZ4nAAAAAAAAIKLia/oEAAAAAAAAgFVhAQsAAAAAAACRxgIWAAAAAAAAIo0FLAAA\
@@ -2477,7 +2473,7 @@ AQsAAACANAELAAAAgDQBCwAAAIA0AQsAAACANAELAAAAgDQBCwAAAIA0AQsAAACANAELAAAAgDQB\
 CwAAAIA0AQsAAACAtG8GIGjYcSY51AAAAABJRU5ErkJggg==\
 "
   frames[3] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAtOJJREFUeJzs3XecVOXd/vFryi51ARFRKVbsRlHsGmNL1Ng7GrtiA9RYY9Rg\
 YqJJ/EVjIDEWLI/GGiWJvfeKjQhKbAjYUBSl7045vz82TJyd64YzzC4MO5/389rnFe8958zszHfP\
 fbj3zPVNRFEUCQAAAAAAAKhSyaX9BAAAAAAAAICFYQELAAAAAAAAVY0FLAAAAAAAAFQ1FrAAAAAA\
@@ -3293,7 +3289,7 @@ YAEAAADQNQ0sAAAAALqmgQUAAABA1zSwAAAAAOiaBhYAAAAAXdPAAgAAAKBrGlgAAAAAdE0DCwAA\
 AICuaWABAAAA0DUNLAAAAAC6poEFAAAAQNc0sAAAAADo2v8B8sQ0vFIUg80AAAAASUVORK5CYII=\
 "
   frames[4] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAu0xJREFUeJzs3XecXGXd/vFr6qZtEkJASKEGCEUIHQTpUqRLC0qRjoTQi1ge\
 UBT08SeIRBFIKIK0SFG69CYlVKnSQkgooZO+087vjzwZmJ3rTs5kdjeTnc/7ee3zknvPOTvlu+c+\
 uffM9U1EURQJAAAAAAAAaFDJRf0AAAAAAAAAgPlhAQsAAAAAAAANjQUsAAAAAAAANDQWsAAAAAAA\
@@ -4138,7 +4134,7 @@ AABA1SSwAAAAAKiaBBYAAAAAVZPAAgAAAKBqElgAAAAAVE0CCwAAAICqSWABAAAAUDUJLAAAAACq\
 JoEFAAAAQNUksAAAAAComgQWAAAAAFX7P5ubNzqEUr0gAAAAAElFTkSuQmCC\
 "
   frames[5] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAwThJREFUeJzs3XeYXGX9/vF7+m46oYeEGjrSURBEBBQQkI6ggHSEELEgioqg\
 KOjPrwWNIpBQBGmRIkgTpINIEZAqPYQWOmm7s1PO7481A7PnfpIzmd0w7LxfXrkueXLOmfbZ85w8\
 e+b+pKIoigQAAAAAAAC0qPSH/QQAAAAAAACA+WEBCwAAAAAAAC2NBSwAAAAAAAC0NBawAAAAAAAA\
@@ -5010,7 +5006,7 @@ AAComgYWAAAAAFXTwAIAAACgahpYAAAAAFRNAwsAAACAqmlgAQAAAFA1DSwAAAAAqqaBBQAAAEDV\
 /j+8iOTOrNgSVQAAAABJRU5ErkJggg==\
 "
   frames[6] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAxz9JREFUeJzs3XeYXGX9/vF7+u4mm9BLCjV0pCNVQECKdEEEAQVpQhIRQRDF\
 b1AU5OvPgomFEsoXpYooVQTpIBAQEBCkh9BCJ2136vn9ETMwe+4nzGR2w2Tn/bquvS7y7Dln2mfn\
 OTxz5v4koiiKBAAAAAAAALSo5Cd9BwAAAAAAAID5YQELAAAAAAAALY0FLAAAAAAAALQ0FrAAAAAA\
@@ -5909,7 +5905,7 @@ BQAAAECvWcACAAAAoNcsYAEAAADQaxawAAAAAOg1C1gAAAAA9JoFLAAAAAB6zQIWAAAAAL1mAQsA\
 AACAXvv/muma7PYa5+gAAAAASUVORK5CYII=\
 "
   frames[7] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAymBJREFUeJzs3XeYVNX9BvD3Tp9tIAJKs6JiAxR772LEXoIFYwMLYC+xBaNG\
 YvzFaCAxKqDGgohKYu+KLQrWCPaGIAqCUnZ3+pzfH5sdmb3vgTs7u8sw836eZ59Hz957p+x377mc\
 vfN+HWOMgYiIiIiIiIiISInyre4nICIiIiIiIiIisjJawBIRERERERERkZKmBSwRERERERERESlp\
@@ -6822,7 +6818,7 @@ p1nAAgAAAKDTLGABAAAA0GkWsAAAAADoNAtYAAAAAHSaBSwAAAAAOs0CFgAAAACdZgELAAAAgE6z\
 gAUAAABAp/1/Ie3N1sI/W3oAAAAASUVORK5CYII=\
 "
   frames[8] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAzjNJREFUeJzs3XeYVNX9P/D3nT6zDVFRmhURSwRFooixN2LvFWPDCjH2aEww\
 GkWTXyyBxFiwfDVYUDH2rtiigh3U2JAiSFPYNn3O7w+yg7P3ffAOs7sMM+/X8/A8erj3TvvsPZez\
 d94fxxhjICIiIiIiIiIiUqZ8q/sJiIiIiIiIiIiIrIwWsEREREREREREpKxpAUtERERERERERMqa\
@@ -7752,7 +7748,7 @@ AAAgaSxgAQAAAAAAIGksYAEAAAAAACBpLGABAAAAAAAgaSxgAQAAAAAAIGksYAEAAAAAACBpLGAB\
 AAAAAAAgaSxgAQAAAAAAIGn/H2gLQfcux7xaAAAAAElFTkSuQmCC\
 "
   frames[9] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAz/5JREFUeJzs3XeYVOXdPvD7TJ/ZBqioNBsqVrBGY+9i7yVRYwErRGONMXk1\
 GtubXyyBxChgjw0VK/aCLSpYUFBiQ4oiCAJbps+c3x+8OzL73A+cYXbXceb+XBfXpc+eM/U75zn7\
 7Jn767iu60JERERERERERKRC+X7qByAiIiIiIiIiIrIiWsASEREREREREZGKpgUsERERERERERGp\
@@ -8690,7 +8686,7 @@ AAAAAIBcYwELAAAAAAAAucYCFgAAAAAAAHKNBSwAAAAAAADkGgtYAAAAAAAAyDUWsAAAAAAAAJBr\
 LGABAAAAAAAg11jAAgAAAAAAQK79f2kCmpjs5CDSAAAAAElFTkSuQmCC\
 "
   frames[10] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAA0AdJREFUeJzs3Xe4FOXdPvB7tu+eCgoqghUVSwBrsESNmiixYC+J2LEBmhhL\
 jObFaKLx9RdLQjQqoMaKqJgYW6zYFRsKamxIUURpp23fnd8fvGd1z3M/MMuec1x37891nevS58zM\
 7s5+d55hzuz9dVzXdSEiIiIiIiIiIlKhfN/1ExAREREREREREVkVXcASEREREREREZGKpgtYIiIi\
@@ -9628,7 +9624,7 @@ AAAAACBpLGABAAAAAAAgaSxgAQAAAAAAIGksYAEAAAAAACBpLGABAAAAAAAgaSxgAQAAAAAAIGks\
 YAEAAAAAACBpLGABAAAAAAAgaSxgAQAAAAAAIGn/HzAygPWvy9J7AAAAAElFTkSuQmCC\
 "
   frames[11] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAA0mNJREFUeJzs3Xe4VNXZNvB7T585FRBFBEUlihWswRpbVOy9Y8cGaOwxmg+j\
 SYyvb4wmxAqosSIqJsZesSs2VOyKCBaUdtr0mf39wcvgnHUv2MOccxxn7t91cV262HufmTnP7LVZ\
 s+d+HNd1XYiIiIiIiIiIiFQo30/9AERERERERERERJZHC1giIiIiIiIiIlLRtIAlIiIiIiIiIiIV\
@@ -10577,7 +10573,7 @@ SDUWsAAAAAAAAJBqLGABAAAAAAAg1VjAAgAAAAAAQKqxgAUAAAAAAIBUYwELAAAAAAAAqcYCFgAA\
 AAAAAFLt/wOV7cXPE66swQAAAABJRU5ErkJggg==\
 "
   frames[12] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAA1axJREFUeJzs3Xe4FOXdPvB7tu+eSlURFBW7ERQ1WGMhUWLBXhLRWLABlhhN\
 jObFaKLx9RejCdGogPraoqho7LFiV2yoqFERERRR4PTtu/P7g5zFPc/9wCx7Dq5n7891nevS58zM\
 7s5+d55hzuz9dVzXdSEiIiIiIiIiIlKhfN/1ExAREREREREREVkVXcASEREREREREZGKpgtYIiIi\
@@ -11541,7 +11537,7 @@ FgAAAAAAADKNBSwAAAAAAABkGgtYAAAAAAAAyDQWsAAAAAAAAJBpLGABAAAAAAAg0/4/5d0FbksQ\
 8Q4AAAAASUVORK5CYII=\
 "
   frames[13] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAA1uFJREFUeJzs3XmUFNXdPvCneu+elWFRERQNUVwCKGpwiTFqosYFdzERd9wA\
 jTFqjMmL0STG11+MJiRGBZfXLYqKiRH3BRU3NIKCGhURcWOdtfelfn9MprHnPhe66Rlsp5/POXOO\
 3qmqrq6+Xbe4U/V8Hdd1XYiIiIiIiIiIiFQoz1e9AyIiIiIiIiIiIuuiCSwREREREREREalomsAS\
@@ -12510,7 +12506,7 @@ QKaxgAUAAAAAAIBMYwELAAAAAAAAmcYCFgAAAAAAADKNBSwAAAAAAABkGgtYAAAAAAAAyDQWsAAA\
 AAAAAJBpLGABAAAAAAAg0/4/lyeXUTV1PpoAAAAASUVORK5CYII=\
 "
   frames[14] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAA1qBJREFUeJzs3Xe4FNX9P/D3bN/buRSRoqjEHsEaLDG22Hs3EY0FG6AxRo3R\
 /DSaaPz6jSW5sQLq14qo2HvDrtiwd0QQpd+6fXd+f5C7sPe8D8yy9+J69/16Hp5HDzOzs7Nn5wxn\
 Z94fx3VdFyIiIiIiIiIiImXK92PvgIiIiIiIiIiIyIpoAktERERERERERMqaJrBERERERERERKSs\
@@ -13478,7 +13474,7 @@ AABkGgtYAAAAAAAAyDQWsAAAAAAAAJBpLGABAAAAAAAg01jAAgAAAAAAQKaxgAUAAAAAAIBMYwEL\
 AAAAAAAAmfb/AeuSt1bkOEK4AAAAAElFTkSuQmCC\
 "
   frames[15] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAA1zJJREFUeJzs3XeYVNX9P/D3nT7bWaoUW7AbQVGDJcaoidh7IRE7NkBjLIlR\
 fxpNYvyaGE2IFVBjRVQsETVW7IoFxBYbIigdtk0v9/fHZgdnz/vADLOL48779Tw8jx7uvTvlM/dc\
 zt55fxzXdV2IiIiIiIiIiIiUKc93/QBERERERERERETWRAtYIiIiIiIiIiJS1rSAJSIiIiIiIiIi\
@@ -14449,7 +14445,7 @@ AQsAAAAAAACpxgIWAAAAAAAAUo0FLAAAAAAAAKQaC1gAAAAAAABItf8PMV957yTYeA0AAAAASUVO\
 RK5CYII=\
 "
   frames[16] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAA18xJREFUeJzs3XeYFFXePvy7c/fkIUcjZgXMqJhZI2ZUXMUIJkDXvIZ9cHVN\
 rz/TyhoB9TEgomJYMQfMigkVsyKCkmFi5+56/+CZxp5zH+imZ7Cdvj/XxXXpmarq6urTdWrOVN1f\
 l+M4DkRERERERERERIqU+4/eARERERERERERkdXRBJaIiIiIiIiIiBQ1TWCJiIiIiIiIiEhR0wSW\
@@ -15422,7 +15418,7 @@ WAAAAAAAAMg0JrAAAAAAAACQaUxgAQAAAAAAINOYwAIAAAAAAECmMYEFAAAAAACATGMCCwAAAAAA\
 AJnGBBYAAAAAAAAyjQksAAAAAAAAZNr/B6iFyQl9PBslAAAAAElFTkSuQmCC\
 "
   frames[17] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAA1lxJREFUeJzs3XecVNX9PvBn+sx2ercSxQqKGqyxJXYRKxasYAPsJUbz02ii\
 8es3loRYAfVrRVQssVdUbFjA3hARpMOybfrM/f2x2cHZ8xyYYXZxnHneee3rFc/ee+fOnTP3XM7e\
 +3xcjuM4EBERERERERERKVLuX3oHRERERERERERE1kQTWCIiIiIiIiIiUtQ0gSUiIiIiIiIiIkVN\
@@ -16389,7 +16385,7 @@ ACDRmMACAAAAAABAojGBBQAAAAAAgERjAgsAAAAAAACJxgQWAAAAAAAAEo0JLAAAAAAAACTa/wcW\
 uH9lZThZPAAAAABJRU5ErkJggg==\
 "
   frames[18] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAA15pJREFUeJzs3XecVNX9PvBn+szuzu6y9GYliiWANShqbIkaK4otikYFG6Ax\
 RhOj+Wo00Rh/MZqQGBUssQVRMRpbrNgVC0TBioggSF3YMn3m/v7Y7ODseQ7cYXZx3Hneee3rFc/e\
 e+fOnTP3XM7e+3w8juM4EBERERERERERKVPeb3oHRERERERERERE1kcTWCIiIiIiIiIiUtY0gSUi\
@@ -17361,7 +17357,7 @@ AAAAAJBqLGABAAAAAAAg1VjAAgAAAAAAQKqxgAUAAAAAAIBUYwELAAAAAAAAqcYCFgAAAAAAAFKN\
 BSwAAAAAAACkGgtYAAAAAAAASDUWsAAAAAAAAJBq/x8JecJUiNsqSAAAAABJRU5ErkJggg==\
 "
   frames[19] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAA1iFJREFUeJzs3XeYVNX9P/D39Nm+LL0pKiqWANZgjS1R7L0kYgUboNGoiTH5\
 ajSJ8ZdvjCYkNkCNXVQ0RtRgw67YULAhItI77M5On7m/P/ju4Ox5H7jD7OI48349D8+jZ++9c+fO\
 mXvunr33/fE4juNARERERERERESkRHm/6x0QERERERERERHZEE1giYiIiIiIiIhISdMEloiIiIiI\
@@ -18327,7 +18323,7 @@ qjGBBQAAAAAAgFRjAgsAAAAAAACpxgQWAAAAAAAAUo0JLAAAAAAAAKQaE1gAAAAAAABItf8PFJme\
 QsBPGGkAAAAASUVORK5CYII=\
 "
   frames[20] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAA0zVJREFUeJzs3Xe4FNX9P/D39t3b6V1RUbFEsAa7URMl9hpNxI4NUGOixmii\
 0UTj118skcSogBq7qGjssWIXbERRoyLS26Xctn13fn+Qu7D3vA/Msvfiuvt+PQ/Po+fOzM7Onp0z\
 99yZ98fjOI4DERERERERERGREuX9rndARERERERERERkXTSBJSIiIiIiIiIiJU0TWCIiIiIiIiIi\
@@ -19280,7 +19276,7 @@ AAAg01jAAgAAAAAAQKaxgAUAAAAAAIBMYwELAAAAAAAAmcYCFgAAAAAAADLt/wHl0sLfSYK7aQAA\
 AABJRU5ErkJggg==\
 "
   frames[21] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAA0nxJREFUeJzs3Xe4FNX9P/D39t1b6R1FRcUSwBqsMUqixIK9JGLHBqgxUWM0\
 0WjU+PUXownRqIAaK6KisceC2AUbUdSoiPRebtu+O78/yF3ce94HZtl7cd19v56H59FzZ2ZnZ8/O\
 mXvuzPvjcRzHgYiIiIiIiIiISInyftc7ICIiIiIiIiIisiGawBIRERERERERkZKmCSwRERERERER\
@@ -20229,7 +20225,7 @@ AAAAAACkGgtYAAAAAAAASDUWsAAAAAAAAJBqLGABAAAAAAAg1VjAAgAAAAAAQKqxgAUAAAAAAIBU\
 YwELAAAAAAAAqcYCFgAAAAAAAFKNBSwAAAAAAACk2v8PEWn38K0+1LwAAAAASUVORK5CYII=\
 "
   frames[22] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAA0HxJREFUeJzs3Xe4FNX9P/D39t3b6R1RsRvBGuw1URQ7JpqIHRtgiyVqEo0m\
 Gn9+Y/QriVEBNXZR0aiosWIXbESJRkWkSK+3bN+d3x987+Le8z4wy957WXffr+e5z6PnzszOzp6d\
 M5w78/54HMdxICIiIiIiIiIiUqK8m3oHRERERERERERE1kcTWCIiIiIiIiIiUtI0gSUiIiIiIiIi\
@@ -21169,7 +21165,7 @@ AAAAAAAAUo0JLAAAAAAAAKQaE1gAAAAAAABINSawAAAAAAAAkGpMYAEAAAAAACDVmMACAAAAAABA\
 qjGBBQAAAAAAgFRjAgsAAAAAAACpxgQWAAAAAAAAUu3/A9si1O8ejgmTAAAAAElFTkSuQmCC\
 "
   frames[23] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAA0oNJREFUeJzs3Xm8XPP9P/DX7HfunptVFoIgliYhaIitaEktsQTRij22JKgW\
 VW0pLfX1q1JpFUlQuyAUQa2xE1tIUERk33Nz19nn/P5I7yRzP69PciZzb4yZ1/PxuI8Hn3vOmTNn\
 PnM+J597zuvtcRzHgYiIiIiIiIiISIHyftc7ICIiIiIiIiIisjGawBIRERERERERkYKmCSwRERER\
@@ -22119,7 +22115,7 @@ AAAAAAAAMo0FLAAAAAAAAGQaC1gAAAAAAADINBawAAAAAAAAkGn/H6ighkuNVVKZAAAAAElFTkSu\
 QmCC\
 "
   frames[24] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAA0tlJREFUeJzs3Xe4FNX9P/D39t3b6R1RUbFEUNRgr1GJvWtiV2yINWqMSTQa\
 NX79xRKJFVBjRVSM3VgQu2BX1NgQ6f1yy/bd+f1B7uLe8z4wy96L6+779Tw8j547Mzs7e3bO3HNn\
 3h+P4zgORERERERERERESpT3p94BERERERERERGR1dEEloiIiIiIiIiIlDRNYImIiIiIiIiISEnT\
@@ -23070,7 +23066,7 @@ AAAAACDTmMACAAAAAABApjGBBQAAAAAAgExjAgsAAAAAAACZxgQWAAAAAAAAMo0JLAAAAAAAAGQa\
 E1gAAAAAAADItP8PVqpCiYwVdgkAAAAASUVORK5CYII=\
 "
   frames[25] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAA0hdJREFUeJzs3XeUFFXePvCn8+QZclZUzAEUdTGsumYUxYCu7ooZE2Bawxp2\
 cXXX8Pqu4bfsuiqgrllUjJgVzIIJEXVVRHIOkzp31+8P3mnsuc+FanoG2+7ncw7n6J2q6urq23Vr\
 7lQ9X4/jOA5EREREREREREQKlPfn3gEREREREREREZH10QSWiIiIiIiIiIgUNE1giYiIiIiIiIhI\
@@ -24018,7 +24014,7 @@ AAAyjQksAAAAAAAAZBoTWAAAAAAAAMg0JrAAAAAAAACQaUxgAQAAAAAAINP+PxPwuLQnHzl3AAAA\
 AElFTkSuQmCC\
 "
   frames[26] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAA0sZJREFUeJzs3XeUFFXePvCn8/RkclZUzAHMKJhdFcWMrqiYMQG6uquuuru4\
 uqaf77r6yuqqgLoGVFSMGDCAWTArq6sikjNM7tz1+4N3Gnvuc6GansF2+vmcM+fonarq6urbdYs7\
 Vc/X4ziOAxERERERERERkQLl/aV3QEREREREREREZH00gSUiIiIiIiIiIgVNE1giIiIiIiIiIlLQ\
@@ -24969,7 +24965,7 @@ AAAAAAAAMo0JLAAAAAAAAGQaE1gAAAAAAADINCawAAAAAAAAkGlMYAEAAAAAACDT/j+eoF7fix7v\
 JwAAAABJRU5ErkJggg==\
 "
   frames[27] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAA0QpJREFUeJzs3XecFFW+BfDTefIMOSsqKkZQ1MW4ZsWEAbOYMQGmNaxhF1d3\
 Dc+3hresrgqoa0BFxYg5YBZMqKirIpIzTO7c9f5gp7HnngvV9Ay23ef7+fD56J2q6urq23Vr7lSd\
 n8dxHAciIiIiIiIiIiJ5yvtr74CIiIiIiIiIiMjaaAJLRERERERERETymiawREREREREREQkr2kC\
@@ -25912,7 +25908,7 @@ YwELAAAAAAAASWMBCwAAAAAAAEljAQsAAAAAAABJYwELAAAAAAAASWMBCwAAAAAAAEljAQsAAAAA\
 AABJ+/85doyLU4RZVAAAAABJRU5ErkJggg==\
 "
   frames[28] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAA0pBJREFUeJzs3XeYVNX9P/D39J3tLL0pKiqWANag2DVRIhYUWxQr2AA1GjWW\
 RKNR49dfjCYkRgXUqFhQsZdYELtgjWBHpEhdytbpc39/bHZ09rwP3GF2cdx5v55nn0fP3nvnzp0z\
 91zO3vv+eBzHcSAiIiIiIiIiIlKgvD/2DoiIiIiIiIiIiKyPJrBERERERERERKSgaQJLRERERERE\
@@ -26862,7 +26858,7 @@ MYEFAAAAAACATGMCCwAAAAAAAJnGBBYAAAAAAAAyjQksAAAAAAAAZBoTWAAAAAAAAMi0/w/mgdaK\
 m+t1PwAAAABJRU5ErkJggg==\
 "
   frames[29] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAA0ZdJREFUeJzs3XeYVNX9P/D39O27LL0pKiqWCNagYIkaFcWOiRqxYwNssURN\
 gtHE8jMx+g2xAmrsoqJRsWABu2BDwYaIFOlt6/S5vz/IDs6e94E7zC6OM+/X8+zz6Nl779y5c+ae\
 y9l73x+P4zgORERERERERERE8pT3p94BERERERERERGRDdEEloiIiIiIiIiI5DVNYImIiIiIiIiI\
@@ -27807,7 +27803,7 @@ AAAAAHKNBSwAAAAAAADkGgtYAAAAAAAAyDUWsAAAAAAAAJBrLGABAAAAAAAg11jAAgAAAAAAQK6x\
 gAUAAAAAAIBcYwELAAAAAAAAucYCFgAAAAAAAHLt/wOE09iFcNCvegAAAABJRU5ErkJggg==\
 "
   frames[30] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAzqxJREFUeJzs3XeYVNX9P/D39O279K6oqNgARQ2W2Bs27GLBjg2wlxCTYNRo\
 /PqLJRKNCpZYUFEx9q7YBRsKiigiRXrZvtPv74/Njsye94E7zC6OM+/X8/A8erj3zuzMZ+65nL3z\
 /ngcx3EgIiIiIiIiIiKSo7y/9hMQERERERERERFZFy1giYiIiIiIiIhITtMCloiIiIiIiIiI5DQt\
@@ -28739,7 +28735,7 @@ jQUsAAAAAAAAJI0FLAAAAAAAACSNBSwAAAAAAAAkjQUsAAAAAAAAJI0FLAAAAAAAACSNBSwAAAAA\
 AAAkjQUsAAAAAAAAJI0FLAAAAAAAACTt/wMSFGVuvjL3DAAAAABJRU5ErkJggg==\
 "
   frames[31] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAzwdJREFUeJzs3XeUFFX+NvCn8+QZclZUVEyAoi6GNbIqJswZMybAtCbW3cXV\
 Vdefr2lljWBYI6JixBwwCwZQUAyIZIkDkzp3vX/MTkvPfS5U0zPYTj+fc+YcvVNVXV19u25xp+r5\
 ehzHcSAiIiIiIiIiIpKnvL/1DoiIiIiIiIiIiKyLJrBERERERERERCSvaQJLRERERERERETymiaw\
@@ -29673,7 +29669,7 @@ AAAAAAAAkDQmsAAAAAAAAJA0JrAAAAAAAACQNCawAAAAAAAAkDQmsAAAAAAAAJA0JrAAAAAAAACQ\
 tP8P6/F1UicsZHUAAAAASUVORK5CYII=\
 "
   frames[32] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAz69JREFUeJzs3XeUFFX+NvCn8+QZhpwUFRXDAoq6KK45YcKAirtixgSY47q7\
 uLrq+vNdw8oaAXUNqKgYUdeIWTCAgrooIlkyTOxc7x+z09JznwvV9Ay23c/nnDlH71RVV1ffrlvc\
 qXq+HsdxHIiIiIiIiIiIiOQo7y+9AyIiIiIiIiIiIhuiCSwREREREREREclpmsASEREREREREZGc\
@@ -30610,7 +30606,7 @@ AAAAgKQxgQUAAAAAAICkMYEFAAAAAACApDGBBQAAAAAAgKQxgQUAAAAAAICkMYEFAAAAAACApP1/\
 rlsqEv+xyZAAAAAASUVORK5CYII=\
 "
   frames[33] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAzZRJREFUeJzs3XeUFFX+NvCn8+QZhiASFBUVE6CoizkHFEWMGDBjAsxhWXcX\
 0+r6813DyuqqYFgDKiquOStmAQMKiigiQZDM5M71/jE7rT33uVBNz2Db/XzOmXP0TlV1dfXtusWd\
 qufrcRzHgYiIiIiIiIiISI7y/tY7ICIiIiIiIiIisjaawBIRERERERERkZymCSwREREREREREclp\
@@ -31537,7 +31533,7 @@ AAAAAJLGBBYAAAAAAACSxgQWAAAAAAAAksYEFgAAAAAAAJLGBBYAAAAAAACSxgQWAAAAAAAAksYE\
 FgAAAAAAAJLGBBYAAAAAAACSxgQWAAAAAAAAkvb/AbkVUPUdAVdtAAAAAElFTkSuQmCC\
 "
   frames[34] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAzutJREFUeJzs3XeUFFX+NvCn8+QZokhQVFQMCygGFMwRBREjBsyYAHNY1t3F\
 Na4/3zWss7oqGNaAiIprzopZMKGgiCIiCJJhYud6/5id1p77XKimZ7Dtfj7nzDl6p6q6uvp23eJO\
 1fP1OI7jQEREREREREREJEd5f+sdEBERERERERERWRdNYImIiIiIiIiISE7TBJaIiIiIiIiIiOQ0\
@@ -32470,7 +32466,7 @@ AAAAAACApDGBBQAAAAAAgKQxgQUAAAAAAICkMYEFAAAAAACApDGBBQAAAAAAgKQxgQUAAAAAAICk\
 MYEFAAAAAACApDGBBQAAAAAAgKQxgQUAAAAAAICk/X/UBPi7pBweQQAAAABJRU5ErkJggg==\
 "
   frames[35] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAzhdJREFUeJzs3XeUFFX+NvCn8+QZokpQVFQwAIq6GNacMGHALK4BjGBOrOsP\
 wyrr665hnTWCYY2IihFzQMUEBhQUUUSCIBkmdq73j9lp7LnPhWp6Btvu53POnKN3qqqrq2/XLe5U\
 PV+P4zgOREREREREREREcpT3994BERERERERERGRtdEEloiIiIiIiIiI5DRNYImIiIiIiIiISE7T\
@@ -33400,7 +33396,7 @@ AAAAACSNCSwAAAAAAAAkjQksAAAAAAAAJI0JLAAAAAAAACSNCSwAAAAAAAAk7f8D3Uu9bbYlu3cA\
 AAAASUVORK5CYII=\
 "
   frames[36] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAzXdJREFUeJzs3XeUFFX+NvCn8+QZokpQVFREBRQDCuaIohhQMWAEE2AOi+4u\
 rtmf7xpWVlcFwxoQUTHnBGYwoaAYEAmKIHFi53r/mJ2WnvtcqKZnsO1+PufMOXqnqrq6+nbd4k7V\
 8/U4juNAREREREREREQkR3n/6B0QERERERERERFZG01giYiIiIiIiIhITtMEloiIiIiIiIiI5DRN\
@@ -34327,7 +34323,7 @@ AAAAAACQNCawAAAAAAAAkDQmsAAAAAAAAJA0JrAAAAAAAACQNCawAAAAAAAAkDQmsAAAAAAAAJC0\
 /w/77315k/G8nQAAAABJRU5ErkJggg==\
 "
   frames[37] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAyr5JREFUeJzs3XeUFFX+NvCn8+QZhqASFBUVE6AYMK5ZUBQxYsAMBsAclnVd\
 TKvr+q5hZXVVQF0DIioq5oxZQAUFxYBIMICkydOx3j/mNy0997lQTc9g0/18zplz9E5VdXX17brF\
 narn63Ecx4GIiIiIiIiIiEiW8v7ROyAiIiIiIiIiIrI2msASEREREREREZGspgksERERERERERHJ\
@@ -35242,7 +35238,7 @@ AAAAwKApYAEAAAAwaApYAAAAAAyaAhYAAAAAg6aABQAAAMCgKWABAAAAMGj/H45MFSmV4R2cAAAA\
 AElFTkSuQmCC\
 "
   frames[38] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAzAFJREFUeJzs3XeUFFX+NvCn8+QZokpQFERQF1DURTGLgTUgimkV1wBG0DXL\
 6i6GVdaf7xrWWSOgrllUXF1RVwyoGAAVFBADIkEQJU7uWO8fs9PSc58L1fQMNt3P55w5R+9UVVdX\
 365b3Kl6vh7HcRyIiIiIiIiIiIhkKe+vvQMiIiIiIiIiIiIbowksERERERERERHJaprAEhERERER\
@@ -36162,7 +36158,7 @@ AGDQTGABAAAAMGgmsAAAAAAYNBNYAAAAAAyaCSwAAAAABs0EFgAAAACDZgILAAAAgEEzgQUAAADA\
 oJnAAgAAAGDQTGABAAAAMGgmsAAAAAAYtP8PSX3NbWU9DZgAAAAASUVORK5CYII=\
 "
   frames[39] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAyjxJREFUeJzs3XeUFFX+NvCn8+QZokpQVFRQF1DURTGLAmtAFOOKawAjrDmw\
 rj8Mq6zru4Z1VlcF1DUiKroqJgyoGIBVUVAUEQmCKHFyx3r/mJ2WnvtcqKZnsOl+PufMOXqnqrq6\
 +nbd4k7V8/U4juNAREREREREREQkS3l/7R0QERERERERERHZGE1giYiIiIiIiIhIVtMEloiIiIiI\
@@ -37074,7 +37070,7 @@ YAEAAAAwaApYAAAAAAyaAhYAAAAAg6aABQAAAMCgKWABAAAAMGgKWAAAAAAMmgIWAAAAAIOmgAUA\
 AADAoClgAQAAADBoClgAAAAADJoCFgAAAACD9v8Bn8XDSqZm48AAAAAASUVORK5CYII=\
 "
   frames[40] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAx/xJREFUeJzs3XeYXGX9/vF7yrZsdlMoUhJq6EgRUBBEBBSQLqCgoCJVQsSC\
 IJYfKAr69WtBoggkFOlEitKlNxWCFAFFWoBQDATSd3fq+f2x3wzMnvsJZzK7Ydh5v65rrwuePefM\
 mTPPnOfk2XPuTyqKokgAAAAAAABAg0q/1zsAAAAAAAAALAkTWAAAAAAAAGhoTGABAAAAAACgoTGB\
@@ -37976,7 +37972,7 @@ AAAAvaaABQAAAECvKWABAAAA0GsKWAAAAAD0mgIWAAAAAL2mgAUAAABArylgAQAAANBrClgAAAAA\
 WAAAAAD0mgIWAAAAAL2mgAUAAABAr/1/GgV2e7f1Z+EAAAAASUVORK5CYII=\
 "
   frames[41] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAyBhJREFUeJzs3XecHVX9//H3Lduzm0KRklAE6VKkCIKIgALSBRQURDoSIiJN\
 LD9QFFS+FiSKQEKRJiBFERBBOlKCFCkiLUBooaXv7q3z+yPmwt15nzA3dzdc9r6ej8c+HnB2Zu7c\
 uefOmZydeX9SURRFAgAAAAAAABpU+oPeAQAAAAAAAGBhmMACAAAAAABAQ2MCCwAAAAAAAA2NCSwA\
@@ -38879,7 +38875,7 @@ AMCgKWABAAAAMGgKWAAAAAAMmgIWAAAAAIOmgAUAAADAoClgAQAAADBoClgAAAAADNr/Bzv9FWPf\
 5BmfAAAAAElFTkSuQmCC\
 "
   frames[42] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAx8NJREFUeJzs3XecHVX9//H3LduzmxCKlIQaOtJREAQEpEhvCgooUiUEFBHE\
 8gVFwfITRKIIJBRBWqQoXXoTIVQBQVqAUAwESNlk99b5/RFz4e68T5ibuxsuu6/n47GPB5ydmTt3\
 7rlzJmdn3p9UFEWRAAAAAAAAgAaV/rh3AAAAAAAAAFgQJrAAAAAAAADQ0JjAAgAAAAAAQENjAgsA\
@@ -39780,7 +39776,7 @@ vaaABQAAAECvKWABAAAA0GsKWAAAAAD0mgIWAAAAAL2mgAUAAABArylgAQAAANBrClgAAAAA9JoC\
 FgAAAAC9poAFAAAAQK8pYAEAAADQa/8f96NWpNJXwJgAAAAASUVORK5CYII=\
 "
   frames[43] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAxwtJREFUeJzs3XecHVX9//H3LVuzuwmhSEmooSMdBEFEQAHpTUHpXUJAulh+\
 QVFQ+YogUQQSinQiRenSuxCUjkgLEFogEJJskt29ZX5/xFy4O++TzM3dDZe9r6ePfTzk7MzcuXPP\
 nTM5O/P+pKIoigQAAAAAAADUqPTnvQMAAAAAAADAvDCBBQAAAAAAgJrGBBYAAAAAAABqGhNYAAAA\
@@ -40678,7 +40674,7 @@ AAAwaApYAAAAAAyaAhYAAAAAg6aABQAAAMCgKWABAAAAMGgKWAAAAAAMmgIWAAAAAIOmgAUAAADA\
 oClgAQAAADBo/x/mw5xaXGfaoAAAAABJRU5ErkJggg==\
 "
   frames[44] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAw55JREFUeJzs3XecHHX9x/H3luu5S+gQEmroCKEpTURAeu8gRYQAEiJSBBH8\
 gaKgP38qSCxAQpFOaEoXpCO9SZUWIBRDDal32+b3R8zC3ry/YTZ7F5bb19PHPR7mezOzs7Pfne/w\
 vZn3JxVFUSQAAAAAAACgTqW/6B0AAAAAAAAA5oYJLAAAAAAAANQ1JrAAAAAAAABQ15jAAgAAAAAA\
@@ -41561,7 +41557,7 @@ AAAAAI2mgAUAAABAoylgAQAAANBoClgAAAAANJoCFgAAAACNpoAFAAAAQKP9f+gB+cM4R+rrAAAA\
 AElFTkSuQmCC\
 "
   frames[45] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAxZpJREFUeJzs3XecXFX9//H3lK3JbkIoAkkoEjpCMIA0EQEFpFdBKVICSAiI\
 NFH5gaKg8lVAoggkFEEwhCYd6b2EKkWkBQgtSEvf3Sn398eagdn7PsmdzG4Ydl5PHvt4kLP33rkz\
 c+aeu2fufX9SURRFAgAAAAAAAGpU+vPeAQAAAAAAAGB+mMACAAAAAABATWMCCwAAAAAAADWNCSwA\
@@ -42453,7 +42449,7 @@ mgIWAAAAAI2mgAUAAABAoylgAQAAANBoClgAAAAANJoCFgAAAACN9n+wef/OzNf+SAAAAABJRU5E\
 rkJggg==\
 "
   frames[46] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAxPlJREFUeJzs3Xe8HFX9//H3lttLAqGmUAPShNCkCghIDb0ISJESQEKkCmID\
 BdvXnwWJIpAgCNIiRTqCdKQ3qdIhtNBJu2XL/P6IWdg77xNms/eG5e7r6eM+HnLuzOzs7Nk5k3Nn\
 3p9UFEWRAAAAAAAAgBqV/rx3AAAAAAAAAJgXJrAAAAAAAABQ05jAAgAAAAAAQE1jAgsAAAAAAAA1\
@@ -43342,7 +43338,7 @@ ADSaAhYAAAAAjaaABQAAAECjKWABAAAA0GgKWAAAAAA0mgIWAAAAAI2mgAUAAABAo/1/FMqaj7Fb\
 R1wAAAAASUVORK5CYII=\
 "
   frames[47] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAwm1JREFUeJzs3Xe8HFX9//H3lttzb0JvCUUiXQgdAZEmvXeQIiW00EEQxR8o\
 CipfFSQWIKFIJzSlF+lICVWqtAChhRrSbtkyvz9iFvbO+4TZ7L1huft6fh/3+5BzZ2ZnZ8/OmZw7\
 8/6koiiKBAAAAAAAANSo9Ne9AwAAAAAAAMDsMIEFAAAAAACAmsYEFgAAAAAAAGoaE1gAAAAAAACo\
@@ -44219,7 +44215,7 @@ AAAAoGoKWAAAAABUTQELAAAAgKopYAEAAABQNQUsAAAAAKqmgAUAAABA1RSwAAAAAKiaAhYAAAAA\
 VVPAAgAAAKBqClgAAAAAVE0BCwAAAICq/X8GHjRuoJMhLwAAAABJRU5ErkJggg==\
 "
   frames[48] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAw/ZJREFUeJzs3XecHVX9//H3Lduzm1ClJNQAoQhBimAQEFBAuoCAUqQEkBBQ\
 QRDLFxQFy8+CRBFIKIK00KQjvZdQhQDSQgjFQGipu3vL/P6Ie+HuvE8yN3c3XPa+nj728ZCzM3Pn\
 zj13zuTszPuTiqIoEgAAAAAAAFCj0p/2DgAAAAAAAAALwgQWAAAAAAAAahoTWAAAAAAAAKhpTGAB\
@@ -45103,7 +45099,7 @@ LAAAAACqpoAFAAAAQNUUsAAAAAComgIWAAAAAFVTwAIAAACgagpYAAAAAFRNAQsAAACAqilgAQAA\
 AFA1BSwAAAAAqqaABQAAAEDV/h/DTovmt7mXDgAAAABJRU5ErkJggg==\
 "
   frames[49] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAwlpJREFUeJzs3Xe8HFX9//H3lluTm0CASEmoAUKRDoIUEZAiXUBBKdKREJAu\
 ll8QFCxfKRJFIKFIJ1Tp0nsJvfcAoYVOcpNbtszvj5iFvfM+yWz23rDcfT193MdDzp2ZnZ09O2dy\
 7sz7k4qiKBIAAAAAAABQo9Jf9w4AAAAAAAAAs8MEFgAAAAAAAGoaE1gAAAAAAACoaUxgAQAAAAAA\
@@ -45980,7 +45976,7 @@ VVPAAgAAAKBqClgAAAAAVE0BCwAAAICqKWABAAAAUDUFLAAAAACqpoAFAAAAQNUUsAAAAAComgIW\
 AAAAAFX7/xyphV3BRncXAAAAAElFTkSuQmCC\
 "
   frames[50] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAv5FJREFUeJzs3XecXGXd/vFrytbsbkIvSaihIwQCCIJIkyK9KSi9t4giRVSe\
 gChYflIeowgklAekhSoQQHpHeiiCdAgtdNK2TDm/P2IGZs91J2cyu2HY+bx97esl9542Z+4598m9\
 Z65vKoqiSAAAAAAAAECNSn/VBwAAAAAAAADMCRNYAAAAAAAAqGlMYAEAAAAAAKCmMYEFAAAAAACA\
@@ -46844,7 +46840,7 @@ BQAAAEDVFLAAAAAAqJoCFgAAAABVU8ACAAAAoGoKWAAAAABUTQELAAAAgKopYAEAAABQNQUsAAAA\
 AKqmgAUAAABA1RSwAAAAAKiaAhYAAAAAVVPAAgAAAKBq/wtBL8WKSX655gAAAABJRU5ErkJggg==\
 "
   frames[51] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAv4pJREFUeJzs3XecXFX9//H3lK3JJqFDCjV0hEAAaSICCkivAlKklxAQpIjA\
 DxAFla+AGkUgoUgnVOm919AiVVqA0EIndXen3N8fMUNm7/uEO5ndMOy8nj7WBzl77507M2fuuXvm\
 3vcnFUVRJAAAAAAAAKBGpb/tHQAAAAAAAADmhAksAAAAAAAA1DQmsAAAAAAAAFDTmMACAAAAAABA\
@@ -47708,7 +47704,7 @@ LAAAAACqpoAFAAAAQNUUsAAAAAComgIWAAAAAFVTwAIAAACgagpYAAAAAFRNAQsAAACAqilgAQAA\
 AFA1BSwAAAAAqqaABQAAAEDVFLAAAAAAqNr/AXs9lYrnc6Y/AAAAAElFTkSuQmCC\
 "
   frames[52] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAv4FJREFUeJzs3XecXFX9//H3tN3sJpuEKoSEIqEjBAJIExFQQEC6ghKQEhBC\
 QJAiKl9AFFR+KmoUgSSANCFU6YI0KUKoAoK0EEILndTdnXJ/f6w7MHvfJ7mT2Q3Dzuv5fez3IWdv\
 m5kz99ycvff9SUVRFAkAAAAAAACoU+lP+wAAAAAAAACABWECCwAAAAAAAHWNCSwAAAAAAADUNSaw\
@@ -48572,7 +48568,7 @@ AAAAgKopYAEAAABQNQUsAAAAAKqmgAUAAABA1RSwAAAAAKiaAhYAAAAAVVPAAgAAAKBqClgAAAAA\
 VE0BCwAAAICqKWABAAAAULX/B18Sini/DEB4AAAAAElFTkSuQmCC\
 "
   frames[53] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAvudJREFUeJzs3Xd4HNXd9vF7iyRLtmzTwYVqOgGDgdBCaKGE3hIg9F7sEAgl\
 hPAYQgJJeENJnBDApoSOAUMA03sNJWB6aAZMMx1XSVvm/cPxwmruY896JbNov5/n0nOFo5nZ2dmz\
 c8ZHM/cvFUVRJAAAAAAAAKBGpb/tHQAAAAAAAADmhAksAAAAAAAA1DQmsAAAAAAAAFDTmMACAAAA\
@@ -49433,7 +49429,7 @@ sAAAAAComgIWAAAAAFVTwAIAAACgagpYAAAAAFRNAQsAAACAqilgAQAAAFA1BSwAAAAAqqaABQAA\
 AEDVFLAAAAAAqJoCFgAAAABVU8ACAAAAoGoKWAAAAABU7f8B1FHf9gwf/SIAAAAASUVORK5CYII=\
 "
   frames[54] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAvZVJREFUeJzs3XecFdX9//H3bdtgF8ROsWI3imJvMWosEcUuGrFjA+wltqAx\
 0ST+YvmGxKiAGrvYYu+9go2IihURG3apu3vL/P7Y7NW78zlwhtnF672v5/ex30c8OzN37txz5wxn\
 Z96fRBAEgQAAAAAAAIAylfypdwAAAAAAAACYHyawAAAAAAAAUNaYwAIAAAAAAEBZYwILAAAAAAAA\
@@ -50289,7 +50285,7 @@ KWABAAAAUDUFLAAAAACqpoAFAAAAQNUUsAAAAAComgIWAAAAAFX7f52SVZLkN37dAAAAAElFTkSu\
 QmCC\
 "
   frames[55] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAup5JREFUeJzs3XecFdX9//H3bdtgF+xKsWI3gqLGFmOLJRYs2HvBCjEaS4zx\
 i8aoSfzF8g3RqID6tYuKRsXeRY3YiKDGhogNu7Qtt8zvj81euTufA2eYXbzc+3p+H/t9xNkzc+fO\
 PXfOcHbm/UkEQRAIAAAAAAAAKFPJH3sHAAAAAAAAgAVhAgsAAAAAAABljQksAAAAAAAAlDUmsAAA\
@@ -51131,7 +51127,7 @@ poAFAAAAQNcUsAAAAADomgIWAAAAAF1TwAIAAACgawpYAAAAAHRNAQsAAACArilgAQAAANA1BSwA\
 AAAAuqaABQAAAEDXFLAAAAAA6Nr/A9J4MUm8KUcDAAAAAElFTkSuQmCC\
 "
   frames[56] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAvLtJREFUeJzs3XecFFXa9vGrw8wwAzNgQiUYMbuCYk5rFteAAXMOGMG0htVd\
 Hwyrruu7hl1WVwXDmkXFiDmgYsKEglkRMGGWODMd6v1jdlp66j5wiprBtvv3fT7zfNYzVdXV1afr\
 FGeqrjsRBEEgAAAAAAAAoEQlf+0dAAAAAAAAAOaHCSwAAAAAAACUNCawAAAAAAAAUNKYwAIAAAAA\
@@ -51983,7 +51979,7 @@ UDUFLAAAAACqpoAFAAAAQNUUsAAAAAComgIWAAAAAFVTwAIAAACgagpYAAAAAFTt/wDLH2ctC22z\
 /wAAAABJRU5ErkJggg==\
 "
   frames[57] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAuklJREFUeJzs3XecFdX9//H3bVuAXbArxYqKaATF3mJLxIgdFQsaVGyALZYY\
 NWg0msRfLN+QGBVQYxdb7L1XsBExdhGwYZe6u7fM748NV+/O58AZZhcv976e38d+H+HszNy5c8+d\
 M56deX8SQRAEAgAAAAAAAMpU8qfeAQAAAAAAAGBhmMACAAAAAABAWWMCCwAAAAAAAGWNCSwAAAAA\
@@ -52824,7 +52820,7 @@ AEDVFLAAAAAAqJoCFgAAAABVU8ACAAAAoGoKWAAAAABUTQELAAAAgKopYAEAAABQtf8DGOdTKGp8\
 InAAAAAASUVORK5CYII=\
 "
   frames[58] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAux1JREFUeJzs3XecFdX9//H3LduAXbChUqyoWCIoalSMsUUlFizYWyxYwRZL\
 jPGLxqhJ/MWSkBgVUKOxoWLF3sWGDQW7ImBDUZS6u7fM74/NXr07nwNnmF283Pt6fh98H/HszNy5\
 c8+dM3t25v1JBEEQCAAAAAAAAChRyZ96BwAAAAAAAIBFYQILAAAAAAAAJY0JLAAAAAAAAJQ0JrAA\
@@ -53668,7 +53664,7 @@ FgAAAABdU8ACAAAAoGsKWAAAAAB0TQELAAAAgK4pYAEAAADQNQUsAAAAALqmgAUAAABA1xSwAAAA\
 AOiaAhYAAAAAXVPAAgAAAKBrClgAAAAAdE0BCwAAAICu/T+Y6di/rFzp0QAAAABJRU5ErkJggg==\
 "
   frames[59] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAucZJREFUeJzs3XecFdX9//H3LbvLLuyCqKgUKyqoERQ1thhbFGLBgjV2xQqx\
 xBJj/GJJNIm/WBISowJqNDZUNCr2LjawoFhREbCAXfruLfP7Y7NX7s7nwBlmFy/3vp7fx34f8ezM\
 3Llzz50znJ15fxJBEAQCAAAAAAAASlTyx94BAAAAAAAAYEmYwAIAAAAAAEBJYwILAAAAAAAAJY0J\
@@ -54506,7 +54502,7 @@ AAAAgKopYAEAAABQNQUsAAAAAKqmgAUAAABA1RSwAAAAAKiaAhYAAAAAVVPAAgAAAKBqClgAAAAA\
 VE0BCwAAAICqKWABAAAAUDUFLAAAAACqpoAFAAAAQNX+D8TgXzzaW7K5AAAAAElFTkSuQmCC\
 "
   frames[60] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAtuxJREFUeJzs3XecVNX9//H3tC3AAgKiUqyoWAIo9t5LxN6wYAcLYI9GY4KJ\
 UWP8JcZAYhRB/WpEJEpijV3sijXW2AEbdum7U+7vj82Ozt7PgXO5uzjMvJ7fx34f8extM3PmnsvZ\
 e9+fRBAEgQAAAAAAAIAylfyxDwAAAAAAAABYHCawAAAAAAAAUNaYwAIAAAAAAEBZYwILAAAAAAAA\
@@ -55332,7 +55328,7 @@ AAAAQNcUsAAAAADomgIWAAAAAF1TwAIAAACgawpYAAAAAHRNAQsAAACArv0Po+c1xelNfckAAAAA\
 SUVORK5CYII=\
 "
   frames[61] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAtpBJREFUeJzs3XecFdX9//H3LbvLAksTUSlWVEQD2Hs3logFKxbs2ABbLDEx\
 wcSWxF8sCYlRAfVrQSSKsRsrdsVGFMWKgA279N1b5vfHhit353PgDLMXr/e+nt/Hfh/x7MzcuXPP\
 nTOcnXl/EkEQBAIAAAAAAADKVPLH3gEAAAAAAABgaZjAAgAAAAAAQFljAgsAAAAAAABljQksAAAA\
@@ -56156,7 +56152,7 @@ AABgaApYAAAAAAxNAQsAAACAoSlgAQAAADA0BSwAAAAAhqaABQAAAMDQFLAAAAAAGJoCFgAAAABD\
 U8ACAAAAYGh/AaH3OsWmc7DxAAAAAElFTkSuQmCC\
 "
   frames[62] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAt7dJREFUeJzs3XecFdX9//H3bbssHRWiFCt2A9hRsRtLRLGgwYIdG2CLJZYE\
 o4nGr79YEhKjAmosqNh7V6wRbESNxoaAiig2+u4t8/tjs1fuzufAGWYXL/e+nt/Hfh/x7MzcuXPP\
 nTOcnXl/EkEQBAIAAAAAAADKVPKn3gEAAAAAAABgSZjAAgAAAAAAQFljAgsAAAAAAABljQksAAAA\
@@ -56985,7 +56981,7 @@ wAIAAACgaQpYAAAAADRNAQsAAACApilgAQAAANA0BSwAAAAAmqaABQAAAEDTFLAAAAAAaJoCFgAA\
 AABNU8ACAAAAoGkKWAAAAAA07d+H+BVQNe+oDgAAAABJRU5ErkJggg==\
 "
   frames[63] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAtzlJREFUeJzs3XecVNX9//H3lN2l7VJEVIoVFUsAxd5bLBELVizYsQG2WGLU\
 YKLRJP6iMZIYFVC/FkSiGHtX7IKNCHZEQEUURem7OzP398dmR2bv58C53F0cZ17P72O/j3j23jt3\
 7py553L23vcnEQRBIAAAAAAAAKBIJX/qHQAAAAAAAACWhwksAAAAAAAAFDUmsAAAAAAAAFDUmMAC\
@@ -57812,7 +57808,7 @@ dE0BCwAAAICuKWABAAAA0DUFLAAAAAC6poAFAAAAQNcUsAAAAADomgIWAAAAAF1TwAIAAACgawpY\
 AAAAAHTtfwFNzYxidO7nFAAAAABJRU5ErkJggg==\
 "
   frames[64] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAtV1JREFUeJzs3XecVNXdx/HvlN2l7QJSVIoVFdEg9oJdYwUrKhrRWFAjYIsl\
 lgQTWxITjZHEqID6WBCxxW40dqOCNaJiRcWGYqPvTrnPH2RHZu/vwLncHRhnPu/ntc8r3j23zMyZ\
 ey5n7/3+EkEQBAIAAAAAAADKVHJFHwAAAAAAAACwJExgAQAAAAAAoKwxgQUAAAAAAICyxgQWAAAA\
@@ -58631,7 +58627,7 @@ CwAAAIDSFLAAAAAAKE0BCwAAAIDSFLAAAAAAKE0BCwAAAIDSFLAAAAAAKO1/V2HRROhckDwAAAAA\
 SUVORK5CYII=\
 "
   frames[65] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAtGRJREFUeJzs3XecVNX9//H3lN2l7QIWohQrKqIRFHtvsUSwooK9YQWNxhJb\
 sERN4i+WhMSogPq1IipW7AUVGzYUI7EhoCJ26bs7M/f3B9mR2fs5cC53Zx1nXs88Ng+5e9vcOXPP\
 3TP3vj+JIAgCAQAAAAAAACUq+XPvAAAAAAAAALA0DGABAAAAAACgpDGABQAAAAAAgJLGABYAAAAA\
@@ -59445,7 +59441,7 @@ AAAAaE0BCwAAAIDWFLAAAAAAaE0BCwAAAIDWFLAAAAAAaE0BCwAAAIDWFLAAAAAAaE0BCwAAAIDW\
 FLAAAAAAaE0BCwAAAIDWFLAAAAAAaO1/a4B1/5s57TAAAAAASUVORK5CYII=\
 "
   frames[66] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAsblJREFUeJzs3XecFPX9x/H3lruj3QFSVIoVDaIiaqzYNVbsDQt2bIAtRmM0\
 wcSWxCTGQGKUov40KmKJPZao2AVrRCU2BGzYpd/d7s7vj8ut7M3nC99hbs9l9/X8Pe73iHPfmZ2d\
 /e58h+/NvD+JIAgCAQAAAAAAACUq+UPvAAAAAAAAALAsTGABAAAAAACgpDGBBQAAAAAAgJLGBBYA\
@@ -60247,7 +60243,7 @@ LAAAAABKE2ABAAAAUJoACwAAAIDSBFgAAAAAlCbAAgAAAKA0ARYAAAAApQmwAAAAAChNgAUAAABA\
 aQIsAAAAAEoTYAEAAABQmgALAAAAgNL+BxBcc+vqJ/GSAAAAAElFTkSuQmCC\
 "
   frames[67] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAspNJREFUeJzs3XecVNX9//H3lN2l7QJSVIoVDaJB1Fixa6zYUdGIHRtgi9FY\
 EkxsSfzGkpAYFVB/FkTsvUXFEhWsERULIqAidum7OzP39wdhZPZ+DpzL3VmGmdfz+9jvI569be6c\
 uedy9s77kwiCIBAAAAAAAABQopIr+wAAAAAAAACAZWECCwAAAAAAACWNCSwAAAAAAACUNCawAAAA\
@@ -61053,7 +61049,7 @@ AABAaQIsAAAAAEoTYAEAAABQmgALAAAAgNIEWAAAAACUJsACAAAAoDQBFgAAAAClCbAAAAAAKE2A\
 BQAAAEBpAiwAAAAASvsvO/Jf1UQLlfgAAAAASUVORK5CYII=\
 "
   frames[68] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAsthJREFUeJzs3XecVNX9//H3lN2l7VJUohQrKqIBFDt2jUrEgqJiwQpWsJeY\
 mKAxahJ/sSQkRgXUr0ZEVKzYsKCiRmwoKFakKKLY6Ls7M/f3x2ZHZudz4FzuzjrsvJ7fx34f8e65\
 d+7cOXPP5ey9708sCIJAAAAAAAAAQJGK/9w7AAAAAAAAAKwKE1gAAAAAAAAoakxgAQAAAAAAoKgx\
@@ -61860,7 +61856,7 @@ ShNgAQAAAFCaAAsAAACA0gRYAAAAAJQmwAIAAACgNAEWAAAAAKUJsAAAAAAoTYAFAAAAQGkCLAAA\
 AABKE2ABAAAAUJoACwAAAIDSBFgAAAAAlPY/+DGm3honlUwAAAAASUVORK5CYII=\
 "
   frames[69] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAsglJREFUeJzs3XecFFXa9vGrw8yQZggqSjKiYgTFjFlXcQUxoKJrVoxgDmvY\
 xbDq7uO767qw6ypBXV0VUTHnhFkwoaAYETBhljwz3V3vH7PT2tP3gVPU9NB0/77PZ57PWnOqurr6\
 dJ3iTNV1x4IgCAQAAAAAAAAUqfiK3gEAAAAAAABgaZjAAgAAAAAAQFFjAgsAAAAAAABFjQksAAAA\
@@ -62664,7 +62660,7 @@ KE2ABQAAAEBpAiwAAAAAShNgAQAAAFCaAAsAAACA0gRYAAAAAJQmwAIAAACgtP8CmlRaj/e8CG0A\
 AAAASUVORK5CYII=\
 "
   frames[70] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAArZdJREFUeJzs3XecVNXdx/HvtF3aLoiCSrGiIhpFsWPXKAr2Bip2bGA3Gkse\
 TEw0xhRNSIwKqLEitthbVFSiEWvELiKCBbuAwO7OzH3+2OzI7PwOnLt3Zh1mPu/nxfOKd88tM3Pm\
 nrtn7/3+YkEQBAIAAAAAAADKVPzHPgAAAAAAAABgaZjAAgAAAAAAQFljAgsAAAAAAABljQksAAAA\
@@ -63448,7 +63444,7 @@ BQAAAEA0AQsAAACAaAIWAAAAANEELAAAAACiCVgAAAAARBOwAAAAAIgmYAEAAAAQ7Ssq9JEXgN+7\
 LQAAAABJRU5ErkJggg==\
 "
   frames[71] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAArVZJREFUeJzs3XecVNX9//H3lN2l7YIoqBQrKpYAigVrbIkYC2JFIxoLNsBe\
 YjRfNCaaxF+iJiRGBdRYERVj74qKDRsRu4gUC4oNENjdmbm/PzY7OjufA+funVmGmdczj81D7t42\
 d87cc/fMve9PLAiCQAAAAAAAAECJiq/sHQAAAAAAAACWhwEsAAAAAAAAlDQGsAAAAAAAAFDSGMAC\
@@ -64231,7 +64227,7 @@ AAAAANEELAAAAACiCVgAAAAARBOwAAAAAIgmYAEAAAAQTcACAAAAINqfHweQv0BcllkAAAAASUVO\
 RK5CYII=\
 "
   frames[72] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAArelJREFUeJzs3XecVNX9//H3tF3aLlhApVhRsURQLFhjjRgLdkFFY8EG2GKJ\
 JcHERGP8xZIQjQqoXwsi9t4VFQvYUOwiAjYUGyCwuzNzf39sdnR2PgfO3buzjDOvZx6bh9y9be6c\
 uefumXvfn1gQBIEAAAAAAACAEhVf3jsAAAAAAAAALA0DWAAAAAAAAChpDGABAAAAAACgpDGABQAA\
@@ -65016,7 +65012,7 @@ JsACAAAAIJoACwAAAIBoAiwAAAAAogmwAAAAAIgmwAIAAAAgmgALAAAAgGgCLAAAAACiCbAAAAAA\
 iCbAAgAAACCaAAsAAACAaH8CSRqJhUxVHxEAAAAASUVORK5CYII=\
 "
   frames[73] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAArZ9JREFUeJzs3XecVNX9//H3lN2l7YIoqBQrKpYAigVrbIlYESsasWMD7CVG\
 88WSaBJ/sUSiUQE1FkRU7L2hYgEbEdSoiBQLiqKAwJaZ+/tjsyOz8zlw7t6dZZh5Pb+P/T7i3XPL\
 zJy553L23vcnFgRBIAAAAAAAAKBAxVf1AQAAAAAAAAArwgQWAAAAAAAAChoTWAAAAAAAAChoTGAB\
@@ -65800,7 +65796,7 @@ LAAAAACiCVgAAAAARBOwAAAAAIgmYAEAAAAQTcACAAAAIJqABQAAAEA0AQsAAACAaAIWAAAAANG+\
 AkrrmSIINMymAAAAAElFTkSuQmCC\
 "
   frames[74] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAq5lJREFUeJzs3XecVNX9//H3lF3qLkhTKTZQsURR7KixRVFAxIpGNBZsgL3E\
 aL7YTeIvUSN2QI0FEVvsLSiWWLCLFRERLCgq0rfM3N8fmx2Znc+Bc/fuLMPM6/l97PcR755b5s6Z\
 ey5n77w/sSAIAgEAAAAAAAAFKr6qDwAAAAAAAABYESawAAAAAAAAUNCYwAIAAAAAAEBBYwILAAAA\
@@ -66575,7 +66571,7 @@ ANIELAAAAADSBCwAAAAA0gQsAAAAANIELAAAAADSBCwAAAAA0gQsAAAAANIELAAAAADS3gGRM62h\
 hjAvbwAAAABJRU5ErkJggg==\
 "
   frames[75] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAqxxJREFUeJzs3XecFFXa9vGrwwwSZsAAKsGIihhAMac1rWDEgAoqZkyAOazp\
 wey6vmvYZXVVQF0DIirmnDArJlbMIgImFBMgMDPdXe8fs9PS0/eBU1PTQ9P9+z6feT5rzanq6urT\
 dYozVdcdC4IgEAAAAAAAAFCk4kt7BwAAAAAAAIDFYQILAAAAAAAARY0JLAAAAAAAABQ1JrAAAAAA\
@@ -67348,7 +67344,7 @@ CwAAAIA0AQsAAACANAELAAAAgDQBCwAAAIA0AQsAAACANAELAAAAgLS/br5AugkZ5EwAAAAASUVO\
 RK5CYII=\
 "
   frames[76] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAqvNJREFUeJzs3XecVNXdx/HvlF3qLiBFpVjRIBrEXrBrFAU7KhrRWLCBNZZY\
 EkxsSUwsCYlRAfWxIGKNvURFJRasEbuIgA0r0rfM3OePzU6Yvb8D5+7dWYaZz/t57fOKd88tM3Pm\
 nsvZe7+/RBAEgQAAAAAAAIAilVzZBwAAAAAAAAAsDxNYAAAAAAAAKGpMYAEAAAAAAKCoMYEFAAAA\
@@ -68120,7 +68116,7 @@ AhYAAAAAaQIWAAAAAGkCFgAAAABpAhYAAAAAaQIWAAAAAGkCFgAAAABpAhYAAAAAaQIWAAAAAGl/\
 AW3kzcIQuqCgAAAAAElFTkSuQmCC\
 "
   frames[77] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAqABJREFUeJzs3XecVNX9//H3lF3qLgiCSrGiIhrFXlBji6JiwYpGNBZsgL3E\
 aL6YmGgSf4makBgVUGNBxN5bVFRiwRqxi4hgQbEBAltm7u+PzY7MzufAuXtnlsvM6/l97PcR755b\
 ZubMPZez974/iSAIAgEAAAAAAAAxlVzRBwAAAAAAAAAsCxNYAAAAAAAAiDUmsAAAAAAAABBrTGAB\
@@ -68879,7 +68875,7 @@ YE1gAQAAALAmsAAAAABYE1gAAAAArAksAAAAANYEFgAAAABrAgsAAACAtQCInhtizt0OxQAAAABJ\
 RU5ErkJggg==\
 "
   frames[78] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAqflJREFUeJzs3XecFFW6xvGnwwxxBkRBJRhRERUxB8y6ioIBRcWAGROY07q6\
 i9l1vbvqLqurAuoaEDHntCpmxbiCGRHBgGIiT+iu+8fstPT0e+DUVPfQdP++9zP3s9acqq6uPl2n\
 OFP1vLEgCAIBAAAAAAAARSq+rHcAAAAAAAAAWBImsAAAAAAAAFDUmMACAAAAAABAUWMCCwAAAAAA\
@@ -69646,7 +69642,7 @@ CVgAAAAApAlYAAAAAKQJWAAAAACkCVgAAAAApAlYAAAAAKQJWAAAAACkCVgAAAAApAlYAAAAAKQJ\
 WAAAAACkCVgAAAAApAlYAAAAAKQJWAAAAACkCVgAAAAApL0BePh+Q9YexzYAAAAASUVORK5CYII=\
 "
   frames[79] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAqRRJREFUeJzs3XecVNX9//H3lF2k7IKoqBQrKpYA9m5sidjFikbs2AB7iYn5\
 otFoEn/RmJAYFVCjERFb7F2xCzYiKIqIFBUUG33Znbm/PzY7cXY+B87dO7NcZl7P74PvI949t8zM\
 mXvunr33/UkEQRAIAAAAAAAAiKnkyj4AAAAAAAAAYHmYwAIAAAAAAECsMYEFAAAAAACAWGMCCwAA\
@@ -70409,7 +70405,7 @@ sCawAAAAAFgTWAAAAACsCSwAAAAA1gQWAAAAAGsCCwAAAIA1gQUAAADAmsACAAAAYE1gAQAAALAm\
 sAAAAABYE1gAAAAArAksAAAAANYEFgAAAABrAgsAAACAtQAMkPJsX2J7jwAAAABJRU5ErkJggg==\
 "
   frames[80] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAqAtJREFUeJzs3XecVNX9//H3lF3qLoidYkXFEkGxY+xRiRpFUbFgBStEY42J\
 CSZGTeIvloTEqID61aiIihU1YsEesRFBsSJFEUVRQGDZnbm/PzY7OjufA+funVkuM6/n97HfR7x7\
 bpmZM/dczt77/iSCIAgEAAAAAAAAxFRyVR8AAAAAAAAAsCJMYAEAAAAAACDWmMACAAAAAABArDGB\
@@ -71168,7 +71164,7 @@ LAAAAADWBBYAAAAAawILAAAAgDWBBQAAAMCawAIAAABgTWABAAAAsCawAAAAAFgTWAAAAACsBe75\
 oZ5vAuONAAAAAElFTkSuQmCC\
 "
   frames[81] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAqHJJREFUeJzs3XecVNX9//H3lF3qLoidYkXFEkGxY+xRiRpEUbFgxQ7RWGNi\
 gsYoSfzFkpAYFVC/VkTFihpRxK7YiKBYkaKIoih92Z25vz82O3F2PgfO3buzXGZez+9jv49499wy\
 M2fuuZy99/1JBEEQCAAAAAAAAIip5Oo+AAAAAAAAAGBlmMACAAAAAABArDGBBQAAAAAAgFhjAgsA\
@@ -71929,7 +71925,7 @@ ANYEFgAAAABrAgsAAACANYEFAAAAwJrAAgAAAGBNYAEAAACwJrAAAAAAWAvL7XPI/YD6YwAAAABJ\
 RU5ErkJggg==\
 "
   frames[82] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAqP5JREFUeJzs3XecVNX9//H3lF3qLoiKSrGiYgmgWFDsmqgRgygqFuzYADXW\
 GE0wGjXGXywJiVEB9auCiL0bC2IXbESwI1IUUWz0ZXfm/v7Y7OjsfA6cu3dmGWZez+9jv49499w7\
 d+6cuedy9t73JxYEQSAAAAAAAACgSMVX9w4AAAAAAAAAK8MEFgAAAAAAAIoaE1gAAAAAAAAoakxg\
@@ -72692,7 +72688,7 @@ CSwAAAAA1gQWAAAAAGsCCwAAAIA1gQUAAADAmsACAAAAYE1gAQAAALAmsAAAAABYE1gAAAAArAks\
 AAAAANYEFgAAAABrAefcQKccTR2tAAAAAElFTkSuQmCC\
 "
   frames[83] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAqSRJREFUeJzs3XmcFNXZ9vGrlxnWGRB3FldUXAIo7rhrVOKCKCouuIIrROMa\
 owkmRkke37hEEqMCajQqomJcUCMuqKgRNxQUF0QWRRRF2YeZ7nr/mExrT98HTk11D0337/t85vnE\
 mlPV1dWn6xRnqq47FgRBIAAAAAAAAKBIxdf0DgAAAAAAAACrwgQWAAAAAAAAihoTWAAAAAAAAChq\
@@ -73456,7 +73452,7 @@ AKwJLAAAAADWBBYAAAAAawILAAAAgDWBBQAAAMCawAIAAABgTWABAAAAsCawAAAAAFgL7UU7Y1al\
 tPcAAAAASUVORK5CYII=\
 "
   frames[84] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAqARJREFUeJzs3XecVNX9//H3lF3qLoholGJFxRJAsWPXWCIWrFjQWLAh9hIT\
 E0xsSfxFYyQxKliiERFb7MaCNSpYIyhWpCiiIEpfdmfu74/97ujsfM5yLndmucy8nt8H30e8e26Z\
 mTP33D177/uTCIIgEAAAAAAAABBTyZV9AAAAAAAAAEBLmMACAAAAAABArDGBBQAAAAAAgFhjAgsA\
@@ -74215,7 +74211,7 @@ LAAAAADWBBYAAAAAawILAAAAgDWBBQAAAMCawAIAAABgTWABAAAAsCawAAAAAFgLPOy8AnXFWV4A\
 AAAASUVORK5CYII=\
 "
   frames[85] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAApx9JREFUeJzs3XecVNX9//H3zOzSd0HsFCsqohEUO3aNQqwoKhasYIVorCHR\
 oDFq8vUXS0JiVECNRkVUrKgRC/aIDQXFihRFFEXpy+7M/f2x2Ymz8zlw7t6Z5TLzen4f+33Eu+eW\
 mTlzz+Xsve9PIgiCQAAAAAAAAEBMJVf3AQAAAAAAAAArwwQWAAAAAAAAYo0JLAAAAAAAAMQaE1gA\
@@ -74970,7 +74966,7 @@ AAAAAFgTWAAAAACsCSwAAAAA1gQWAAAAAGsCCwAAAIA1gQUAAADAmsACAAAAYC3fDkUJI3OO0wAA\
 AABJRU5ErkJggg==\
 "
   frames[86] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAp6hJREFUeJzs3XecVNX9//H3zOzSdymWKMWKimgAxY5doxIriooFK1jBXmJi\
 golRk6+/WBISowJqNCqiYsWGBRU1YkNBsSJFEcVGX3Zn7u+PzU6cnc+Bc/fOLJeZ1/P72O8j3j23\
 zMyZey5n731/EkEQBAIAAAAAAABiKrm6DwAAAAAAAABYGSawAAAAAAAAEGtMYAEAAAAAACDWmMAC\
@@ -75727,7 +75723,7 @@ BBYAAAAAawILAAAAgDWBBQAAAMCawAIAAABgTWABAAAAsCawAAAAAFgTWAAAAACsCSwAAAAA1gQW\
 AAAAAGsCCwAAAIC1AEXc+5J34UgWAAAAAElFTkSuQmCC\
 "
   frames[87] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAApgVJREFUeJzs3XecVNX9//H3zOzSd0EUC8WKimgAxY5dEzFgwYoFjQUbYC8x\
 McGo0ST+ojEhMSqgfi2I2GLvil2xEUGxIFIsKDb6sjtzf39sdnR2Pmc5d+/Mcpl5Pb+P/T7i3XPL\
 zJy553L23vcnEQRBIAAAAAAAACCmkqv6AAAAAAAAAICmMIEFAAAAAACAWGMCCwAAAAAAALHGBBYA\
@@ -76477,7 +76473,7 @@ YE1gAQAAALAmsAAAAABYE1gAAAAArAksAAAAANYEFgAAAABrAgsAAACANYEFAAAAwFqD2do2yAI+\
 5wAAAABJRU5ErkJggg==\
 "
   frames[88] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAApChJREFUeJzs3XecVNX9//H3zOzSd0HsFCsqlgiKHXuFWFFULFjBCmqsMTHB\
 aJTk6y+WSDQqoEajIirGghqxYI/YUFCsSFFEUZS+7M7c3x+bnTg7n7Ocy51ZLjOv5/ex30e8e26Z\
 O2fuuZy98/4kgiAIBAAAAAAAAMRUclUfAAAAAAAAANAUJrAAAAAAAAAQa0xgAQAAAAAAINaYwAIA\
@@ -77218,7 +77214,7 @@ ALAmsAAAAABYE1gAAAAArAksAAAAANYEFgAAAABrAgsAAACANYEFAAAAwJrAAgAAAGBNYAEAAACw\
 JrAAAAAAWBNYAAAAAKwJLAAAAADWBBYAAAAAawGsM9/BP4BArQAAAABJRU5ErkJggg==\
 "
   frames[89] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAApfJJREFUeJzs3XecVNX9//H3zOzSdyl2ihUVSwTFjl2jEAuiqFiwghWisRtN\
 MDFK8vUXS0JiVECNRkVUrNiwYFewoKAoKlIUURSlL+zM/f1BduLsfA6cu3dmucy8nt/Hfh/x7rll\
 Zs7cczl77/uTCIIgEAAAAAAAABBTyTV9AAAAAAAAAMCqMIEFAAAAAACAWGMCCwAAAAAAALHGBBYA\
@@ -77967,7 +77963,7 @@ AAAAWBNYAAAAAKwJLAAAAADWBBYAAAAAawILAAAAgDWBBQAAAMCawAIAAABgTWABAAAAsCawAAAA\
 AFgTWAAAAACsCSwAAAAA1gQWAAAAAGsCCwAAAIC1AD7sVbr65cBUAAAAAElFTkSuQmCC\
 "
   frames[90] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAo2lJREFUeJzs3XecFFXa9vGruweQMENQUQlGVIygmDFHMGEWA0YwgjnrPhhW\
 Wdd3V11YXUVQV1dFVIyYMGBWTCgoYkDAhAklDzPd9f7BTq89fZ/hFNU9FN2/7/OZ57PWnArdfbpO\
 cabquhNBEAQCAAAAAAAAYiq5vA8AAAAAAAAAaAgTWAAAAAAAAIg1JrAAAAAAAAAQa0xgAQAAAAAA\
@@ -78705,7 +78701,7 @@ AADAmsACAAAAYE1gAQAAALAmsAAAAABYE1gAAAAArAksAAAAANYEFgAAAABrAgsAAACANYEFAAAA\
 wJrAAgAAAGAtobMLJM8CEksAAAAASUVORK5CYII=\
 "
   frames[91] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAoxJJREFUeJzs3XecFFXa9vGru4fMDIiCSjCiYgIUA+a4ghExYsCMCTCtcXUf\
 XOO6vmtYWSOgrhFRMeeEWTGhoCgqAiqimMjDTHe9f7DTa0/fB05NdQ9F9+/7fOb5rDWnQnefrlOc\
 qbruRBAEgQAAAAAAAICYSi7vAwAAAAAAAACWhgksAAAAAAAAxBoTWAAAAAAAAIg1JrAAAAAAAAAQ\
@@ -79441,7 +79437,7 @@ AACsCSwAAAAA1gQWAAAAAGsCCwAAAIA1gQUAAADAmsACAAAAYE1gAQAAALAmsAAAAABYE1gAAAAA\
 rAksAAAAANYEFgAAAABrAgsAAACANYEFAAAAwJrAAgAAAGAtuKjhKu9/+JcAAAAASUVORK5CYII=\
 "
   frames[92] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAo4FJREFUeJzs3XecFFXa9vGru4fMDEFFSYqKiglQDChm3QUVxSy6YsYEmLPu\
 4hrX9d1VF3ZdRVDXiKjomjOYBRMKihEBE4qJPMx01/vH7PRjT98HTk1ND0X37/t85vmsNadCd5+u\
 U5ypuu5EEASBAAAAAAAAgJhKruoDAAAAAAAAAFaECSwAAAAAAADEGhNYAAAAAAAAiDUmsAAAAAAA\
@@ -80179,7 +80175,7 @@ sAAAAABYE1gAAAAArAksAAAAANYEFgAAAABrAgsAAACANYEFAAAAwJrAAgAAAGBNYAEAAACwJrAA\
 AAAAWBNYAAAAAKwJLAAAAADWBBYAAAAAawILAAAAgLUAQ2A1joaudGMAAAAASUVORK5CYII=\
 "
   frames[93] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAo/tJREFUeJzs3XecVNX9//H3zCwgZRdERaVYUbEEUOzYJQo2LKhoxFjACtEY\
 G9F80ZhIEn+xkhgVUIMNUdGo2LCgYgMLCooiIkURRVH6ws7c3x+bnTg7nwPn7t1ZLjOv5/ex30e8\
 e26ZmTP3XM7e+/4kgiAIBAAAAAAAAMRUcl0fAAAAAAAAALAmTGABAAAAAAAg1pjAAgAAAAAAQKwx\
@@ -80920,7 +80916,7 @@ BQAAAMCawAIAAABgTWABAAAAsCawAAAAAFgTWAAAAACsCSwAAAAA1gLxB3aAzbiduwAAAABJRU5E\
 rkJggg==\
 "
   frames[94] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAo3NJREFUeJzs3XecVNXdx/HvzCydXRARqVZULAEUO3aNomJvWLBjQ+wlRBNM\
 bEl8ojGiRgW7ImKL3ViwF7ChoCgqUiwoNvqyu3OfPzY7cXZ+ZzmXOzNcZj7v58XzinfPLTNz5p67\
 Z+/9/hJBEAQCAAAAAAAAYiq5og8AAAAAAAAAaAoTWAAAAAAAAIg1JrAAAAAAAAAQa0xgAQAAAAAA\
@@ -81658,7 +81654,7 @@ sAAAAABYE1gAAAAArAksAAAAANYEFgAAAABrAgsAAACANYEFAAAAwJrAAgAAAGBNYAEAAACwJrAA\
 AAAAWBNYAAAAAKwJLAAAAADWAvK/lzIlhF8UAAAAAElFTkSuQmCC\
 "
   frames[95] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAopRJREFUeJzs3XecFFW6xvGnuweQMDOAikowomIExZwzYMKAigHXhBFMaw6L\
 YdV1vWtYWV0VUNcsKiqKCQNmBQMKiqIioAJmMsPMdN0/2Om1p98Dp6a6h6L7972fuZ+15tSp6u7q\
 OsWZqudNBEEQCAAAAAAAAIip5PLeAQAAAAAAAGBpmMACAAAAAABArDGBBQAAAAAAgFhjAgsAAAAA\
@@ -82392,7 +82388,7 @@ AAAAAGsCCwAAAIA1gQUAAADAmsACAAAAYE1gAQAAALAmsAAAAABYE1gAAAAArAksAAAAANYEFgAA\
 AABrAgsAAACANYEFAAAAwJrAAgAAAGAtGxCtzYTQGHMAAAAASUVORK5CYII=\
 "
   frames[96] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAouBJREFUeJzs3XecVNX9//H3zCxL3aWoKM2KihWUWLFrFBXFgopGjA0riBpL\
 jCaYGEu+/mIJRKMUNRoVUbFiQxG7gAUFxYqABex0lt2d+/tjsxNn53OWc/fuLJeZ1zOPzUPunlvm\
 zp177p659/1JBEEQCAAAAAAAAIip5JreAAAAAAAAAKA+DGABAAAAAAAg1hjAAgAAAAAAQKwxgAUA\
@@ -83128,7 +83124,7 @@ sCawAAAAAFgTWAAAAACsCSwAAAAA1gQWAAAAAGsCCwAAAIA1gQUAAADAWjmp6zI3W9P8AAAAAElF\
 TkSuQmCC\
 "
   frames[97] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAoUVJREFUeJzs3XecFPX9x/H37h6dO4qI0qyo2ADF3lsE7F0sWMEG2EtMTDDR\
 aIy/WCLRqIAaCyIq9l7ALtiIoCgiUiwoFjoHdzu/Py63cW8/X/jOze4x7L6ev8f9HnHuO9+Z3Z2d\
 7/C9mfcnEQRBIAAAAAAAACCmkqt7BwAAAAAAAICVYQILAAAAAAAAscYEFgAAAAAAAGKNCSwAAAAA\
@@ -83856,7 +83852,7 @@ AAAAgDWBBQAAAMCawAIAAABgTWABAAAAsCawAAAAAFgTWAAAAACsCSwAAAAA1gQWAAAAAGsCCwAA\
 AIA1gQUAAADAmsACAAAAYE1gAQAAALAmsAAAAABYCwiwbrnXfulbAAAAAElFTkSuQmCC\
 "
   frames[98] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAohlJREFUeJzs3XecFFXa9vGre4bMDMFMMKJiBEVMmCOYEMUsrgGMYI677mJY\
 ZX1817Cyuiqgrq6KqBgxoYhZwYCCoohIUERRlDww0/X+wU6vPX2f4dRU90zR/fs+H57PWnPqVHV3\
 dZ2aM1XXnQiCIBAAAAAAAAAQU8mG3gEAAAAAAACgNkxgAQAAAAAAINaYwAIAAAAAAECsMYEFAAAA\
@@ -84588,7 +84584,7 @@ ALAmsAAAAABYE1gAAAAArAksAAAAANYEFgAAAABrAgsAAACANYEFAAAAwJrAAgAAAGBNYAEAAACw\
 JrAAAAAAWBNYAAAAAKwFX1ED/pgtAREAAAAASUVORK5CYII=\
 "
   frames[99] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAJYCAYAAABy5h8aAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAP\
+bGliIHZlcnNpb24zLjExLjIsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvgI3uAAAAAAlwSFlzAAAP\
 YQAAD2EBqD+naQAAne1JREFUeJzs3XecFPX9x/H37h6dOxAFlWJFRVRAsWBvRLFiF1Ts2AB7idEE\
 o1Fi/MUSiUYF1FgRFXtXxC7YiKhYkWJBsdA5uNv5/XG5jXv7+cJ3bnbvht3XM4/LQ+a+U3Z2dr5z\
 3515fxJBEAQCAAAAAAAAYirZ2BsAAAAAAAAArAgDWAAAAAAAAIg1BrAAAAAAAAAQawxgAQAAAAAA\
@@ -85305,12 +85301,12 @@ T2NHYQQAAMCawAIAAABgTWABAAAAsCawAAAAAFgLLBxxtDYVUF4AAAAASUVORK5CYII=\
     /* set a timeout to make sure all the above elements are created before
        the object is initialized. */
     setTimeout(function() {
-        anim07e51326470f4ebe957f96bce5429375 = new Animation(frames, img_id, slider_id, 50.0,
+        anim0c8e3777c92f4ae1901410b33f3ae8c3 = new Animation(frames, img_id, slider_id, 50.0,
                                  loop_select_id);
     }, 0);
   })()
 </script></div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 17.264 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 21.014 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-data-gen-plot-burgers-2d-solver-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/273559202d552ae1f0e540d0854f46bd/plot_burgers_2d_solver.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_burgers_2d_solver.ipynb</span></code></a></p>

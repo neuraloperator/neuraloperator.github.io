@@ -16,7 +16,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -123,9 +123,9 @@
       <div class="container content main-content">
         
   <h1>Source code for neuralop.layers.complex</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Functionality for handling complex-valued spatial data</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
 
@@ -135,7 +135,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">CGELU</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Complex GELU activation function</span>
+<span class="w">    </span><span class="sd">"""Complex GELU activation function</span>
 <span class="sd">    Follows the formulation of CReLU from [1]_.</span>
 <span class="sd">    Applies GELU to real and imaginary parts of the input</span>
 <span class="sd">    separately, then combine as complex number</span>
@@ -150,49 +150,49 @@
 <span class="sd">    ----------</span>
 <span class="sd">    .. [1] :</span>
 
-<span class="sd">    Trabelsi, C., et al. (2018). &quot;Deep Complex Networks&quot;.</span>
+<span class="sd">    Trabelsi, C., et al. (2018). "Deep Complex Networks".</span>
 <span class="sd">        ICLR 2018, https://openreview.net/pdf?id=H1T2hmZAb.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">gelu</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">real</span><span class="p">)</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cfloat</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">F</span><span class="o">.</span><span class="n">gelu</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">imag</span><span class="p">)</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cfloat</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">cselu</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Complex-valued SELU activation</span>
+<span class="w">    </span><span class="sd">"""Complex-valued SELU activation</span>
 <span class="sd">    Apply SELU to real and imag part of the input separately, then combine as complex number</span>
 <span class="sd">    Args:</span>
 <span class="sd">        x: complex tensor</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">selu</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">real</span><span class="p">)</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cfloat</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">F</span><span class="o">.</span><span class="n">selu</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">imag</span><span class="p">)</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cfloat</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">ctanh</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Complex-valued tanh stabilizer</span>
+<span class="w">    </span><span class="sd">"""Complex-valued tanh stabilizer</span>
 <span class="sd">    Apply ctanh is real and imag part of the input separately, then combine as complex number</span>
 <span class="sd">    Args:</span>
 <span class="sd">        x: complex tensor</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">real</span><span class="p">)</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cfloat</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">imag</span><span class="p">)</span><span class="o">.</span><span class="n">type</span><span class="p">(</span>
         <span class="n">torch</span><span class="o">.</span><span class="n">cfloat</span>
     <span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">apply_complex</span><span class="p">(</span><span class="n">real_func</span><span class="p">,</span> <span class="n">imag_func</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">cfloat</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    fr: a function (e.g., conv) to be applied on real part of x</span>
 <span class="sd">    fi: a function (e.g., conv) to be applied on imag part of x</span>
 <span class="sd">    x: complex input.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">real_func</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">real</span><span class="p">)</span> <span class="o">-</span> <span class="n">imag_func</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">imag</span><span class="p">))</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="p">(</span><span class="n">real_func</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">imag</span><span class="p">)</span> <span class="o">+</span> <span class="n">imag_func</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">real</span><span class="p">))</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="ComplexValued">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.complex.ComplexValued.html#neuralop.layers.complex.ComplexValued">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ComplexValued</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Wrapper class that converts a standard nn.Module that operates on real data</span>
 <span class="sd">    into a module that operates on complex-valued spatial data.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ComplexValued</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>

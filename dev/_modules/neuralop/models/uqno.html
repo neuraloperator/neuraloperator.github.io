@@ -16,7 +16,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -134,8 +134,8 @@
 
 <div class="viewcode-block" id="UQNO">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.models.UQNO.html#neuralop.models.UQNO">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">UQNO</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;UQNO&quot;</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Uncertainty Quantification Neural Operator</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">UQNO</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"UQNO"</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Uncertainty Quantification Neural Operator</span>
 <span class="sd">    </span>
 <span class="sd">    General N-dim (alpha, delta) Risk-Controlling Neural Operator, as described in [1]_.</span>
 
@@ -150,7 +150,7 @@
 <span class="sd">    base_model : nn.Module</span>
 <span class="sd">        Pre-trained solution operator. Determined by the problem.</span>
 <span class="sd">    residual_model : nn.Module, optional</span>
-<span class="sd">        Architecture to train as the UQNO&#39;s quantile model.</span>
+<span class="sd">        Architecture to train as the UQNO's quantile model.</span>
 <span class="sd">        If None, a deep copy of base_model is used. Default: None</span>
 
 <span class="sd">    References</span>
@@ -158,9 +158,9 @@
 <span class="sd">    .. [1] :</span>
 
 <span class="sd">    Ma, Z., Pitt, D., Azizzadenesheli, K., and Anandkumar, A. (2024).</span>
-<span class="sd">        &quot;Calibrated Uncertainty Quantification for Operator Learning</span>
-<span class="sd">        via Conformal Prediction&quot;. TMLR, https://openreview.net/pdf?id=cGpegxy12T.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        "Calibrated Uncertainty Quantification for Operator Learning</span>
+<span class="sd">        via Conformal Prediction". TMLR, https://openreview.net/pdf?id=cGpegxy12T.</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">base_model</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">residual_model</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
@@ -175,11 +175,11 @@
 <div class="viewcode-block" id="UQNO.forward">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.models.UQNO.html#neuralop.models.UQNO.forward">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Forward pass returns the solution u(a,x)</span>
 <span class="sd">        and the uncertainty ball E(a,x) as a pair</span>
 <span class="sd">        for pointwise quantile loss</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base_model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>  <span class="c1"># base-model weights are frozen</span>
         <span class="c1"># another way to handle this would be to use LoRA, or similar</span>
         <span class="c1"># ie freeze the  weights, and train a low-rank matrix of weight perturbations</span>

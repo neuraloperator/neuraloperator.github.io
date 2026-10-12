@@ -16,7 +16,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -152,12 +152,12 @@
 <div class="viewcode-block" id="Trainer">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.training.Trainer.html#neuralop.training.Trainer">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Trainer</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A general Trainer class to train neural-operators on given datasets.</span>
 
 <span class="sd">    .. note ::</span>
 <span class="sd">        Our Trainer expects datasets to provide batches as key-value dictionaries, ex.:</span>
-<span class="sd">        ``{&#39;x&#39;: x, &#39;y&#39;: y}``, that are keyed to the arguments expected by models and losses.</span>
+<span class="sd">        ``{'x': x, 'y': y}``, that are keyed to the arguments expected by models and losses.</span>
 <span class="sd">        For specifics and an example, check ``neuralop.data.datasets.DarcyDataset``.</span>
 
 <span class="sd">    Parameters</span>
@@ -166,7 +166,7 @@
 <span class="sd">    n_epochs : int</span>
 <span class="sd">    wandb_log : bool, default is False</span>
 <span class="sd">        whether to log results to wandb</span>
-<span class="sd">    device : torch.device, or str &#39;cpu&#39; or &#39;cuda&#39;</span>
+<span class="sd">    device : torch.device, or str 'cpu' or 'cuda'</span>
 <span class="sd">    mixed_precision : bool, default is False</span>
 <span class="sd">        whether to use torch.autocast to compute mixed precision</span>
 <span class="sd">    data_processor : DataProcessor class to transform data, default is None</span>
@@ -179,7 +179,7 @@
 <span class="sd">    use_distributed : bool, default is False</span>
 <span class="sd">        whether to use DDP</span>
 <span class="sd">    verbose : bool, default is False</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -187,7 +187,7 @@
         <span class="n">model</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
         <span class="n">n_epochs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">wandb_log</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
+        <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"cpu"</span><span class="p">,</span>
         <span class="n">mixed_precision</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">data_processor</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">eval_interval</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
@@ -195,7 +195,7 @@
         <span class="n">use_distributed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">""" """</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_epochs</span> <span class="o">=</span> <span class="n">n_epochs</span>
@@ -212,10 +212,10 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">autocast_device_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">type</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s2">&quot;cuda&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">autocast_device_type</span> <span class="o">=</span> <span class="s2">&quot;cuda&quot;</span>
+            <span class="k">if</span> <span class="s2">"cuda"</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">autocast_device_type</span> <span class="o">=</span> <span class="s2">"cuda"</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">autocast_device_type</span> <span class="o">=</span> <span class="s2">&quot;cpu&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">autocast_device_type</span> <span class="o">=</span> <span class="s2">"cpu"</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mixed_precision</span> <span class="o">=</span> <span class="n">mixed_precision</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span> <span class="o">=</span> <span class="n">data_processor</span>
 
@@ -236,11 +236,11 @@
         <span class="n">eval_modes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">save_every</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">save_best</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">save_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;./ckpt&quot;</span><span class="p">,</span>
+        <span class="n">save_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"./ckpt"</span><span class="p">,</span>
         <span class="n">resume_from_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">max_autoregressive_steps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Trains the given model on the given dataset.</span>
+<span class="w">        </span><span class="sd">"""Trains the given model on the given dataset.</span>
 
 <span class="sd">        If a device is provided, the model and data processor are loaded to device here.</span>
 
@@ -261,19 +261,19 @@
 <span class="sd">        eval_modes: dict[str], optional</span>
 <span class="sd">            optional mapping from the name of each loader to its evaluation mode.</span>
 
-<span class="sd">            * if &#39;single_step&#39;, predicts one input-output pair and evaluates loss.</span>
+<span class="sd">            * if 'single_step', predicts one input-output pair and evaluates loss.</span>
 
-<span class="sd">            * if &#39;autoregressive&#39;, autoregressively predicts output using last step&#39;s</span>
+<span class="sd">            * if 'autoregressive', autoregressively predicts output using last step's</span>
 <span class="sd">            output as input for a number of steps defined by the temporal dimension of the batch.</span>
 <span class="sd">            This requires specially batched data with a data processor whose ``.preprocess`` and</span>
 <span class="sd">            ``.postprocess`` both take ``idx`` as an argument.</span>
 <span class="sd">        save_every: int, optional, default is None</span>
 <span class="sd">            if provided, interval at which to save checkpoints</span>
 <span class="sd">        save_best: str, optional, default is None</span>
-<span class="sd">            if provided, key of metric f&quot;{loader_name}_{loss_name}&quot;</span>
+<span class="sd">            if provided, key of metric f"{loader_name}_{loss_name}"</span>
 <span class="sd">            to monitor and save model with best eval result</span>
 <span class="sd">            Overrides save_every and saves on eval_interval</span>
-<span class="sd">        save_dir: str | Path, default &quot;./ckpt&quot;</span>
+<span class="sd">        save_dir: str | Path, default "./ckpt"</span>
 <span class="sd">            directory at which to save training states if</span>
 <span class="sd">            save_every and/or save_best is provided</span>
 <span class="sd">        resume_from_dir: str | Path, default None</span>
@@ -286,11 +286,11 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        all_metrics: dict</span>
-<span class="sd">            dictionary keyed f&quot;{loader_name}_{loss_name}&quot;</span>
+<span class="sd">            dictionary keyed f"{loader_name}_{loss_name}"</span>
 <span class="sd">            of metric results for last validation epoch across</span>
 <span class="sd">            all test_loaders</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">optimizer</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scheduler</span> <span class="o">=</span> <span class="n">scheduler</span>
         <span class="k">if</span> <span class="n">regularizer</span><span class="p">:</span>
@@ -302,12 +302,12 @@
             <span class="n">training_loss</span> <span class="o">=</span> <span class="n">LpLoss</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
         <span class="c1"># Warn the user if training loss is reducing across the batch</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">training_loss</span><span class="p">,</span> <span class="s2">&quot;reduction&quot;</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">training_loss</span><span class="o">.</span><span class="n">reduction</span> <span class="o">==</span> <span class="s2">&quot;mean&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">training_loss</span><span class="p">,</span> <span class="s2">"reduction"</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">training_loss</span><span class="o">.</span><span class="n">reduction</span> <span class="o">==</span> <span class="s2">"mean"</span><span class="p">:</span>
                 <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">training_loss</span><span class="o">.</span><span class="n">reduction</span><span class="si">=}</span><span class="s2">. This means that the loss is &quot;</span>
-                    <span class="s2">&quot;initialized to average across the batch dim. The Trainer &quot;</span>
-                    <span class="s2">&quot;expects losses to sum across the batch dim.&quot;</span>
+                    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">training_loss</span><span class="o">.</span><span class="n">reduction</span><span class="si">=}</span><span class="s2">. This means that the loss is "</span>
+                    <span class="s2">"initialized to average across the batch dim. The Trainer "</span>
+                    <span class="s2">"expects losses to sum across the batch dim."</span>
                 <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">eval_losses</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># By default just evaluate on the training loss</span>
@@ -341,18 +341,18 @@
             <span class="n">metrics</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">test_loaders</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="k">for</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">eval_losses</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                    <span class="n">metrics</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">metrics</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
             <span class="k">assert</span> <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">save_best</span> <span class="ow">in</span> <span class="n">metrics</span>
-            <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Error: expected a metric of the form &lt;loader_name&gt;_&lt;metric&gt;, got </span><span class="si">{</span><span class="n">save_best</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="n">best_metric_value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span>
+            <span class="p">),</span> <span class="sa">f</span><span class="s2">"Error: expected a metric of the form &lt;loader_name&gt;_&lt;metric&gt;, got </span><span class="si">{</span><span class="n">save_best</span><span class="si">}</span><span class="s2">"</span>
+            <span class="n">best_metric_value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">"inf"</span><span class="p">)</span>
             <span class="c1"># either monitor metric or save on interval, exclusive for simplicity</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">save_every</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training on </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">train_loader</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span><span class="si">}</span><span class="s2"> samples&quot;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Testing on </span><span class="si">{</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">loader</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">loader</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">test_loaders</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span><span class="si">}</span><span class="s2"> samples&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;         on resolutions </span><span class="si">{</span><span class="p">[</span><span class="n">name</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">test_loaders</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Training on </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">train_loader</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span><span class="si">}</span><span class="s2"> samples"</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Testing on </span><span class="si">{</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">loader</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">loader</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">test_loaders</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span><span class="si">}</span><span class="s2"> samples"</span>
+                <span class="sa">f</span><span class="s2">"         on resolutions </span><span class="si">{</span><span class="p">[</span><span class="n">name</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">test_loaders</span><span class="p">]</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
             <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 
         <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_epoch</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_epochs</span><span class="p">):</span>
@@ -396,7 +396,7 @@
 <div class="viewcode-block" id="Trainer.train_one_epoch">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.training.Trainer.html#neuralop.training.Trainer.train_one_epoch">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">train_one_epoch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">training_loss</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;train_one_epoch trains self.model on train_loader</span>
+<span class="w">        </span><span class="sd">"""train_one_epoch trains self.model on train_loader</span>
 <span class="sd">        for one epoch and returns training metrics</span>
 
 <span class="sd">        Parameters</span>
@@ -412,7 +412,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        all_errors</span>
 <span class="sd">            dict of all eval metrics for the last epoch</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">on_epoch_start</span><span class="p">(</span><span class="n">epoch</span><span class="p">)</span>
         <span class="n">avg_loss</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">avg_lasso_loss</span> <span class="o">=</span> <span class="mi">0</span>
@@ -452,7 +452,7 @@
 
         <span class="n">lr</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">for</span> <span class="n">pg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">param_groups</span><span class="p">:</span>
-            <span class="n">lr</span> <span class="o">=</span> <span class="n">pg</span><span class="p">[</span><span class="s2">&quot;lr&quot;</span><span class="p">]</span>
+            <span class="n">lr</span> <span class="o">=</span> <span class="n">pg</span><span class="p">[</span><span class="s2">"lr"</span><span class="p">]</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="ow">and</span> <span class="n">epoch</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_interval</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">log_training</span><span class="p">(</span>
                 <span class="n">epoch</span><span class="o">=</span><span class="n">epoch</span><span class="p">,</span>
@@ -476,7 +476,7 @@
         <span class="n">eval_modes</span><span class="p">,</span>
         <span class="n">max_autoregressive_steps</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;evaluate_all iterates through the entire dict of test_loaders</span>
+<span class="w">        </span><span class="sd">"""evaluate_all iterates through the entire dict of test_loaders</span>
 <span class="sd">        to perform evaluation on the whole dataset stored in each one.</span>
 
 <span class="sd">        Parameters</span>
@@ -493,18 +493,18 @@
 <span class="sd">            * If ``eval_modes.get(loader_name)`` does not return a value,</span>
 <span class="sd">            the evaluation is automatically performed in ``single_step`` mode.</span>
 <span class="sd">        max_autoregressive_steps : ``int``, optional</span>
-<span class="sd">            if provided, and one of the test loaders has ``eval_mode == &quot;autoregressive&quot;``,</span>
+<span class="sd">            if provided, and one of the test loaders has ``eval_mode == "autoregressive"``,</span>
 <span class="sd">            limits the number of autoregressive steps performed per rollout.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        all_metrics: dict</span>
 <span class="sd">            collected eval metrics for each loader.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># evaluate and gather metrics across each loader in test_loaders</span>
         <span class="n">all_metrics</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">loader_name</span><span class="p">,</span> <span class="n">loader</span> <span class="ow">in</span> <span class="n">test_loaders</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">loader_eval_mode</span> <span class="o">=</span> <span class="n">eval_modes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">loader_name</span><span class="p">,</span> <span class="s2">&quot;single_step&quot;</span><span class="p">)</span>
+            <span class="n">loader_eval_mode</span> <span class="o">=</span> <span class="n">eval_modes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">loader_name</span><span class="p">,</span> <span class="s2">"single_step"</span><span class="p">)</span>
             <span class="n">loader_metrics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
                 <span class="n">eval_losses</span><span class="p">,</span>
                 <span class="n">loader</span><span class="p">,</span>
@@ -524,12 +524,12 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">loss_dict</span><span class="p">,</span>
         <span class="n">data_loader</span><span class="p">,</span>
-        <span class="n">log_prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">log_prefix</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span>
         <span class="n">epoch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;single_step&quot;</span><span class="p">,</span>
+        <span class="n">mode</span><span class="o">=</span><span class="s2">"single_step"</span><span class="p">,</span>
         <span class="n">max_steps</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Evaluates the model on a dictionary of losses</span>
+<span class="w">        </span><span class="sd">"""Evaluates the model on a dictionary of losses</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -537,22 +537,22 @@
 <span class="sd">          each function takes as input a tuple (prediction, ground_truth)</span>
 <span class="sd">          and returns the corresponding loss</span>
 <span class="sd">        data_loader : data_loader to evaluate on</span>
-<span class="sd">        log_prefix : str, default is &#39;&#39;</span>
-<span class="sd">            if not &#39;&#39;, used as prefix in output dictionary</span>
+<span class="sd">        log_prefix : str, default is ''</span>
+<span class="sd">            if not '', used as prefix in output dictionary</span>
 <span class="sd">        epoch : int | None</span>
 <span class="sd">            current epoch. Used when logging both train and eval</span>
 <span class="sd">            default None</span>
-<span class="sd">        mode : Literal {&#39;single_step&#39;, &#39;autoregression&#39;}</span>
-<span class="sd">            if &#39;single_step&#39;, performs standard evaluation</span>
-<span class="sd">            if &#39;autoregression&#39; loops through `max_steps` steps</span>
+<span class="sd">        mode : Literal {'single_step', 'autoregression'}</span>
+<span class="sd">            if 'single_step', performs standard evaluation</span>
+<span class="sd">            if 'autoregression' loops through `max_steps` steps</span>
 <span class="sd">        max_steps : int, optional</span>
 <span class="sd">            max number of steps for autoregressive rollout.</span>
 <span class="sd">            If None, runs the full rollout.</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        errors : dict</span>
-<span class="sd">            dict[f&#39;{log_prefix}_{loss_name}] = loss for loss in loss_dict</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">            dict[f'{log_prefix}_{loss_name}] = loss for loss in loss_dict</span>
+<span class="sd">        """</span>
         <span class="c1"># Ensure model and data processor are loaded to the proper device</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
@@ -563,16 +563,16 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 
-        <span class="n">errors</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">log_prefix</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">loss_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">loss_name</span> <span class="ow">in</span> <span class="n">loss_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+        <span class="n">errors</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">log_prefix</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">loss_name</span><span class="si">}</span><span class="s2">"</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">loss_name</span> <span class="ow">in</span> <span class="n">loss_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
 
         <span class="c1"># Warn the user if any of the eval losses is reducing across the batch</span>
         <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">eval_loss</span> <span class="ow">in</span> <span class="n">loss_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">eval_loss</span><span class="p">,</span> <span class="s2">&quot;reduction&quot;</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">eval_loss</span><span class="o">.</span><span class="n">reduction</span> <span class="o">==</span> <span class="s2">&quot;mean&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">eval_loss</span><span class="p">,</span> <span class="s2">"reduction"</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">eval_loss</span><span class="o">.</span><span class="n">reduction</span> <span class="o">==</span> <span class="s2">"mean"</span><span class="p">:</span>
                     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">eval_loss</span><span class="o">.</span><span class="n">reduction</span><span class="si">=}</span><span class="s2">. This means that the loss is &quot;</span>
-                        <span class="s2">&quot;initialized to average across the batch dim. The Trainer &quot;</span>
-                        <span class="s2">&quot;expects losses to sum across the batch dim.&quot;</span>
+                        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">eval_loss</span><span class="o">.</span><span class="n">reduction</span><span class="si">=}</span><span class="s2">. This means that the loss is "</span>
+                        <span class="s2">"initialized to average across the batch dim. The Trainer "</span>
+                        <span class="s2">"expects losses to sum across the batch dim."</span>
                     <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">=</span> <span class="mi">0</span>
@@ -581,11 +581,11 @@
                 <span class="n">return_output</span> <span class="o">=</span> <span class="kc">False</span>
                 <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_loader</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="n">return_output</span> <span class="o">=</span> <span class="kc">True</span>
-                <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;single_step&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">"single_step"</span><span class="p">:</span>
                     <span class="n">eval_step_losses</span><span class="p">,</span> <span class="n">outs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_one_batch</span><span class="p">(</span>
                         <span class="n">sample</span><span class="p">,</span> <span class="n">loss_dict</span><span class="p">,</span> <span class="n">return_output</span><span class="o">=</span><span class="n">return_output</span>
                     <span class="p">)</span>
-                <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;autoregression&quot;</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">"autoregression"</span><span class="p">:</span>
                     <span class="n">eval_step_losses</span><span class="p">,</span> <span class="n">outs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_one_batch_autoreg</span><span class="p">(</span>
                         <span class="n">sample</span><span class="p">,</span>
                         <span class="n">loss_dict</span><span class="p">,</span>
@@ -594,14 +594,14 @@
                     <span class="p">)</span>
 
                 <span class="k">for</span> <span class="n">loss_name</span><span class="p">,</span> <span class="n">val_loss</span> <span class="ow">in</span> <span class="n">eval_step_losses</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                    <span class="n">errors</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">log_prefix</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">loss_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">val_loss</span>
+                    <span class="n">errors</span><span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">log_prefix</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">loss_name</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">+=</span> <span class="n">val_loss</span>
 
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">errors</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">errors</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span>
 
         <span class="c1"># on last batch, log model outputs</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_output</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">wandb_log</span><span class="p">:</span>
-            <span class="n">errors</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">log_prefix</span><span class="si">}</span><span class="s2">_outputs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">wandb</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="n">outs</span><span class="p">)</span>
+            <span class="n">errors</span><span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">log_prefix</span><span class="si">}</span><span class="s2">_outputs"</span><span class="p">]</span> <span class="o">=</span> <span class="n">wandb</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="n">outs</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">errors</span></div>
 
@@ -609,7 +609,7 @@
 <div class="viewcode-block" id="Trainer.on_epoch_start">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.training.Trainer.html#neuralop.training.Trainer.on_epoch_start">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">on_epoch_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;on_epoch_start runs at the beginning</span>
+<span class="w">        </span><span class="sd">"""on_epoch_start runs at the beginning</span>
 <span class="sd">        of each training epoch. This method is a stub</span>
 <span class="sd">        that can be overwritten in more complex cases.</span>
 
@@ -621,7 +621,7 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">epoch</span> <span class="o">=</span> <span class="n">epoch</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
@@ -629,7 +629,7 @@
 <div class="viewcode-block" id="Trainer.train_one_batch">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.training.Trainer.html#neuralop.training.Trainer.train_one_batch">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">train_one_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">sample</span><span class="p">,</span> <span class="n">training_loss</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run one batch of input through model</span>
+<span class="w">        </span><span class="sd">"""Run one batch of input through model</span>
 <span class="sd">           and return training loss on outputs</span>
 
 <span class="sd">        Parameters</span>
@@ -643,7 +643,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        loss: float | Tensor</span>
 <span class="sd">            float value of training loss</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">(</span><span class="n">set_to_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">regularizer</span><span class="p">:</span>
@@ -654,8 +654,8 @@
             <span class="c1"># load data to device if no preprocessor exists</span>
             <span class="n">sample</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">sample</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">is_tensor</span><span class="p">(</span><span class="n">v</span><span class="p">)}</span>
 
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">+=</span> <span class="n">sample</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="s2">"y"</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">+=</span> <span class="n">sample</span><span class="p">[</span><span class="s2">"y"</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">+=</span> <span class="mi">1</span>
 
@@ -666,7 +666,7 @@
             <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">sample</span><span class="p">)</span>
         
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">epoch</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Raw outputs of shape </span><span class="si">{</span><span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Raw outputs of shape </span><span class="si">{</span><span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">out</span><span class="p">,</span> <span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span><span class="o">.</span><span class="n">postprocess</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">sample</span><span class="p">)</span>
@@ -690,7 +690,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">eval_one_batch</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">sample</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">eval_losses</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">return_output</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;eval_one_batch runs inference on one batch</span>
+<span class="w">        </span><span class="sd">"""eval_one_batch runs inference on one batch</span>
 <span class="sd">        and returns eval_losses for that batch.</span>
 
 <span class="sd">        Parameters</span>
@@ -705,17 +705,17 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        eval_step_losses : dict</span>
-<span class="sd">            keyed &quot;loss_name&quot;: step_loss_value for each loss name</span>
+<span class="sd">            keyed "loss_name": step_loss_value for each loss name</span>
 <span class="sd">        outputs: torch.Tensor | None</span>
 <span class="sd">            optionally returns batch outputs</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># load data to device if no preprocessor exists</span>
             <span class="n">sample</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">sample</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">is_tensor</span><span class="p">(</span><span class="n">v</span><span class="p">)}</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">+=</span> <span class="n">sample</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">+=</span> <span class="n">sample</span><span class="p">[</span><span class="s2">"y"</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
         <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">sample</span><span class="p">)</span>
 
@@ -743,7 +743,7 @@
         <span class="n">return_output</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">max_steps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;eval_one_batch runs inference on one batch</span>
+<span class="w">        </span><span class="sd">"""eval_one_batch runs inference on one batch</span>
 <span class="sd">        and returns eval_losses for that batch.</span>
 
 <span class="sd">        Parameters</span>
@@ -766,18 +766,18 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        eval_step_losses : dict</span>
-<span class="sd">            keyed &quot;loss_name&quot;: step_loss_value for each loss name</span>
+<span class="sd">            keyed "loss_name": step_loss_value for each loss name</span>
 <span class="sd">        outputs: torch.Tensor | None</span>
 <span class="sd">            optionally returns batch outputs</span>
 
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">eval_step_losses</span> <span class="o">=</span> <span class="p">{</span><span class="n">loss_name</span><span class="p">:</span> <span class="mf">0.0</span> <span class="k">for</span> <span class="n">loss_name</span> <span class="ow">in</span> <span class="n">eval_losses</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
         <span class="c1"># eval_rollout_losses = {loss_name: 0. for loss_name in eval_losses.keys()}</span>
 
         <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="n">max_steps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">max_steps</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span>
+            <span class="n">max_steps</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">"inf"</span><span class="p">)</span>
 
         <span class="c1"># only increment the sample count once</span>
         <span class="n">sample_count_incr</span> <span class="o">=</span> <span class="kc">False</span>
@@ -798,7 +798,7 @@
 
             <span class="c1"># only increment the sample count once</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">sample_count_incr</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">+=</span> <span class="n">sample</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">+=</span> <span class="n">sample</span><span class="p">[</span><span class="s2">"y"</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">sample_count_incr</span> <span class="o">=</span> <span class="kc">True</span>
 
             <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">sample</span><span class="p">)</span>
@@ -832,7 +832,7 @@
         <span class="n">avg_lasso_loss</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">lr</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Basic method to log results</span>
+<span class="w">        </span><span class="sd">"""Basic method to log results</span>
 <span class="sd">        from a single training epoch.</span>
 
 
@@ -849,7 +849,7 @@
 <span class="sd">            average lasso loss from regularizer, optional</span>
 <span class="sd">        lr: float</span>
 <span class="sd">            learning rate at current epoch</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># accumulate info to log to wandb</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">wandb_log</span><span class="p">:</span>
             <span class="n">values_to_log</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
@@ -860,11 +860,11 @@
                 <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">,</span>
             <span class="p">)</span>
 
-        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">epoch</span><span class="si">}</span><span class="s2">] time=</span><span class="si">{</span><span class="n">time</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, &quot;</span>
-        <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;avg_loss=</span><span class="si">{</span><span class="n">avg_loss</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, &quot;</span>
-        <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;train_err=</span><span class="si">{</span><span class="n">train_err</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"[</span><span class="si">{</span><span class="n">epoch</span><span class="si">}</span><span class="s2">] time=</span><span class="si">{</span><span class="n">time</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, "</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"avg_loss=</span><span class="si">{</span><span class="n">avg_loss</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, "</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"train_err=</span><span class="si">{</span><span class="n">train_err</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span>
         <span class="k">if</span> <span class="n">avg_lasso_loss</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;, avg_lasso=</span><span class="si">{</span><span class="n">avg_lasso_loss</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">", avg_lasso=</span><span class="si">{</span><span class="n">avg_lasso_loss</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
@@ -876,7 +876,7 @@
 <div class="viewcode-block" id="Trainer.log_eval">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.training.Trainer.html#neuralop.training.Trainer.log_eval">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">log_eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">eval_metrics</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;log_eval logs outputs from evaluation</span>
+<span class="w">        </span><span class="sd">"""log_eval logs outputs from evaluation</span>
 <span class="sd">        on all test loaders to stdout and wandb</span>
 
 <span class="sd">        Parameters</span>
@@ -885,18 +885,18 @@
 <span class="sd">            current training epoch</span>
 <span class="sd">        eval_metrics : dict</span>
 <span class="sd">            metrics collected during evaluation</span>
-<span class="sd">            keyed f&quot;{test_loader_name}_{metric}&quot; for each test_loader</span>
+<span class="sd">            keyed f"{test_loader_name}_{metric}" for each test_loader</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">values_to_log</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">""</span>
         <span class="k">for</span> <span class="n">metric</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">eval_metrics</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
-                <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">value</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, &quot;</span>
+                <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">value</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, "</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">wandb_log</span><span class="p">:</span>
                 <span class="n">values_to_log</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Eval: &quot;</span> <span class="o">+</span> <span class="n">msg</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># cut off last comma+space</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Eval: "</span> <span class="o">+</span> <span class="n">msg</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># cut off last comma+space</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 
@@ -907,7 +907,7 @@
 <div class="viewcode-block" id="Trainer.resume_state_from_dir">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.training.Trainer.html#neuralop.training.Trainer.resume_state_from_dir">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">resume_state_from_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Resume training from save_dir created by `neuralop.training.save_training_state`</span>
 
 <span class="sd">        Parameters</span>
@@ -915,19 +915,19 @@
 <span class="sd">        save_dir: Union[str, Path]</span>
 <span class="sd">            directory in which training state is saved</span>
 <span class="sd">            (see neuralop.training.training_state)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">save_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">save_dir</span><span class="p">)</span>
 
         <span class="c1"># check for save model exists</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">save_dir</span> <span class="o">/</span> <span class="s2">&quot;best_model_state_dict.pt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="n">save_name</span> <span class="o">=</span> <span class="s2">&quot;best_model&quot;</span>
-        <span class="k">elif</span> <span class="p">(</span><span class="n">save_dir</span> <span class="o">/</span> <span class="s2">&quot;model_state_dict.pt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="n">save_name</span> <span class="o">=</span> <span class="s2">&quot;model&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">save_dir</span> <span class="o">/</span> <span class="s2">"best_model_state_dict.pt"</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">save_name</span> <span class="o">=</span> <span class="s2">"best_model"</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">save_dir</span> <span class="o">/</span> <span class="s2">"model_state_dict.pt"</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">save_name</span> <span class="o">=</span> <span class="s2">"model"</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span>
-                <span class="s2">&quot;Error: resume_from_dir expects a model</span><span class="se">\</span>
-<span class="s2">                                        state dict named model.pt or best_model.pt.&quot;</span>
+                <span class="s2">"Error: resume_from_dir expects a model</span><span class="se">\</span>
+<span class="s2">                                        state dict named model.pt or best_model.pt."</span>
             <span class="p">)</span>
         <span class="c1"># returns model, loads other modules if provided</span>
         
@@ -950,13 +950,13 @@
             <span class="k">if</span> <span class="n">resume_epoch</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_epoch</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">start_epoch</span> <span class="o">=</span> <span class="n">resume_epoch</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Trainer resuming from epoch </span><span class="si">{</span><span class="n">resume_epoch</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Trainer resuming from epoch </span><span class="si">{</span><span class="n">resume_epoch</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Trainer.checkpoint">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.training.Trainer.html#neuralop.training.Trainer.checkpoint">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">checkpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;checkpoint saves current training state</span>
+<span class="w">        </span><span class="sd">"""checkpoint saves current training state</span>
 <span class="sd">        to a directory for resuming later. Only saves</span>
 <span class="sd">        training state on the first GPU.</span>
 <span class="sd">        See neuralop.training.training_state</span>
@@ -965,12 +965,12 @@
 <span class="sd">        ----------</span>
 <span class="sd">        save_dir : str | Path</span>
 <span class="sd">            directory in which to save training state</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">comm</span><span class="o">.</span><span class="n">get_local_rank</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_best</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">save_name</span> <span class="o">=</span> <span class="s2">&quot;best_model&quot;</span>
+                <span class="n">save_name</span> <span class="o">=</span> <span class="s2">"best_model"</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">save_name</span> <span class="o">=</span> <span class="s2">&quot;model&quot;</span>
+                <span class="n">save_name</span> <span class="o">=</span> <span class="s2">"model"</span>
             <span class="n">save_training_state</span><span class="p">(</span>
                 <span class="n">save_dir</span><span class="o">=</span><span class="n">save_dir</span><span class="p">,</span>
                 <span class="n">save_name</span><span class="o">=</span><span class="n">save_name</span><span class="p">,</span>
@@ -981,7 +981,7 @@
                 <span class="n">epoch</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">epoch</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[Rank 0]: saved training state to </span><span class="si">{</span><span class="n">save_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[Rank 0]: saved training state to </span><span class="si">{</span><span class="n">save_dir</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span></div>
 </div>
 
 </pre></div>

@@ -16,7 +16,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -138,9 +138,9 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.base_spectral_conv</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseSpectralConv</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.resample</span><span class="w"> </span><span class="kn">import</span> <span class="n">resample</span>
 
-<span class="n">tl</span><span class="o">.</span><span class="n">set_backend</span><span class="p">(</span><span class="s2">&quot;pytorch&quot;</span><span class="p">)</span>
-<span class="n">use_opt_einsum</span><span class="p">(</span><span class="s2">&quot;optimal&quot;</span><span class="p">)</span>
-<span class="n">einsum_symbols</span> <span class="o">=</span> <span class="s2">&quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;</span>
+<span class="n">tl</span><span class="o">.</span><span class="n">set_backend</span><span class="p">(</span><span class="s2">"pytorch"</span><span class="p">)</span>
+<span class="n">use_opt_einsum</span><span class="p">(</span><span class="s2">"optimal"</span><span class="p">)</span>
+<span class="n">einsum_symbols</span> <span class="o">=</span> <span class="s2">"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_contract_dense</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">separable</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -159,7 +159,7 @@
         <span class="n">out_syms</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">weight_syms</span><span class="p">)</span>
         <span class="n">out_syms</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_syms</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-    <span class="n">eq</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x_syms</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">weight_syms</span><span class="p">)</span><span class="si">}</span><span class="s1">-&gt;</span><span class="si">{</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_syms</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="n">eq</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x_syms</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">weight_syms</span><span class="p">)</span><span class="si">}</span><span class="s1">-&gt;</span><span class="si">{</span><span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_syms</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">torch</span><span class="o">.</span><span class="n">is_tensor</span><span class="p">(</span><span class="n">weight</span><span class="p">):</span>
         <span class="n">weight</span> <span class="o">=</span> <span class="n">weight</span><span class="o">.</span><span class="n">to_tensor</span><span class="p">()</span>
@@ -190,7 +190,7 @@
         <span class="n">out_syms</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_sym</span>
         <span class="n">factor_syms</span> <span class="o">=</span> <span class="p">[</span><span class="n">einsum_symbols</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">rank_sym</span><span class="p">,</span> <span class="n">out_sym</span> <span class="o">+</span> <span class="n">rank_sym</span><span class="p">]</span>  <span class="c1"># in, out</span>
     <span class="n">factor_syms</span> <span class="o">+=</span> <span class="p">[</span><span class="n">xs</span> <span class="o">+</span> <span class="n">rank_sym</span> <span class="k">for</span> <span class="n">xs</span> <span class="ow">in</span> <span class="n">x_syms</span><span class="p">[</span><span class="mi">2</span><span class="p">:]]</span>  <span class="c1"># x, y, ...</span>
-    <span class="n">eq</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">x_syms</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="n">rank_sym</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">factor_syms</span><span class="p">)</span><span class="si">}</span><span class="s1">-&gt;</span><span class="si">{</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_syms</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="n">eq</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">x_syms</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="n">rank_sym</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="s2">","</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">factor_syms</span><span class="p">)</span><span class="si">}</span><span class="s1">-&gt;</span><span class="si">{</span><span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_syms</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span>
 
     <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">torch</span><span class="o">.</span><span class="n">complex32</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">einsum_complexhalf</span><span class="p">(</span><span class="n">eq</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">cp_weight</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span> <span class="o">*</span><span class="n">cp_weight</span><span class="o">.</span><span class="n">factors</span><span class="p">)</span>
@@ -220,7 +220,7 @@
         <span class="c1"># x, y, ...</span>
         <span class="n">factor_syms</span> <span class="o">+=</span> <span class="p">[</span><span class="n">xs</span> <span class="o">+</span> <span class="n">rs</span> <span class="k">for</span> <span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">rs</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x_syms</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span> <span class="n">core_syms</span><span class="p">[</span><span class="mi">2</span><span class="p">:])]</span>
 
-    <span class="n">eq</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">x_syms</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="n">core_syms</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">factor_syms</span><span class="p">)</span><span class="si">}</span><span class="s1">-&gt;</span><span class="si">{</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_syms</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="n">eq</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">x_syms</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="n">core_syms</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="s2">","</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">factor_syms</span><span class="p">)</span><span class="si">}</span><span class="s1">-&gt;</span><span class="si">{</span><span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_syms</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span>
 
     <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">torch</span><span class="o">.</span><span class="n">complex32</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">einsum_complexhalf</span><span class="p">(</span><span class="n">eq</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">tucker_weight</span><span class="o">.</span><span class="n">core</span><span class="p">,</span> <span class="o">*</span><span class="n">tucker_weight</span><span class="o">.</span><span class="n">factors</span><span class="p">)</span>
@@ -244,11 +244,11 @@
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">weight_syms</span><span class="p">):</span>
         <span class="n">tt_syms</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">rank_syms</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">s</span><span class="p">,</span> <span class="n">rank_syms</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]])</span>
     <span class="n">eq</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x_syms</span><span class="p">)</span>
-        <span class="o">+</span> <span class="s2">&quot;,&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">tt_syms</span><span class="p">)</span>
-        <span class="o">+</span> <span class="s2">&quot;-&gt;&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_syms</span><span class="p">)</span>
+        <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x_syms</span><span class="p">)</span>
+        <span class="o">+</span> <span class="s2">","</span>
+        <span class="o">+</span> <span class="s2">","</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">tt_syms</span><span class="p">)</span>
+        <span class="o">+</span> <span class="s2">"-&gt;"</span>
+        <span class="o">+</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_syms</span><span class="p">)</span>
     <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">torch</span><span class="o">.</span><span class="n">complex32</span><span class="p">:</span>
@@ -257,13 +257,13 @@
         <span class="k">return</span> <span class="n">tl</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="n">eq</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">tt_weight</span><span class="o">.</span><span class="n">factors</span><span class="p">)</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">get_contract_fun</span><span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="n">implementation</span><span class="o">=</span><span class="s2">&quot;reconstructed&quot;</span><span class="p">,</span> <span class="n">separable</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generic ND implementation of Fourier Spectral Conv contraction</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_contract_fun</span><span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="n">implementation</span><span class="o">=</span><span class="s2">"reconstructed"</span><span class="p">,</span> <span class="n">separable</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Generic ND implementation of Fourier Spectral Conv contraction</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    weight : tensorly-torch&#39;s FactorizedTensor</span>
-<span class="sd">    implementation : {&#39;reconstructed&#39;, &#39;factorized&#39;}, default is &#39;reconstructed&#39;</span>
+<span class="sd">    weight : tensorly-torch's FactorizedTensor</span>
+<span class="sd">    implementation : {'reconstructed', 'factorized'}, default is 'reconstructed'</span>
 <span class="sd">        whether to reconstruct the weight and do a forward pass (reconstructed)</span>
 <span class="sd">        or contract directly the factors of the factorized weight with the input (factorized)</span>
 <span class="sd">    separable: bool</span>
@@ -272,33 +272,33 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    function : (x, weight) -&gt; x * weight in Fourier space</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">implementation</span> <span class="o">==</span> <span class="s2">&quot;reconstructed&quot;</span><span class="p">:</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">implementation</span> <span class="o">==</span> <span class="s2">"reconstructed"</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">separable</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">_contract_dense_separable</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">_contract_dense</span>
-    <span class="k">elif</span> <span class="n">implementation</span> <span class="o">==</span> <span class="s2">&quot;factorized&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">implementation</span> <span class="o">==</span> <span class="s2">"factorized"</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">is_tensor</span><span class="p">(</span><span class="n">weight</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">_contract_dense</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="n">FactorizedTensor</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">weight</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;dense&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">weight</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">"dense"</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">_contract_dense</span>
-            <span class="k">elif</span> <span class="n">weight</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;tucker&quot;</span><span class="p">):</span>
+            <span class="k">elif</span> <span class="n">weight</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">"tucker"</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">_contract_tucker</span>
-            <span class="k">elif</span> <span class="n">weight</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;tt&quot;</span><span class="p">):</span>
+            <span class="k">elif</span> <span class="n">weight</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">"tt"</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">_contract_tt</span>
-            <span class="k">elif</span> <span class="n">weight</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;cp&quot;</span><span class="p">):</span>
+            <span class="k">elif</span> <span class="n">weight</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">"cp"</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">_contract_cp</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Got unexpected factorized weight type </span><span class="si">{</span><span class="n">weight</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Got unexpected factorized weight type </span><span class="si">{</span><span class="n">weight</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Got unexpected weight type of class </span><span class="si">{</span><span class="n">weight</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"Got unexpected weight type of class </span><span class="si">{</span><span class="n">weight</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s1">&#39;Got implementation=</span><span class="si">{</span><span class="n">implementation</span><span class="si">}</span><span class="s1">, expected &quot;reconstructed&quot; or &quot;factorized&quot;&#39;</span>
+            <span class="sa">f</span><span class="s1">'Got implementation=</span><span class="si">{</span><span class="n">implementation</span><span class="si">}</span><span class="s1">, expected "reconstructed" or "factorized"'</span>
         <span class="p">)</span>
 
 
@@ -308,7 +308,7 @@
 <div class="viewcode-block" id="SpectralConv">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.spectral_convolution.SpectralConv.html#neuralop.layers.spectral_convolution.SpectralConv">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SpectralConv</span><span class="p">(</span><span class="n">BaseSpectralConv</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;SpectralConv implements the Spectral Convolution component of a Fourier layer</span>
+<span class="w">    </span><span class="sd">"""SpectralConv implements the Spectral Convolution component of a Fourier layer</span>
 <span class="sd">    described. </span>
 <span class="sd">    </span>
 <span class="sd">    It is implemented as described in [1]_ and [2]_.</span>
@@ -355,31 +355,31 @@
 <span class="sd">        will be scaled by this factor along each spatial dimension.</span>
 <span class="sd">        By default None.</span>
 <span class="sd">    fno_block_precision : str, optional</span>
-<span class="sd">        Precision mode for FNO block operations. Options: &#39;full&#39;, &#39;half&#39;, &#39;mixed&#39;.</span>
-<span class="sd">        By default &#39;full&#39;.</span>
+<span class="sd">        Precision mode for FNO block operations. Options: 'full', 'half', 'mixed'.</span>
+<span class="sd">        By default 'full'.</span>
 <span class="sd">    rank : float, optional</span>
 <span class="sd">        Rank of the tensor factorization of the Fourier weights, by default 1.0.</span>
 <span class="sd">        Ignored if ``factorization is None``.</span>
 <span class="sd">    factorization : str or None, optional</span>
-<span class="sd">        Tensor factorization type. Options: {&#39;tucker&#39;, &#39;cp&#39;, &#39;tt&#39;}.</span>
+<span class="sd">        Tensor factorization type. Options: {'tucker', 'cp', 'tt'}.</span>
 <span class="sd">        If None, a single dense weight is learned for the FNO.</span>
 <span class="sd">        Otherwise, that weight, used for the contraction in the Fourier domain</span>
 <span class="sd">        is learned in factorized form. In that case, `factorization` is the</span>
 <span class="sd">        tensor factorization of the parameters weight used.</span>
 <span class="sd">        By default None.</span>
-<span class="sd">    implementation : {&#39;factorized&#39;, &#39;reconstructed&#39;}, optional</span>
+<span class="sd">    implementation : {'factorized', 'reconstructed'}, optional</span>
 <span class="sd">        If factorization is not None, forward mode to use:</span>
 <span class="sd">        * `reconstructed` : the full weight tensor is reconstructed from the</span>
 <span class="sd">          factorization and used for the forward pass</span>
 <span class="sd">        * `factorized` : the input is directly contracted with the factors of</span>
 <span class="sd">          the decomposition</span>
 <span class="sd">        Ignored if ``factorization is None``.</span>
-<span class="sd">        By default &#39;reconstructed&#39;.</span>
+<span class="sd">        By default 'reconstructed'.</span>
 <span class="sd">    enforce_hermitian_symmetry : bool, optional</span>
 <span class="sd">        Whether to enforce Hermitian symmetry conditions when performing inverse FFT</span>
 <span class="sd">        for real-valued data. When True, explicitly enforces that the 0th frequency</span>
 <span class="sd">        and Nyquist frequency are real-valued before calling irfft. </span>
-<span class="sd">        When False, relies on cuFFT&#39;s irfftn to handle symmetry automatically, </span>
+<span class="sd">        When False, relies on cuFFT's irfftn to handle symmetry automatically, </span>
 <span class="sd">        which may fail on certain GPUs or input sizes, causing line artifacts. </span>
 <span class="sd">        Setting to True splits the inverse FFT into ifftn along (n-1) dimensions </span>
 <span class="sd">        followed by irfft on the last dimension, with a small computational overhead. </span>
@@ -391,23 +391,23 @@
 <span class="sd">        Optional additional parameters to pass to the tensor decomposition.</span>
 <span class="sd">        Ignored if ``factorization is None``.</span>
 <span class="sd">        By default None.</span>
-<span class="sd">    init_std : float or &#39;auto&#39;, optional</span>
-<span class="sd">        Standard deviation to use for weight initialization, by default &#39;auto&#39;.</span>
-<span class="sd">        If &#39;auto&#39;, uses (2 / (in_channels + out_channels)) ** 0.5.</span>
+<span class="sd">    init_std : float or 'auto', optional</span>
+<span class="sd">        Standard deviation to use for weight initialization, by default 'auto'.</span>
+<span class="sd">        If 'auto', uses (2 / (in_channels + out_channels)) ** 0.5.</span>
 <span class="sd">    fft_norm : str, optional</span>
-<span class="sd">        FFT normalization parameter, by default &#39;forward&#39;.</span>
+<span class="sd">        FFT normalization parameter, by default 'forward'.</span>
 <span class="sd">    device : torch.device or None, optional</span>
 <span class="sd">        Device to place the layer on, by default None.</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
-<span class="sd">    .. [1] Li, Z. et al. &quot;Fourier Neural Operator for Parametric Partial Differential</span>
-<span class="sd">        Equations&quot; (2021). ICLR 2021, https://arxiv.org/pdf/2010.08895.</span>
+<span class="sd">    .. [1] Li, Z. et al. "Fourier Neural Operator for Parametric Partial Differential</span>
+<span class="sd">        Equations" (2021). ICLR 2021, https://arxiv.org/pdf/2010.08895.</span>
 <span class="sd">        </span>
-<span class="sd">    .. [2] Kossaifi, J., Kovachki, N., Azizzadenesheli, K., Anandkumar, A. &quot;Multi-Grid</span>
-<span class="sd">        Tensorized Fourier Neural Operator for High-Resolution PDEs&quot; (2024).</span>
+<span class="sd">    .. [2] Kossaifi, J., Kovachki, N., Azizzadenesheli, K., Anandkumar, A. "Multi-Grid</span>
+<span class="sd">        Tensorized Fourier Neural Operator for High-Resolution PDEs" (2024).</span>
 <span class="sd">        TMLR 2024, https://openreview.net/pdf?id=AWiDlO63bH.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -419,15 +419,15 @@
         <span class="n">bias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">separable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">resolution_scaling_factor</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Number</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Number</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">fno_block_precision</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">,</span>
+        <span class="n">fno_block_precision</span><span class="o">=</span><span class="s2">"full"</span><span class="p">,</span>
         <span class="n">rank</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
         <span class="n">factorization</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">implementation</span><span class="o">=</span><span class="s2">&quot;reconstructed&quot;</span><span class="p">,</span>
+        <span class="n">implementation</span><span class="o">=</span><span class="s2">"reconstructed"</span><span class="p">,</span>
         <span class="n">enforce_hermitian_symmetry</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">fixed_rank_modes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">decomposition_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">init_std</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
-        <span class="n">fft_norm</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span>
+        <span class="n">init_std</span><span class="o">=</span><span class="s2">"auto"</span><span class="p">,</span>
+        <span class="n">fft_norm</span><span class="o">=</span><span class="s2">"forward"</span><span class="p">,</span>
         <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
@@ -457,7 +457,7 @@
             <span class="kc">None</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span>
         <span class="p">]</span> <span class="o">=</span> <span class="n">validate_scaling_factor</span><span class="p">(</span><span class="n">resolution_scaling_factor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">init_std</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">init_std</span> <span class="o">==</span> <span class="s2">"auto"</span><span class="p">:</span>
             <span class="n">init_std</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">in_channels</span> <span class="o">+</span> <span class="n">out_channels</span><span class="p">))</span> <span class="o">**</span> <span class="mf">0.5</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fixed_rank_modes</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
@@ -469,14 +469,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">fft_norm</span> <span class="o">=</span> <span class="n">fft_norm</span>
 
         <span class="k">if</span> <span class="n">factorization</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">factorization</span> <span class="o">=</span> <span class="s2">&quot;Dense&quot;</span>  <span class="c1"># No factorization</span>
+            <span class="n">factorization</span> <span class="o">=</span> <span class="s2">"Dense"</span>  <span class="c1"># No factorization</span>
 
         <span class="k">if</span> <span class="n">separable</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">in_channels</span> <span class="o">!=</span> <span class="n">out_channels</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;To use separable Fourier Conv, in_channels must be equal &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;to out_channels, but got in_channels=</span><span class="si">{</span><span class="n">in_channels</span><span class="si">}</span><span class="s2"> and &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;out_channels=</span><span class="si">{</span><span class="n">out_channels</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="s2">"To use separable Fourier Conv, in_channels must be equal "</span>
+                    <span class="sa">f</span><span class="s2">"to out_channels, but got in_channels=</span><span class="si">{</span><span class="n">in_channels</span><span class="si">}</span><span class="s2"> and "</span>
+                    <span class="sa">f</span><span class="s2">"out_channels=</span><span class="si">{</span><span class="n">out_channels</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="n">weight_shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="o">*</span><span class="n">max_n_modes</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -547,7 +547,7 @@
 <div class="viewcode-block" id="SpectralConv.forward">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.spectral_convolution.SpectralConv.html#neuralop.layers.spectral_convolution.SpectralConv.forward">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">output_shape</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generic forward pass for the Factorized Spectral Conv</span>
+<span class="w">        </span><span class="sd">"""Generic forward pass for the Factorized Spectral Conv</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -557,7 +557,7 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        tensorized_spectral_conv(x)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">batchsize</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="o">*</span><span class="n">mode_sizes</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
 
         <span class="n">fft_size</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">mode_sizes</span><span class="p">)</span>
@@ -565,7 +565,7 @@
             <span class="n">fft_size</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">fft_size</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># Redundant last coefficient in real spatial data</span>
         <span class="n">fft_dims</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fno_block_precision</span> <span class="o">==</span> <span class="s2">&quot;half&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fno_block_precision</span> <span class="o">==</span> <span class="s2">"half"</span><span class="p">:</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">half</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">complex_data</span><span class="p">:</span>
@@ -580,12 +580,12 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">dims_to_fft_shift</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fno_block_precision</span> <span class="o">==</span> <span class="s2">&quot;mixed&quot;</span><span class="p">:</span>
-            <span class="c1"># if &#39;mixed&#39;, the above fft runs in full precision, but the</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fno_block_precision</span> <span class="o">==</span> <span class="s2">"mixed"</span><span class="p">:</span>
+            <span class="c1"># if 'mixed', the above fft runs in full precision, but the</span>
             <span class="c1"># following operations run at half precision</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">chalf</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fno_block_precision</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;half&quot;</span><span class="p">,</span> <span class="s2">&quot;mixed&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fno_block_precision</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"half"</span><span class="p">,</span> <span class="s2">"mixed"</span><span class="p">]:</span>
             <span class="n">out_dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">chalf</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">out_dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cfloat</span>

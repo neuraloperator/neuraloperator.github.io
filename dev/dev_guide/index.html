@@ -17,7 +17,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/tensorly_style.css?v=a02e9698" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -243,11 +243,11 @@ git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </
 
 <span class="c1"># Stage and commit your changes</span>
 git<span class="w"> </span>add<span class="w"> </span>.
-git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Add: brief description of your changes</span>
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Add: brief description of your changes</span>
 
 <span class="s2">- More detailed explanation of what you changed</span>
 <span class="s2">- Why you made these changes</span>
-<span class="s2">- Any relevant context&quot;</span>
+<span class="s2">- Any relevant context"</span>
 
 <span class="c1"># Push to your fork</span>
 git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>feature/your-feature-name
@@ -383,23 +383,23 @@ python<span class="w"> </span>-m<span class="w"> </span>http.server<span class="
 <p>To ensure code clarity and future maintainability, NeuralOperator adheres to simple style principles.</p>
 <p>In general, docstrings use the NumPy format:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">arg1</span><span class="p">:</span> <span class="n">type1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">:</span> <span class="n">type2</span><span class="o">=</span><span class="n">default</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    arg1 : type1</span>
-<span class="sd">        description of what arg1 &#39;means&#39;</span>
-<span class="sd">        for the function&#39;s behavior</span>
+<span class="sd">        description of what arg1 'means'</span>
+<span class="sd">        for the function's behavior</span>
 <span class="sd">    arg2 : type2, optional</span>
 <span class="sd">        description arg2</span>
 <span class="sd">        by default default</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 </pre></div>
 </div>
 <p>For <em>classes</em>, this docstring should go directly below the class declaration:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyClass</span><span class="p">(</span><span class="n">Superclass</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    docstring goes here</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">...</span><span class="p">):</span>
     <span class="c1"># Full NumPy docstring not needed here.</span>
 </pre></div>
@@ -432,7 +432,7 @@ shape annotations are especially helpful where applicable.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">neuralop.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">YourModel</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Your model docstring here.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Your model docstring here."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">...</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>

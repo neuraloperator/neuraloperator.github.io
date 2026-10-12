@@ -16,7 +16,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/tensorly_style.css?v=a02e9698" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -132,18 +132,18 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">Burgers1dTimeDataProcessor</span><span class="p">(</span><span class="n">DefaultDataProcessor</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Burgers1dTimeDataProcessor wraps the DefaultDataProcessor</span>
+<span class="w">    </span><span class="sd">"""Burgers1dTimeDataProcessor wraps the DefaultDataProcessor</span>
 <span class="sd">    but adds one line to ``.preprocess`` to repeat the input ``x`` along</span>
 <span class="sd">    the temporal dimension.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">preprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dict</span><span class="p">,</span> <span class="n">batched</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;preprocess does the same thing as ``DefaultDataProcessor.preprocess()``,</span>
+<span class="w">        </span><span class="sd">"""preprocess does the same thing as ``DefaultDataProcessor.preprocess()``,</span>
 <span class="sd">        with the addition of unsqueezing ``x`` along the temporal dimension and repeating</span>
-<span class="sd">        to match ``y``&#39;s shape.</span>
+<span class="sd">        to match ``y``'s shape.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -151,21 +151,21 @@
 <span class="sd">            one batch of input</span>
 <span class="sd">        batched : bool, optional</span>
 <span class="sd">            Whether inputs are batched, by default True</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">temporal_len</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+<span class="sd">        """</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">temporal_len</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">data_dict</span><span class="p">[</span><span class="s2">"y"</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
         <span class="c1"># x starts as shape b, 1, spatial_len</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">data_dict</span><span class="p">[</span><span class="s2">"x"</span><span class="p">]</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">temporal_len</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-        <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">data_dict</span><span class="p">[</span><span class="s2">"x"</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">data_dict</span><span class="p">,</span> <span class="n">batched</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="Burgers1dTimeDataset">
 <a class="viewcode-back" href="../../../../modules/generated/neuralop.data.datasets.burgers.Burgers1dTimeDataset.html#neuralop.data.datasets.burgers.Burgers1dTimeDataset">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Burgers1dTimeDataset</span><span class="p">(</span><span class="n">PTDataset</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Burgers1dTimeDataset wraps data from the viscous</span>
-<span class="sd">    Burger&#39;s equation in 1 spatial dimension.</span>
+<span class="sd">    Burger's equation in 1 spatial dimension.</span>
 <span class="sd">    This dataset is not available for download online, but we</span>
 <span class="sd">    provide a low-res version on 16 spatial points</span>
 
@@ -193,10 +193,10 @@
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    train_db: torch.utils.data.Dataset of training examples</span>
-<span class="sd">    test_db:  &quot;&quot;                       of test examples</span>
+<span class="sd">    test_db:  ""                       of test examples</span>
 <span class="sd">    data_processor: neuralop.data.transforms.DataProcessor to process data examples</span>
 <span class="sd">        optional, default is None</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -220,11 +220,11 @@
         <span class="n">available_resolutions</span> <span class="o">=</span> <span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">128</span><span class="p">]</span>
         <span class="k">assert</span> <span class="p">(</span>
             <span class="n">train_resolution</span> <span class="ow">in</span> <span class="n">available_resolutions</span>
-        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Resolutions available: </span><span class="si">{</span><span class="n">available_resolutions</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">train_resolution</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">),</span> <span class="sa">f</span><span class="s2">"Resolutions available: </span><span class="si">{</span><span class="n">available_resolutions</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">train_resolution</span><span class="si">}</span><span class="s2">"</span>
         <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">test_resolutions</span><span class="p">:</span>
             <span class="k">assert</span> <span class="p">(</span>
                 <span class="n">res</span> <span class="ow">in</span> <span class="n">available_resolutions</span>
-            <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Resolutions available: </span><span class="si">{</span><span class="n">available_resolutions</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">),</span> <span class="sa">f</span><span class="s2">"Resolutions available: </span><span class="si">{</span><span class="n">available_resolutions</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="s2">"</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">root_dir</span><span class="o">=</span><span class="n">root_dir</span><span class="p">,</span>
@@ -238,9 +238,9 @@
             <span class="n">output_subsampling_rate</span><span class="o">=</span><span class="p">[</span><span class="n">temporal_subsample</span><span class="p">,</span> <span class="n">spatial_subsample</span><span class="p">],</span>
             <span class="n">encode_input</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">encode_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;channel-wise&quot;</span><span class="p">,</span>
+            <span class="n">encoding</span><span class="o">=</span><span class="s2">"channel-wise"</span><span class="p">,</span>
             <span class="n">channel_dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="n">dataset_name</span><span class="o">=</span><span class="s2">&quot;burgers&quot;</span><span class="p">,</span>
+            <span class="n">dataset_name</span><span class="o">=</span><span class="s2">"burgers"</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_data_processor</span> <span class="o">=</span> <span class="n">Burgers1dTimeDataProcessor</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_data_processor</span><span class="o">.</span><span class="n">in_normalizer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span><span class="o">.</span><span class="n">out_normalizer</span>
@@ -259,8 +259,8 @@
     <span class="n">temporal_subsample</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
     <span class="n">spatial_subsample</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Legacy function to load mini Burger&#39;s equation dataset</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Legacy function to load mini Burger's equation dataset</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -278,7 +278,7 @@
 <span class="sd">        rate at which to subsample the temporal dimension, by default None</span>
 <span class="sd">    spatial_subsample : int, optional</span>
 <span class="sd">        rate at which to subsample along the spatial dimension, by default None</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">burgers_dataset</span> <span class="o">=</span> <span class="n">Burgers1dTimeDataset</span><span class="p">(</span>
         <span class="n">root_dir</span><span class="o">=</span><span class="n">data_path</span><span class="p">,</span>
         <span class="n">n_train</span><span class="o">=</span><span class="n">n_train</span><span class="p">,</span>

@@ -16,7 +16,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -143,7 +143,7 @@
 <div class="viewcode-block" id="GridEmbedding2D">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.embeddings.GridEmbedding2D.html#neuralop.layers.embeddings.GridEmbedding2D">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">GridEmbedding2D</span><span class="p">(</span><span class="n">Embedding</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;GridEmbedding2D applies a simple positional embedding as a regular 2D grid.</span>
+<span class="w">    </span><span class="sd">"""GridEmbedding2D applies a simple positional embedding as a regular 2D grid.</span>
 <span class="sd">    </span>
 <span class="sd">    It expects inputs of shape (batch, channels, d_1, d_2)</span>
 
@@ -153,7 +153,7 @@
 <span class="sd">        number of channels in input. Fixed for output channel interface</span>
 <span class="sd">    grid_boundaries : list, optional</span>
 <span class="sd">        coordinate boundaries of input grid, by default [[0, 1], [0, 1]]</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">grid_boundaries</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -169,7 +169,7 @@
 <div class="viewcode-block" id="GridEmbedding2D.grid">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.embeddings.GridEmbedding2D.html#neuralop.layers.embeddings.GridEmbedding2D.grid">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spatial_dims</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;grid generates 2D grid needed for pos encoding</span>
+<span class="w">        </span><span class="sd">"""grid generates 2D grid needed for pos encoding</span>
 <span class="sd">        and caches the grid associated with MRU resolution</span>
 
 <span class="sd">        Parameters</span>
@@ -177,7 +177,7 @@
 <span class="sd">        spatial_dims : torch.size</span>
 <span class="sd">             sizes of spatial resolution</span>
 <span class="sd">        device : str</span>
-<span class="sd">            Device to load data (e.g. &#39;cpu&#39; or &#39;cuda:*&#39;).</span>
+<span class="sd">            Device to load data (e.g. 'cpu' or 'cuda:*').</span>
 <span class="sd">        dtype : str</span>
 <span class="sd">            dtype to encode data.</span>
 
@@ -185,7 +185,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        torch.tensor</span>
 <span class="sd">            output grids to concatenate</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># handle case of multiple train resolutions</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_res</span> <span class="o">!=</span> <span class="n">spatial_dims</span><span class="p">:</span>
             <span class="n">grid_x</span><span class="p">,</span> <span class="n">grid_y</span> <span class="o">=</span> <span class="n">regular_grid_2d</span><span class="p">(</span>
@@ -224,7 +224,7 @@
 <div class="viewcode-block" id="GridEmbeddingND">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.embeddings.GridEmbeddingND.html#neuralop.layers.embeddings.GridEmbeddingND">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">GridEmbeddingND</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;GridEmbeddingND applies a simple positional embedding as a regular ND grid.</span>
+<span class="w">    </span><span class="sd">"""GridEmbeddingND applies a simple positional embedding as a regular ND grid.</span>
 <span class="sd">    </span>
 <span class="sd">    It expects inputs of shape (batch, channels, d_1, ..., d_n)</span>
 
@@ -236,14 +236,14 @@
 <span class="sd">        dimensions of positional encoding to apply</span>
 <span class="sd">    grid_boundaries : list, optional</span>
 <span class="sd">        coordinate boundaries of input grid along each dim, by default [[0, 1], [0, 1]]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">grid_boundaries</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span> <span class="o">=</span> <span class="n">in_channels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="n">dim</span>
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span>
             <span class="n">grid_boundaries</span>
-        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Error: expected grid_boundaries to be an iterable of length </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="si">}</span><span class="s2">, received </span><span class="si">{</span><span class="n">grid_boundaries</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">),</span> <span class="sa">f</span><span class="s2">"Error: expected grid_boundaries to be an iterable of length </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="si">}</span><span class="s2">, received </span><span class="si">{</span><span class="n">grid_boundaries</span><span class="si">}</span><span class="s2">"</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">grid_boundaries</span> <span class="o">=</span> <span class="n">grid_boundaries</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_res</span> <span class="o">=</span> <span class="kc">None</span>
@@ -255,7 +255,7 @@
 <div class="viewcode-block" id="GridEmbeddingND.grid">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.embeddings.GridEmbeddingND.html#neuralop.layers.embeddings.GridEmbeddingND.grid">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spatial_dims</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Size</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">dtype</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;grid generates ND grid needed for pos encoding</span>
+<span class="w">        </span><span class="sd">"""grid generates ND grid needed for pos encoding</span>
 <span class="sd">        and caches the grid associated with MRU resolution</span>
 
 <span class="sd">        Parameters</span>
@@ -263,7 +263,7 @@
 <span class="sd">        spatial_dims : torch.Size</span>
 <span class="sd">            Sizes of spatial resolution.</span>
 <span class="sd">        device : str</span>
-<span class="sd">            Device to load data (e.g. &#39;cpu&#39; or &#39;cuda:*&#39;).</span>
+<span class="sd">            Device to load data (e.g. 'cpu' or 'cuda:*').</span>
 <span class="sd">        dtype : str</span>
 <span class="sd">            dtype to encode data.</span>
 
@@ -271,7 +271,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        torch.tensor</span>
 <span class="sd">            output grids to concatenate</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># handle case of multiple train resolutions</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_res</span> <span class="o">!=</span> <span class="n">spatial_dims</span><span class="p">:</span>
             <span class="n">grids_by_dim</span> <span class="o">=</span> <span class="n">regular_grid_nd</span><span class="p">(</span><span class="n">spatial_dims</span><span class="p">,</span> <span class="n">grid_boundaries</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">grid_boundaries</span><span class="p">)</span>
@@ -286,15 +286,15 @@
 <div class="viewcode-block" id="GridEmbeddingND.forward">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.embeddings.GridEmbeddingND.html#neuralop.layers.embeddings.GridEmbeddingND.forward">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">batched</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        data: torch.Tensor</span>
 <span class="sd">            assumes shape (batch (optional), channels, x_1, x_2, ...x_n)</span>
 <span class="sd">        batched: bool</span>
 <span class="sd">            whether data has a batch dim</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># add batch dim if it doesn&#39;t exist</span>
+<span class="sd">        """</span>
+        <span class="c1"># add batch dim if it doesn't exist</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">batched</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -310,14 +310,14 @@
 <div class="viewcode-block" id="SinusoidalEmbedding">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.embeddings.SinusoidalEmbedding.html#neuralop.layers.embeddings.SinusoidalEmbedding">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SinusoidalEmbedding</span><span class="p">(</span><span class="n">Embedding</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Sinusoidal positional embedding for enriching coordinate inputs with spectral information.</span>
 
 <span class="sd">    This class provides sinusoidal positional embeddings in two styles: Transformer-style</span>
 <span class="sd">    and NeRF-style. It lifts low-dimensional coordinates into a richer spectral representation</span>
 <span class="sd">    by encoding them as periodic functions (sines and cosines) at multiple frequencies.</span>
 
-<span class="sd">    The embedding enhances a model&#39;s ability to capture fine-scale variations and high-frequency</span>
+<span class="sd">    The embedding enhances a model's ability to capture fine-scale variations and high-frequency</span>
 <span class="sd">    dynamics by providing a hierarchy of frequency components alongside the original coordinates.</span>
 
 <span class="sd">    Parameters</span>
@@ -328,8 +328,8 @@
 <span class="sd">        Number of frequency levels L in the embedding. Each level contributes</span>
 <span class="sd">        a sine and cosine pair, resulting in 2L output channels per input channel.</span>
 <span class="sd">        By default, set to the number of input channels.</span>
-<span class="sd">    embedding_type : {&#39;transformer&#39;, &#39;nerf&#39;}, optional</span>
-<span class="sd">        Type of embedding to apply, by default &#39;transformer&#39;</span>
+<span class="sd">    embedding_type : {'transformer', 'nerf'}, optional</span>
+<span class="sd">        Type of embedding to apply, by default 'transformer'</span>
 
 <span class="sd">        Transformer-style [1]_:</span>
 <span class="sd">        For each input coordinate p and frequency level k (0 ≤ k &lt; L):</span>
@@ -343,7 +343,7 @@
 
 <span class="sd">    max_positions : int, optional</span>
 <span class="sd">        Maximum number of positions for transformer-style encoding, by default 10000.</span>
-<span class="sd">        Only used when embedding_type=&#39;transformer&#39;.</span>
+<span class="sd">        Only used when embedding_type='transformer'.</span>
 
 
 <span class="sd">    Notes</span>
@@ -362,18 +362,18 @@
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
-<span class="sd">    .. [1] Vaswani, A. et al. &quot;Attention Is All You Need&quot;.</span>
+<span class="sd">    .. [1] Vaswani, A. et al. "Attention Is All You Need".</span>
 <span class="sd">           NeurIPS 2017, https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf</span>
 
-<span class="sd">    .. [2] Mildenhall, B. et al. &quot;NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis&quot;.</span>
+<span class="sd">    .. [2] Mildenhall, B. et al. "NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis".</span>
 <span class="sd">           ArXiv 2020, https://arxiv.org/pdf/2003.08934</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">num_frequencies</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">embedding_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;transformer&quot;</span><span class="p">,</span>
+        <span class="n">embedding_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"transformer"</span><span class="p">,</span>
         <span class="n">max_positions</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -381,36 +381,36 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">num_frequencies</span> <span class="o">=</span> <span class="n">num_frequencies</span>
 
         <span class="c1"># verify embedding type</span>
-        <span class="n">allowed_embeddings</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nerf&quot;</span><span class="p">,</span> <span class="s2">&quot;transformer&quot;</span><span class="p">]</span>
+        <span class="n">allowed_embeddings</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"nerf"</span><span class="p">,</span> <span class="s2">"transformer"</span><span class="p">]</span>
         <span class="k">assert</span> <span class="p">(</span>
             <span class="n">embedding_type</span> <span class="ow">in</span> <span class="n">allowed_embeddings</span>
-        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Error: embedding_type expected one of </span><span class="si">{</span><span class="n">allowed_embeddings</span><span class="si">}</span><span class="s2">, received </span><span class="si">{</span><span class="n">embedding_type</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">),</span> <span class="sa">f</span><span class="s2">"Error: embedding_type expected one of </span><span class="si">{</span><span class="n">allowed_embeddings</span><span class="si">}</span><span class="s2">, received </span><span class="si">{</span><span class="n">embedding_type</span><span class="si">}</span><span class="s2">"</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">embedding_type</span> <span class="o">=</span> <span class="n">embedding_type</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">embedding_type</span> <span class="o">==</span> <span class="s2">&quot;transformer&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">embedding_type</span> <span class="o">==</span> <span class="s2">"transformer"</span><span class="p">:</span>
             <span class="k">assert</span> <span class="p">(</span>
                 <span class="n">max_positions</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-            <span class="p">),</span> <span class="s2">&quot;Error: max_positions must have an int value for </span><span class="se">\</span>
-<span class="s2">                transformer embedding.&quot;</span>
+            <span class="p">),</span> <span class="s2">"Error: max_positions must have an int value for </span><span class="se">\</span>
+<span class="s2">                transformer embedding."</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_positions</span> <span class="o">=</span> <span class="n">max_positions</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">out_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        required property for linking/composing model layers</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_frequencies</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span>
 
 <div class="viewcode-block" id="SinusoidalEmbedding.forward">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.layers.embeddings.SinusoidalEmbedding.html#neuralop.layers.embeddings.SinusoidalEmbedding.forward">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        x: torch.Tensor</span>
 <span class="sd">            shape (n_in, self.in_channels) or (batch, n_in, self.in_channels)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="sa">f</span><span class="s2">&quot;Error: expected inputs of shape (batch, n_in, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span><span class="si">}</span><span class="s2">)</span><span class="se">\</span>
-<span class="s2">            or (n_in, channels), got inputs with ndim=</span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">, shape=</span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="sd">        """</span>
+        <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="sa">f</span><span class="s2">"Error: expected inputs of shape (batch, n_in, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span><span class="si">}</span><span class="s2">)</span><span class="se">\</span>
+<span class="s2">            or (n_in, channels), got inputs with ndim=</span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">, shape=</span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span>
         <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">batched</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -418,16 +418,16 @@
             <span class="n">batched</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">batch_size</span><span class="p">,</span> <span class="n">n_in</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">embedding_type</span> <span class="o">==</span> <span class="s2">&quot;nerf&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">embedding_type</span> <span class="o">==</span> <span class="s2">"nerf"</span><span class="p">:</span>
             <span class="n">freqs</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_frequencies</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">device</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">pi</span>
 
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">embedding_type</span> <span class="o">==</span> <span class="s2">&quot;transformer&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">embedding_type</span> <span class="o">==</span> <span class="s2">"transformer"</span><span class="p">:</span>
             <span class="n">freqs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_frequencies</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">device</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_frequencies</span> <span class="o">*</span> <span class="mi">2</span>
             <span class="n">freqs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_positions</span><span class="p">)</span> <span class="o">**</span> <span class="n">freqs</span>
 
         <span class="c1"># outer product of wavenumbers and position coordinates</span>
         <span class="c1"># shape b, n_in * channels, len(freqs)</span>
-        <span class="n">freqs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;bij, k -&gt; bijk&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">freqs</span><span class="p">)</span>
+        <span class="n">freqs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">"bij, k -&gt; bijk"</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">freqs</span><span class="p">)</span>
 
         <span class="c1"># shape len(x), 2, len(freqs)</span>
         <span class="n">freqs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">freqs</span><span class="o">.</span><span class="n">sin</span><span class="p">(),</span> <span class="n">freqs</span><span class="o">.</span><span class="n">cos</span><span class="p">()),</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
@@ -444,21 +444,21 @@
 
 <span class="k">class</span><span class="w"> </span><span class="nc">RotaryEmbedding2D</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">min_freq</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">64</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Applying rotary positional embedding (https://arxiv.org/abs/2104.09864) to the input feature tensor.</span>
 <span class="sd">        The crux is the dot product of two rotation matrices R(theta1) and R(theta2) is equal to R(theta2 - theta1).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="n">inv_freq</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mi">10000</span> <span class="o">**</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span> <span class="o">/</span> <span class="n">dim</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">min_freq</span> <span class="o">=</span> <span class="n">min_freq</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">&quot;inv_freq&quot;</span><span class="p">,</span> <span class="n">inv_freq</span><span class="p">,</span> <span class="n">persistent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">"inv_freq"</span><span class="p">,</span> <span class="n">inv_freq</span><span class="p">,</span> <span class="n">persistent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span> <span class="o">=</span> <span class="mi">2</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;coordinates is tensor of [batch_size, num_points]&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""coordinates is tensor of [batch_size, num_points]"""</span>
         <span class="n">coordinates</span> <span class="o">=</span> <span class="n">coordinates</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_freq</span><span class="p">)</span>
-        <span class="n">freqs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;... i , j -&gt; ... i j&quot;</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">inv_freq</span><span class="p">)</span>  <span class="c1"># [b, n, d//2]</span>
+        <span class="n">freqs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">"... i , j -&gt; ... i j"</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">inv_freq</span><span class="p">)</span>  <span class="c1"># [b, n, d//2]</span>
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">freqs</span><span class="p">,</span> <span class="n">freqs</span><span class="p">),</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># [b, n, d]</span>
 
     <span class="nd">@staticmethod</span>
@@ -467,8 +467,8 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">apply_2d_rotary_pos_emb</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">freqs_x</span><span class="p">,</span> <span class="n">freqs_y</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Split the last dimension of features into two equal halves</span>
-<span class="sd">        and apply 1d rotary positional embedding to each half.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Split the last dimension of features into two equal halves</span>
+<span class="sd">        and apply 1d rotary positional embedding to each half."""</span>
         <span class="n">d</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">t_x</span><span class="p">,</span> <span class="n">t_y</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span> <span class="n">d</span> <span class="o">//</span> <span class="mi">2</span><span class="p">],</span> <span class="n">t</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">d</span> <span class="o">//</span> <span class="mi">2</span> <span class="p">:]</span>
 
@@ -480,16 +480,16 @@
 
 <span class="c1"># Utility functions for GridEmbedding</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">regular_grid_2d</span><span class="p">(</span><span class="n">spatial_dims</span><span class="p">,</span> <span class="n">grid_boundaries</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Creates a 2 x height x width stack of positional encodings A, where</span>
 <span class="sd">    A[:,i,j] = [[x,y]] at coordinate (i,j) on a (height, width) grid.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">height</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">spatial_dims</span>
 
     <span class="n">xt</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">grid_boundaries</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">grid_boundaries</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">height</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">yt</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">grid_boundaries</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">grid_boundaries</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">width</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-    <span class="n">grid_x</span><span class="p">,</span> <span class="n">grid_y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">xt</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span><span class="p">)</span>
+    <span class="n">grid_x</span><span class="p">,</span> <span class="n">grid_y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">xt</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">"ij"</span><span class="p">)</span>
 
     <span class="n">grid_x</span> <span class="o">=</span> <span class="n">grid_x</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">grid_y</span> <span class="o">=</span> <span class="n">grid_y</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -500,7 +500,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">regular_grid_nd</span><span class="p">(</span>
     <span class="n">resolutions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">grid_boundaries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">*</span> <span class="mi">2</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;regular_grid_nd generates a tensor of coordinate points that</span>
+<span class="w">    </span><span class="sd">"""regular_grid_nd generates a tensor of coordinate points that</span>
 <span class="sd">    describe a bounded regular grid.</span>
 
 <span class="sd">    Creates a dim x res_d1 x ... x res_dn stack of positional encodings A, where</span>
@@ -518,16 +518,16 @@
 <span class="sd">    -------</span>
 <span class="sd">    grid: tuple(Tensor)</span>
 <span class="sd">    list of tensors describing positional encoding</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">resolutions</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span>
         <span class="n">grid_boundaries</span>
-    <span class="p">),</span> <span class="s2">&quot;Error: inputs must have same number of dimensions&quot;</span>
+    <span class="p">),</span> <span class="s2">"Error: inputs must have same number of dimensions"</span>
     <span class="n">dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">resolutions</span><span class="p">)</span>
 
     <span class="n">meshgrid_inputs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">res</span><span class="p">,</span> <span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">resolutions</span><span class="p">,</span> <span class="n">grid_boundaries</span><span class="p">):</span>
         <span class="n">meshgrid_inputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">res</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">grid</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="o">*</span><span class="n">meshgrid_inputs</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span><span class="p">)</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="o">*</span><span class="n">meshgrid_inputs</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">"ij"</span><span class="p">)</span>
     <span class="n">grid</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">repeat</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">dim</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">grid</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">grid</span>
 
@@ -535,9 +535,9 @@
 <span class="c1"># Utility fucntions for Rotary embedding</span>
 <span class="c1"># modified from https://github.com/lucidrains/x-transformers/blob/main/x_transformers/x_transformers.py</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">rotate_half</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Split x&#39;s channels into two equal halves.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Split x's channels into two equal halves.</span>
+<span class="sd">    """</span>
     <span class="c1"># split the last dimension of x into two equal halves</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span>
@@ -545,13 +545,13 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">apply_rotary_pos_emb</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">freqs</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Apply rotation matrix computed based on freqs to rotate t.</span>
 <span class="sd">    t: tensor of shape [batch_size, num_points, dim]</span>
 <span class="sd">    freqs: tensor of shape [batch_size, num_points, 1]</span>
 
 <span class="sd">    Formula: see equation (34) in https://arxiv.org/pdf/2104.09864.pdf</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">t</span> <span class="o">*</span> <span class="n">freqs</span><span class="o">.</span><span class="n">cos</span><span class="p">())</span> <span class="o">+</span> <span class="p">(</span><span class="n">rotate_half</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="n">freqs</span><span class="o">.</span><span class="n">sin</span><span class="p">())</span>
 </pre></div>
 

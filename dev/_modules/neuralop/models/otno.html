@@ -16,7 +16,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -132,7 +132,7 @@
 <div class="viewcode-block" id="OTNO">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.models.OTNO.html#neuralop.models.OTNO">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">OTNO</span><span class="p">(</span><span class="n">FNO</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Optimal Transport Neural Operator</span>
 
 <span class="sd">    The architecture is described in [1]_.</span>
@@ -148,10 +148,10 @@
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
-<span class="sd">    .. [1] Li, X., Li, Z., Kovachki, N., &amp; Anandkumar, A. &quot;Geometric Operator</span>
-<span class="sd">        Learning with Optimal Transport&quot; (2025). arXiv preprint arXiv:2507.20065.</span>
+<span class="sd">    .. [1] Li, X., Li, Z., Kovachki, N., &amp; Anandkumar, A. "Geometric Operator</span>
+<span class="sd">        Learning with Optimal Transport" (2025). arXiv preprint arXiv:2507.20065.</span>
 <span class="sd">        https://arxiv.org/pdf/2507.20065</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -166,7 +166,7 @@
         <span class="n">use_channel_mlp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">channel_mlp_expansion</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">channel_mlp_dropout</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-        <span class="n">norm</span><span class="o">=</span><span class="s2">&quot;group_norm&quot;</span><span class="p">,</span>
+        <span class="n">norm</span><span class="o">=</span><span class="s2">"group_norm"</span><span class="p">,</span>
         <span class="n">norm_groups</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">factorization</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">rank</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
@@ -195,7 +195,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">device</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the device that the model is on.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Returns the device that the model is on."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">device_indicator_param</span><span class="o">.</span><span class="n">device</span>
 
     <span class="c1"># x: (1, in_channels, n_s_sqrt, n_s_sqrt)</span>
@@ -211,7 +211,7 @@
 <div class="viewcode-block" id="OTNO.forward">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.models.OTNO.html#neuralop.models.OTNO.forward">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">ind_dec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;OTNO&#39;s forward pass&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""OTNO's forward pass"""</span>
         <span class="c1"># Append spatial positional embedding if set (mirrors FNO.forward)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">positional_embedding</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">positional_embedding</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>

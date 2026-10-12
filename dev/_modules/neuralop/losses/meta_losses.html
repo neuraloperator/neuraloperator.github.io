@@ -16,7 +16,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tensorly_style.css?v=a02e9698" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -133,13 +133,13 @@
 <span class="c1"># Set warning filter to show each warning only once</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
-<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;once&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">"once"</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">FieldwiseAggregatorLoss</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    AggregatorLoss takes a dict of losses, keyed to correspond</span>
-<span class="sd">        to different properties or fields of a model&#39;s output.</span>
+<span class="sd">        to different properties or fields of a model's output.</span>
 <span class="sd">        It then returns an aggregate of all losses weighted by</span>
 <span class="sd">        an optional weight dict.</span>
 
@@ -149,23 +149,23 @@
 <span class="sd">            takes in some truth_field and pred_field</span>
 <span class="sd">        mappings: dict[tuple(Slice)]</span>
 <span class="sd">            a dictionary of mapping indices corresponding to</span>
-<span class="sd">            the output fields above. keyed &#39;field&#39;: indices,</span>
+<span class="sd">            the output fields above. keyed 'field': indices,</span>
 <span class="sd">            so that pred[indices] contains output for specified field</span>
 <span class="sd">        logging: bool</span>
 <span class="sd">            whether to track error for each output field of the model separately</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">losses</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">mappings</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">logging</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="c1"># AggregatorLoss should only be instantiated with more than one loss.</span>
-        <span class="k">assert</span> <span class="n">mappings</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">==</span> <span class="n">losses</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="s1">&#39;Mappings and losses must use the same keying&#39;</span>
+        <span class="k">assert</span> <span class="n">mappings</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">==</span> <span class="n">losses</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="s1">'Mappings and losses must use the same keying'</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">losses</span> <span class="o">=</span> <span class="n">losses</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mappings</span> <span class="o">=</span> <span class="n">mappings</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logging</span> <span class="o">=</span> <span class="n">logging</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">truth</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Calculate aggregate loss across model inputs and outputs.</span>
 
 <span class="sd">        parameters</span>
@@ -176,11 +176,11 @@
 <span class="sd">            contains ground truth. Indexed the same way as pred.</span>
 <span class="sd">        **kwargs: dict</span>
 <span class="sd">            bonus args to pass to each fieldwise loss</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;FieldwiseLoss.__call__() received unexpected keyword arguments: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">. &quot;</span>
-                <span class="s2">&quot;These arguments will be ignored.&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">"FieldwiseLoss.__call__() received unexpected keyword arguments: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">. "</span>
+                <span class="s2">"These arguments will be ignored."</span><span class="p">,</span>
                 <span class="ne">UserWarning</span><span class="p">,</span>
                 <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
             <span class="p">)</span>
@@ -195,7 +195,7 @@
             <span class="n">field_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">losses</span><span class="p">[</span><span class="n">field</span><span class="p">](</span><span class="n">pred_field</span><span class="p">,</span> <span class="n">truth_field</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="n">loss</span> <span class="o">+=</span> <span class="n">field_loss</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">logging</span><span class="p">:</span>
-                <span class="n">loss_record</span><span class="p">[</span><span class="s2">&quot;field&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">field_loss</span>
+                <span class="n">loss_record</span><span class="p">[</span><span class="s2">"field"</span><span class="p">]</span> <span class="o">=</span> <span class="n">field_loss</span>
         <span class="n">loss</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mappings</span><span class="p">))</span> <span class="o">*</span> <span class="n">loss</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">logging</span><span class="p">:</span>
@@ -207,16 +207,16 @@
 <div class="viewcode-block" id="WeightedSumLoss">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.losses.meta_losses.WeightedSumLoss.html#neuralop.losses.meta_losses.WeightedSumLoss">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">WeightedSumLoss</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Computes an average or weighted sum of given losses.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">losses</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">weights</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">losses</span><span class="p">)]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">losses</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">losses</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Each loss must have a weight.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Each loss must have a weight."</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">losses</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">losses</span><span class="p">,</span> <span class="n">weights</span><span class="p">))</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -226,9 +226,9 @@
         <span class="k">return</span> <span class="n">weighted_loss</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Combined loss: &quot;</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="s2">"Combined loss: "</span>
         <span class="k">for</span> <span class="n">loss</span><span class="p">,</span> <span class="n">weight</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">losses</span><span class="p">:</span>
-            <span class="n">description</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">loss</span><span class="si">}</span><span class="s2"> (weight: </span><span class="si">{</span><span class="n">weight</span><span class="si">}</span><span class="s2">) &quot;</span>
+            <span class="n">description</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">loss</span><span class="si">}</span><span class="s2"> (weight: </span><span class="si">{</span><span class="n">weight</span><span class="si">}</span><span class="s2">) "</span>
         <span class="k">return</span> <span class="n">description</span></div>
 
 
@@ -240,7 +240,7 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">Aggregator</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Base class for loss aggregators that dynamically balance multiple loss components.</span>
 
 <span class="sd">    This class provides the foundation for adaptive loss weighting schemes that can</span>
@@ -268,7 +268,7 @@
 
 <span class="sd">    The device is automatically determined from the first parameter in the params list.</span>
 <span class="sd">    All parameters should be on the same device to avoid device mismatch errors.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">num_losses</span><span class="p">,</span> <span class="n">weights</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -311,7 +311,7 @@
 <div class="viewcode-block" id="SoftAdapt">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.losses.meta_losses.SoftAdapt.html#neuralop.losses.meta_losses.SoftAdapt">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SoftAdapt</span><span class="p">(</span><span class="n">Aggregator</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    SoftAdapt algorithm for adaptive loss weighting and aggregation.</span>
 
 <span class="sd">    SoftAdapt automatically adjusts the weights of multiple loss components based on</span>
@@ -320,9 +320,9 @@
 <span class="sd">    relatively larger, based on their ratio to previous losses, helping to balance</span>
 <span class="sd">    the training of different objectives.</span>
 
-<span class="sd">    Reference: &quot;Heydari, A.A., Thompson, C.A. and Mehmood, A., 2019.</span>
+<span class="sd">    Reference: "Heydari, A.A., Thompson, C.A. and Mehmood, A., 2019.</span>
 <span class="sd">    Softadapt: Techniques for adaptive loss weighting of neural networks with multi-part loss functions.</span>
-<span class="sd">    arXiv preprint arXiv: 1912.12355.&quot;</span>
+<span class="sd">    arXiv preprint arXiv: 1912.12355."</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -347,26 +347,26 @@
 <span class="sd">    --------</span>
 <span class="sd">    The algorithm assumes that all loss components should be minimized. If some</span>
 <span class="sd">    losses should be maximized, they should be negated before passing to SoftAdapt.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">num_losses</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">num_losses</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">eps</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span>
-            <span class="s2">&quot;prev_losses&quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_losses</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="s2">"prev_losses"</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_losses</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
         <span class="p">)</span>
 
 <div class="viewcode-block" id="SoftAdapt.forward">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.losses.meta_losses.SoftAdapt.html#neuralop.losses.meta_losses.SoftAdapt.forward">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">losses</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">step</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Weights and aggregates the losses using the original variant of the SoftAdapt algorithm.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        losses : Dict[str, torch.Tensor]</span>
 <span class="sd">            Dictionary of loss components to be aggregated.</span>
-<span class="sd">            For instance, the keys could be &#39;data_loss&#39; and &#39;physics_loss&#39;.</span>
+<span class="sd">            For instance, the keys could be 'data_loss' and 'physics_loss'.</span>
 <span class="sd">        step : int</span>
 <span class="sd">            Current optimization step. Used to determine whether to initialize</span>
 <span class="sd">            the algorithm (step 0) or apply adaptive weighting (step &gt; 0).</span>
@@ -383,7 +383,7 @@
 <span class="sd">        At step 0, all losses are summed with equal weights.</span>
 <span class="sd">        For subsequent steps, the algorithm computes adaptive weights based on</span>
 <span class="sd">        the ratio of current to previous loss values.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="c1"># weigh losses</span>
         <span class="n">losses</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weigh_losses</span><span class="p">(</span><span class="n">losses</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">)</span>
@@ -422,7 +422,7 @@
 <div class="viewcode-block" id="Relobralo">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.losses.meta_losses.Relobralo.html#neuralop.losses.meta_losses.Relobralo">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Relobralo</span><span class="p">(</span><span class="n">Aggregator</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Relative Loss Balancing with Random Lookback (ReLoBRaLo) algorithm for adaptive loss weighting.</span>
 
 <span class="sd">    ReLoBRaLo combines relative loss balancing with random lookback to provide more</span>
@@ -432,9 +432,9 @@
 <span class="sd">    stochasticity in the weighting by sometimes reverting to initial loss values,</span>
 <span class="sd">    encouraging robustness across loss scales over time.</span>
 
-<span class="sd">    Reference: &quot;Bischof, R. and Kraus, M., 2021.</span>
+<span class="sd">    Reference: "Bischof, R. and Kraus, M., 2021.</span>
 <span class="sd">    Multi-Objective Loss Balancing for Physics-Informed Deep Learning.</span>
-<span class="sd">    arXiv preprint arXiv:2110.09813.&quot;</span>
+<span class="sd">    arXiv preprint arXiv:2110.09813."</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -481,7 +481,7 @@
 
 <span class="sd">    The random component means that results may vary between runs,</span>
 <span class="sd">    due to the Bernoulli sampling in the weight computation.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">num_losses</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="kc">None</span>
@@ -492,26 +492,26 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">tau</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">eps</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span>
-            <span class="s2">&quot;init_losses&quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_losses</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="s2">"init_losses"</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_losses</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span>
-            <span class="s2">&quot;prev_losses&quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_losses</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="s2">"prev_losses"</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_losses</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span>
-            <span class="s2">&quot;lmbda_ema&quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_losses</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="s2">"lmbda_ema"</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_losses</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
         <span class="p">)</span>
 
 <div class="viewcode-block" id="Relobralo.forward">
 <a class="viewcode-back" href="../../../modules/generated/neuralop.losses.meta_losses.Relobralo.html#neuralop.losses.meta_losses.Relobralo.forward">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">losses</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">step</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Weights and aggregates the losses using the ReLoBRaLo algorithm.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        losses : Dict[str, torch.Tensor]</span>
 <span class="sd">            Dictionary of loss components to be aggregated.</span>
-<span class="sd">            For instance, the keys could be &#39;data_loss&#39; and &#39;physics_loss&#39;.</span>
+<span class="sd">            For instance, the keys could be 'data_loss' and 'physics_loss'.</span>
 <span class="sd">        step : int</span>
 <span class="sd">            Current optimization step. Used to determine whether to initialize</span>
 <span class="sd">            the algorithm (step 0) or apply adaptive weighting (step &gt; 0).</span>
@@ -531,7 +531,7 @@
 <span class="sd">        For subsequent steps, the algorithm computes weights using both initial</span>
 <span class="sd">        and previous loss values, with a random component that helps escape</span>
 <span class="sd">        local minima. The final weights are computed as an exponential moving average.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="c1"># weigh losses</span>
         <span class="n">losses</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weigh_losses</span><span class="p">(</span><span class="n">losses</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">)</span>
