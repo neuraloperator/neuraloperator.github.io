@@ -443,13 +443,13 @@ Parameter Group 0
 )
 
 ### SCHEDULER ###
- &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f40a5b5d400&gt;
+ &lt;torch.optim.lr_scheduler.CosineAnnealingLR object at 0x7f478509d2b0&gt;
 
 ### LOSSES ###
 
- * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f40a5b5d6a0&gt;
+ * Train: &lt;neuralop.losses.data_losses.H1Loss object at 0x7f478509d550&gt;
 
- * Test: {'h1': &lt;neuralop.losses.data_losses.H1Loss object at 0x7f40a5b5d6a0&gt;, 'l2': &lt;neuralop.losses.data_losses.LpLoss object at 0x7f40a5b5d550&gt;}
+ * Test: {'h1': &lt;neuralop.losses.data_losses.H1Loss object at 0x7f478509d550&gt;, 'l2': &lt;neuralop.losses.data_losses.LpLoss object at 0x7f478509d400&gt;}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -496,22 +496,22 @@ Testing on [50, 50] samples         on resolutions [16, 32].
 Raw outputs of shape torch.Size([32, 1, 16, 16])
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:536: UserWarning: H1Loss.__call__() received unexpected keyword arguments: ['x']. These arguments will be ignored.
   loss += training_loss(out, **sample)
-[0] time=4.04, avg_loss=0.6413, train_err=20.0396
+[0] time=3.85, avg_loss=0.6412, train_err=20.0389
 /home/runner/work/neuraloperator/neuraloperator/neuralop/training/trainer.py:581: UserWarning: LpLoss.__call__() received unexpected keyword arguments: ['x']. These arguments will be ignored.
   val_loss = loss(out, **sample)
-Eval: 16_h1=0.4022, 16_l2=0.2731, 32_h1=0.6125, 32_l2=0.3017
-[5] time=4.00, avg_loss=0.2208, train_err=6.9006
-Eval: 16_h1=0.2547, 16_l2=0.1777, 32_h1=0.4186, 32_l2=0.2127
-[10] time=3.98, avg_loss=0.1816, train_err=5.6739
-Eval: 16_h1=0.2441, 16_l2=0.1535, 32_h1=0.4204, 32_l2=0.1916
-[15] time=3.95, avg_loss=0.1844, train_err=5.7641
-Eval: 16_h1=0.2480, 16_l2=0.1506, 32_h1=0.3855, 32_l2=0.1756
-[20] time=3.96, avg_loss=0.1212, train_err=3.7884
-Eval: 16_h1=0.2236, 16_l2=0.1320, 32_h1=0.3791, 32_l2=0.1439
-[25] time=3.98, avg_loss=0.0990, train_err=3.0922
-Eval: 16_h1=0.1977, 16_l2=0.1096, 32_h1=0.3933, 32_l2=0.1509
+Eval: 16_h1=0.4024, 16_l2=0.2735, 32_h1=0.6127, 32_l2=0.3020
+[5] time=3.92, avg_loss=0.2100, train_err=6.5624
+Eval: 16_h1=0.3047, 16_l2=0.2184, 32_h1=0.4556, 32_l2=0.2517
+[10] time=3.95, avg_loss=0.1974, train_err=6.1675
+Eval: 16_h1=0.2391, 16_l2=0.1383, 32_h1=0.4235, 32_l2=0.1718
+[15] time=3.98, avg_loss=0.1565, train_err=4.8918
+Eval: 16_h1=0.2438, 16_l2=0.1558, 32_h1=0.4111, 32_l2=0.1942
+[20] time=3.99, avg_loss=0.1181, train_err=3.6921
+Eval: 16_h1=0.2224, 16_l2=0.1251, 32_h1=0.3838, 32_l2=0.1474
+[25] time=3.90, avg_loss=0.0983, train_err=3.0716
+Eval: 16_h1=0.2009, 16_l2=0.1102, 32_h1=0.3871, 32_l2=0.1460
 
-{'train_err': 2.525248534977436, 'avg_loss': 0.08080795311927795, 'avg_lasso_loss': None, 'epoch_train_time': 3.968559615999993}
+{'train_err': 2.5257378481328487, 'avg_loss': 0.08082361114025116, 'avg_lasso_loss': None, 'epoch_train_time': 3.8882680540000365}
 </pre></div>
 </div>
 <div style="margin-top: 3em;"></div></section>
@@ -565,7 +565,7 @@ ii) can be trained quickly on CPU</p>
 </span><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="p">)</span><span class="w">
 </span><span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="p">)</span><span class="w">
 </span></pre></div></div>
-<img src="../../_images/sphx_glr_plot_UNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_UNO_darcy_001.png" alt="U-NO predictions on 32x32 Darcy-Flow data, Input x, Ground-truth y, U-NO prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 3.772 seconds)</p>
+<img src="../../_images/sphx_glr_plot_UNO_darcy_001.png" srcset="../../_images/sphx_glr_plot_UNO_darcy_001.png" alt="U-NO predictions on 32x32 Darcy-Flow data, Input x, Ground-truth y, U-NO prediction" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 2.254 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-models-plot-uno-darcy-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/fee630be9801a5d2d76c0b9e3091063c/plot_UNO_darcy.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_UNO_darcy.ipynb</span></code></a></p>
